@@ -1,0 +1,53 @@
+; First-person arms. Bones are unit-height cylinders that the ArmRig stretches
+; between shoulder, elbow and hand each frame, so nothing here is baked to a
+; particular weapon. Shoulders sit behind the near plane and clip away.
+[gd_scene load_steps=7 format=3]
+
+[ext_resource type="Script" path="res://scripts/arm_rig.gd" id="1_rig"]
+[ext_resource type="PackedScene" path="res://scenes/hand_right.tscn" id="2_hand_r"]
+[ext_resource type="PackedScene" path="res://scenes/hand_left.tscn" id="3_hand_l"]
+
+[sub_resource type="StandardMaterial3D" id="Mat_sleeve"]
+albedo_color = Color(0.27, 0.27, 0.18, 1)
+roughness = 0.9
+
+[sub_resource type="CylinderMesh" id="Mesh_upper"]
+material = SubResource("Mat_sleeve")
+top_radius = 0.058
+bottom_radius = 0.048
+height = 1.0
+radial_segments = 10
+rings = 1
+
+[sub_resource type="CylinderMesh" id="Mesh_fore"]
+material = SubResource("Mat_sleeve")
+top_radius = 0.048
+bottom_radius = 0.036
+height = 1.0
+radial_segments = 10
+rings = 1
+
+[node name="ViewmodelArms" type="Node3D"]
+script = ExtResource("1_rig")
+arm_right_shoulder = Vector3(0.24, -0.3, 0.14)
+arm_left_shoulder = Vector3(-0.22, -0.3, 0.14)
+arm_right_lengths = Vector2(0.3, 0.26)
+arm_left_lengths = Vector2(0.46, 0.46)
+arm_right_pole = Vector3(0.8, -1, -0.2)
+arm_left_pole = Vector3(-0.8, -1, -0.2)
+
+[node name="RightUpper" type="MeshInstance3D" parent="."]
+mesh = SubResource("Mesh_upper")
+
+[node name="RightFore" type="MeshInstance3D" parent="."]
+mesh = SubResource("Mesh_fore")
+
+[node name="RightHand" parent="." instance=ExtResource("2_hand_r")]
+
+[node name="LeftUpper" type="MeshInstance3D" parent="."]
+mesh = SubResource("Mesh_upper")
+
+[node name="LeftFore" type="MeshInstance3D" parent="."]
+mesh = SubResource("Mesh_fore")
+
+[node name="LeftHand" parent="." instance=ExtResource("3_hand_l")]

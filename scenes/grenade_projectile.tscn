@@ -1,0 +1,62 @@
+[gd_scene load_steps=8 format=3]
+
+[ext_resource type="Script" path="res://scripts/grenade_projectile.gd" id="1_proj"]
+
+[sub_resource type="PhysicsMaterial" id="Phys_grenade"]
+friction = 0.8
+bounce = 0.28
+
+[sub_resource type="SphereShape3D" id="Shape_grenade"]
+radius = 0.038
+
+[sub_resource type="StandardMaterial3D" id="Mat_grenade"]
+albedo_color = Color(0.19, 0.22, 0.16, 1)
+metallic = 0.5
+roughness = 0.65
+
+[sub_resource type="StandardMaterial3D" id="Mat_flash"]
+transparency = 1
+shading_mode = 0
+albedo_color = Color(1, 0.86, 0.55, 0.85)
+emission_enabled = true
+emission = Color(1, 0.74, 0.34, 1)
+emission_energy_multiplier = 9.0
+
+[sub_resource type="SphereMesh" id="Mesh_grenade"]
+material = SubResource("Mat_grenade")
+radius = 0.036
+height = 0.086
+radial_segments = 10
+rings = 6
+
+[sub_resource type="SphereMesh" id="Mesh_flash"]
+material = SubResource("Mat_flash")
+radius = 0.4
+height = 0.8
+radial_segments = 12
+rings = 6
+
+[node name="GrenadeProjectile" type="RigidBody3D"]
+physics_material_override = SubResource("Phys_grenade")
+continuous_cd = true
+script = ExtResource("1_proj")
+
+[node name="CollisionShape3D" type="CollisionShape3D" parent="."]
+shape = SubResource("Shape_grenade")
+
+[node name="Body" type="MeshInstance3D" parent="."]
+mesh = SubResource("Mesh_grenade")
+
+[node name="Flash" type="MeshInstance3D" parent="."]
+visible = false
+mesh = SubResource("Mesh_flash")
+
+[node name="FlashLight" type="OmniLight3D" parent="."]
+visible = false
+light_color = Color(1, 0.78, 0.45, 1)
+light_energy = 12.0
+omni_range = 14.0
+
+[node name="Sound" type="AudioStreamPlayer3D" parent="."]
+unit_size = 18.0
+max_distance = 90.0

@@ -1,0 +1,56 @@
+[gd_scene load_steps=8 format=3]
+
+[ext_resource type="Script" path="res://scripts/player.gd" id="1_player"]
+[ext_resource type="PackedScene" path="res://scenes/weapon_thompson.tscn" id="2_weapon"]
+[ext_resource type="PackedScene" path="res://scenes/hud.tscn" id="3_hud"]
+[ext_resource type="PackedScene" path="res://scenes/weapon_grenade.tscn" id="6_grenade"]
+[ext_resource type="PackedScene" path="res://scenes/viewmodel_arms.tscn" id="4_arms"]
+[ext_resource type="PackedScene" path="res://scenes/character_body.tscn" id="5_body"]
+
+[sub_resource type="CapsuleShape3D" id="CapsuleShape3D_1"]
+radius = 0.4
+height = 1.8
+
+[node name="Player" type="CharacterBody3D"]
+script = ExtResource("1_player")
+
+[node name="CollisionShape3D" type="CollisionShape3D" parent="."]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0.9, 0)
+shape = SubResource("CapsuleShape3D_1")
+
+[node name="Head" type="Node3D" parent="."]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 1.6, 0)
+
+[node name="Camera3D" type="Camera3D" parent="Head"]
+current = true
+
+; The weapon lives on a socket, not on the camera, so it can be reparented to
+; the body's socket in third person without disturbing its own rest transform.
+[node name="WeaponSocket" type="Node3D" parent="Head/Camera3D"]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0.15, -0.15, -0.38)
+
+[node name="WeaponThompson" parent="Head/Camera3D/WeaponSocket" instance=ExtResource("2_weapon")]
+
+[node name="WeaponGrenade" parent="Head/Camera3D/WeaponSocket" instance=ExtResource("6_grenade")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0.02, 0.07, 0.05)
+visible = false
+
+[node name="ViewmodelArms" parent="Head/Camera3D" instance=ExtResource("4_arms")]
+weapon_path = NodePath("../WeaponSocket/WeaponThompson")
+
+; SpringArm3D pushes its children along +Z, i.e. behind the head, and pulls
+; them in when a wall is in the way.
+[node name="SpringArm3D" type="SpringArm3D" parent="Head"]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0.45, 0.15, 0)
+spring_length = 2.8
+margin = 0.2
+
+[node name="CameraTP" type="Camera3D" parent="Head/SpringArm3D"]
+current = false
+
+[node name="BodyModel" parent="." instance=ExtResource("5_body")]
+
+[node name="StepPlayer" type="AudioStreamPlayer" parent="."]
+
+[node name="HUD" parent="." instance=ExtResource("3_hud")]
+player_path = NodePath("..")

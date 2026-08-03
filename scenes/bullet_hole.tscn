@@ -1,0 +1,16 @@
+[gd_scene load_steps=4 format=3]
+
+[ext_resource type="Script" path="res://scripts/bullet_hole.gd" id="1_hole"]
+
+[sub_resource type="StandardMaterial3D" id="Mat_hole"]
+transparency = 1
+shading_mode = 0
+albedo_color = Color(0.04, 0.03, 0.03, 0.85)
+
+[sub_resource type="QuadMesh" id="Mesh_hole"]
+material = SubResource("Mat_hole")
+size = Vector2(0.055, 0.055)
+
+[node name="BulletHole" type="MeshInstance3D"]
+mesh = SubResource("Mesh_hole")
+script = ExtResource("1_hole")

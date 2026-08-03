@@ -1,0 +1,229 @@
+; Thompson M1928A1 placeholder viewmodel, assembled from primitives.
+; Local space: barrel fires along -Z, +Y up. Roughly life-size (~0.82m long).
+[gd_scene load_steps=21 format=3]
+
+[ext_resource type="Script" path="res://scripts/weapon.gd" id="1_weapon"]
+
+[sub_resource type="StandardMaterial3D" id="Mat_metal"]
+albedo_color = Color(0.16, 0.16, 0.18, 1)
+metallic = 0.85
+roughness = 0.35
+
+[sub_resource type="StandardMaterial3D" id="Mat_wood"]
+albedo_color = Color(0.33, 0.19, 0.09, 1)
+roughness = 0.6
+
+[sub_resource type="StandardMaterial3D" id="Mat_flash"]
+transparency = 1
+shading_mode = 0
+albedo_color = Color(1, 0.83, 0.45, 0.9)
+emission_enabled = true
+emission = Color(1, 0.72, 0.3, 1)
+emission_energy_multiplier = 6.0
+
+[sub_resource type="BoxMesh" id="Mesh_receiver"]
+material = SubResource("Mat_metal")
+size = Vector3(0.055, 0.085, 0.3)
+
+[sub_resource type="CylinderMesh" id="Mesh_barrel"]
+material = SubResource("Mat_metal")
+top_radius = 0.013
+bottom_radius = 0.013
+height = 0.26
+radial_segments = 12
+rings = 1
+
+[sub_resource type="CylinderMesh" id="Mesh_fin"]
+material = SubResource("Mat_metal")
+top_radius = 0.021
+bottom_radius = 0.021
+height = 0.01
+radial_segments = 12
+rings = 1
+
+[sub_resource type="CylinderMesh" id="Mesh_comp"]
+material = SubResource("Mat_metal")
+top_radius = 0.021
+bottom_radius = 0.021
+height = 0.055
+radial_segments = 12
+rings = 1
+
+[sub_resource type="CylinderMesh" id="Mesh_drum"]
+material = SubResource("Mat_metal")
+top_radius = 0.072
+bottom_radius = 0.072
+height = 0.032
+radial_segments = 20
+rings = 1
+
+[sub_resource type="BoxMesh" id="Mesh_rear_base"]
+material = SubResource("Mat_metal")
+size = Vector3(0.03, 0.01, 0.008)
+
+[sub_resource type="BoxMesh" id="Mesh_rear_post"]
+material = SubResource("Mat_metal")
+size = Vector3(0.009, 0.02, 0.008)
+
+; Front post is deliberately oversized and pale so it reads against a dark
+; target; a scale-accurate blade is only a few pixels wide.
+[sub_resource type="StandardMaterial3D" id="Mat_front_post"]
+albedo_color = Color(0.62, 0.63, 0.66, 1)
+metallic = 0.4
+roughness = 0.5
+
+[sub_resource type="BoxMesh" id="Mesh_front_blade"]
+material = SubResource("Mat_front_post")
+size = Vector3(0.009, 0.022, 0.006)
+
+[sub_resource type="BoxMesh" id="Mesh_front_wing"]
+material = SubResource("Mat_metal")
+size = Vector3(0.005, 0.026, 0.006)
+
+[sub_resource type="BoxMesh" id="Mesh_bolt"]
+material = SubResource("Mat_metal")
+size = Vector3(0.014, 0.014, 0.05)
+
+[sub_resource type="BoxMesh" id="Mesh_guard"]
+material = SubResource("Mat_metal")
+size = Vector3(0.012, 0.03, 0.055)
+
+[sub_resource type="BoxMesh" id="Mesh_foregrip"]
+material = SubResource("Mat_wood")
+size = Vector3(0.032, 0.1, 0.042)
+
+[sub_resource type="BoxMesh" id="Mesh_grip"]
+material = SubResource("Mat_wood")
+size = Vector3(0.033, 0.125, 0.048)
+
+[sub_resource type="BoxMesh" id="Mesh_stock"]
+material = SubResource("Mat_wood")
+size = Vector3(0.042, 0.085, 0.24)
+
+[sub_resource type="SphereMesh" id="Mesh_flash"]
+material = SubResource("Mat_flash")
+radius = 0.05
+height = 0.1
+radial_segments = 10
+rings = 5
+
+[node name="WeaponThompson" type="Node3D"]
+script = ExtResource("1_weapon")
+
+[node name="Receiver" type="MeshInstance3D" parent="."]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0, -0.06)
+mesh = SubResource("Mesh_receiver")
+
+[node name="Barrel" type="MeshInstance3D" parent="."]
+transform = Transform3D(1, 0, 0, 0, 0, -1, 0, 1, 0, 0, 0.018, -0.34)
+mesh = SubResource("Mesh_barrel")
+
+[node name="Fin1" type="MeshInstance3D" parent="."]
+transform = Transform3D(1, 0, 0, 0, 0, -1, 0, 1, 0, 0, 0.018, -0.25)
+mesh = SubResource("Mesh_fin")
+
+[node name="Fin2" type="MeshInstance3D" parent="."]
+transform = Transform3D(1, 0, 0, 0, 0, -1, 0, 1, 0, 0, 0.018, -0.29)
+mesh = SubResource("Mesh_fin")
+
+[node name="Fin3" type="MeshInstance3D" parent="."]
+transform = Transform3D(1, 0, 0, 0, 0, -1, 0, 1, 0, 0, 0.018, -0.33)
+mesh = SubResource("Mesh_fin")
+
+[node name="Fin4" type="MeshInstance3D" parent="."]
+transform = Transform3D(1, 0, 0, 0, 0, -1, 0, 1, 0, 0, 0.018, -0.37)
+mesh = SubResource("Mesh_fin")
+
+[node name="Fin5" type="MeshInstance3D" parent="."]
+transform = Transform3D(1, 0, 0, 0, 0, -1, 0, 1, 0, 0, 0.018, -0.41)
+mesh = SubResource("Mesh_fin")
+
+[node name="Compensator" type="MeshInstance3D" parent="."]
+transform = Transform3D(1, 0, 0, 0, 0, -1, 0, 1, 0, 0, 0.018, -0.485)
+mesh = SubResource("Mesh_comp")
+
+; Sight line runs at y=0.054 through the rear notch and across the front blade
+; tip. RearSight/FrontSight are the markers the aim solve reads; the meshes
+; around them are just what you look through.
+[node name="RearSight" type="Marker3D" parent="."]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0.054, -0.175)
+
+[node name="RearSightBase" type="MeshInstance3D" parent="."]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0.043, -0.175)
+mesh = SubResource("Mesh_rear_base")
+
+[node name="RearSightPostL" type="MeshInstance3D" parent="."]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -0.0125, 0.058, -0.175)
+mesh = SubResource("Mesh_rear_post")
+
+[node name="RearSightPostR" type="MeshInstance3D" parent="."]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0.0125, 0.058, -0.175)
+mesh = SubResource("Mesh_rear_post")
+
+[node name="FrontSight" type="Marker3D" parent="."]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0.054, -0.465)
+
+[node name="FrontSightBlade" type="MeshInstance3D" parent="."]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0.043, -0.465)
+mesh = SubResource("Mesh_front_blade")
+
+[node name="FrontSightWingL" type="MeshInstance3D" parent="."]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -0.014, 0.047, -0.465)
+mesh = SubResource("Mesh_front_wing")
+
+[node name="FrontSightWingR" type="MeshInstance3D" parent="."]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0.014, 0.047, -0.465)
+mesh = SubResource("Mesh_front_wing")
+
+; On the receiver's right flank rather than on top: a top-mounted handle sits
+; exactly on the sight line and, being nearer the eye than the rear notch,
+; blocks the sight picture entirely.
+[node name="BoltHandle" type="MeshInstance3D" parent="."]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0.036, 0.022, -0.06)
+mesh = SubResource("Mesh_bolt")
+
+[node name="DrumMag" type="MeshInstance3D" parent="."]
+transform = Transform3D(0, -1, 0, 1, 0, 0, 0, 0, 1, 0, -0.095, -0.09)
+mesh = SubResource("Mesh_drum")
+
+[node name="TriggerGuard" type="MeshInstance3D" parent="."]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, -0.055, -0.035)
+mesh = SubResource("Mesh_guard")
+
+[node name="Foregrip" type="MeshInstance3D" parent="."]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, -0.05, -0.295)
+mesh = SubResource("Mesh_foregrip")
+
+[node name="PistolGrip" type="MeshInstance3D" parent="."]
+transform = Transform3D(1, 0, 0, 0, 0.965926, 0.258819, 0, -0.258819, 0.965926, 0, -0.092, 0.015)
+mesh = SubResource("Mesh_grip")
+
+[node name="Stock" type="MeshInstance3D" parent="."]
+transform = Transform3D(1, 0, 0, 0, 0.994522, -0.104528, 0, 0.104528, 0.994522, 0, -0.03, 0.185)
+mesh = SubResource("Mesh_stock")
+
+; Attachment points for the arm rig. Any weapon that wants hands on it needs
+; these two markers; nothing else about the rig is weapon-specific.
+[node name="GripRight" type="Marker3D" parent="."]
+transform = Transform3D(1, 0, 0, 0, 0.965926, 0.258819, 0, -0.258819, 0.965926, 0, -0.092, 0.015)
+
+[node name="GripLeft" type="Marker3D" parent="."]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, -0.05, -0.295)
+
+[node name="Muzzle" type="Marker3D" parent="."]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0.018, -0.515)
+
+[node name="MuzzleFlash" type="MeshInstance3D" parent="Muzzle"]
+transform = Transform3D(0.9, 0, 0, 0, 0.75, 0, 0, 0, 1.9, 0, 0, -0.05)
+visible = false
+mesh = SubResource("Mesh_flash")
+
+[node name="FlashLight" type="OmniLight3D" parent="Muzzle"]
+visible = false
+light_color = Color(1, 0.75, 0.42, 1)
+light_energy = 6.0
+omni_range = 8.0
+
+[node name="FireSound" type="AudioStreamPlayer" parent="."]
+
+[node name="ReloadSound" type="AudioStreamPlayer" parent="."]

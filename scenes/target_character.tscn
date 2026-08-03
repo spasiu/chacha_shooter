@@ -1,0 +1,57 @@
+; A shootable copy of the character. The floating bar's fill quad is offset so
+; its own origin sits at the left edge, letting a plain x-scale drain it
+; rightward instead of shrinking about the middle.
+[gd_scene load_steps=9 format=3]
+
+[ext_resource type="Script" path="res://scripts/target_character.gd" id="1_target"]
+[ext_resource type="PackedScene" path="res://scenes/character_body.tscn" id="2_body"]
+[ext_resource type="PackedScene" path="res://scenes/weapon_thompson.tscn" id="3_weapon"]
+
+[sub_resource type="CapsuleShape3D" id="Shape_body"]
+radius = 0.35
+height = 1.6
+
+[sub_resource type="StandardMaterial3D" id="Mat_bar_back"]
+transparency = 1
+shading_mode = 0
+albedo_color = Color(0.05, 0.05, 0.06, 0.72)
+
+[sub_resource type="StandardMaterial3D" id="Mat_bar_fill"]
+shading_mode = 0
+albedo_color = Color(0.78, 0.19, 0.16, 1)
+
+[sub_resource type="QuadMesh" id="Mesh_bar_back"]
+material = SubResource("Mat_bar_back")
+size = Vector2(0.64, 0.09)
+
+[sub_resource type="QuadMesh" id="Mesh_bar_fill"]
+material = SubResource("Mat_bar_fill")
+size = Vector2(0.6, 0.06)
+center_offset = Vector3(0.3, 0, 0)
+
+[node name="TargetCharacter" type="StaticBody3D"]
+script = ExtResource("1_target")
+
+[node name="CollisionShape3D" type="CollisionShape3D" parent="."]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0.8, 0)
+shape = SubResource("Shape_body")
+
+[node name="CharacterBody" parent="." instance=ExtResource("2_body")]
+weapon_scene = ExtResource("3_weapon")
+
+[node name="HealthBar" type="Node3D" parent="."]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 1.82, 0)
+
+[node name="Back" type="MeshInstance3D" parent="HealthBar"]
+mesh = SubResource("Mesh_bar_back")
+
+[node name="FillPivot" type="Node3D" parent="HealthBar"]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -0.3, 0, 0.002)
+
+[node name="Fill" type="MeshInstance3D" parent="HealthBar/FillPivot"]
+mesh = SubResource("Mesh_bar_fill")
+
+[node name="HitSound" type="AudioStreamPlayer3D" parent="."]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 1.1, 0)
+unit_size = 6.0
+max_distance = 40.0

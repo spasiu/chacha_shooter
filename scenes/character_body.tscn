@@ -1,0 +1,294 @@
+; Placeholder infantryman, ~1.8m, built from primitives. Origin at the feet.
+; Everything above the waist hangs off Spine, which the player pitches so the
+; weapon tracks where you are aiming. WeaponSocket is the attachment point --
+; swapping weapons means reparenting a different scene onto it.
+[gd_scene load_steps=29 format=3]
+
+[ext_resource type="Script" path="res://scripts/arm_rig.gd" id="1_rig"]
+[ext_resource type="Script" path="res://scripts/character_body.gd" id="4_model"]
+[ext_resource type="PackedScene" path="res://scenes/hand_right.tscn" id="2_hand_r"]
+[ext_resource type="PackedScene" path="res://scenes/hand_left.tscn" id="3_hand_l"]
+
+[sub_resource type="StandardMaterial3D" id="Mat_uniform"]
+albedo_color = Color(0.29, 0.3, 0.2, 1)
+roughness = 0.9
+
+[sub_resource type="StandardMaterial3D" id="Mat_webbing"]
+albedo_color = Color(0.42, 0.38, 0.26, 1)
+roughness = 0.95
+
+[sub_resource type="StandardMaterial3D" id="Mat_cap"]
+albedo_color = Color(0.24, 0.27, 0.18, 1)
+roughness = 0.9
+
+[sub_resource type="StandardMaterial3D" id="Mat_skin"]
+albedo_color = Color(0.72, 0.53, 0.4, 1)
+roughness = 0.75
+
+[sub_resource type="StandardMaterial3D" id="Mat_boot"]
+albedo_color = Color(0.14, 0.11, 0.09, 1)
+roughness = 0.8
+
+[sub_resource type="StandardMaterial3D" id="Mat_sole"]
+albedo_color = Color(0.07, 0.07, 0.07, 1)
+roughness = 0.95
+
+[sub_resource type="BoxMesh" id="Mesh_boot"]
+material = SubResource("Mat_boot")
+size = Vector3(0.135, 0.095, 0.28)
+
+[sub_resource type="BoxMesh" id="Mesh_sole"]
+material = SubResource("Mat_sole")
+size = Vector3(0.142, 0.028, 0.292)
+
+; Laced upper that swallows the bottom half of the shin. Hangs off the knee
+; rather than the foot so it follows the shin instead of staying flat.
+[sub_resource type="CylinderMesh" id="Mesh_boot_shaft"]
+material = SubResource("Mat_boot")
+top_radius = 0.062
+bottom_radius = 0.07
+height = 0.215
+radial_segments = 10
+rings = 1
+
+[sub_resource type="CylinderMesh" id="Mesh_boot_cuff"]
+material = SubResource("Mat_boot")
+top_radius = 0.072
+bottom_radius = 0.068
+height = 0.032
+radial_segments = 10
+rings = 1
+
+[sub_resource type="CylinderMesh" id="Mesh_shin"]
+material = SubResource("Mat_uniform")
+top_radius = 0.06
+bottom_radius = 0.05
+height = 0.315
+radial_segments = 10
+rings = 1
+
+[sub_resource type="CylinderMesh" id="Mesh_thigh"]
+material = SubResource("Mat_uniform")
+top_radius = 0.082
+bottom_radius = 0.066
+height = 0.315
+radial_segments = 10
+rings = 1
+
+[sub_resource type="BoxMesh" id="Mesh_hips"]
+material = SubResource("Mat_uniform")
+size = Vector3(0.32, 0.18, 0.2)
+
+[sub_resource type="BoxMesh" id="Mesh_torso"]
+material = SubResource("Mat_uniform")
+size = Vector3(0.36, 0.42, 0.22)
+
+[sub_resource type="BoxMesh" id="Mesh_webbing"]
+material = SubResource("Mat_webbing")
+size = Vector3(0.38, 0.06, 0.24)
+
+[sub_resource type="BoxMesh" id="Mesh_pack"]
+material = SubResource("Mat_webbing")
+size = Vector3(0.28, 0.24, 0.14)
+
+[sub_resource type="CylinderMesh" id="Mesh_neck"]
+material = SubResource("Mat_skin")
+top_radius = 0.05
+bottom_radius = 0.055
+height = 0.09
+radial_segments = 8
+rings = 1
+
+[sub_resource type="BoxMesh" id="Mesh_head"]
+material = SubResource("Mat_skin")
+size = Vector3(0.16, 0.2, 0.18)
+
+; Olive field cap: boxy crown, a band that grips the head, and a short stiff
+; visor over the brow.
+[sub_resource type="BoxMesh" id="Mesh_cap_crown"]
+material = SubResource("Mat_cap")
+size = Vector3(0.172, 0.075, 0.196)
+
+[sub_resource type="BoxMesh" id="Mesh_cap_band"]
+material = SubResource("Mat_cap")
+size = Vector3(0.178, 0.028, 0.202)
+
+[sub_resource type="BoxMesh" id="Mesh_cap_visor"]
+material = SubResource("Mat_cap")
+size = Vector3(0.158, 0.016, 0.082)
+
+[sub_resource type="BoxMesh" id="Mesh_gun_shadow"]
+size = Vector3(0.07, 0.18, 0.82)
+
+[sub_resource type="CylinderMesh" id="Mesh_arm_upper"]
+material = SubResource("Mat_uniform")
+top_radius = 0.058
+bottom_radius = 0.046
+height = 1.0
+radial_segments = 10
+rings = 1
+
+[sub_resource type="CylinderMesh" id="Mesh_arm_fore"]
+material = SubResource("Mat_uniform")
+top_radius = 0.046
+bottom_radius = 0.036
+height = 1.0
+radial_segments = 10
+rings = 1
+
+[node name="CharacterBody" type="Node3D"]
+script = ExtResource("4_model")
+
+; Each leg is a hip pivot -> knee pivot chain so the walk cycle can rotate
+; them. Hip at y=0.73, knee at 0.415, ankle at 0.10.
+[node name="LeftLeg" type="Node3D" parent="."]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -0.11, 0.73, 0)
+
+[node name="Thigh" type="MeshInstance3D" parent="LeftLeg"]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, -0.1575, 0)
+mesh = SubResource("Mesh_thigh")
+
+[node name="Knee" type="Node3D" parent="LeftLeg"]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, -0.315, 0)
+
+[node name="Shin" type="MeshInstance3D" parent="LeftLeg/Knee"]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, -0.1575, 0)
+mesh = SubResource("Mesh_shin")
+
+; Shaft and cuff ride with the shin; only the foot below is counter-rotated to
+; stay flat on the ground, so the two overlap at the ankle to hide the seam.
+[node name="BootShaft" type="MeshInstance3D" parent="LeftLeg/Knee"]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, -0.2375, 0)
+mesh = SubResource("Mesh_boot_shaft")
+
+[node name="BootCuff" type="MeshInstance3D" parent="LeftLeg/Knee"]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, -0.138, 0)
+mesh = SubResource("Mesh_boot_cuff")
+
+[node name="Boot" type="MeshInstance3D" parent="LeftLeg/Knee"]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, -0.3475, -0.02)
+mesh = SubResource("Mesh_boot")
+
+[node name="Sole" type="MeshInstance3D" parent="LeftLeg/Knee/Boot"]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, -0.0535, 0)
+mesh = SubResource("Mesh_sole")
+
+[node name="RightLeg" type="Node3D" parent="."]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0.11, 0.73, 0)
+
+[node name="Thigh" type="MeshInstance3D" parent="RightLeg"]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, -0.1575, 0)
+mesh = SubResource("Mesh_thigh")
+
+[node name="Knee" type="Node3D" parent="RightLeg"]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, -0.315, 0)
+
+[node name="Shin" type="MeshInstance3D" parent="RightLeg/Knee"]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, -0.1575, 0)
+mesh = SubResource("Mesh_shin")
+
+[node name="BootShaft" type="MeshInstance3D" parent="RightLeg/Knee"]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, -0.2375, 0)
+mesh = SubResource("Mesh_boot_shaft")
+
+[node name="BootCuff" type="MeshInstance3D" parent="RightLeg/Knee"]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, -0.138, 0)
+mesh = SubResource("Mesh_boot_cuff")
+
+[node name="Boot" type="MeshInstance3D" parent="RightLeg/Knee"]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, -0.3475, -0.02)
+mesh = SubResource("Mesh_boot")
+
+[node name="Sole" type="MeshInstance3D" parent="RightLeg/Knee/Boot"]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, -0.0535, 0)
+mesh = SubResource("Mesh_sole")
+
+[node name="Spine" type="Node3D" parent="."]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0.84, 0)
+
+[node name="Hips" type="MeshInstance3D" parent="Spine"]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, -0.03, 0)
+mesh = SubResource("Mesh_hips")
+
+[node name="Torso" type="MeshInstance3D" parent="Spine"]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0.21, 0)
+mesh = SubResource("Mesh_torso")
+
+[node name="Webbing" type="MeshInstance3D" parent="Spine"]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0.1, 0)
+mesh = SubResource("Mesh_webbing")
+
+[node name="Pack" type="MeshInstance3D" parent="Spine"]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0.26, 0.16)
+mesh = SubResource("Mesh_pack")
+
+[node name="Neck" type="MeshInstance3D" parent="Spine"]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0.455, 0)
+mesh = SubResource("Mesh_neck")
+
+[node name="Head" type="MeshInstance3D" parent="Spine"]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0.58, 0)
+mesh = SubResource("Mesh_head")
+
+; Sits down over the top of the head (head top is at y=0.68) with the visor
+; jutting past the brow at -Z, the direction the body faces.
+[node name="Cap" type="Node3D" parent="Spine"]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0.605, 0)
+
+[node name="Band" type="MeshInstance3D" parent="Spine/Cap"]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0.014, 0)
+mesh = SubResource("Mesh_cap_band")
+
+[node name="Crown" type="MeshInstance3D" parent="Spine/Cap"]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0.062, 0)
+mesh = SubResource("Mesh_cap_crown")
+
+[node name="Visor" type="MeshInstance3D" parent="Spine/Cap"]
+transform = Transform3D(1, 0, 0, 0, 0.990268, -0.139173, 0, 0.139173, 0.990268, 0, 0.007, -0.128)
+mesh = SubResource("Mesh_cap_visor")
+
+[node name="WeaponSocket" type="Node3D" parent="Spine"]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0.06, 0.29, -0.165)
+
+; Where the weapon's grips land once it is socketed. The arms fall back to
+; these when the player takes the gun away for the first-person view.
+[node name="IdleGripRight" type="Marker3D" parent="Spine"]
+transform = Transform3D(1, 0, 0, 0, 0.965926, 0.258819, 0, -0.258819, 0.965926, 0.06, 0.198, -0.15)
+
+[node name="IdleGripLeft" type="Marker3D" parent="Spine"]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0.06, 0.24, -0.46)
+
+; Crude stand-in that casts the weapon's shadow in first person, when the real
+; weapon has moved up to the camera. Never drawn.
+[node name="WeaponShadowProxy" type="MeshInstance3D" parent="Spine"]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0.06, 0.26, -0.265)
+visible = false
+cast_shadow = 3
+mesh = SubResource("Mesh_gun_shadow")
+
+[node name="Arms" type="Node3D" parent="Spine"]
+script = ExtResource("1_rig")
+arm_right_shoulder = Vector3(0.21, 0.37, 0)
+arm_left_shoulder = Vector3(-0.21, 0.37, 0)
+arm_right_lengths = Vector2(0.28, 0.26)
+arm_left_lengths = Vector2(0.3, 0.28)
+arm_right_pole = Vector3(0.6, -1, 0.2)
+arm_left_pole = Vector3(-0.6, -1, 0.2)
+idle_grip_right = NodePath("../IdleGripRight")
+idle_grip_left = NodePath("../IdleGripLeft")
+
+[node name="RightUpper" type="MeshInstance3D" parent="Spine/Arms"]
+mesh = SubResource("Mesh_arm_upper")
+
+[node name="RightFore" type="MeshInstance3D" parent="Spine/Arms"]
+mesh = SubResource("Mesh_arm_fore")
+
+[node name="RightHand" parent="Spine/Arms" instance=ExtResource("2_hand_r")]
+
+[node name="LeftUpper" type="MeshInstance3D" parent="Spine/Arms"]
+mesh = SubResource("Mesh_arm_upper")
+
+[node name="LeftFore" type="MeshInstance3D" parent="Spine/Arms"]
+mesh = SubResource("Mesh_arm_fore")
+
+[node name="LeftHand" parent="Spine/Arms" instance=ExtResource("3_hand_l")]

@@ -1,0 +1,54 @@
+; Hand posed to wrap a grip. Its origin sits at the CENTRE of the grip
+; it holds, so the arm rig can drop it straight onto a weapon's grip
+; marker regardless of which weapon that is.
+[gd_scene load_steps=7 format=3]
+
+[sub_resource type="StandardMaterial3D" id="Mat_skin"]
+albedo_color = Color(0.72, 0.53, 0.4, 1)
+roughness = 0.75
+
+[sub_resource type="BoxMesh" id="Mesh_palm"]
+material = SubResource("Mat_skin")
+size = Vector3(0.026, 0.08, 0.05)
+
+[sub_resource type="BoxMesh" id="Mesh_finger_a"]
+material = SubResource("Mat_skin")
+size = Vector3(0.058, 0.015, 0.018)
+
+[sub_resource type="BoxMesh" id="Mesh_finger_b"]
+material = SubResource("Mat_skin")
+size = Vector3(0.054, 0.014, 0.017)
+
+[sub_resource type="BoxMesh" id="Mesh_finger_c"]
+material = SubResource("Mat_skin")
+size = Vector3(0.05, 0.013, 0.016)
+
+[sub_resource type="BoxMesh" id="Mesh_thumb"]
+material = SubResource("Mat_skin")
+size = Vector3(0.048, 0.017, 0.019)
+
+[node name="HandRight" type="Node3D"]
+
+[node name="Palm" type="MeshInstance3D" parent="."]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0.026, 0.005, 0)
+mesh = SubResource("Mesh_palm")
+
+[node name="Finger1" type="MeshInstance3D" parent="."]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0.005, 0.03, -0.031)
+mesh = SubResource("Mesh_finger_a")
+
+[node name="Finger2" type="MeshInstance3D" parent="."]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0.005, 0.011, -0.032)
+mesh = SubResource("Mesh_finger_a")
+
+[node name="Finger3" type="MeshInstance3D" parent="."]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0.004, -0.008, -0.031)
+mesh = SubResource("Mesh_finger_b")
+
+[node name="Finger4" type="MeshInstance3D" parent="."]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0.003, -0.026, -0.029)
+mesh = SubResource("Mesh_finger_c")
+
+[node name="Thumb" type="MeshInstance3D" parent="."]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0.004, 0.028, 0.03)
+mesh = SubResource("Mesh_thumb")
