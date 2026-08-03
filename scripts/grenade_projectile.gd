@@ -10,7 +10,8 @@ extends RigidBody3D
 ## Each ray costs ~8us, so this is a direct trade of pattern density against a
 ## one-frame hitch on detonation. count x damage is what sets lethality.
 @export var fragment_count := 900
-@export var fragment_damage := 16.0
+## Per-pellet lethality bands, measured from the burst.
+@export var fragment_bands := [100.0, 50.0, 25.0, 10.0]
 @export var fragment_range := 16.0
 ## Leave an impact mark for every Nth fragment, so the ground is not carpeted.
 @export var decal_every := 45
@@ -77,10 +78,11 @@ func _spray_fragments() -> void:
 
 		var collider: Object = hit.collider
 		if collider != null and collider.has_method("take_damage"):
+			var dealt := Lethality.at_range(origin.distance_to(hit.position), fragment_bands)
 			if casualties.has(collider):
-				casualties[collider][0] += fragment_damage
+				casualties[collider][0] += dealt
 			else:
-				casualties[collider] = [fragment_damage, hit.position, direction]
+				casualties[collider] = [dealt, hit.position, direction]
 		elif i % decal_every == 0 and decals < 32:
 			decals += 1
 			_spawn_decal(hit.position, hit.normal)

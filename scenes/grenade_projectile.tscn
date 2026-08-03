@@ -3,8 +3,8 @@
 [ext_resource type="Script" path="res://scripts/grenade_projectile.gd" id="1_proj"]
 
 [sub_resource type="PhysicsMaterial" id="Phys_grenade"]
-friction = 0.8
-bounce = 0.28
+friction = 1.0
+bounce = 0.05
 
 [sub_resource type="SphereShape3D" id="Shape_grenade"]
 radius = 0.038
@@ -39,6 +39,8 @@ rings = 6
 [node name="GrenadeProjectile" type="RigidBody3D"]
 physics_material_override = SubResource("Phys_grenade")
 continuous_cd = true
+linear_damp = 0.4
+angular_damp = 6.0
 script = ExtResource("1_proj")
 
 [node name="CollisionShape3D" type="CollisionShape3D" parent="."]

@@ -1,9 +1,17 @@
-[gd_scene load_steps=8 format=3]
+[gd_scene load_steps=16 format=3]
 
 [ext_resource type="Script" path="res://scripts/player.gd" id="1_player"]
 [ext_resource type="PackedScene" path="res://scenes/weapon_thompson.tscn" id="2_weapon"]
 [ext_resource type="PackedScene" path="res://scenes/hud.tscn" id="3_hud"]
 [ext_resource type="PackedScene" path="res://scenes/weapon_grenade.tscn" id="6_grenade"]
+[ext_resource type="PackedScene" path="res://scenes/weapon_shotgun.tscn" id="7_shotgun"]
+[ext_resource type="PackedScene" path="res://scenes/weapon_garand.tscn" id="8_garand"]
+[ext_resource type="PackedScene" path="res://scenes/weapon_carbine.tscn" id="9_carbine"]
+[ext_resource type="PackedScene" path="res://scenes/weapon_bazooka.tscn" id="10_bazooka"]
+[ext_resource type="PackedScene" path="res://scenes/weapon_bar.tscn" id="11_bar"]
+[ext_resource type="PackedScene" path="res://scenes/weapon_m1911.tscn" id="12_m1911"]
+[ext_resource type="PackedScene" path="res://scenes/weapon_johnson.tscn" id="13_johnson"]
+[ext_resource type="PackedScene" path="res://scenes/weapon_shovel.tscn" id="20_shovel"]
 [ext_resource type="PackedScene" path="res://scenes/viewmodel_arms.tscn" id="4_arms"]
 [ext_resource type="PackedScene" path="res://scenes/character_body.tscn" id="5_body"]
 
@@ -12,6 +20,7 @@ radius = 0.4
 height = 1.8
 
 [node name="Player" type="CharacterBody3D"]
+floor_snap_length = 0.35
 script = ExtResource("1_player")
 
 [node name="CollisionShape3D" type="CollisionShape3D" parent="."]
@@ -33,6 +42,30 @@ transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0.15, -0.15, -0.38)
 
 [node name="WeaponGrenade" parent="Head/Camera3D/WeaponSocket" instance=ExtResource("6_grenade")]
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0.02, 0.07, 0.05)
+visible = false
+
+[node name="WeaponShotgun" parent="Head/Camera3D/WeaponSocket" instance=ExtResource("7_shotgun")]
+visible = false
+
+[node name="WeaponGarand" parent="Head/Camera3D/WeaponSocket" instance=ExtResource("8_garand")]
+visible = false
+
+[node name="WeaponCarbine" parent="Head/Camera3D/WeaponSocket" instance=ExtResource("9_carbine")]
+visible = false
+
+[node name="WeaponBazooka" parent="Head/Camera3D/WeaponSocket" instance=ExtResource("10_bazooka")]
+visible = false
+
+[node name="WeaponBAR" parent="Head/Camera3D/WeaponSocket" instance=ExtResource("11_bar")]
+visible = false
+
+[node name="WeaponM1911" parent="Head/Camera3D/WeaponSocket" instance=ExtResource("12_m1911")]
+visible = false
+
+[node name="WeaponJohnson" parent="Head/Camera3D/WeaponSocket" instance=ExtResource("13_johnson")]
+visible = false
+
+[node name="WeaponShovel" parent="Head/Camera3D/WeaponSocket" instance=ExtResource("20_shovel")]
 visible = false
 
 [node name="ViewmodelArms" parent="Head/Camera3D" instance=ExtResource("4_arms")]

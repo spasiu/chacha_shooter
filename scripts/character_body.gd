@@ -23,6 +23,10 @@ extends Node3D
 @export var death_time := 1.1
 ## How far past vertical the body ends up.
 @export var death_angle_deg := 88.0
+## How far forward the body tips when prone.
+@export var prone_angle_deg := 76.0
+## Lift applied at full prone so the chest rests on the ground, not in it.
+@export var prone_lift := 0.1
 
 @export_group("Gait")
 @export var hip_swing_deg := 32.0
@@ -47,6 +51,8 @@ extends Node3D
 ## Set by whoever is driving the torso (the player's aim pitch). Kept separate
 ## so a flinch can be layered on top rather than fighting it.
 var spine_pitch := 0.0
+## 0 = upright, 1 = flat on the ground. Driven by the player.
+var prone_amount := 0.0
 
 var _spine_rest_y := 0.0
 var _death_rest_y := 0.0
@@ -78,9 +84,13 @@ func _process(delta: float) -> void:
 	# Spine carries aim pitch, hit flinch and the death slump at once.
 	spine.rotation.x = spine_pitch + _flinch + _death * deg_to_rad(22.0) * -_death_sign
 	# The body pivots about its feet, so rotating the root lays it on the floor.
+	# Prone tips the same way a face-first collapse does, just under control.
 	var fall := ease(_death, 0.35)
-	rotation.x = _death_sign * deg_to_rad(death_angle_deg) * fall
-	position.y = _death_rest_y + 0.12 * fall
+	rotation.x = (
+		_death_sign * deg_to_rad(death_angle_deg) * fall
+		- deg_to_rad(prone_angle_deg) * prone_amount * (1.0 - fall)
+	)
+	position.y = _death_rest_y + 0.12 * fall + prone_lift * prone_amount * (1.0 - fall)
 
 
 ## Kicks the torso away from an impact. `from_behind` flips which way it folds.

@@ -15,6 +15,9 @@ signal died
 @export var jump_velocity := 4.5
 @export var mouse_sensitivity := 0.002
 @export var acceleration := 12.0
+## Height that can be walked up without jumping. One block is 0.25m; the extra
+## is margin so a block edge is never caught on.
+@export var step_height := 0.28
 
 @export_group("Health")
 @export var max_health := 100.0
@@ -24,6 +27,8 @@ signal died
 @export var fall_damage_per_speed := 6.0
 ## Seconds face-down before respawning at the start point.
 @export var respawn_delay := 4.0
+## Falling this far below the world kills, in case the edge is ever outrun.
+@export var void_depth := -12.0
 
 @export_group("Aim")
 @export var aim_fov := 55.0
@@ -36,6 +41,12 @@ signal died
 @export var crouch_drop := 0.35
 ## Crouch blend rate, per second.
 @export var crouch_transition := 8.0
+## How far the eye drops when prone.
+@export var prone_drop := 1.25
+## Seconds the crouch key must be held to drop prone.
+@export var prone_hold_time := 1.0
+## Seconds to lower into or rise out of prone.
+@export var prone_transition := 0.45
 
 ## Metres of ground travel between footsteps. Cadence scales with speed on its
 ## own, so running steps more often without a separate interval.
@@ -60,12 +71,22 @@ const FOOTSTEPS: Array[AudioStream] = [
 	preload("res://assets/audio/footstep_04.wav"),
 ]
 const LAND_SOUND: AudioStream = preload("res://assets/audio/land.wav")
+## Put up over the death view so every life starts with a fresh choice of kit.
+const LOADOUT_SCREEN: PackedScene = preload("res://scenes/loadout_select.tscn")
 
 @onready var head: Node3D = $Head
 @onready var collision_shape: CollisionShape3D = $CollisionShape3D
 @onready var step_player: AudioStreamPlayer = $StepPlayer
 @onready var thompson: Equipment = $Head/Camera3D/WeaponSocket/WeaponThompson
 @onready var grenade: Equipment = $Head/Camera3D/WeaponSocket/WeaponGrenade
+@onready var shotgun: Equipment = $Head/Camera3D/WeaponSocket/WeaponShotgun
+@onready var garand: Equipment = $Head/Camera3D/WeaponSocket/WeaponGarand
+@onready var carbine: Equipment = $Head/Camera3D/WeaponSocket/WeaponCarbine
+@onready var bazooka: Equipment = $Head/Camera3D/WeaponSocket/WeaponBazooka
+@onready var bar: Equipment = $Head/Camera3D/WeaponSocket/WeaponBAR
+@onready var m1911: Equipment = $Head/Camera3D/WeaponSocket/WeaponM1911
+@onready var johnson: Equipment = $Head/Camera3D/WeaponSocket/WeaponJohnson
+@onready var shovel: Equipment = $Head/Camera3D/WeaponSocket/WeaponShovel
 @onready var camera_fp: Camera3D = $Head/Camera3D
 @onready var camera_tp: Camera3D = $Head/SpringArm3D/CameraTP
 @onready var spring_arm: SpringArm3D = $Head/SpringArm3D
@@ -75,6 +96,20 @@ const LAND_SOUND: AudioStream = preload("res://assets/audio/land.wav")
 @onready var body_spine: Node3D = $BodyModel/Spine
 @onready var body_arms: ArmRig = $BodyModel/Spine/Arms
 @onready var socket_tp: Node3D = $BodyModel/Spine/WeaponSocket
+## Everything that exists, keyed the way the select screen names it. What is
+## actually carried is whichever subset was picked there.
+@onready var _catalogue := {
+	&"thompson": thompson,
+	&"shotgun": shotgun,
+	&"garand": garand,
+	&"carbine": carbine,
+	&"bazooka": bazooka,
+	&"bar": bar,
+	&"m1911": m1911,
+	&"johnson": johnson,
+	&"shovel": shovel,
+	&"grenade": grenade,
+}
 
 var gravity: float = ProjectSettings.get_setting("physics/3d/default_gravity")
 
@@ -90,6 +125,11 @@ var _third_person := false
 ## Toggled by the crouch key; `_crouch` is its smoothed 0..1 form.
 var _crouching := false
 var _crouch := 0.0
+## Prone is a separate stance: held crouch drops into it, and it pins you in
+## place -- you can turn and shoot, but not travel.
+var _prone := false
+var _prone_blend := 0.0
+var _crouch_held := 0.0
 var _head_rest_y := 0.0
 var _stand_height := 0.0
 var _rest_fov := 75.0
@@ -97,6 +137,9 @@ var health := 0.0
 var _dead := false
 var _spawn_transform := Transform3D.IDENTITY
 var _death_tween: Tween
+## Holds the respawn loadout screen while it is up; null the rest of the time.
+var _select_layer: CanvasLayer
+var _voxel_world: Node
 # Alternates each footfall so the gait phase runs 0..2PI over two steps, which
 # lands each footplant exactly on its footstep sound.
 var _step_parity := false
@@ -115,8 +158,9 @@ func _ready() -> void:
 	health = max_health
 	health_changed.emit(health, max_health)
 	_spawn_transform = global_transform
+	_voxel_world = get_tree().get_first_node_in_group("voxel_world")
 	_aim_yaw = rotation.y
-	loadout = [thompson, grenade]
+	_build_loadout()
 	# Keep the camera from clipping into our own capsule.
 	spring_arm.add_excluded_object(get_rid())
 	# Both rigs grip the same weapon node, whichever socket it currently hangs
@@ -130,11 +174,16 @@ func _ready() -> void:
 
 
 func _unhandled_input(event: InputEvent) -> void:
+	# A corpse takes no orders, and while the loadout screen is up the number
+	# keys belong to it rather than to weapon slots.
+	if _dead:
+		return
+
 	var captured := Input.mouse_mode == Input.MOUSE_MODE_CAPTURED
 
 	if event is InputEventMouseMotion and captured:
 		# Sighted aiming slows the turn rate in proportion to the zoom.
-		var sens := mouse_sensitivity * lerpf(1.0, aim_sensitivity, weapon.aim_ratio())
+		var sens := mouse_sensitivity * lerpf(1.0, _aim_sensitivity(), weapon.aim_ratio())
 		_aim_yaw -= event.relative.x * sens
 		_aim_pitch = clampf(
 			_aim_pitch - event.relative.y * sens, -PITCH_LIMIT, PITCH_LIMIT
@@ -143,8 +192,20 @@ func _unhandled_input(event: InputEvent) -> void:
 		_equip(0)
 	elif event.is_action_pressed("slot_2"):
 		_equip(1)
+	elif event.is_action_pressed("slot_3"):
+		_equip(2)
+	elif event.is_action_pressed("slot_4"):
+		_equip(3)
+	elif event.is_action_pressed("slot_5"):
+		_equip(4)
 	elif event.is_action_pressed("crouch"):
-		_crouching = not _crouching
+		# From prone, a tap gets you back up to a crouch rather than toggling.
+		if _prone:
+			_prone = false
+			_crouching = true
+		else:
+			_crouching = not _crouching
+		_crouch_held = 0.0
 	elif event.is_action_pressed("toggle_view"):
 		_third_person = not _third_person
 		_apply_view()
@@ -175,18 +236,25 @@ func _process(delta: float) -> void:
 	# Iron sights are first-person only; the pose is solved against the camera.
 	var captured := Input.mouse_mode == Input.MOUSE_MODE_CAPTURED
 	weapon.set_aiming(captured and not _third_person and Input.is_action_pressed("aim"))
-	camera_fp.fov = lerpf(_rest_fov, aim_fov, weapon.aim_ratio())
+	camera_fp.fov = lerpf(_rest_fov, _sighted_fov(), weapon.aim_ratio())
 
 	if not captured:
 		return
 	if Input.is_action_pressed("shoot"):
 		if weapon.try_fire():
 			_shoot_recency = shooting_walk_time
+	else:
+		# Only ever while the trigger is actually up. A pump gun needs to see it
+		# come up before it will fire again, and a grenade throws on the way up,
+		# so releasing on any other frame would throw the moment you pulled the
+		# pin. Safe to repeat: both ignore it after the first.
+		weapon.release_trigger()
 	if Input.is_action_just_pressed("reload"):
 		weapon.reload()
 
 
 func _physics_process(delta: float) -> void:
+	_check_out_of_bounds()
 	if _dead:
 		# Still fall, but take no input and make no footfalls.
 		if not is_on_floor():
@@ -203,7 +271,7 @@ func _physics_process(delta: float) -> void:
 
 	if not was_on_floor:
 		velocity.y -= gravity * delta
-	elif Input.is_action_just_pressed("jump"):
+	elif not _prone and Input.is_action_just_pressed("jump"):
 		velocity.y = jump_velocity
 
 	var input_dir := Input.get_vector("move_left", "move_right", "move_forward", "move_back")
@@ -214,7 +282,12 @@ func _physics_process(delta: float) -> void:
 	velocity.x = move_toward(velocity.x, target.x, acceleration * delta * speed)
 	velocity.z = move_toward(velocity.z, target.z, acceleration * delta * speed)
 
+	# Remember the intent: after sliding, velocity no longer reflects where we
+	# were trying to go.
+	var intended := Vector3(velocity.x, 0.0, velocity.z) * delta
 	move_and_slide()
+	if is_on_floor() and is_on_wall() and intended.length_squared() > 1e-8:
+		_try_step_up(intended)
 
 	if is_on_floor() and not was_on_floor:
 		_play_step(LAND_SOUND, 1.0, STEP_VOLUME_DB + 4.0)
@@ -229,9 +302,49 @@ func _physics_process(delta: float) -> void:
 	_drive_gait(delta)
 
 
+## Godot's CharacterBody3D has no step climbing, so this does it by hand: lift,
+## move across, then drop back down. Bails out unless all three succeed, which
+## is what stops it from being used to climb walls or cross gaps.
+func _try_step_up(motion: Vector3) -> bool:
+	var lift := Vector3.UP * step_height
+	var start := global_transform
+	if test_move(start, lift):
+		return false
+
+	var raised := start.translated(lift)
+	if test_move(raised, motion):
+		return false
+
+	var across := raised.translated(motion)
+	var landing := KinematicCollision3D.new()
+	var drop := Vector3.DOWN * (step_height + 0.02)
+	if not test_move(across, drop, landing):
+		# Nothing underneath: that was a gap, not a step.
+		return false
+
+	global_position = across.origin + landing.get_travel()
+	return true
+
+
+## FOV to zoom to when the held item is fully raised. Irons use the player's
+## own setting; anything with glass on it names its own.
+func _sighted_fov() -> float:
+	return weapon.sighted_fov if weapon.sighted_fov > 0.0 else aim_fov
+
+
+## A magnified optic has to slow the turn rate further, or the view whips around
+## at the same angular rate through several times the magnification. Scaled by
+## how much further the optic zooms than plain irons do, so irons are unchanged.
+func _aim_sensitivity() -> float:
+	return aim_sensitivity * (_sighted_fov() / aim_fov)
+
+
 ## Running is the default; every other state can only slow it down, so the
 ## slowest applicable restriction always wins.
 func _current_speed() -> float:
+	# Prone is stationary by design: turn and shoot, but do not travel.
+	if _prone:
+		return 0.0
 	var speed := run_speed
 	if _shoot_recency > 0.0 or Input.is_action_pressed("shoot"):
 		speed = minf(speed, walk_speed)
@@ -246,12 +359,35 @@ func _current_speed() -> float:
 ## matches what the camera implies. Note there is no headroom check on standing
 ## back up.
 func _update_crouch(delta: float) -> void:
-	_crouch = move_toward(_crouch, 1.0 if _crouching else 0.0, crouch_transition * delta)
-	var drop := crouch_drop * _crouch
+	_update_prone_hold(delta)
+
+	# Crouch relaxes as prone takes over, so the drop hands off smoothly.
+	var crouch_target := 1.0 if (_crouching and not _prone) else 0.0
+	_crouch = move_toward(_crouch, crouch_target, crouch_transition * delta)
+	_prone_blend = move_toward(
+		_prone_blend, 1.0 if _prone else 0.0, delta / maxf(prone_transition, 0.001)
+	)
+
+	var drop := crouch_drop * _crouch + prone_drop * _prone_blend
 	head.position.y = _head_rest_y - drop
-	var height := _stand_height - drop
-	(collision_shape.shape as CapsuleShape3D).height = height
+	var shape := collision_shape.shape as CapsuleShape3D
+	# A capsule cannot be shorter than its own diameter, so prone bottoms out
+	# there: the collider stays a little taller than the pose suggests.
+	var height := maxf(_stand_height - drop, shape.radius * 2.0 + 0.02)
+	shape.height = height
 	collision_shape.position.y = height * 0.5
+
+
+## Holding crouch, rather than tapping it, drops you prone.
+func _update_prone_hold(delta: float) -> void:
+	if _prone or not Input.is_action_pressed("crouch"):
+		if not Input.is_action_pressed("crouch"):
+			_crouch_held = 0.0
+		return
+	_crouch_held += delta
+	if _crouch_held >= prone_hold_time:
+		_prone = true
+		_crouching = true
 
 
 ## Feeds the body's walk cycle. Runs in both views: in first person the body is
@@ -261,6 +397,7 @@ func _drive_gait(delta: float) -> void:
 	var phase := (_stride_accum / stride_length) * PI
 	if _step_parity:
 		phase += PI
+	body_model.prone_amount = _prone_blend
 	body_model.set_gait(
 		phase, clampf(ground_speed / walk_speed, 0.0, 1.3), is_on_floor(), _crouch, delta
 	)
@@ -279,6 +416,23 @@ func take_damage(amount: float, _hit_position := Vector3.ZERO, _from: Vector3 = 
 
 func is_dead() -> bool:
 	return _dead
+
+
+## There is no wall at the edge of the world, only a painted line. Crossing it
+## is fatal; so is falling off the side into the void.
+func _check_out_of_bounds() -> void:
+	if _dead:
+		return
+	if global_position.y < void_depth:
+		_die()
+		return
+	if _voxel_world == null:
+		return
+	var limit: Vector2 = _voxel_world.boundary_half_extent()
+	if absf(global_position.x) > limit.x or absf(global_position.z) > limit.y:
+		health = 0.0
+		health_changed.emit(health, max_health)
+		_die()
 
 
 ## Drops the camera to the ground, collapses the body and respawns after a
@@ -301,7 +455,33 @@ func _die() -> void:
 	_death_tween.tween_property(head, "rotation:z", deg_to_rad(74.0), 1.1)
 	_death_tween.tween_property(head, "rotation:x", deg_to_rad(-12.0), 1.1)
 	_death_tween.chain().tween_interval(respawn_delay)
-	_death_tween.chain().tween_callback(respawn)
+	_death_tween.chain().tween_callback(_open_loadout_select)
+
+
+## Offers the kit for the next life. Respawning waits on the answer, so this is
+## the one thing standing between dying and getting back up.
+func _open_loadout_select() -> void:
+	if _select_layer != null:
+		return
+	# The screen is a Control and this is a 3D node, so it needs a canvas of its
+	# own. Layer above the HUD, which is still drawing underneath.
+	_select_layer = CanvasLayer.new()
+	_select_layer.layer = 10
+	add_child(_select_layer)
+
+	var screen: Control = LOADOUT_SCREEN.instantiate()
+	# Instanced over a live match: the world stays exactly as it was shot up.
+	screen.loads_world = false
+	screen.confirmed.connect(_on_loadout_confirmed)
+	_select_layer.add_child(screen)
+
+
+func _on_loadout_confirmed(_picks: Array) -> void:
+	if _select_layer != null:
+		_select_layer.queue_free()
+		_select_layer = null
+	Input.mouse_mode = Input.MOUSE_MODE_CAPTURED
+	respawn()
 
 
 func respawn() -> void:
@@ -319,13 +499,28 @@ func respawn() -> void:
 	_recoil_yaw = 0.0
 	_crouching = false
 	_crouch = 0.0
+	_prone = false
+	_prone_blend = 0.0
+	_crouch_held = 0.0
 	_shoot_recency = 0.0
 	head.position.y = _head_rest_y
 	head.rotation = Vector3.ZERO
 	body_model.revive()
-	for item: Equipment in loadout:
+
+	# A throw or reload cut short by dying would otherwise leave the item busy
+	# and block re-equipping below.
+	if weapon != null:
+		weapon.on_holstered()
+	# Everything gets restocked, not just what was carried last life: an item
+	# taken for this life should arrive full whether or not it saw the last one.
+	for item: Equipment in _catalogue.values():
 		item.restock()
-	weapon.visible = true
+
+	# The picks may have changed while the loadout screen was up, so whatever
+	# slot the old weapon sat in means nothing now -- rebuild and start at one.
+	_build_loadout()
+	_slot = -1
+	_equip(0)
 	_apply_view()
 
 
@@ -334,10 +529,36 @@ func heal(amount: float) -> void:
 	health_changed.emit(health, max_health)
 
 
+## Assembles what is carried from the select screen's picks, in pick order, so
+## slot 1 is whatever was chosen first. Everything else stays parented where it
+## is and simply never becomes visible: `_equip` and `_apply_view` only ever
+## walk `loadout`, so an item left behind is inert.
+func _build_loadout() -> void:
+	loadout.clear()
+	for key: StringName in LoadoutConfig.chosen:
+		# Capped here as well as on the select screen: a slot past the last one
+		# has no key bound to it, so anything beyond the cap would be carried
+		# but unreachable.
+		if loadout.size() >= LoadoutConfig.SLOTS:
+			break
+		var item: Equipment = _catalogue.get(key)
+		if item != null and not loadout.has(item):
+			loadout.append(item)
+	# Nothing in hand would break every weapon call below, so an empty or
+	# unrecognised selection falls back to the starting weapon.
+	if loadout.is_empty():
+		loadout.append(thompson)
+	for item: Equipment in _catalogue.values():
+		item.visible = false
+
+
 ## Swaps which item is in hand. The arm rig and HUD follow the change without
 ## needing to know what was equipped.
 func _equip(index: int) -> void:
 	if index == _slot or index < 0 or index >= loadout.size():
+		return
+	# A grenade with the pin out is not going back on the belt.
+	if weapon != null and weapon.is_busy():
 		return
 	if weapon != null:
 		weapon.on_holstered()

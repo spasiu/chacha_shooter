@@ -1,16 +1,23 @@
-; Thompson M1928A1 placeholder viewmodel, assembled from primitives.
-; Local space: barrel fires along -Z, +Y up. Roughly life-size (~0.82m long).
-[gd_scene load_steps=21 format=3]
+; Thompson M1A1 placeholder viewmodel, assembled from primitives.
+; Local space: barrel fires along -Z, +Y up. Roughly life-size (~0.81m long).
+;
+; The wartime M1A1, not the M1928: plain barrel with no cooling fins and no
+; Cutts compensator, a straight box magazine rather than a drum, a horizontal
+; wooden forend in place of the vertical foregrip, and the bolt handle on the
+; receiver's right flank.
+[gd_scene load_steps=22 format=3]
 
 [ext_resource type="Script" path="res://scripts/weapon.gd" id="1_weapon"]
 
+; Parkerised olive-drab rather than blued: the M1A1 was a wartime austerity
+; build and photographs distinctly greener than the shotgun or the Garand.
 [sub_resource type="StandardMaterial3D" id="Mat_metal"]
-albedo_color = Color(0.16, 0.16, 0.18, 1)
-metallic = 0.85
-roughness = 0.35
+albedo_color = Color(0.2, 0.2, 0.16, 1)
+metallic = 0.7
+roughness = 0.55
 
 [sub_resource type="StandardMaterial3D" id="Mat_wood"]
-albedo_color = Color(0.33, 0.19, 0.09, 1)
+albedo_color = Color(0.42, 0.26, 0.13, 1)
 roughness = 0.6
 
 [sub_resource type="StandardMaterial3D" id="Mat_flash"]
@@ -23,47 +30,37 @@ emission_energy_multiplier = 6.0
 
 [sub_resource type="BoxMesh" id="Mesh_receiver"]
 material = SubResource("Mat_metal")
-size = Vector3(0.055, 0.085, 0.3)
+size = Vector3(0.055, 0.075, 0.2)
 
 [sub_resource type="CylinderMesh" id="Mesh_barrel"]
 material = SubResource("Mat_metal")
-top_radius = 0.013
-bottom_radius = 0.013
-height = 0.26
+top_radius = 0.012
+bottom_radius = 0.012
+height = 0.38
 radial_segments = 12
 rings = 1
 
-[sub_resource type="CylinderMesh" id="Mesh_fin"]
+[sub_resource type="CylinderMesh" id="Mesh_muzzle_nut"]
 material = SubResource("Mat_metal")
-top_radius = 0.021
-bottom_radius = 0.021
-height = 0.01
+top_radius = 0.016
+bottom_radius = 0.016
+height = 0.022
 radial_segments = 12
 rings = 1
 
-[sub_resource type="CylinderMesh" id="Mesh_comp"]
+; Straight 30-round box. The base class's reload drops it away and rides a
+; fresh one back up, which is the same gesture a drum needed.
+[sub_resource type="BoxMesh" id="Mesh_magazine"]
 material = SubResource("Mat_metal")
-top_radius = 0.021
-bottom_radius = 0.021
-height = 0.055
-radial_segments = 12
-rings = 1
-
-[sub_resource type="CylinderMesh" id="Mesh_drum"]
-material = SubResource("Mat_metal")
-top_radius = 0.072
-bottom_radius = 0.072
-height = 0.032
-radial_segments = 20
-rings = 1
+size = Vector3(0.026, 0.15, 0.048)
 
 [sub_resource type="BoxMesh" id="Mesh_rear_base"]
 material = SubResource("Mat_metal")
-size = Vector3(0.03, 0.01, 0.008)
+size = Vector3(0.028, 0.008, 0.01)
 
-[sub_resource type="BoxMesh" id="Mesh_rear_post"]
+[sub_resource type="BoxMesh" id="Mesh_rear_ear"]
 material = SubResource("Mat_metal")
-size = Vector3(0.009, 0.02, 0.008)
+size = Vector3(0.005, 0.022, 0.006)
 
 ; Front post is deliberately oversized and pale so it reads against a dark
 ; target; a scale-accurate blade is only a few pixels wide.
@@ -72,33 +69,42 @@ albedo_color = Color(0.62, 0.63, 0.66, 1)
 metallic = 0.4
 roughness = 0.5
 
+[sub_resource type="BoxMesh" id="Mesh_front_base"]
+material = SubResource("Mat_metal")
+size = Vector3(0.02, 0.012, 0.016)
+
 [sub_resource type="BoxMesh" id="Mesh_front_blade"]
 material = SubResource("Mat_front_post")
-size = Vector3(0.009, 0.022, 0.006)
-
-[sub_resource type="BoxMesh" id="Mesh_front_wing"]
-material = SubResource("Mat_metal")
-size = Vector3(0.005, 0.026, 0.006)
+size = Vector3(0.007, 0.02, 0.007)
 
 [sub_resource type="BoxMesh" id="Mesh_bolt"]
 material = SubResource("Mat_metal")
-size = Vector3(0.014, 0.014, 0.05)
+size = Vector3(0.014, 0.014, 0.042)
 
 [sub_resource type="BoxMesh" id="Mesh_guard"]
 material = SubResource("Mat_metal")
-size = Vector3(0.012, 0.03, 0.055)
+size = Vector3(0.012, 0.028, 0.05)
 
-[sub_resource type="BoxMesh" id="Mesh_foregrip"]
+; Horizontal, lying under the barrel, not the M1928's vertical foregrip.
+[sub_resource type="BoxMesh" id="Mesh_forend"]
 material = SubResource("Mat_wood")
-size = Vector3(0.032, 0.1, 0.042)
+size = Vector3(0.042, 0.04, 0.15)
 
 [sub_resource type="BoxMesh" id="Mesh_grip"]
 material = SubResource("Mat_wood")
-size = Vector3(0.033, 0.125, 0.048)
+size = Vector3(0.032, 0.095, 0.048)
 
-[sub_resource type="BoxMesh" id="Mesh_stock"]
+[sub_resource type="BoxMesh" id="Mesh_wrist"]
 material = SubResource("Mat_wood")
-size = Vector3(0.042, 0.085, 0.24)
+size = Vector3(0.04, 0.062, 0.11)
+
+[sub_resource type="BoxMesh" id="Mesh_butt"]
+material = SubResource("Mat_wood")
+size = Vector3(0.045, 0.095, 0.16)
+
+[sub_resource type="BoxMesh" id="Mesh_buttplate"]
+material = SubResource("Mat_metal")
+size = Vector3(0.046, 0.098, 0.01)
 
 [sub_resource type="SphereMesh" id="Mesh_flash"]
 material = SubResource("Mat_flash")
@@ -109,109 +115,98 @@ rings = 5
 
 [node name="WeaponThompson" type="Node3D"]
 script = ExtResource("1_weapon")
+damage_short = 100.0
+damage_medium = 50.0
+damage_long = 25.0
+damage_beyond = 10.0
+magazine_size = 30
 
 [node name="Receiver" type="MeshInstance3D" parent="."]
-transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0, -0.06)
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0, 0)
 mesh = SubResource("Mesh_receiver")
 
 [node name="Barrel" type="MeshInstance3D" parent="."]
-transform = Transform3D(1, 0, 0, 0, 0, -1, 0, 1, 0, 0, 0.018, -0.34)
+transform = Transform3D(1, 0, 0, 0, 0, -1, 0, 1, 0, 0, 0.018, -0.28)
 mesh = SubResource("Mesh_barrel")
 
-[node name="Fin1" type="MeshInstance3D" parent="."]
-transform = Transform3D(1, 0, 0, 0, 0, -1, 0, 1, 0, 0, 0.018, -0.25)
-mesh = SubResource("Mesh_fin")
+[node name="MuzzleNut" type="MeshInstance3D" parent="."]
+transform = Transform3D(1, 0, 0, 0, 0, -1, 0, 1, 0, 0, 0.018, -0.462)
+mesh = SubResource("Mesh_muzzle_nut")
 
-[node name="Fin2" type="MeshInstance3D" parent="."]
-transform = Transform3D(1, 0, 0, 0, 0, -1, 0, 1, 0, 0, 0.018, -0.29)
-mesh = SubResource("Mesh_fin")
-
-[node name="Fin3" type="MeshInstance3D" parent="."]
-transform = Transform3D(1, 0, 0, 0, 0, -1, 0, 1, 0, 0, 0.018, -0.33)
-mesh = SubResource("Mesh_fin")
-
-[node name="Fin4" type="MeshInstance3D" parent="."]
-transform = Transform3D(1, 0, 0, 0, 0, -1, 0, 1, 0, 0, 0.018, -0.37)
-mesh = SubResource("Mesh_fin")
-
-[node name="Fin5" type="MeshInstance3D" parent="."]
-transform = Transform3D(1, 0, 0, 0, 0, -1, 0, 1, 0, 0, 0.018, -0.41)
-mesh = SubResource("Mesh_fin")
-
-[node name="Compensator" type="MeshInstance3D" parent="."]
-transform = Transform3D(1, 0, 0, 0, 0, -1, 0, 1, 0, 0, 0.018, -0.485)
-mesh = SubResource("Mesh_comp")
-
-; Sight line runs at y=0.054 through the rear notch and across the front blade
+; Sight line runs at y=0.050 through the rear notch and across the front blade
 ; tip. RearSight/FrontSight are the markers the aim solve reads; the meshes
 ; around them are just what you look through.
 [node name="RearSight" type="Marker3D" parent="."]
-transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0.054, -0.175)
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0.05, 0.082)
 
 [node name="RearSightBase" type="MeshInstance3D" parent="."]
-transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0.043, -0.175)
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0.042, 0.082)
 mesh = SubResource("Mesh_rear_base")
 
-[node name="RearSightPostL" type="MeshInstance3D" parent="."]
-transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -0.0125, 0.058, -0.175)
-mesh = SubResource("Mesh_rear_post")
+[node name="RearSightEarL" type="MeshInstance3D" parent="."]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -0.011, 0.055, 0.082)
+mesh = SubResource("Mesh_rear_ear")
 
-[node name="RearSightPostR" type="MeshInstance3D" parent="."]
-transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0.0125, 0.058, -0.175)
-mesh = SubResource("Mesh_rear_post")
+[node name="RearSightEarR" type="MeshInstance3D" parent="."]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0.011, 0.055, 0.082)
+mesh = SubResource("Mesh_rear_ear")
 
 [node name="FrontSight" type="Marker3D" parent="."]
-transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0.054, -0.465)
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0.05, -0.444)
+
+[node name="FrontSightBase" type="MeshInstance3D" parent="."]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0.032, -0.444)
+mesh = SubResource("Mesh_front_base")
 
 [node name="FrontSightBlade" type="MeshInstance3D" parent="."]
-transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0.043, -0.465)
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0.042, -0.444)
 mesh = SubResource("Mesh_front_blade")
-
-[node name="FrontSightWingL" type="MeshInstance3D" parent="."]
-transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -0.014, 0.047, -0.465)
-mesh = SubResource("Mesh_front_wing")
-
-[node name="FrontSightWingR" type="MeshInstance3D" parent="."]
-transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0.014, 0.047, -0.465)
-mesh = SubResource("Mesh_front_wing")
 
 ; On the receiver's right flank rather than on top: a top-mounted handle sits
 ; exactly on the sight line and, being nearer the eye than the rear notch,
 ; blocks the sight picture entirely.
 [node name="BoltHandle" type="MeshInstance3D" parent="."]
-transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0.036, 0.022, -0.06)
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0.035, 0.026, 0.02)
 mesh = SubResource("Mesh_bolt")
 
-[node name="DrumMag" type="MeshInstance3D" parent="."]
-transform = Transform3D(0, -1, 0, 1, 0, 0, 0, 0, 1, 0, -0.095, -0.09)
-mesh = SubResource("Mesh_drum")
+[node name="Magazine" type="MeshInstance3D" parent="."]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, -0.1, -0.05)
+mesh = SubResource("Mesh_magazine")
 
 [node name="TriggerGuard" type="MeshInstance3D" parent="."]
-transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, -0.055, -0.035)
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, -0.05, 0.014)
 mesh = SubResource("Mesh_guard")
 
-[node name="Foregrip" type="MeshInstance3D" parent="."]
-transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, -0.05, -0.295)
-mesh = SubResource("Mesh_foregrip")
+[node name="Forend" type="MeshInstance3D" parent="."]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, -0.004, -0.17)
+mesh = SubResource("Mesh_forend")
 
 [node name="PistolGrip" type="MeshInstance3D" parent="."]
-transform = Transform3D(1, 0, 0, 0, 0.965926, 0.258819, 0, -0.258819, 0.965926, 0, -0.092, 0.015)
+transform = Transform3D(1, 0, 0, 0, 0.978148, 0.207912, 0, -0.207912, 0.978148, 0, -0.072, 0.075)
 mesh = SubResource("Mesh_grip")
 
-[node name="Stock" type="MeshInstance3D" parent="."]
-transform = Transform3D(1, 0, 0, 0, 0.994522, -0.104528, 0, 0.104528, 0.994522, 0, -0.03, 0.185)
-mesh = SubResource("Mesh_stock")
+[node name="Wrist" type="MeshInstance3D" parent="."]
+transform = Transform3D(1, 0, 0, 0, 0.996195, -0.087156, 0, 0.087156, 0.996195, 0, -0.015, 0.145)
+mesh = SubResource("Mesh_wrist")
+
+[node name="Butt" type="MeshInstance3D" parent="."]
+transform = Transform3D(1, 0, 0, 0, 0.996195, -0.087156, 0, 0.087156, 0.996195, 0, -0.03, 0.268)
+mesh = SubResource("Mesh_butt")
+
+[node name="Buttplate" type="MeshInstance3D" parent="."]
+transform = Transform3D(1, 0, 0, 0, 0.996195, -0.087156, 0, 0.087156, 0.996195, 0, -0.03, 0.35)
+mesh = SubResource("Mesh_buttplate")
 
 ; Attachment points for the arm rig. Any weapon that wants hands on it needs
 ; these two markers; nothing else about the rig is weapon-specific.
 [node name="GripRight" type="Marker3D" parent="."]
-transform = Transform3D(1, 0, 0, 0, 0.965926, 0.258819, 0, -0.258819, 0.965926, 0, -0.092, 0.015)
+transform = Transform3D(1, 0, 0, 0, 0.978148, 0.207912, 0, -0.207912, 0.978148, 0, -0.072, 0.075)
 
 [node name="GripLeft" type="Marker3D" parent="."]
-transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, -0.05, -0.295)
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, -0.024, -0.17)
 
 [node name="Muzzle" type="Marker3D" parent="."]
-transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0.018, -0.515)
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0.018, -0.478)
 
 [node name="MuzzleFlash" type="MeshInstance3D" parent="Muzzle"]
 transform = Transform3D(0.9, 0, 0, 0, 0.75, 0, 0, 0, 1.9, 0, 0, -0.05)

@@ -1,0 +1,234 @@
+; M1 Carbine placeholder viewmodel, assembled from primitives.
+; Local space: barrel fires along -Z, +Y up. Roughly life-size (~0.90m long).
+;
+; Sight line runs at y=0.068, clear of the receiver, handguard, barrel band and
+; the operating slide handle -- the handle sits on the right flank rather than
+; on top, which is where it would block the aperture.
+[gd_scene load_steps=23 format=3]
+
+[ext_resource type="Script" path="res://scripts/weapon.gd" id="1_weapon"]
+
+[sub_resource type="StandardMaterial3D" id="Mat_steel"]
+albedo_color = Color(0.1, 0.1, 0.12, 1)
+metallic = 0.85
+roughness = 0.32
+
+[sub_resource type="StandardMaterial3D" id="Mat_wood"]
+albedo_color = Color(0.42, 0.22, 0.12, 1)
+roughness = 0.6
+
+[sub_resource type="StandardMaterial3D" id="Mat_front"]
+albedo_color = Color(0.62, 0.63, 0.66, 1)
+metallic = 0.4
+roughness = 0.5
+
+[sub_resource type="StandardMaterial3D" id="Mat_flash"]
+transparency = 1
+shading_mode = 0
+albedo_color = Color(1, 0.83, 0.45, 0.9)
+emission_enabled = true
+emission = Color(1, 0.72, 0.3, 1)
+emission_energy_multiplier = 6.0
+
+[sub_resource type="BoxMesh" id="Mesh_receiver"]
+material = SubResource("Mat_steel")
+size = Vector3(0.042, 0.058, 0.26)
+
+[sub_resource type="CylinderMesh" id="Mesh_barrel"]
+material = SubResource("Mat_steel")
+top_radius = 0.011
+bottom_radius = 0.012
+height = 0.4
+radial_segments = 12
+rings = 1
+
+[sub_resource type="BoxMesh" id="Mesh_handguard"]
+material = SubResource("Mat_wood")
+size = Vector3(0.048, 0.045, 0.22)
+
+[sub_resource type="BoxMesh" id="Mesh_band"]
+material = SubResource("Mat_steel")
+size = Vector3(0.05, 0.05, 0.022)
+
+[sub_resource type="BoxMesh" id="Mesh_wrist"]
+material = SubResource("Mat_wood")
+size = Vector3(0.038, 0.055, 0.2)
+
+[sub_resource type="BoxMesh" id="Mesh_butt_top"]
+material = SubResource("Mat_wood")
+size = Vector3(0.048, 0.03, 0.16)
+
+[sub_resource type="BoxMesh" id="Mesh_butt_bottom"]
+material = SubResource("Mat_wood")
+size = Vector3(0.048, 0.032, 0.16)
+
+[sub_resource type="BoxMesh" id="Mesh_buttplate"]
+material = SubResource("Mat_steel")
+size = Vector3(0.05, 0.105, 0.012)
+
+[sub_resource type="BoxMesh" id="Mesh_magazine"]
+material = SubResource("Mat_steel")
+size = Vector3(0.026, 0.1, 0.042)
+
+[sub_resource type="BoxMesh" id="Mesh_guard"]
+material = SubResource("Mat_steel")
+size = Vector3(0.03, 0.022, 0.055)
+
+[sub_resource type="BoxMesh" id="Mesh_bolt"]
+material = SubResource("Mat_steel")
+size = Vector3(0.03, 0.016, 0.018)
+
+[sub_resource type="BoxMesh" id="Mesh_rear_base"]
+material = SubResource("Mat_steel")
+size = Vector3(0.028, 0.014, 0.01)
+
+[sub_resource type="BoxMesh" id="Mesh_rear_post"]
+material = SubResource("Mat_steel")
+size = Vector3(0.008, 0.026, 0.01)
+
+[sub_resource type="BoxMesh" id="Mesh_rear_top"]
+material = SubResource("Mat_steel")
+size = Vector3(0.03, 0.007, 0.01)
+
+[sub_resource type="BoxMesh" id="Mesh_front_post"]
+material = SubResource("Mat_front")
+size = Vector3(0.008, 0.024, 0.008)
+
+[sub_resource type="BoxMesh" id="Mesh_front_wing"]
+material = SubResource("Mat_steel")
+size = Vector3(0.005, 0.03, 0.008)
+
+[sub_resource type="SphereMesh" id="Mesh_flash"]
+material = SubResource("Mat_flash")
+radius = 0.045
+height = 0.09
+radial_segments = 10
+rings = 5
+
+[node name="WeaponCarbine" type="Node3D"]
+script = ExtResource("1_weapon")
+rounds_per_minute = 350.0
+max_range = 228.6
+automatic = false
+fire_pitch = 1.25
+min_spread = 0.15
+max_spread = 2.0
+bloom_per_shot = 0.1
+bloom_recovery = 1.1
+recoil_pitch = 0.95
+recoil_yaw = 0.28
+kick_back = 0.045
+magazine_size = 15
+reserve_ammo = 90
+reload_time = 2.2
+sway_amplitude = 1.5
+damage_short = 100.0
+damage_medium = 100.0
+damage_long = 50.0
+damage_beyond = 10.0
+
+[node name="Receiver" type="MeshInstance3D" parent="."]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0.012, -0.09)
+mesh = SubResource("Mesh_receiver")
+
+[node name="Barrel" type="MeshInstance3D" parent="."]
+transform = Transform3D(1, 0, 0, 0, 0, -1, 0, 1, 0, 0, 0.028, -0.4)
+mesh = SubResource("Mesh_barrel")
+
+[node name="Handguard" type="MeshInstance3D" parent="."]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0.024, -0.33)
+mesh = SubResource("Mesh_handguard")
+
+[node name="BarrelBand" type="MeshInstance3D" parent="."]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0.026, -0.445)
+mesh = SubResource("Mesh_band")
+
+[node name="Wrist" type="MeshInstance3D" parent="."]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, -0.012, 0.1)
+mesh = SubResource("Mesh_wrist")
+
+; The butt is split into two rails so the gap between them reads as the
+; cut-out slot in the real stock.
+[node name="ButtTop" type="MeshInstance3D" parent="."]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0.0155, 0.235)
+mesh = SubResource("Mesh_butt_top")
+
+[node name="ButtBottom" type="MeshInstance3D" parent="."]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, -0.0585, 0.235)
+mesh = SubResource("Mesh_butt_bottom")
+
+[node name="Buttplate" type="MeshInstance3D" parent="."]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, -0.022, 0.309)
+mesh = SubResource("Mesh_buttplate")
+
+[node name="Magazine" type="MeshInstance3D" parent="."]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, -0.068, -0.06)
+mesh = SubResource("Mesh_magazine")
+
+[node name="TriggerGuard" type="MeshInstance3D" parent="."]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, -0.048, 0.01)
+mesh = SubResource("Mesh_guard")
+
+[node name="BoltHandle" type="MeshInstance3D" parent="."]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0.032, 0.018, -0.055)
+mesh = SubResource("Mesh_bolt")
+
+[node name="RearSight" type="Marker3D" parent="."]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0.068, -0.2)
+
+[node name="RearSightBase" type="MeshInstance3D" parent="."]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0.05, -0.2)
+mesh = SubResource("Mesh_rear_base")
+
+[node name="RearSightPostL" type="MeshInstance3D" parent="."]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -0.011, 0.07, -0.2)
+mesh = SubResource("Mesh_rear_post")
+
+[node name="RearSightPostR" type="MeshInstance3D" parent="."]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0.011, 0.07, -0.2)
+mesh = SubResource("Mesh_rear_post")
+
+[node name="RearSightHood" type="MeshInstance3D" parent="."]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0.0865, -0.2)
+mesh = SubResource("Mesh_rear_top")
+
+[node name="FrontSight" type="Marker3D" parent="."]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0.068, -0.575)
+
+[node name="FrontSightPost" type="MeshInstance3D" parent="."]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0.056, -0.575)
+mesh = SubResource("Mesh_front_post")
+
+[node name="FrontSightWingL" type="MeshInstance3D" parent="."]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -0.013, 0.058, -0.575)
+mesh = SubResource("Mesh_front_wing")
+
+[node name="FrontSightWingR" type="MeshInstance3D" parent="."]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0.013, 0.058, -0.575)
+mesh = SubResource("Mesh_front_wing")
+
+; No pistol grip on a carbine: the firing hand wraps the wrist of the stock,
+; raked back a few degrees.
+[node name="GripRight" type="Marker3D" parent="."]
+transform = Transform3D(1, 0, 0, 0, 0.990268, 0.139173, 0, -0.139173, 0.990268, 0, -0.015, 0.075)
+
+[node name="GripLeft" type="Marker3D" parent="."]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, -0.005, -0.33)
+
+[node name="Muzzle" type="Marker3D" parent="."]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0.028, -0.605)
+
+[node name="MuzzleFlash" type="MeshInstance3D" parent="Muzzle"]
+transform = Transform3D(0.9, 0, 0, 0, 0.75, 0, 0, 0, 1.9, 0, 0, -0.04)
+visible = false
+mesh = SubResource("Mesh_flash")
+
+[node name="FlashLight" type="OmniLight3D" parent="Muzzle"]
+visible = false
+light_color = Color(1, 0.75, 0.42, 1)
+light_energy = 5.0
+omni_range = 7.0
+
+[node name="FireSound" type="AudioStreamPlayer" parent="."]
+
+[node name="ReloadSound" type="AudioStreamPlayer" parent="."]

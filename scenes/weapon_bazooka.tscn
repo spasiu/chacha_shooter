@@ -1,0 +1,199 @@
+; M1A1 Bazooka placeholder viewmodel, assembled from primitives.
+; Local space matches the other weapons: the tube points along -Z, +Y up.
+; Roughly life-size (~1.25m of tube), most of which sits behind the shoulder.
+;
+; Its damage bands are far tighter than a rifle's -- 1, 3 and 9 yards out from
+; the burst rather than 10, 50 and 250 downrange -- so it carries its own
+; `band_yards` rather than the shared small-arms curve.
+[gd_scene load_steps=16 format=3]
+
+[ext_resource type="Script" path="res://scripts/bazooka.gd" id="1_bazooka"]
+
+[sub_resource type="StandardMaterial3D" id="Mat_tube"]
+albedo_color = Color(0.21, 0.24, 0.19, 1)
+metallic = 0.6
+roughness = 0.55
+
+[sub_resource type="StandardMaterial3D" id="Mat_metal"]
+albedo_color = Color(0.13, 0.13, 0.15, 1)
+metallic = 0.85
+roughness = 0.4
+
+[sub_resource type="StandardMaterial3D" id="Mat_wood"]
+albedo_color = Color(0.34, 0.2, 0.11, 1)
+roughness = 0.62
+
+[sub_resource type="StandardMaterial3D" id="Mat_warhead"]
+albedo_color = Color(0.3, 0.32, 0.24, 1)
+metallic = 0.4
+roughness = 0.6
+
+[sub_resource type="StandardMaterial3D" id="Mat_flash"]
+transparency = 1
+shading_mode = 0
+albedo_color = Color(1, 0.83, 0.45, 0.9)
+emission_enabled = true
+emission = Color(1, 0.72, 0.3, 1)
+emission_energy_multiplier = 6.0
+
+[sub_resource type="CylinderMesh" id="Mesh_tube"]
+material = SubResource("Mat_tube")
+top_radius = 0.032
+bottom_radius = 0.032
+height = 1.25
+radial_segments = 20
+rings = 1
+cap_top = false
+cap_bottom = false
+
+; Wire guard round the muzzle and a ring at the breech, the two details that
+; make the plain pipe read as a bazooka.
+[sub_resource type="TorusMesh" id="Mesh_ring"]
+material = SubResource("Mat_metal")
+inner_radius = 0.033
+outer_radius = 0.042
+rings = 20
+ring_segments = 8
+
+[sub_resource type="BoxMesh" id="Mesh_grip"]
+material = SubResource("Mat_wood")
+size = Vector3(0.032, 0.1, 0.05)
+
+[sub_resource type="BoxMesh" id="Mesh_foregrip"]
+material = SubResource("Mat_wood")
+size = Vector3(0.034, 0.095, 0.055)
+
+[sub_resource type="BoxMesh" id="Mesh_shoulder"]
+material = SubResource("Mat_wood")
+size = Vector3(0.05, 0.085, 0.16)
+
+[sub_resource type="BoxMesh" id="Mesh_sight_post"]
+material = SubResource("Mat_metal")
+size = Vector3(0.006, 0.03, 0.008)
+
+[sub_resource type="BoxMesh" id="Mesh_sight_frame"]
+material = SubResource("Mat_metal")
+size = Vector3(0.03, 0.006, 0.008)
+
+; The loaded round, tail out of the breech. Bazooka slides this clear and back
+; again on reload.
+[sub_resource type="CylinderMesh" id="Mesh_rocket"]
+material = SubResource("Mat_warhead")
+top_radius = 0.026
+bottom_radius = 0.026
+height = 0.12
+radial_segments = 12
+rings = 1
+
+[sub_resource type="SphereMesh" id="Mesh_flash"]
+material = SubResource("Mat_flash")
+radius = 0.05
+height = 0.1
+radial_segments = 10
+rings = 5
+
+[node name="WeaponBazooka" type="Node3D"]
+script = ExtResource("1_bazooka")
+eye_relief = 0.45
+damage_short = 1000.0
+damage_medium = 100.0
+damage_long = 10.0
+damage_beyond = 0.0
+band_yards = [1.0, 3.0, 9.0]
+rounds_per_minute = 25.0
+max_range = 200.0
+automatic = false
+fire_pitch = 0.4
+fire_volume_db = 7.0
+min_spread = 0.4
+max_spread = 2.0
+bloom_per_shot = 0.7
+bloom_recovery = 0.8
+recoil_pitch = 4.2
+recoil_yaw = 0.7
+kick_back = 0.13
+kick_recovery = 7.0
+aim_time = 0.34
+aim_spread_factor = 0.4
+aim_recoil_factor = 0.7
+aim_bloom_factor = 0.6
+sway_amplitude = 2.4
+sway_period = 4.2
+magazine_size = 1
+reserve_ammo = 5
+reload_time = 4.0
+
+[node name="Tube" type="MeshInstance3D" parent="."]
+transform = Transform3D(1, 0, 0, 0, 0, -1, 0, 1, 0, 0, 0, -0.205)
+mesh = SubResource("Mesh_tube")
+
+[node name="MuzzleRing" type="MeshInstance3D" parent="."]
+transform = Transform3D(1, 0, 0, 0, 0, -1, 0, 1, 0, 0, 0, -0.81)
+mesh = SubResource("Mesh_ring")
+
+[node name="BreechRing" type="MeshInstance3D" parent="."]
+transform = Transform3D(1, 0, 0, 0, 0, -1, 0, 1, 0, 0, 0, 0.4)
+mesh = SubResource("Mesh_ring")
+
+[node name="MidRing" type="MeshInstance3D" parent="."]
+transform = Transform3D(1, 0, 0, 0, 0, -1, 0, 1, 0, 0, 0, -0.34)
+mesh = SubResource("Mesh_ring")
+
+[node name="Rocket" type="MeshInstance3D" parent="."]
+transform = Transform3D(1, 0, 0, 0, 0, -1, 0, 1, 0, 0, 0, 0.36)
+mesh = SubResource("Mesh_rocket")
+
+[node name="PistolGrip" type="MeshInstance3D" parent="."]
+transform = Transform3D(1, 0, 0, 0, 0.965926, 0.258819, 0, -0.258819, 0.965926, 0, -0.078, 0.05)
+mesh = SubResource("Mesh_grip")
+
+[node name="Foregrip" type="MeshInstance3D" parent="."]
+transform = Transform3D(1, 0, 0, 0, 0.965926, 0.258819, 0, -0.258819, 0.965926, 0, -0.076, -0.3)
+mesh = SubResource("Mesh_foregrip")
+
+[node name="ShoulderRest" type="MeshInstance3D" parent="."]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, -0.052, 0.24)
+mesh = SubResource("Mesh_shoulder")
+
+; Sight line runs at y=0.058 along the top of the tube, rear post to front post.
+[node name="RearSight" type="Marker3D" parent="."]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0.058, 0.1)
+
+[node name="RearSightPost" type="MeshInstance3D" parent="."]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0.045, 0.1)
+mesh = SubResource("Mesh_sight_post")
+
+[node name="RearSightFrame" type="MeshInstance3D" parent="."]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0.058, 0.1)
+mesh = SubResource("Mesh_sight_frame")
+
+[node name="FrontSight" type="Marker3D" parent="."]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0.058, -0.55)
+
+[node name="FrontSightPost" type="MeshInstance3D" parent="."]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0.045, -0.55)
+mesh = SubResource("Mesh_sight_post")
+
+[node name="GripRight" type="Marker3D" parent="."]
+transform = Transform3D(1, 0, 0, 0, 0.965926, 0.258819, 0, -0.258819, 0.965926, 0, -0.078, 0.05)
+
+[node name="GripLeft" type="Marker3D" parent="."]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, -0.076, -0.3)
+
+[node name="Muzzle" type="Marker3D" parent="."]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0, -0.86)
+
+[node name="MuzzleFlash" type="MeshInstance3D" parent="Muzzle"]
+transform = Transform3D(1.5, 0, 0, 0, 1.3, 0, 0, 0, 2.4, 0, 0, -0.06)
+visible = false
+mesh = SubResource("Mesh_flash")
+
+[node name="FlashLight" type="OmniLight3D" parent="Muzzle"]
+visible = false
+light_color = Color(1, 0.75, 0.42, 1)
+light_energy = 9.0
+omni_range = 12.0
+
+[node name="FireSound" type="AudioStreamPlayer" parent="."]
+
+[node name="ReloadSound" type="AudioStreamPlayer" parent="."]

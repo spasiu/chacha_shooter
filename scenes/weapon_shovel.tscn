@@ -1,0 +1,74 @@
+; Trench shovel. Haft runs along -Z with the blade at the front, angled so it
+; reads as a spade rather than a paddle.
+[gd_scene load_steps=8 format=3]
+
+[ext_resource type="Script" path="res://scripts/shovel.gd" id="1_shovel"]
+
+[sub_resource type="StandardMaterial3D" id="Mat_wood"]
+albedo_color = Color(0.4, 0.27, 0.14, 1)
+roughness = 0.72
+
+[sub_resource type="StandardMaterial3D" id="Mat_steel"]
+albedo_color = Color(0.29, 0.3, 0.32, 1)
+metallic = 0.75
+roughness = 0.45
+
+[sub_resource type="CylinderMesh" id="Mesh_haft"]
+material = SubResource("Mat_wood")
+top_radius = 0.016
+bottom_radius = 0.018
+height = 0.46
+radial_segments = 10
+rings = 1
+
+[sub_resource type="BoxMesh" id="Mesh_grip"]
+material = SubResource("Mat_wood")
+size = Vector3(0.09, 0.026, 0.03)
+
+[sub_resource type="CylinderMesh" id="Mesh_socket"]
+material = SubResource("Mat_steel")
+top_radius = 0.021
+bottom_radius = 0.026
+height = 0.07
+radial_segments = 10
+rings = 1
+
+[sub_resource type="BoxMesh" id="Mesh_blade"]
+material = SubResource("Mat_steel")
+size = Vector3(0.15, 0.014, 0.17)
+
+[sub_resource type="BoxMesh" id="Mesh_edge"]
+material = SubResource("Mat_steel")
+size = Vector3(0.15, 0.02, 0.03)
+
+[node name="WeaponShovel" type="Node3D"]
+script = ExtResource("1_shovel")
+
+[node name="Haft" type="MeshInstance3D" parent="."]
+transform = Transform3D(1, 0, 0, 0, 0, -1, 0, 1, 0, 0, 0, -0.01)
+mesh = SubResource("Mesh_haft")
+
+[node name="TGrip" type="MeshInstance3D" parent="."]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0, 0.225)
+mesh = SubResource("Mesh_grip")
+
+[node name="Socket" type="MeshInstance3D" parent="."]
+transform = Transform3D(1, 0, 0, 0, 0, -1, 0, 1, 0, 0, -0.004, -0.255)
+mesh = SubResource("Mesh_socket")
+
+; Blade pitched down 25 degrees off the haft.
+[node name="Blade" type="MeshInstance3D" parent="."]
+transform = Transform3D(1, 0, 0, 0, 0.906308, 0.422618, 0, -0.422618, 0.906308, 0, -0.024, -0.352)
+mesh = SubResource("Mesh_blade")
+
+[node name="BladeEdge" type="MeshInstance3D" parent="."]
+transform = Transform3D(1, 0, 0, 0, 0.906308, 0.422618, 0, -0.422618, 0.906308, 0, -0.056, -0.424)
+mesh = SubResource("Mesh_edge")
+
+[node name="GripRight" type="Marker3D" parent="."]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0, 0.13)
+
+[node name="GripLeft" type="Marker3D" parent="."]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0, -0.12)
+
+[node name="WorkSound" type="AudioStreamPlayer" parent="."]

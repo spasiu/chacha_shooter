@@ -15,6 +15,12 @@ extends Equipment
 ## Fraction of the animation at which the grenade actually leaves the hand.
 @export var release_at := 0.38
 @export var raise_time := 0.18
+## Total fuse carried by the grenade. Time spent cooking in hand comes off
+## what is left once it is in flight. Matches the projectile's own default
+## so an uncooked throw behaves the same as before.
+@export var fuse_time := 2.6
+## How far the grenade is raised while the fuse burns.
+@export var cook_offset := Vector3(0.03, 0.05, 0.09)
 @export var projectile_scene: PackedScene
 
 const PIN_PULL: AudioStream = preload("res://assets/audio/pin_pull.wav")
@@ -26,6 +32,12 @@ var _aim := 0.0
 var _aim_held := false
 var _throwing := false
 var _throw_tween: Tween
+var _cooking := false
+var _cook_time := 0.0
+## Whether the trigger has gone down and not yet come back up. One pull is one
+## grenade: without this, holding on through a cook-off in the hand pulls the
+## pin on the next one straight away, and so on until you run out or die.
+var _pulled := false
 var _starting_count := 0
 var _rest_position := Vector3.ZERO
 var _aim_position := Vector3.ZERO
@@ -44,14 +56,35 @@ func restock() -> void:
 	on_holstered()
 
 
+## Pressing pulls the pin and starts the fuse; the throw happens on release.
 func try_fire() -> bool:
-	if _throwing or count <= 0:
+	var held := _pulled
+	_pulled = true
+	if held or _throwing or _cooking or count <= 0:
 		return false
-	_throwing = true
+	_cooking = true
+	_cook_time = 0.0
 	throw_sound.stream = PIN_PULL
 	throw_sound.play()
-	_run_throw()
 	return true
+
+
+func release_trigger() -> void:
+	_pulled = false
+	if not _cooking:
+		return
+	_cooking = false
+	_throwing = true
+	_run_throw()
+
+
+func is_busy() -> bool:
+	return _cooking or _throwing
+
+
+## Seconds of fuse left, for the HUD.
+func fuse_remaining() -> float:
+	return maxf(fuse_time - _cook_time, 0.0)
 
 
 func set_aiming(aiming: bool) -> void:
@@ -63,6 +96,8 @@ func aim_ratio() -> float:
 
 
 func status_text() -> String:
+	if _cooking:
+		return "COOKING  %.1f" % fuse_remaining()
 	return "GRENADES  %d" % count
 
 
@@ -86,6 +121,9 @@ func on_holstered() -> void:
 	# tween has to die first or it keeps writing over the reset.
 	if _throw_tween != null and _throw_tween.is_valid():
 		_throw_tween.kill()
+	_cooking = false
+	_cook_time = 0.0
+	_pulled = false
 	_throwing = false
 	_anim_offset = Vector3.ZERO
 	_anim_tilt = Vector3.ZERO
@@ -94,10 +132,36 @@ func on_holstered() -> void:
 
 
 func _process(delta: float) -> void:
+	if _cooking:
+		_cook_time += delta
+		# Held too long and it goes off in your hand.
+		if _cook_time >= fuse_time:
+			_cook_off_in_hand()
+		else:
+			_anim_offset = _anim_offset.lerp(cook_offset, minf(delta * 9.0, 1.0))
+
 	var target := 1.0 if (_aim_held and not _throwing) else 0.0
 	_aim = move_toward(_aim, target, delta / maxf(raise_time, 0.001))
 	position = _rest_position.lerp(_aim_position, _aim) + _anim_offset
 	rotation = _anim_tilt
+
+
+## Detonates where it is being held. Entirely the player's fault.
+func _cook_off_in_hand() -> void:
+	_cooking = false
+	_cook_time = 0.0
+	count = maxi(count - 1, 0)
+	body.visible = count > 0
+	_anim_offset = Vector3.ZERO
+
+	var scene_root := get_tree().current_scene
+	if scene_root == null or projectile_scene == null:
+		return
+	var live := projectile_scene.instantiate() as RigidBody3D
+	live.fuse_time = 0.02
+	scene_root.add_child(live)
+	live.global_position = global_position
+	live.freeze = true
 
 
 func _run_throw() -> void:
@@ -133,6 +197,7 @@ func _release() -> void:
 	var forward := -camera.global_basis.z
 	var direction := (forward + Vector3.UP * throw_arc).normalized()
 	var projectile := projectile_scene.instantiate() as RigidBody3D
+	projectile.fuse_time = maxf(fuse_time - _cook_time, 0.25)
 	scene_root.add_child(projectile)
 	# Clear of the player's own capsule so it does not immediately collide.
 	projectile.global_position = camera.global_position + forward * 0.5
@@ -140,13 +205,17 @@ func _release() -> void:
 	if thrower != null:
 		projectile.add_collision_exception_with(thrower)
 	projectile.linear_velocity = direction * (throw_speed + aim_throw_bonus * _aim)
-	projectile.angular_velocity = Vector3(randf_range(-8.0, 8.0), randf_range(-4.0, 4.0), 0.0)
+	# Just enough tumble to look thrown, not enough to roll away on landing.
+	projectile.angular_velocity = Vector3(
+		randf_range(-2.5, 2.5), randf_range(-1.5, 1.5), randf_range(-1.0, 1.0)
+	)
 
 	fired.emit(deg_to_rad(1.4), deg_to_rad(randf_range(-0.4, 0.4)))
 
 
 func _finish_throw() -> void:
 	_throwing = false
+	_cook_time = 0.0
 	_anim_offset = Vector3.ZERO
 	_anim_tilt = Vector3.ZERO
 	body.visible = count > 0

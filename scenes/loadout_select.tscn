@@ -1,0 +1,72 @@
+; Pre-match loadout screen, and the game's entry point. Only the frame lives
+; here -- the item cards are built from LoadoutConfig.ITEMS at runtime, so the
+; catalogue is the single place an item has to be listed.
+[gd_scene load_steps=2 format=3]
+
+[ext_resource type="Script" path="res://scripts/loadout_select.gd" id="1_select"]
+
+[node name="LoadoutSelect" type="Control"]
+anchor_right = 1.0
+anchor_bottom = 1.0
+script = ExtResource("1_select")
+
+[node name="Backdrop" type="ColorRect" parent="."]
+anchor_right = 1.0
+anchor_bottom = 1.0
+mouse_filter = 2
+color = Color(0.065, 0.072, 0.065, 1)
+
+[node name="Root" type="VBoxContainer" parent="."]
+anchor_right = 1.0
+anchor_bottom = 1.0
+offset_left = 40.0
+offset_top = 32.0
+offset_right = -40.0
+offset_bottom = -32.0
+mouse_filter = 2
+alignment = 1
+theme_override_constants/separation = 16
+
+[node name="Title" type="Label" parent="Root"]
+mouse_filter = 2
+theme_override_colors/font_color = Color(0.93, 0.93, 0.9, 1)
+theme_override_font_sizes/font_size = 42
+text = "SELECT YOUR LOADOUT"
+horizontal_alignment = 1
+
+[node name="Subtitle" type="Label" parent="Root"]
+mouse_filter = 2
+theme_override_colors/font_color = Color(0.6, 0.62, 0.58, 1)
+theme_override_font_sizes/font_size = 16
+text = "Take three into the field."
+horizontal_alignment = 1
+
+[node name="Spacer" type="Control" parent="Root"]
+custom_minimum_size = Vector2(0, 10)
+mouse_filter = 2
+
+[node name="Cards" type="GridContainer" parent="Root"]
+size_flags_horizontal = 4
+theme_override_constants/h_separation = 16
+theme_override_constants/v_separation = 16
+columns = 5
+
+[node name="Counter" type="Label" parent="Root"]
+mouse_filter = 2
+theme_override_colors/font_color = Color(0.72, 0.74, 0.7, 1)
+theme_override_font_sizes/font_size = 18
+text = "0 OF 3 SELECTED"
+horizontal_alignment = 1
+
+[node name="Deploy" type="Button" parent="Root"]
+custom_minimum_size = Vector2(280, 54)
+size_flags_horizontal = 4
+theme_override_font_sizes/font_size = 22
+text = "DEPLOY"
+
+[node name="Hint" type="Label" parent="Root"]
+mouse_filter = 2
+theme_override_colors/font_color = Color(0.45, 0.47, 0.44, 1)
+theme_override_font_sizes/font_size = 13
+text = "1-4 TOGGLE      ENTER DEPLOY"
+horizontal_alignment = 1

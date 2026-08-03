@@ -1,14 +1,23 @@
 class_name Weapon
 extends Equipment
 
-## Hitscan automatic weapon. Owns fire timing, the raycast, recoil impulses and
-## its own visual kick; the player applies the camera recoil it emits.
+## Hitscan weapon. Owns fire timing, the raycasts, recoil impulses and its own
+## visual kick; the player applies the camera recoil it emits.
 
 @export_group("Ballistics")
 ## Thompson M1928A1 ran roughly 700rpm.
 @export var rounds_per_minute := 700.0
-@export var damage := 12.0
 @export var max_range := 120.0
+## Rays per shot. Above 1 the round is buckshot: every pellet draws its own
+## direction from the same spread cone, so the pattern opens up with distance.
+@export var pellets := 1
+## False for a pump or bolt gun, which needs the trigger released between shots.
+@export var automatic := true
+## Multiplies the gunshot sample's pitch, for weapons with a heavier report.
+@export var fire_pitch := 1.0
+## Trim on the shot, in decibels. A launcher wants to be plainly louder than
+## the rifle beside it.
+@export var fire_volume_db := 0.0
 
 @export_group("Accuracy")
 ## Cone half-angle when fully settled, in degrees.
@@ -37,6 +46,15 @@ extends Equipment
 ## Bloom-per-shot multiplier while aiming: sighted fire walks off target slower.
 @export var aim_bloom_factor := 0.4
 
+@export_group("Sway")
+## Half-width of the figure eight at the hip, in degrees. Aiming removes it.
+@export var sway_amplitude := 2.0
+## Seconds for one full figure of eight.
+@export var sway_period := 3.4
+## How far the pattern wanders off a clean figure eight, as a fraction of
+## amplitude. Zero traces the same loop forever.
+@export var sway_wander := 0.4
+
 @export_group("Ammo")
 @export var magazine_size := 50
 @export var reserve_ammo := 150
@@ -56,10 +74,10 @@ const BULLET_HOLE: PackedScene = preload("res://scenes/bullet_hole.tscn")
 const CANT_OFFSET := Vector3(-0.05, -0.06, 0.04)
 const CANT_TILT_DEG := Vector3(-12.0, 14.0, -25.0)
 # Left-hand waypoints, as offsets from its resting spot on the foregrip.
-const HAND_TO_MAG := Vector3(0.0, -0.06, 0.21)
-const HAND_OFFSCREEN := Vector3(0.02, -0.3, 0.28)
-const HAND_WITH_MAG := Vector3(0.0, -0.1, 0.2)
-const HAND_TO_BOLT := Vector3(0.0, 0.1, 0.235)
+const HAND_TO_MAG := Vector3(0.0, -0.05, 0.12)
+const HAND_OFFSCREEN := Vector3(0.02, -0.3, 0.2)
+const HAND_WITH_MAG := Vector3(0.0, -0.11, 0.12)
+const HAND_TO_BOLT := Vector3(0.0, 0.06, 0.19)
 const MAG_DROP := Vector3(0.0, -0.28, 0.02)
 const BOLT_PULL := Vector3(0.0, 0.0, 0.055)
 
@@ -68,8 +86,10 @@ const BOLT_PULL := Vector3(0.0, 0.0, 0.055)
 @onready var flash_light: OmniLight3D = $Muzzle/FlashLight
 @onready var fire_sound: AudioStreamPlayer = $FireSound
 @onready var reload_sound: AudioStreamPlayer = $ReloadSound
-@onready var drum: MeshInstance3D = $DrumMag
-@onready var bolt_handle: MeshInstance3D = $BoltHandle
+# Moving parts the default magazine reload drives. Optional: a weapon that
+# reloads some other way overrides `_run_reload_animation` and leaves them out.
+@onready var magazine: MeshInstance3D = get_node_or_null("Magazine")
+@onready var bolt_handle: MeshInstance3D = get_node_or_null("BoltHandle")
 @onready var rear_sight: Node3D = $RearSight
 @onready var front_sight: Node3D = $FrontSight
 
@@ -78,7 +98,7 @@ var is_reloading := false
 
 var _rest_position := Vector3.ZERO
 var _rest_rotation := Vector3.ZERO
-var _drum_rest := Vector3.ZERO
+var _mag_rest := Vector3.ZERO
 var _bolt_rest := Vector3.ZERO
 
 var _cooldown := 0.0
@@ -91,8 +111,13 @@ var _reload_offset := Vector3.ZERO
 var _reload_tilt := Vector3.ZERO
 var _reload_tween: Tween
 
+var _trigger_held := false
 var _aim := 0.0
 var _aim_held := false
+## x = yaw, y = pitch, in radians. Applied to both the model and the shot.
+var _sway := Vector2.ZERO
+var _sway_time := 0.0
+var _sway_seed := 0.0
 var _aim_position := Vector3.ZERO
 var _aim_rotation := Vector3.ZERO
 
@@ -104,10 +129,13 @@ var _holes: Array[Node3D] = []
 func _ready() -> void:
 	_rest_position = position
 	_rest_rotation = rotation
-	_drum_rest = drum.position
-	_bolt_rest = bolt_handle.position
+	if magazine != null:
+		_mag_rest = magazine.position
+	if bolt_handle != null:
+		_bolt_rest = bolt_handle.position
 	in_magazine = magazine_size
 	_starting_reserve = reserve_ammo
+	_sway_seed = randf() * TAU
 	_shooter = _find_ancestor_body()
 
 
@@ -145,6 +173,13 @@ func set_aim_pose(pose: Transform3D) -> void:
 
 
 func try_fire() -> bool:
+	# Checked before anything else so holding the trigger on a non-automatic
+	# weapon neither fires nor spams the auto-reload below.
+	var held := _trigger_held
+	_trigger_held = true
+	if not automatic and held:
+		return false
+
 	if is_reloading or _cooldown > 0.0:
 		return false
 	if in_magazine <= 0:
@@ -155,7 +190,7 @@ func try_fire() -> bool:
 	_cooldown = 60.0 / rounds_per_minute
 	_raycast()
 	_show_flash()
-	_play(fire_sound, GUNSHOT, randf_range(0.94, 1.06), 0.0)
+	_play(fire_sound, GUNSHOT, randf_range(0.94, 1.06) * fire_pitch, fire_volume_db)
 
 	_kick.z += kick_back
 	_bloom = minf(_bloom + bloom_per_shot * lerpf(1.0, aim_bloom_factor, _aim), 1.0)
@@ -165,6 +200,10 @@ func try_fire() -> bool:
 		deg_to_rad(recoil_yaw) * randf_range(-1.0, 1.0) * recoil_scale
 	)
 	return true
+
+
+func release_trigger() -> void:
+	_trigger_held = false
 
 
 func reload() -> void:
@@ -204,10 +243,30 @@ func _process(delta: float) -> void:
 	# Sights cannot be used mid-reload; the reload animation owns the pose.
 	var aim_target := 1.0 if (_aim_held and not is_reloading) else 0.0
 	_aim = move_toward(_aim, aim_target, delta / maxf(aim_time, 0.001))
+	_update_sway(delta)
 
 	_kick = _kick.lerp(Vector3.ZERO, minf(kick_recovery * delta, 1.0))
 	position = _rest_position.lerp(_aim_position, _aim) + _kick + _reload_offset
-	rotation = _rest_rotation.lerp(_aim_rotation, _aim) + _reload_tilt
+	rotation = (
+		_rest_rotation.lerp(_aim_rotation, _aim)
+		+ _reload_tilt
+		+ Vector3(_sway.y, _sway.x, 0.0)
+	)
+
+
+## Traces a Lissajous 1:2 curve — a figure eight — with two slow, mutually
+## irrational drift terms layered on so successive loops never quite repeat.
+## Sighting the weapon settles it: at full aim the sway is gone.
+func _update_sway(delta: float) -> void:
+	_sway_time += delta * TAU / maxf(sway_period, 0.001)
+
+	var x := sin(_sway_time)
+	var y := sin(_sway_time * 2.0) * 0.5
+	x += sin(_sway_time * 0.37 + _sway_seed) * sway_wander
+	y += cos(_sway_time * 0.29 + _sway_seed * 1.7) * sway_wander
+
+	var scale := deg_to_rad(sway_amplitude) * (1.0 - _aim)
+	_sway = Vector2(x, y) * scale
 
 
 ## Keyframed timeline for the reload. Every delay is a fraction of
@@ -226,15 +285,15 @@ func _run_reload_animation() -> void:
 	tween.tween_property(self, "_reload_tilt", _cant_tilt(), t * 0.18)
 	tween.tween_property(self, "left_hand_offset", HAND_TO_MAG, t * 0.18)
 
-	# Drum releases and falls away.
+	# Magazine releases and falls away.
 	tween.tween_callback(_play.bind(reload_sound, MAG_OUT, 1.0, -3.0)).set_delay(t * 0.2)
-	tween.tween_property(drum, "position", _drum_rest + MAG_DROP, t * 0.18).set_delay(t * 0.2)
-	tween.tween_callback(drum.hide).set_delay(t * 0.4)
+	tween.tween_property(magazine, "position", _mag_rest + MAG_DROP, t * 0.18).set_delay(t * 0.2)
+	tween.tween_callback(magazine.hide).set_delay(t * 0.4)
 
-	# Hand dips out of frame for a fresh drum, then rides it back up.
+	# Hand dips out of frame for a fresh one, then rides it back up.
 	tween.tween_property(self, "left_hand_offset", HAND_OFFSCREEN, t * 0.22).set_delay(t * 0.22)
-	tween.tween_callback(_present_fresh_drum).set_delay(t * 0.46)
-	tween.tween_property(drum, "position", _drum_rest, t * 0.21).set_delay(t * 0.47)
+	tween.tween_callback(_present_fresh_magazine).set_delay(t * 0.46)
+	tween.tween_property(magazine, "position", _mag_rest, t * 0.21).set_delay(t * 0.47)
 	tween.tween_property(self, "left_hand_offset", HAND_WITH_MAG, t * 0.2).set_delay(t * 0.48)
 	tween.tween_callback(_play.bind(reload_sound, MAG_IN, 1.0, -3.0)).set_delay(t * 0.68)
 
@@ -259,9 +318,9 @@ func _cant_tilt() -> Vector3:
 	)
 
 
-func _present_fresh_drum() -> void:
-	drum.position = _drum_rest + MAG_DROP
-	drum.show()
+func _present_fresh_magazine() -> void:
+	magazine.position = _mag_rest + MAG_DROP
+	magazine.show()
 
 
 func _finish_reload() -> void:
@@ -278,9 +337,11 @@ func _finish_reload_state() -> void:
 	_reload_offset = Vector3.ZERO
 	_reload_tilt = Vector3.ZERO
 	left_hand_offset = Vector3.ZERO
-	drum.position = _drum_rest
-	bolt_handle.position = _bolt_rest
-	drum.show()
+	if bolt_handle != null:
+		bolt_handle.position = _bolt_rest
+	if magazine != null:
+		magazine.position = _mag_rest
+		magazine.show()
 
 
 func _raycast() -> void:
@@ -296,12 +357,28 @@ func _raycast() -> void:
 	var spread := deg_to_rad(lerpf(min_spread, max_spread, _bloom)) * lerpf(
 		1.0, aim_spread_factor, _aim
 	)
+	for _i in pellets:
+		_fire_pellet(camera, origin, spread)
+
+
+## Direction one projectile leaves on: the camera's forward, carried off by the
+## weapon's sway so the shot really does go where the weapon drifts, then
+## scattered somewhere inside the spread cone.
+func _shot_direction(camera: Camera3D, spread: float) -> Vector3:
 	var direction := -camera.global_basis.z
-	direction = direction.rotated(
+	direction = direction.rotated(camera.global_basis.y, _sway.x).rotated(
+		camera.global_basis.x, _sway.y
+	)
+	return direction.rotated(
 		camera.global_basis.x, randf_range(-spread, spread)
 	).rotated(
 		camera.global_basis.y, randf_range(-spread, spread)
 	)
+
+
+## One ray, aimed anywhere inside the current spread cone.
+func _fire_pellet(camera: Camera3D, origin: Vector3, spread: float) -> void:
+	var direction := _shot_direction(camera, spread)
 
 	var query := PhysicsRayQueryParameters3D.create(origin, origin + direction * max_range)
 	if _shooter != null:
@@ -312,11 +389,24 @@ func _raycast() -> void:
 		return
 
 	var target: Object = hit.collider
-	if target != null and target.has_method("take_damage"):
-		target.take_damage(damage, hit.position, -direction)
+	if target == null or not target.has_method("take_damage"):
+		# Inert scenery: all the round leaves behind is the mark.
+		_spawn_hole(hit.position, hit.normal)
 		return
 
-	_spawn_hole(hit.position, hit.normal)
+	# Lethality is a function of how far the round actually travelled, and is
+	# quoted per shot rather than per projectile: buckshot splits its band
+	# across the pattern, so how much of the shot lands is the spread's job
+	# rather than something the damage model has to account for twice.
+	var dealt := damage_at(origin.distance_to(hit.position)) / float(maxi(pellets, 1))
+
+	# Anything damageable takes the round. What it hands back says whether a
+	# mark belongs there: terrain answers true or false depending on whether the
+	# block broke under the hit, while a character answers nothing at all and
+	# never keeps one -- it has its own reaction to being shot.
+	var broke: Variant = target.take_damage(dealt, hit.position, -direction)
+	if broke is bool and not broke:
+		_spawn_hole(hit.position, hit.normal)
 
 
 func _spawn_hole(hit_position: Vector3, normal: Vector3) -> void:

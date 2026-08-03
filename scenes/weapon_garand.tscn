@@ -1,0 +1,416 @@
+; M1D sniper Garand with an M84 telescope, assembled from primitives.
+; Local space matches the other weapons: barrel fires along -Z, +Y up. Roughly
+; life-size (~1.08m long).
+;
+; Unlike the SMG and the shotgun, most of this rifle's silhouette is wood: one
+; stock running butt-to-band with the barrel and gas cylinder exposed only over
+; the front fifth, plus an upper handguard over the barrel and a slung leather
+; strap underneath.
+;
+; The scope is centred over the bore. The real M1D offset it to the left so the
+; en-bloc clip had a clear path down through the top of the receiver; with it
+; centred, Garand throws the clip out to the right instead, from under the tube.
+;
+; Its tube is drawn with the caps off and culling disabled, so at full zoom you
+; are genuinely looking down the inside of it. Note these bases put local +Y
+; toward the shooter, so on any tapered part `top_radius` is the rear rim.
+[gd_scene load_steps=36 format=3]
+
+[ext_resource type="Script" path="res://scripts/garand.gd" id="1_garand"]
+
+[sub_resource type="StandardMaterial3D" id="Mat_metal"]
+albedo_color = Color(0.13, 0.13, 0.145, 1)
+metallic = 0.85
+roughness = 0.42
+
+; Warmer and redder than the Thompson's furniture: Garand stocks are walnut.
+[sub_resource type="StandardMaterial3D" id="Mat_wood"]
+albedo_color = Color(0.36, 0.19, 0.1, 1)
+roughness = 0.62
+
+[sub_resource type="StandardMaterial3D" id="Mat_leather"]
+albedo_color = Color(0.3, 0.21, 0.13, 1)
+roughness = 0.85
+
+; Culling off so the tube reads as a tube from outside and as a dark surround
+; from the eyepiece. Caps off on the meshes using it, or there is nothing to
+; look through.
+;
+; Unshaded on purpose: with culling off, the inside of the tube is lit by
+; normals that point the other way, so the lower inner wall catches the ground
+; and glows a flat grey right beside the sight picture. Unshaded makes the
+; surround uniformly dark from any angle, which is what it should look like.
+[sub_resource type="StandardMaterial3D" id="Mat_scope"]
+shading_mode = 0
+albedo_color = Color(0.045, 0.045, 0.05, 1)
+cull_mode = 2
+
+[sub_resource type="StandardMaterial3D" id="Mat_reticle"]
+shading_mode = 0
+albedo_color = Color(0.02, 0.02, 0.02, 1)
+
+[sub_resource type="StandardMaterial3D" id="Mat_flash"]
+transparency = 1
+shading_mode = 0
+albedo_color = Color(1, 0.83, 0.45, 0.9)
+emission_enabled = true
+emission = Color(1, 0.72, 0.3, 1)
+emission_energy_multiplier = 6.0
+
+[sub_resource type="BoxMesh" id="Mesh_receiver"]
+material = SubResource("Mat_metal")
+size = Vector3(0.048, 0.062, 0.25)
+
+[sub_resource type="CylinderMesh" id="Mesh_barrel"]
+material = SubResource("Mat_metal")
+top_radius = 0.0135
+bottom_radius = 0.0135
+height = 0.56
+radial_segments = 12
+rings = 1
+
+; Slung under and around the barrel over the exposed front section. With the
+; front sight standing on it, this is the Garand's clearest silhouette cue.
+[sub_resource type="CylinderMesh" id="Mesh_gas"]
+material = SubResource("Mat_metal")
+top_radius = 0.02
+bottom_radius = 0.02
+height = 0.2
+radial_segments = 12
+rings = 1
+
+[sub_resource type="CylinderMesh" id="Mesh_gas_lock"]
+material = SubResource("Mat_metal")
+top_radius = 0.017
+bottom_radius = 0.017
+height = 0.035
+radial_segments = 12
+rings = 1
+
+[sub_resource type="BoxMesh" id="Mesh_front_base"]
+material = SubResource("Mat_metal")
+size = Vector3(0.024, 0.014, 0.03)
+
+[sub_resource type="BoxMesh" id="Mesh_front_blade"]
+material = SubResource("Mat_metal")
+size = Vector3(0.006, 0.014, 0.007)
+
+[sub_resource type="BoxMesh" id="Mesh_front_wing"]
+material = SubResource("Mat_metal")
+size = Vector3(0.005, 0.018, 0.009)
+
+; Band clamping the front of the stock to the barrel, where the wood stops.
+[sub_resource type="BoxMesh" id="Mesh_band"]
+material = SubResource("Mat_metal")
+size = Vector3(0.054, 0.052, 0.022)
+
+[sub_resource type="BoxMesh" id="Mesh_guard"]
+material = SubResource("Mat_metal")
+size = Vector3(0.012, 0.026, 0.05)
+
+[sub_resource type="BoxMesh" id="Mesh_bolt"]
+material = SubResource("Mat_metal")
+size = Vector3(0.014, 0.014, 0.05)
+
+[sub_resource type="BoxMesh" id="Mesh_clip"]
+material = SubResource("Mat_metal")
+size = Vector3(0.03, 0.045, 0.05)
+
+[sub_resource type="BoxMesh" id="Mesh_buttplate"]
+material = SubResource("Mat_metal")
+size = Vector3(0.05, 0.11, 0.012)
+
+[sub_resource type="BoxMesh" id="Mesh_butt"]
+material = SubResource("Mat_wood")
+size = Vector3(0.048, 0.108, 0.17)
+
+[sub_resource type="BoxMesh" id="Mesh_comb"]
+material = SubResource("Mat_wood")
+size = Vector3(0.044, 0.076, 0.2)
+
+[sub_resource type="BoxMesh" id="Mesh_grip"]
+material = SubResource("Mat_wood")
+size = Vector3(0.04, 0.075, 0.055)
+
+[sub_resource type="BoxMesh" id="Mesh_forearm"]
+material = SubResource("Mat_wood")
+size = Vector3(0.05, 0.062, 0.34)
+
+[sub_resource type="BoxMesh" id="Mesh_handguard"]
+material = SubResource("Mat_wood")
+size = Vector3(0.046, 0.03, 0.3)
+
+[sub_resource type="BoxMesh" id="Mesh_sling_front"]
+material = SubResource("Mat_leather")
+size = Vector3(0.02, 0.006, 0.351)
+
+[sub_resource type="BoxMesh" id="Mesh_sling_rear"]
+material = SubResource("Mat_leather")
+size = Vector3(0.02, 0.006, 0.4604)
+
+; Straight, thin and dark, like the M84. Its front rim is what bounds the sight
+; picture, so its radius against its distance from the eye sets how much of the
+; screen the view through it fills.
+[sub_resource type="CylinderMesh" id="Mesh_scope_tube"]
+material = SubResource("Mat_scope")
+top_radius = 0.024
+bottom_radius = 0.024
+height = 0.22
+radial_segments = 32
+rings = 1
+cap_top = false
+cap_bottom = false
+
+[sub_resource type="CylinderMesh" id="Mesh_scope_eyepiece"]
+material = SubResource("Mat_scope")
+top_radius = 0.032
+bottom_radius = 0.032
+height = 0.055
+radial_segments = 32
+rings = 1
+cap_top = false
+cap_bottom = false
+
+[sub_resource type="CylinderMesh" id="Mesh_scope_objective"]
+material = SubResource("Mat_scope")
+top_radius = 0.032
+bottom_radius = 0.032
+height = 0.05
+radial_segments = 32
+rings = 1
+cap_top = false
+cap_bottom = false
+
+; A torus, not a cylinder: the mount rings sit part way along the tube, so a
+; capped ring would block the view straight down it.
+[sub_resource type="TorusMesh" id="Mesh_ring"]
+material = SubResource("Mat_metal")
+inner_radius = 0.025
+outer_radius = 0.032
+rings = 24
+ring_segments = 8
+
+; Wears the surround material rather than steel: the top of the block sits just
+; under the tube, close enough to the sight picture that a lit face would show
+; as a grey wedge at the bottom of it.
+[sub_resource type="BoxMesh" id="Mesh_mount"]
+material = SubResource("Mat_scope")
+size = Vector3(0.03, 0.056, 0.03)
+
+[sub_resource type="BoxMesh" id="Mesh_turret_top"]
+material = SubResource("Mat_metal")
+size = Vector3(0.022, 0.018, 0.024)
+
+[sub_resource type="BoxMesh" id="Mesh_turret_side"]
+material = SubResource("Mat_metal")
+size = Vector3(0.018, 0.022, 0.024)
+
+[sub_resource type="BoxMesh" id="Mesh_reticle_h"]
+material = SubResource("Mat_reticle")
+size = Vector3(0.048, 0.0016, 0.002)
+
+[sub_resource type="BoxMesh" id="Mesh_reticle_v"]
+material = SubResource("Mat_reticle")
+size = Vector3(0.0016, 0.048, 0.002)
+
+[sub_resource type="SphereMesh" id="Mesh_flash"]
+material = SubResource("Mat_flash")
+radius = 0.05
+height = 0.1
+radial_segments = 10
+rings = 5
+
+[node name="WeaponGarand" type="Node3D"]
+script = ExtResource("1_garand")
+eye_relief = 0.08
+sighted_fov = 14.0
+rounds_per_minute = 55.0
+damage_short = 100.0
+damage_medium = 100.0
+damage_long = 100.0
+damage_beyond = 10.0
+max_range = 300.0
+automatic = false
+fire_pitch = 0.8
+min_spread = 0.06
+max_spread = 3.0
+bloom_per_shot = 0.6
+bloom_recovery = 1.0
+recoil_pitch = 2.8
+recoil_yaw = 0.4
+kick_back = 0.07
+kick_recovery = 10.0
+aim_time = 0.28
+aim_spread_factor = 0.08
+aim_recoil_factor = 0.6
+aim_bloom_factor = 0.5
+sway_amplitude = 2.2
+sway_period = 3.8
+magazine_size = 8
+reserve_ammo = 40
+reload_time = 2.4
+
+[node name="Receiver" type="MeshInstance3D" parent="."]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0.006, -0.05)
+mesh = SubResource("Mesh_receiver")
+
+[node name="Barrel" type="MeshInstance3D" parent="."]
+transform = Transform3D(1, 0, 0, 0, 0, -1, 0, 1, 0, 0, 0.01, -0.44)
+mesh = SubResource("Mesh_barrel")
+
+[node name="GasCylinder" type="MeshInstance3D" parent="."]
+transform = Transform3D(1, 0, 0, 0, 0, -1, 0, 1, 0, 0, 0.01, -0.6)
+mesh = SubResource("Mesh_gas")
+
+[node name="GasLock" type="MeshInstance3D" parent="."]
+transform = Transform3D(1, 0, 0, 0, 0, -1, 0, 1, 0, 0, 0.01, -0.712)
+mesh = SubResource("Mesh_gas_lock")
+
+; Stands on the gas cylinder at the muzzle. Deliberately kept low: anything
+; taller here climbs into the bottom of the scope's field of view.
+[node name="FrontSightBase" type="MeshInstance3D" parent="."]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0.03, -0.665)
+mesh = SubResource("Mesh_front_base")
+
+[node name="FrontSightBlade" type="MeshInstance3D" parent="."]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0.039, -0.665)
+mesh = SubResource("Mesh_front_blade")
+
+[node name="FrontSightWingL" type="MeshInstance3D" parent="."]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -0.013, 0.037, -0.665)
+mesh = SubResource("Mesh_front_wing")
+
+[node name="FrontSightWingR" type="MeshInstance3D" parent="."]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0.013, 0.037, -0.665)
+mesh = SubResource("Mesh_front_wing")
+
+[node name="StockBand" type="MeshInstance3D" parent="."]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0.004, -0.5)
+mesh = SubResource("Mesh_band")
+
+[node name="TriggerGuard" type="MeshInstance3D" parent="."]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, -0.038, 0.005)
+mesh = SubResource("Mesh_guard")
+
+; Op rod handle on the right flank. The base class animates this as the bolt.
+[node name="BoltHandle" type="MeshInstance3D" parent="."]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0.032, 0.012, -0.02)
+mesh = SubResource("Mesh_bolt")
+
+; En-bloc clip, seated down inside the receiver with only its top edge showing.
+; Garand pings it up and out to the right of here on reload.
+[node name="Clip" type="MeshInstance3D" parent="."]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0.022, -0.03)
+mesh = SubResource("Mesh_clip")
+
+; One stock from butt to band, then an upper handguard over the barrel. The
+; wood is most of this rifle's read at a glance.
+[node name="Butt" type="MeshInstance3D" parent="."]
+transform = Transform3D(1, 0, 0, 0, 0.994522, -0.104528, 0, 0.104528, 0.994522, 0, -0.042, 0.265)
+mesh = SubResource("Mesh_butt")
+
+[node name="Comb" type="MeshInstance3D" parent="."]
+transform = Transform3D(1, 0, 0, 0, 0.994522, -0.104528, 0, 0.104528, 0.994522, 0, -0.03, 0.11)
+mesh = SubResource("Mesh_comb")
+
+[node name="PistolGrip" type="MeshInstance3D" parent="."]
+transform = Transform3D(1, 0, 0, 0, 0.965926, 0.258819, 0, -0.20791, 0.97815, 0, -0.078, 0.055)
+mesh = SubResource("Mesh_grip")
+
+[node name="Forearm" type="MeshInstance3D" parent="."]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, -0.012, -0.33)
+mesh = SubResource("Mesh_forearm")
+
+[node name="Handguard" type="MeshInstance3D" parent="."]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0.03, -0.33)
+mesh = SubResource("Mesh_handguard")
+
+[node name="Buttplate" type="MeshInstance3D" parent="."]
+transform = Transform3D(1, 0, 0, 0, 0.994522, -0.104528, 0, 0.104528, 0.994522, 0, -0.042, 0.352)
+mesh = SubResource("Mesh_buttplate")
+
+; Leather sling, band to butt, sagging in the middle.
+[node name="SlingFront" type="MeshInstance3D" parent="."]
+transform = Transform3D(1, 0, 0, 0, 0.9703, -0.24192, 0, 0.24192, 0.9703, 0, -0.0925, -0.33)
+mesh = SubResource("Mesh_sling_front")
+
+[node name="SlingRear" type="MeshInstance3D" parent="."]
+transform = Transform3D(1, 0, 0, 0, 0.99906, 0.04345, 0, -0.04345, 0.99906, 0, -0.125, 0.07)
+mesh = SubResource("Mesh_sling_rear")
+
+; Optic, centred over the bore. RearSight and FrontSight are its two rims,
+; which is all the aim solve needs to put the tube's axis on the camera's
+; centre line.
+[node name="ScopeTube" type="MeshInstance3D" parent="."]
+transform = Transform3D(1, 0, 0, 0, 0, -1, 0, 1, 0, 0, 0.115, -0.09)
+mesh = SubResource("Mesh_scope_tube")
+
+[node name="ScopeEyepiece" type="MeshInstance3D" parent="."]
+transform = Transform3D(1, 0, 0, 0, 0, -1, 0, 1, 0, 0, 0.115, 0.02)
+mesh = SubResource("Mesh_scope_eyepiece")
+
+[node name="ScopeObjective" type="MeshInstance3D" parent="."]
+transform = Transform3D(1, 0, 0, 0, 0, -1, 0, 1, 0, 0, 0.115, -0.215)
+mesh = SubResource("Mesh_scope_objective")
+
+[node name="ScopeRingRear" type="MeshInstance3D" parent="."]
+transform = Transform3D(1, 0, 0, 0, 0, -1, 0, 1, 0, 0, 0.115, -0.03)
+mesh = SubResource("Mesh_ring")
+
+[node name="ScopeRingFront" type="MeshInstance3D" parent="."]
+transform = Transform3D(1, 0, 0, 0, 0, -1, 0, 1, 0, 0, 0.115, -0.155)
+mesh = SubResource("Mesh_ring")
+
+[node name="ScopeMountRear" type="MeshInstance3D" parent="."]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0.062, -0.03)
+mesh = SubResource("Mesh_mount")
+
+[node name="ScopeMountFront" type="MeshInstance3D" parent="."]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0.062, -0.155)
+mesh = SubResource("Mesh_mount")
+
+[node name="TurretTop" type="MeshInstance3D" parent="."]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0.15, -0.09)
+mesh = SubResource("Mesh_turret_top")
+
+[node name="TurretSide" type="MeshInstance3D" parent="."]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0.036, 0.115, -0.09)
+mesh = SubResource("Mesh_turret_side")
+
+[node name="ReticleH" type="MeshInstance3D" parent="."]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0.115, -0.19)
+mesh = SubResource("Mesh_reticle_h")
+
+[node name="ReticleV" type="MeshInstance3D" parent="."]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0.115, -0.19)
+mesh = SubResource("Mesh_reticle_v")
+
+[node name="RearSight" type="Marker3D" parent="."]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0.115, 0.02)
+
+[node name="FrontSight" type="Marker3D" parent="."]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0.115, -0.2)
+
+[node name="GripRight" type="Marker3D" parent="."]
+transform = Transform3D(1, 0, 0, 0, 0.965926, 0.258819, 0, -0.258819, 0.965926, 0, -0.082, 0.045)
+
+[node name="GripLeft" type="Marker3D" parent="."]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, -0.022, -0.3)
+
+[node name="Muzzle" type="Marker3D" parent="."]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0.01, -0.735)
+
+[node name="MuzzleFlash" type="MeshInstance3D" parent="Muzzle"]
+transform = Transform3D(0.85, 0, 0, 0, 0.7, 0, 0, 0, 2.1, 0, 0, -0.05)
+visible = false
+mesh = SubResource("Mesh_flash")
+
+[node name="FlashLight" type="OmniLight3D" parent="Muzzle"]
+visible = false
+light_color = Color(1, 0.75, 0.42, 1)
+light_energy = 7.0
+omni_range = 9.0
+
+[node name="FireSound" type="AudioStreamPlayer" parent="."]
+
+[node name="ReloadSound" type="AudioStreamPlayer" parent="."]

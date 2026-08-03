@@ -1,0 +1,20 @@
+[gd_scene load_steps=4 format=3]
+
+[ext_resource type="Script" path="res://scripts/block_debris.gd" id="1_debris"]
+
+[sub_resource type="BoxShape3D" id="Shape_debris"]
+size = Vector3(0.07, 0.07, 0.07)
+
+[sub_resource type="BoxMesh" id="Mesh_debris"]
+size = Vector3(0.07, 0.07, 0.07)
+
+[node name="BlockDebris" type="RigidBody3D"]
+physics_material_override = null
+continuous_cd = true
+script = ExtResource("1_debris")
+
+[node name="CollisionShape3D" type="CollisionShape3D" parent="."]
+shape = SubResource("Shape_debris")
+
+[node name="MeshInstance3D" type="MeshInstance3D" parent="."]
+mesh = SubResource("Mesh_debris")
