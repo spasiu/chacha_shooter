@@ -14,23 +14,40 @@
 ; Its tube is drawn with the caps off and culling disabled, so at full zoom you
 ; are genuinely looking down the inside of it. Note these bases put local +Y
 ; toward the shooter, so on any tapered part `top_radius` is the rear rim.
-[gd_scene load_steps=36 format=3]
+[gd_scene load_steps=44 format=3]
 
 [ext_resource type="Script" path="res://scripts/garand.gd" id="1_garand"]
+[ext_resource type="Texture2D" path="res://assets/textures/wood_grain.tres" id="90_wood"]
+[ext_resource type="Texture2D" path="res://assets/textures/cloth_grain.tres" id="91_wear"]
 
 [sub_resource type="StandardMaterial3D" id="Mat_metal"]
-albedo_color = Color(0.13, 0.13, 0.145, 1)
-metallic = 0.85
-roughness = 0.42
+albedo_color = Color(0.082, 0.082, 0.088, 1)
+albedo_texture = ExtResource("91_wear")
+metallic = 0.8
+metallic_specular = 0.5
+roughness = 0.52
+roughness_texture = ExtResource("91_wear")
+uv1_scale = Vector3(9, 9, 9)
+uv1_triplanar = true
 
 ; Warmer and redder than the Thompson's furniture: Garand stocks are walnut.
 [sub_resource type="StandardMaterial3D" id="Mat_wood"]
-albedo_color = Color(0.36, 0.19, 0.1, 1)
-roughness = 0.62
+albedo_color = Color(0.235, 0.12, 0.058, 1)
+albedo_texture = ExtResource("90_wood")
+roughness = 0.52
+roughness_texture = ExtResource("90_wood")
+metallic_specular = 0.32
+uv1_scale = Vector3(24, 24, 3.4)
+uv1_triplanar = true
 
 [sub_resource type="StandardMaterial3D" id="Mat_leather"]
-albedo_color = Color(0.3, 0.21, 0.13, 1)
-roughness = 0.85
+albedo_color = Color(0.245, 0.165, 0.1, 1)
+albedo_texture = ExtResource("91_wear")
+roughness = 0.78
+roughness_texture = ExtResource("91_wear")
+metallic_specular = 0.25
+uv1_scale = Vector3(12, 12, 12)
+uv1_triplanar = true
 
 ; Culling off so the tube reads as a tube from outside and as a dark surround
 ; from the eyepiece. Caps off on the meshes using it, or there is nothing to
@@ -63,8 +80,8 @@ size = Vector3(0.048, 0.062, 0.25)
 
 [sub_resource type="CylinderMesh" id="Mesh_barrel"]
 material = SubResource("Mat_metal")
-top_radius = 0.0135
-bottom_radius = 0.0135
+top_radius = 0.0125
+bottom_radius = 0.014
 height = 0.56
 radial_segments = 12
 rings = 1
@@ -104,9 +121,12 @@ size = Vector3(0.005, 0.018, 0.009)
 material = SubResource("Mat_metal")
 size = Vector3(0.054, 0.052, 0.022)
 
-[sub_resource type="BoxMesh" id="Mesh_guard"]
+[sub_resource type="TorusMesh" id="Mesh_guard"]
 material = SubResource("Mat_metal")
-size = Vector3(0.012, 0.026, 0.05)
+inner_radius = 0.01
+outer_radius = 0.013
+rings = 16
+ring_segments = 6
 
 [sub_resource type="BoxMesh" id="Mesh_bolt"]
 material = SubResource("Mat_metal")
@@ -213,16 +233,52 @@ size = Vector3(0.048, 0.0016, 0.002)
 material = SubResource("Mat_reticle")
 size = Vector3(0.0016, 0.048, 0.002)
 
-[sub_resource type="SphereMesh" id="Mesh_flash"]
+[sub_resource type="CylinderMesh" id="Mesh_flash"]
 material = SubResource("Mat_flash")
-radius = 0.05
-height = 0.1
+top_radius = 0.0
+bottom_radius = 0.042
+height = 0.115
 radial_segments = 10
-rings = 5
+rings = 1
+cap_top = false
+
+
+; Openings -- ejection ports and the like. Near black and matte, so a shallow
+; inset reads as a hole rather than as a panel bolted on.
+[sub_resource type="StandardMaterial3D" id="Mat_shadow"]
+albedo_color = Color(0.022, 0.022, 0.024, 1)
+roughness = 1.0
+
+[sub_resource type="BoxMesh" id="Mesh_trigger"]
+material = SubResource("Mat_metal")
+size = Vector3(0.007, 0.026, 0.009)
+
+[sub_resource type="BoxMesh" id="Mesh_port"]
+material = SubResource("Mat_shadow")
+size = Vector3(0.006, 0.022, 0.062)
+
+; Operating rod, running along the right of the barrel between the stock band
+; and the gas cylinder. The one line that makes a Garand a Garand in profile.
+[sub_resource type="CylinderMesh" id="Mesh_oprod"]
+material = SubResource("Mat_metal")
+top_radius = 0.0075
+bottom_radius = 0.0075
+height = 0.12
+radial_segments = 10
+rings = 1
+
+[sub_resource type="CylinderMesh" id="Mesh_bore"]
+material = SubResource("Mat_shadow")
+top_radius = 0.0068
+bottom_radius = 0.0068
+height = 0.03
+radial_segments = 10
+rings = 1
 
 [node name="WeaponGarand" type="Node3D"]
 script = ExtResource("1_garand")
 eye_relief = 0.08
+move_penalty = 0.15
 sighted_fov = 14.0
 rounds_per_minute = 55.0
 damage_short = 100.0
@@ -236,10 +292,10 @@ min_spread = 0.06
 max_spread = 3.0
 bloom_per_shot = 0.6
 bloom_recovery = 1.0
-recoil_pitch = 2.8
-recoil_yaw = 0.4
-kick_back = 0.07
-kick_recovery = 10.0
+recoil_pitch = 3.2
+recoil_yaw = 0.55
+kick_back = 0.095
+kick_recovery = 9.0
 aim_time = 0.28
 aim_spread_factor = 0.08
 aim_recoil_factor = 0.6
@@ -247,7 +303,6 @@ aim_bloom_factor = 0.5
 sway_amplitude = 2.2
 sway_period = 3.8
 magazine_size = 8
-reserve_ammo = 40
 reload_time = 2.4
 
 [node name="Receiver" type="MeshInstance3D" parent="."]
@@ -289,7 +344,7 @@ transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0.004, -0.5)
 mesh = SubResource("Mesh_band")
 
 [node name="TriggerGuard" type="MeshInstance3D" parent="."]
-transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, -0.038, 0.005)
+transform = Transform3D(0, -1, 0, 1, 0, 0, 0, 0, 1.8, 0, -0.038, 0.005)
 mesh = SubResource("Mesh_guard")
 
 ; Op rod handle on the right flank. The base class animates this as the bolt.
@@ -401,7 +456,7 @@ transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, -0.022, -0.3)
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0.01, -0.735)
 
 [node name="MuzzleFlash" type="MeshInstance3D" parent="Muzzle"]
-transform = Transform3D(0.85, 0, 0, 0, 0.7, 0, 0, 0, 2.1, 0, 0, -0.05)
+transform = Transform3D(0.85, 0, 0, 0, 0, 0.7, 0, -2.1, 0, 0, 0, -0.116)
 visible = false
 mesh = SubResource("Mesh_flash")
 
@@ -414,3 +469,21 @@ omni_range = 9.0
 [node name="FireSound" type="AudioStreamPlayer" parent="."]
 
 [node name="ReloadSound" type="AudioStreamPlayer" parent="."]
+
+[node name="Trigger" type="MeshInstance3D" parent="."]
+transform = Transform3D(1, 0, 0, 0, 0.98481, 0.17365, 0, -0.17365, 0.98481, 0, -0.032, 0.009)
+mesh = SubResource("Mesh_trigger")
+
+[node name="EjectionPort" type="MeshInstance3D" parent="."]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0.0225, 0.022, -0.045)
+mesh = SubResource("Mesh_port")
+
+[node name="OpRod" type="MeshInstance3D" parent="."]
+transform = Transform3D(1, 0, 0, 0, 0, -1, 0, 1, 0, 0.017, -0.004, -0.552)
+mesh = SubResource("Mesh_oprod")
+
+; The hole the round leaves by. Recessed a little so it stays dark from any
+; angle rather than catching the sun like a coin.
+[node name="Bore" type="MeshInstance3D" parent="."]
+transform = Transform3D(1, 0, 0, 0, 0, -1, 0, 1, 0, 0, 0.01, -0.726)
+mesh = SubResource("Mesh_bore")

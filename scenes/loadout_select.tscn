@@ -41,6 +41,24 @@ theme_override_font_sizes/font_size = 16
 text = "Take three into the field."
 horizontal_alignment = 1
 
+[node name="NameRow" type="HBoxContainer" parent="Root"]
+size_flags_horizontal = 4
+theme_override_constants/separation = 12
+
+[node name="NameLabel" type="Label" parent="Root/NameRow"]
+mouse_filter = 2
+theme_override_colors/font_color = Color(0.72, 0.74, 0.7, 1)
+theme_override_font_sizes/font_size = 15
+text = "NAME"
+vertical_alignment = 1
+
+[node name="NameField" type="LineEdit" parent="Root/NameRow"]
+custom_minimum_size = Vector2(300, 38)
+theme_override_font_sizes/font_size = 16
+max_length = 16
+placeholder_text = "SOLDIER"
+caret_blink = true
+
 [node name="Spacer" type="Control" parent="Root"]
 custom_minimum_size = Vector2(0, 10)
 mouse_filter = 2
@@ -62,11 +80,20 @@ horizontal_alignment = 1
 custom_minimum_size = Vector2(280, 54)
 size_flags_horizontal = 4
 theme_override_font_sizes/font_size = 22
-text = "DEPLOY"
+text = "JOIN GAME"
 
 [node name="Hint" type="Label" parent="Root"]
 mouse_filter = 2
 theme_override_colors/font_color = Color(0.45, 0.47, 0.44, 1)
 theme_override_font_sizes/font_size = 13
 text = "1-4 TOGGLE      ENTER DEPLOY"
+horizontal_alignment = 1
+
+; Whether anyone else is out there. Filled in from Net, and the reason the
+; screen is worth looking at before you have picked anything.
+[node name="Status" type="Label" parent="Root"]
+mouse_filter = 2
+theme_override_colors/font_color = Color(0.42, 0.6, 0.46, 1)
+theme_override_font_sizes/font_size = 14
+text = "CONNECTING..."
 horizontal_alignment = 1

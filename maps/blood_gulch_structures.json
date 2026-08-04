@@ -1,0 +1,333 @@
+{
+ "name": "blood_gulch",
+ "title": "BLOOD GULCH",
+ "blurb": "A canyon, a base at each end, and a tank apiece to cross it with.",
+ "size": 256,
+ "block": 0.25,
+ "metres": 64.0,
+ "depth_blocks": 16,
+ "build_height": 48,
+ "team_spawns": {
+  "blue": [
+   -15.5,
+   -15.5
+  ],
+  "red": [
+   15.5,
+   15.5
+  ]
+ },
+ "capture_points": [],
+ "tanks": [
+  {
+   "x": -9.0,
+   "z": -14.0,
+   "yaw": 45.0
+  },
+  {
+   "x": 9.0,
+   "z": 14.0,
+   "yaw": 225.0
+  }
+ ],
+ "ammo_boxes": [
+  [
+   4.5,
+   -7.25
+  ],
+  [
+   0.0,
+   -11.0
+  ],
+  [
+   2.5,
+   11.0
+  ],
+  [
+   -8.5,
+   0.0
+  ],
+  [
+   13.5,
+   0.0
+  ],
+  [
+   0.0,
+   0.0
+  ]
+ ],
+ "structures": [
+  {
+   "name": "red base floor",
+   "x0": 146,
+   "z0": 164,
+   "x1": 234,
+   "z1": 216,
+   "from": 0,
+   "height": 1,
+   "type": "team_red",
+   "flat": true,
+   "gy": 16
+  },
+  {
+   "name": "red base wall north a",
+   "x0": 146,
+   "z0": 164,
+   "x1": 175,
+   "z1": 170,
+   "from": 0,
+   "height": 16,
+   "type": "concrete"
+  },
+  {
+   "name": "red base wall north b",
+   "x0": 205,
+   "z0": 164,
+   "x1": 234,
+   "z1": 170,
+   "from": 0,
+   "height": 16,
+   "type": "concrete"
+  },
+  {
+   "name": "red base wall south",
+   "x0": 146,
+   "z0": 210,
+   "x1": 234,
+   "z1": 216,
+   "from": 0,
+   "height": 16,
+   "type": "concrete"
+  },
+  {
+   "name": "red base wall west",
+   "x0": 146,
+   "z0": 164,
+   "x1": 152,
+   "z1": 216,
+   "from": 0,
+   "height": 16,
+   "type": "concrete"
+  },
+  {
+   "name": "red base wall east",
+   "x0": 228,
+   "z0": 164,
+   "x1": 234,
+   "z1": 216,
+   "from": 0,
+   "height": 16,
+   "type": "concrete"
+  },
+  {
+   "name": "red base colours",
+   "x0": 152,
+   "z0": 206,
+   "x1": 228,
+   "z1": 210,
+   "from": 0,
+   "height": 18,
+   "type": "team_red"
+  },
+  {
+   "name": "red base mast",
+   "x0": 188,
+   "z0": 188,
+   "x1": 192,
+   "z1": 192,
+   "from": 0,
+   "height": 30,
+   "type": "team_red"
+  },
+  {
+   "name": "red base stores",
+   "x0": 158,
+   "z0": 176,
+   "x1": 176,
+   "z1": 190,
+   "from": 0,
+   "height": 7,
+   "type": "canvas",
+   "flat": true,
+   "gy": 16
+  },
+  {
+   "name": "red base crates",
+   "x0": 204,
+   "z0": 178,
+   "x1": 220,
+   "z1": 188,
+   "from": 0,
+   "height": 6,
+   "type": "wood",
+   "flat": true,
+   "gy": 16
+  },
+  {
+   "name": "blue base floor",
+   "x0": 22,
+   "z0": 40,
+   "x1": 110,
+   "z1": 92,
+   "from": 0,
+   "height": 1,
+   "type": "team_blue",
+   "flat": true,
+   "gy": 16
+  },
+  {
+   "name": "blue base wall north",
+   "x0": 22,
+   "z0": 40,
+   "x1": 110,
+   "z1": 46,
+   "from": 0,
+   "height": 16,
+   "type": "concrete"
+  },
+  {
+   "name": "blue base wall south a",
+   "x0": 22,
+   "z0": 86,
+   "x1": 51,
+   "z1": 92,
+   "from": 0,
+   "height": 16,
+   "type": "concrete"
+  },
+  {
+   "name": "blue base wall south b",
+   "x0": 81,
+   "z0": 86,
+   "x1": 110,
+   "z1": 92,
+   "from": 0,
+   "height": 16,
+   "type": "concrete"
+  },
+  {
+   "name": "blue base wall west",
+   "x0": 22,
+   "z0": 40,
+   "x1": 28,
+   "z1": 92,
+   "from": 0,
+   "height": 16,
+   "type": "concrete"
+  },
+  {
+   "name": "blue base wall east",
+   "x0": 104,
+   "z0": 40,
+   "x1": 110,
+   "z1": 92,
+   "from": 0,
+   "height": 16,
+   "type": "concrete"
+  },
+  {
+   "name": "blue base colours",
+   "x0": 28,
+   "z0": 46,
+   "x1": 104,
+   "z1": 50,
+   "from": 0,
+   "height": 18,
+   "type": "team_blue"
+  },
+  {
+   "name": "blue base mast",
+   "x0": 64,
+   "z0": 64,
+   "x1": 68,
+   "z1": 68,
+   "from": 0,
+   "height": 30,
+   "type": "team_blue"
+  },
+  {
+   "name": "blue base stores",
+   "x0": 34,
+   "z0": 52,
+   "x1": 52,
+   "z1": 66,
+   "from": 0,
+   "height": 7,
+   "type": "canvas",
+   "flat": true,
+   "gy": 16
+  },
+  {
+   "name": "blue base crates",
+   "x0": 80,
+   "z0": 54,
+   "x1": 96,
+   "z1": 64,
+   "from": 0,
+   "height": 6,
+   "type": "wood",
+   "flat": true,
+   "gy": 16
+  },
+  {
+   "name": "gulch rock 2",
+   "x0": 74,
+   "z0": 116,
+   "x1": 82,
+   "z1": 124,
+   "from": 0,
+   "height": 13,
+   "type": "stone"
+  },
+  {
+   "name": "gulch rock 5",
+   "x0": 162,
+   "z0": 115,
+   "x1": 173,
+   "z1": 126,
+   "from": 0,
+   "height": 10,
+   "type": "stone"
+  },
+  {
+   "name": "gulch rock 6",
+   "x0": 161,
+   "z0": 101,
+   "x1": 169,
+   "z1": 109,
+   "from": 0,
+   "height": 7,
+   "type": "stone"
+  },
+  {
+   "name": "gulch rock 7",
+   "x0": 115,
+   "z0": 178,
+   "x1": 130,
+   "z1": 193,
+   "from": 0,
+   "height": 4,
+   "type": "stone"
+  },
+  {
+   "name": "gulch rock 8",
+   "x0": 170,
+   "z0": 76,
+   "x1": 176,
+   "z1": 82,
+   "from": 0,
+   "height": 7,
+   "type": "stone"
+  },
+  {
+   "name": "gulch rock 11",
+   "x0": 104,
+   "z0": 126,
+   "x1": 119,
+   "z1": 141,
+   "from": 0,
+   "height": 8,
+   "type": "stone"
+  }
+ ]
+}

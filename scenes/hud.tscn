@@ -44,6 +44,19 @@ theme_override_font_sizes/font_size = 18
 text = "100"
 vertical_alignment = 1
 
+[node name="NameLabel" type="Label" parent="Root"]
+anchor_top = 1.0
+anchor_bottom = 1.0
+offset_left = 28.0
+offset_top = -112.0
+offset_right = 300.0
+offset_bottom = -90.0
+grow_vertical = 0
+mouse_filter = 2
+theme_override_colors/font_color = Color(0.74, 0.76, 0.7, 1)
+theme_override_font_sizes/font_size = 15
+text = "SOLDIER"
+
 [node name="AmmoLabel" type="Label" parent="Root"]
 anchor_left = 1.0
 anchor_top = 1.0
@@ -59,6 +72,38 @@ theme_override_font_sizes/font_size = 26
 text = "50 / 150"
 horizontal_alignment = 2
 vertical_alignment = 1
+
+; Everyone in the field, us included. Hidden outright when playing alone, so
+; single-player looks exactly as it did; up whenever there is a connection,
+; because "am I actually in the same game as them" should never be a question
+; you have to go and look for an answer to.
+[node name="Roster" type="VBoxContainer" parent="Root"]
+offset_left = 28.0
+offset_top = 24.0
+offset_right = 320.0
+offset_bottom = 200.0
+mouse_filter = 2
+theme_override_constants/separation = 2
+
+[node name="RosterTitle" type="Label" parent="Root/Roster"]
+mouse_filter = 2
+theme_override_colors/font_color = Color(0.55, 0.57, 0.53, 1)
+theme_override_font_sizes/font_size = 13
+text = "IN THE FIELD"
+
+; Who killed whom, newest at the top. Empty when playing alone, so it costs
+; single-player nothing but the container.
+[node name="Feed" type="VBoxContainer" parent="Root"]
+anchor_left = 1.0
+anchor_right = 1.0
+offset_left = -380.0
+offset_top = 24.0
+offset_right = -28.0
+offset_bottom = 160.0
+grow_horizontal = 0
+mouse_filter = 2
+alignment = 2
+theme_override_constants/separation = 4
 
 [node name="DeathOverlay" type="ColorRect" parent="Root"]
 anchor_right = 1.0
@@ -95,3 +140,246 @@ theme_override_font_sizes/font_size = 20
 text = "respawning..."
 horizontal_alignment = 1
 vertical_alignment = 1
+
+; Over everything, because until the map is finished there is nothing behind it
+; worth looking at. Last child of Root so it draws on top of the death overlay
+; as well -- you can be waiting on the ground on the frame you respawn.
+[node name="Loading" type="ColorRect" parent="Root"]
+anchor_right = 1.0
+anchor_bottom = 1.0
+mouse_filter = 2
+color = Color(0.055, 0.06, 0.055, 1)
+
+[node name="LoadingTitle" type="Label" parent="Root/Loading"]
+anchor_left = 0.5
+anchor_top = 0.5
+anchor_right = 0.5
+anchor_bottom = 0.5
+offset_left = -320.0
+offset_top = -70.0
+offset_right = 320.0
+offset_bottom = -26.0
+mouse_filter = 2
+theme_override_colors/font_color = Color(0.93, 0.93, 0.9, 1)
+theme_override_font_sizes/font_size = 32
+text = "PREPARING THE GROUND"
+horizontal_alignment = 1
+vertical_alignment = 1
+
+[node name="LoadingHint" type="Label" parent="Root/Loading"]
+anchor_left = 0.5
+anchor_top = 0.5
+anchor_right = 0.5
+anchor_bottom = 0.5
+offset_left = -320.0
+offset_top = -20.0
+offset_right = 320.0
+offset_bottom = 6.0
+mouse_filter = 2
+theme_override_colors/font_color = Color(0.6, 0.62, 0.58, 1)
+theme_override_font_sizes/font_size = 15
+text = "building the whole map  ·  keep this tab in front, a background tab stops building"
+horizontal_alignment = 1
+vertical_alignment = 1
+
+[node name="BarBack" type="ColorRect" parent="Root/Loading"]
+anchor_left = 0.5
+anchor_top = 0.5
+anchor_right = 0.5
+anchor_bottom = 0.5
+offset_left = -220.0
+offset_top = 24.0
+offset_right = 220.0
+offset_bottom = 34.0
+mouse_filter = 2
+color = Color(0.14, 0.15, 0.14, 1)
+
+[node name="BarFill" type="ColorRect" parent="Root/Loading/BarBack"]
+anchor_right = 0.0
+anchor_bottom = 1.0
+mouse_filter = 2
+color = Color(0.42, 0.6, 0.46, 1)
+
+[node name="LoadingPercent" type="Label" parent="Root/Loading"]
+anchor_left = 0.5
+anchor_top = 0.5
+anchor_right = 0.5
+anchor_bottom = 0.5
+offset_left = -220.0
+offset_top = 42.0
+offset_right = 220.0
+offset_bottom = 66.0
+mouse_filter = 2
+theme_override_colors/font_color = Color(0.72, 0.74, 0.7, 1)
+theme_override_font_sizes/font_size = 16
+text = "0%"
+horizontal_alignment = 1
+vertical_alignment = 1
+
+; The attrition count, dead centre at the top where both numbers can be read
+; without looking away from what you are aiming at. Shows men remaining rather
+; than casualties taken: "sixteen left" is something you can act on, "eighty-four
+; lost" is something you have to subtract first.
+[node name="Tickets" type="Label" parent="Root"]
+anchor_left = 0.5
+anchor_right = 0.5
+offset_left = -220.0
+offset_top = 16.0
+offset_right = 220.0
+offset_bottom = 44.0
+mouse_filter = 2
+theme_override_font_sizes/font_size = 20
+text = ""
+horizontal_alignment = 1
+vertical_alignment = 1
+
+; Between rounds. Last child of Root so it covers the lot, including the death
+; overlay -- you can be face down at the moment your side runs out of men.
+[node name="RoundOver" type="ColorRect" parent="Root"]
+anchor_right = 1.0
+anchor_bottom = 1.0
+mouse_filter = 2
+color = Color(0.045, 0.05, 0.055, 0.94)
+
+[node name="RoundTitle" type="Label" parent="Root/RoundOver"]
+anchor_left = 0.5
+anchor_top = 0.16
+anchor_right = 0.5
+offset_left = -420.0
+offset_right = 420.0
+offset_bottom = 52.0
+mouse_filter = 2
+theme_override_colors/font_color = Color(0.94, 0.93, 0.89, 1)
+theme_override_font_sizes/font_size = 40
+text = "ROUND OVER"
+horizontal_alignment = 1
+vertical_alignment = 1
+
+[node name="RoundSub" type="Label" parent="Root/RoundOver"]
+anchor_left = 0.5
+anchor_top = 0.16
+anchor_right = 0.5
+offset_left = -420.0
+offset_top = 56.0
+offset_right = 420.0
+offset_bottom = 84.0
+mouse_filter = 2
+theme_override_colors/font_color = Color(0.63, 0.65, 0.61, 1)
+theme_override_font_sizes/font_size = 17
+text = ""
+horizontal_alignment = 1
+vertical_alignment = 1
+
+[node name="Columns" type="HBoxContainer" parent="Root/RoundOver"]
+anchor_left = 0.5
+anchor_top = 0.3
+anchor_right = 0.5
+offset_left = -430.0
+offset_right = 430.0
+offset_bottom = 420.0
+mouse_filter = 2
+theme_override_constants/separation = 60
+
+[node name="BlueSide" type="VBoxContainer" parent="Root/RoundOver/Columns"]
+custom_minimum_size = Vector2(400, 0)
+mouse_filter = 2
+theme_override_constants/separation = 3
+
+[node name="BlueHead" type="Label" parent="Root/RoundOver/Columns/BlueSide"]
+mouse_filter = 2
+theme_override_colors/font_color = Color(0.45, 0.62, 0.95, 1)
+theme_override_font_sizes/font_size = 23
+text = "BLUE"
+
+[node name="RedSide" type="VBoxContainer" parent="Root/RoundOver/Columns"]
+custom_minimum_size = Vector2(400, 0)
+mouse_filter = 2
+theme_override_constants/separation = 3
+
+[node name="RedHead" type="Label" parent="Root/RoundOver/Columns/RedSide"]
+mouse_filter = 2
+theme_override_colors/font_color = Color(0.92, 0.42, 0.38, 1)
+theme_override_font_sizes/font_size = 23
+text = "RED"
+
+; Corner brackets round the aim point, for the one thing carried that has no
+; sights of its own to look down. Scaled from code: the square is the footprint
+; of what the next swing does, so it opens out as the shovel comes up to build.
+[node name="Reticule" type="Control" parent="Root"]
+anchor_left = 0.5
+anchor_top = 0.5
+anchor_right = 0.5
+anchor_bottom = 0.5
+mouse_filter = 2
+
+[node name="Dot" type="ColorRect" parent="Root/Reticule"]
+offset_left = -1.0
+offset_top = -1.0
+offset_right = 1.0
+offset_bottom = 1.0
+mouse_filter = 2
+color = Color(0.93, 0.92, 0.87, 0.85)
+
+[node name="TLh" type="ColorRect" parent="Root/Reticule"]
+offset_left = -14.0
+offset_top = -14.0
+offset_right = -8.0
+offset_bottom = -12.0
+mouse_filter = 2
+color = Color(0.93, 0.92, 0.87, 0.8)
+
+[node name="TLv" type="ColorRect" parent="Root/Reticule"]
+offset_left = -14.0
+offset_top = -14.0
+offset_right = -12.0
+offset_bottom = -8.0
+mouse_filter = 2
+color = Color(0.93, 0.92, 0.87, 0.8)
+
+[node name="TRh" type="ColorRect" parent="Root/Reticule"]
+offset_left = 8.0
+offset_top = -14.0
+offset_right = 14.0
+offset_bottom = -12.0
+mouse_filter = 2
+color = Color(0.93, 0.92, 0.87, 0.8)
+
+[node name="TRv" type="ColorRect" parent="Root/Reticule"]
+offset_left = 12.0
+offset_top = -14.0
+offset_right = 14.0
+offset_bottom = -8.0
+mouse_filter = 2
+color = Color(0.93, 0.92, 0.87, 0.8)
+
+[node name="BLh" type="ColorRect" parent="Root/Reticule"]
+offset_left = -14.0
+offset_top = 12.0
+offset_right = -8.0
+offset_bottom = 14.0
+mouse_filter = 2
+color = Color(0.93, 0.92, 0.87, 0.8)
+
+[node name="BLv" type="ColorRect" parent="Root/Reticule"]
+offset_left = -14.0
+offset_top = 8.0
+offset_right = -12.0
+offset_bottom = 14.0
+mouse_filter = 2
+color = Color(0.93, 0.92, 0.87, 0.8)
+
+[node name="BRh" type="ColorRect" parent="Root/Reticule"]
+offset_left = 8.0
+offset_top = 12.0
+offset_right = 14.0
+offset_bottom = 14.0
+mouse_filter = 2
+color = Color(0.93, 0.92, 0.87, 0.8)
+
+[node name="BRv" type="ColorRect" parent="Root/Reticule"]
+offset_left = 12.0
+offset_top = 8.0
+offset_right = 14.0
+offset_bottom = 14.0
+mouse_filter = 2
+color = Color(0.93, 0.92, 0.87, 0.8)

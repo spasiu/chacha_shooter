@@ -1,9 +1,13 @@
-[gd_scene load_steps=11 format=3]
+[gd_scene load_steps=15 format=3]
 
 [ext_resource type="PackedScene" path="res://scenes/player.tscn" id="1_player"]
 [ext_resource type="PackedScene" path="res://scenes/target_character.tscn" id="2_target"]
 [ext_resource type="Script" path="res://scripts/voxel_world.gd" id="4_voxel"]
 [ext_resource type="PackedScene" path="res://scenes/block_debris.tscn" id="5_debris"]
+[ext_resource type="PackedScene" path="res://scenes/tank.tscn" id="9_tank"]
+[ext_resource type="Script" path="res://scripts/ammo_dump.gd" id="10_ammo_dump"]
+[ext_resource type="PackedScene" path="res://scenes/ammo_box.tscn" id="11_ammo_box"]
+[ext_resource type="Script" path="res://scripts/tank_park.gd" id="12_tank_park"]
 
 [sub_resource type="ProceduralSkyMaterial" id="ProceduralSkyMaterial_1"]
 sky_horizon_color = Color(0.64625, 0.65575, 0.67075, 1)
@@ -35,6 +39,17 @@ roughness = 0.7
 [node name="VoxelWorld" type="Node3D" parent="."]
 script = ExtResource("4_voxel")
 debris_scene = ExtResource("5_debris")
+prebuild = false
+
+; Armour and ammunition, wherever the map file puts them. Both sit after
+; VoxelWorld so the ground they stand on has been read by the time they ask.
+[node name="TankPark" type="Node3D" parent="."]
+script = ExtResource("12_tank_park")
+tank_scene = ExtResource("9_tank")
+
+[node name="AmmoDump" type="Node3D" parent="."]
+script = ExtResource("10_ammo_dump")
+box_scene = ExtResource("11_ammo_box")
 
 [node name="WorldEnvironment" type="WorldEnvironment" parent="."]
 environment = SubResource("Environment_1")
@@ -45,7 +60,8 @@ shadow_enabled = true
 
 ; Shootable target. Collapses when killed and gets back up after a delay.
 [node name="Mannequin" parent="." instance=ExtResource("2_target")]
-transform = Transform3D(0.910366, 0, -0.413803, 0, 1, 0, -0.413803, 0, -0.910366, -5, 0, -6)
+transform = Transform3D(0.910366, 0, -0.413803, 0, 1, 0, -0.413803, 0, -0.910366, 7, 0, 7)
 
 [node name="Player" parent="." instance=ExtResource("1_player")]
-transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 1, 5)
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 1, 0)
+

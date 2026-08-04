@@ -1,0 +1,14 @@
+[remap]
+
+importer="image"
+type="Image"
+uid="uid://d23y8evc6v0op"
+path="res://.godot/imported/blood_gulch_terrain.png-952896e3b8888216f9890bb2b76ee16f.image"
+
+[deps]
+
+source_file="res://maps/blood_gulch_terrain.png"
+dest_files=["res://.godot/imported/blood_gulch_terrain.png-952896e3b8888216f9890bb2b76ee16f.image"]
+
+[params]
+

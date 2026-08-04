@@ -35,6 +35,10 @@ extends Equipment
 ## Metres the viewmodel slides back per shot.
 @export var kick_back := 0.035
 @export var kick_recovery := 12.0
+## Recoil multiplier while the holder is prone. One for anything held up by the
+## shooter alone; well under one for a weapon with a bipod, which lying down
+## puts on the ground and turns into something quite different to fire.
+@export var braced_recoil_factor := 1.0
 
 @export_group("Aim")
 ## Seconds to raise or lower the weapon.
@@ -57,7 +61,11 @@ extends Equipment
 
 @export_group("Ammo")
 @export var magazine_size := 50
-@export var reserve_ammo := 150
+## Spare magazines carried beyond the one in the weapon, so a soldier goes out
+## with three magazines' worth all told. A launcher whose magazine is a single
+## round therefore carries three rounds, which is the same rule read out of a
+## different weapon rather than a special case for it.
+@export var spare_magazines := 2
 @export var reload_time := 2.6
 
 const FLASH_TIME := 0.045
@@ -94,6 +102,9 @@ const BOLT_PULL := Vector3(0.0, 0.0, 0.055)
 @onready var front_sight: Node3D = $FrontSight
 
 var in_magazine := 0
+## Rounds off the magazine. Worked out from the spares carried rather than set
+## per weapon, so nothing can quietly drift away from the three-magazine rule.
+var reserve_ammo := 0
 var is_reloading := false
 
 var _rest_position := Vector3.ZERO
@@ -114,6 +125,7 @@ var _reload_tween: Tween
 var _trigger_held := false
 var _aim := 0.0
 var _aim_held := false
+var _braced := false
 ## x = yaw, y = pitch, in radians. Applied to both the model and the shot.
 var _sway := Vector2.ZERO
 var _sway_time := 0.0
@@ -134,7 +146,8 @@ func _ready() -> void:
 	if bolt_handle != null:
 		_bolt_rest = bolt_handle.position
 	in_magazine = magazine_size
-	_starting_reserve = reserve_ammo
+	_starting_reserve = magazine_size * maxi(spare_magazines, 0)
+	reserve_ammo = _starting_reserve
 	_sway_seed = randf() * TAU
 	_shooter = _find_ancestor_body()
 
@@ -151,6 +164,10 @@ func aim_ratio() -> float:
 
 func set_aiming(aiming: bool) -> void:
 	_aim_held = aiming
+
+
+func set_braced(braced: bool) -> void:
+	_braced = braced
 
 
 ## Local transform, relative to the camera, that puts this weapon's rear and
@@ -192,9 +209,13 @@ func try_fire() -> bool:
 	_show_flash()
 	_play(fire_sound, GUNSHOT, randf_range(0.94, 1.06) * fire_pitch, fire_volume_db)
 
-	_kick.z += kick_back
+	# Prone rests a bipod on the ground, which takes the shot off the shooter
+	# and out of the sight picture; it applies to what is felt and to what is
+	# seen alike.
+	var brace := braced_recoil_factor if _braced else 1.0
+	_kick.z += kick_back * brace
 	_bloom = minf(_bloom + bloom_per_shot * lerpf(1.0, aim_bloom_factor, _aim), 1.0)
-	var recoil_scale := lerpf(1.0, aim_recoil_factor, _aim)
+	var recoil_scale := lerpf(1.0, aim_recoil_factor, _aim) * brace
 	fired.emit(
 		deg_to_rad(recoil_pitch) * randf_range(0.8, 1.2) * recoil_scale,
 		deg_to_rad(recoil_yaw) * randf_range(-1.0, 1.0) * recoil_scale
@@ -228,6 +249,10 @@ func status_text() -> String:
 
 func is_empty() -> bool:
 	return in_magazine <= 0 and not is_reloading
+
+
+func is_full() -> bool:
+	return in_magazine >= magazine_size and reserve_ammo >= _starting_reserve
 
 
 func _process(delta: float) -> void:
@@ -404,7 +429,9 @@ func _fire_pellet(camera: Camera3D, origin: Vector3, spread: float) -> void:
 	# mark belongs there: terrain answers true or false depending on whether the
 	# block broke under the hit, while a character answers nothing at all and
 	# never keeps one -- it has its own reaction to being shot.
-	var broke: Variant = target.take_damage(dealt, hit.position, -direction)
+	var broke: Variant = target.take_damage(
+		dealt, hit.position, -direction, Lethality.BULLET
+	)
 	if broke is bool and not broke:
 		_spawn_hole(hit.position, hit.normal)
 
@@ -437,6 +464,10 @@ func _spawn_hole(hit_position: Vector3, normal: Vector3) -> void:
 
 func _on_hole_removed(hole: Node3D) -> void:
 	_holes.erase(hole)
+
+
+func show_muzzle_flash() -> void:
+	_show_flash()
 
 
 func _show_flash() -> void:

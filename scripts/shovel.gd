@@ -20,6 +20,12 @@ extends Equipment
 @export var raise_time := 0.18
 ## Blocks this close to the player are refused, so you cannot wall yourself in.
 @export var self_clearance := 0.75
+## Blocks across one spadeful, per side, laid flat in the face you are aiming
+## at and centred on it. Four is a metre square of earth a swing -- sixteen
+## blocks -- which is what makes filling a crater or throwing up a parapet
+## something you would actually attempt. One puts it back to a single block and
+## makes building the exact mirror of digging.
+@export var build_span := 4
 
 const DIG: AudioStream = preload("res://assets/audio/shovel_dig.wav")
 const PACK: AudioStream = preload("res://assets/audio/shovel_pack.wav")
@@ -71,6 +77,15 @@ func is_busy() -> bool:
 
 func status_text() -> String:
 	return "SHOVEL  ·  BUILD" if _aim > 0.5 else "SHOVEL  ·  DIG"
+
+
+## Opens out as the shovel comes up, so the square is the footprint of what the
+## next swing actually does: tight on the one block a dig takes out, and the
+## width of the whole spadeful once it is raised to build. Tied to `_aim` rather
+## than switched at the halfway point, so the marker grows with the swing
+## instead of jumping the moment the mode flips.
+func reticule_size() -> float:
+	return lerpf(1.0, maxf(float(build_span), 1.0) * 0.55, _aim)
 
 
 ## No sights on a shovel: raising it just brings the blade up and inboard,
@@ -153,10 +168,19 @@ func _dig() -> void:
 
 	var target: Object = hit["collider"]
 	if target != null and target.has_method("take_damage"):
-		target.take_damage(swing_damage, hit["position"], -into)
+		target.take_damage(swing_damage, hit["position"], -into, Lethality.MELEE)
 	_play(DIG, randf_range(0.9, 1.0))
 
 
+## Packs a spadeful of earth onto whatever you are looking at.
+##
+## Deliberately not the mirror of digging. A swing that takes one block out and
+## a swing that puts one block back makes filling a crater in take as many
+## swings as blowing it open did, and a bazooka opens several hundred at once.
+## A spadeful is `build_span` square in the plane of the face you hit -- sixteen
+## blocks by default, a metre each way -- so earthworks go up at a pace worth
+## attempting, while digging stays one block at a time and fine enough to cut a
+## firing slit with.
 func _place_earth() -> void:
 	if _world == null:
 		return
@@ -170,13 +194,70 @@ func _place_earth() -> void:
 	var spot: Vector3 = hit["position"] + normal * (VoxelWorld.BLOCK * 0.5)
 	var g: Vector3i = _world.world_to_grid(spot)
 
-	var centre: Vector3 = _world.grid_to_world(g.x, g.y, g.z) + Vector3.ONE * (VoxelWorld.BLOCK * 0.5)
 	var body := _find_ancestor_body()
-	if body != null and centre.distance_to(body.global_position + Vector3.UP * 0.9) < self_clearance:
-		return
+	var eyes := Vector3.ZERO
+	if body != null:
+		eyes = body.global_position + Vector3.UP * 0.9
 
-	if _world.place_block(g.x, g.y, g.z, VoxelWorld.DIRT):
+	var laid := false
+	for cell: Vector3i in _spadeful(g, normal, hit["position"]):
+		# Tested per block rather than once for the patch: a spadeful reaches
+		# further than a single block did, and the far corner of it being clear
+		# says nothing about the corner next to your boots.
+		var centre: Vector3 = (
+			_world.grid_to_world(cell.x, cell.y, cell.z)
+			+ Vector3.ONE * (VoxelWorld.BLOCK * 0.5)
+		)
+		if body != null and centre.distance_to(eyes) < self_clearance:
+			continue
+		if _world.place_block(cell.x, cell.y, cell.z, VoxelWorld.DIRT):
+			laid = true
+	if laid:
 		_play(PACK, randf_range(0.95, 1.05))
+
+
+## The cells one spadeful covers: a square patch lying in the face that was
+## struck, so earth goes onto a wall flat against it and onto the ground flat
+## along it rather than as a tower sticking out of either.
+##
+## Which way the patch grows is decided by where in the block the ray actually
+## landed, so it spreads around the point you are aiming at instead of always
+## reaching off in whichever direction the axes happen to be numbered.
+func _spadeful(g: Vector3i, normal: Vector3, at: Vector3) -> Array[Vector3i]:
+	var cells: Array[Vector3i] = [g]
+	if build_span <= 1:
+		return cells
+
+	# The two axes that lie in the face: everything except the one the normal
+	# points along.
+	var facing := normal.abs()
+	var along := 0
+	if facing.y >= facing.x and facing.y >= facing.z:
+		along = 1
+	elif facing.z >= facing.x:
+		along = 2
+	var axes: Array[int] = [0, 1, 2]
+	axes.erase(along)
+
+	# The patch is laid around the block you hit rather than out from it. An
+	# even span cannot sit exactly on centre, so which half of the block the ray
+	# came down in breaks the tie -- which is also what makes a two-wide spadeful
+	# grow toward where you are pointing.
+	var corner: Vector3 = _world.grid_to_world(g.x, g.y, g.z)
+	var low := Vector3i.ZERO
+	for axis: int in axes:
+		var into := (at[axis] - corner[axis]) / VoxelWorld.BLOCK
+		@warning_ignore("integer_division")
+		low[axis] = -(build_span / 2) + (1 if into >= 0.5 else 0)
+
+	cells.clear()
+	for a in build_span:
+		for b in build_span:
+			var cell := g
+			cell[axes[0]] += low[axes[0]] + a
+			cell[axes[1]] += low[axes[1]] + b
+			cells.append(cell)
+	return cells
 
 
 ## Ray from the camera, so the shovel works where you are looking rather than

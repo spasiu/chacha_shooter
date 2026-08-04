@@ -7,8 +7,16 @@ config_version=5
 [application]
 
 config/name="chacha_shooter"
-run/main_scene="res://scenes/loadout_select.tscn"
+run/main_scene="res://scenes/map_select.tscn"
 config/features=PackedStringArray("4.7", "Forward Plus")
+
+[autoload]
+
+; The connection has to outlive the change from the join screen into the world,
+; which is exactly what an autoload is for. It is harmless when there is no
+; server to talk to: everything on it turns into a no-op and the game is
+; single-player again.
+Net="*res://scripts/net.gd"
 
 [display]
 
@@ -69,6 +77,10 @@ slot_5={
 "deadzone": 0.2,
 "events": [Object(InputEventKey,"device":-1,"physical_keycode":53)]
 }
+interact={
+"deadzone": 0.2,
+"events": [Object(InputEventKey,"device":-1,"physical_keycode":69)]
+}
 crouch={
 "deadzone": 0.2,
 "events": [Object(InputEventKey,"device":-1,"physical_keycode":4194326)]
@@ -81,3 +93,6 @@ toggle_view={
 [rendering]
 
 renderer/rendering_method="forward_plus"
+; Browsers cannot run the Vulkan backend. Without this the web build falls back
+; on its own and renders the world flat and untextured; desktop is unaffected.
+renderer/rendering_method.web="gl_compatibility"

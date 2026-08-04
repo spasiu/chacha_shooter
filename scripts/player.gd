@@ -25,8 +25,10 @@ signal died
 @export var safe_fall_speed := 14.0
 ## Damage per m/s of impact beyond the safe threshold.
 @export var fall_damage_per_speed := 6.0
-## Seconds face-down before respawning at the start point.
-@export var respawn_delay := 4.0
+## Seconds face-down before you may get back up. The body lies where it fell
+## for the whole of it, so a position that has been taken stays visibly taken,
+## and going down is a real loss of ground rather than a short pause.
+@export var respawn_delay := 1.0
 ## Falling this far below the world kills, in case the edge is ever outrun.
 @export var void_depth := -12.0
 
@@ -52,8 +54,18 @@ signal died
 ## own, so running steps more often without a separate interval.
 @export var stride_length := 2.0
 
+## How close you have to be to climb into a vehicle.
+@export var vehicle_reach := 4.5
+
+## How close to your own side's base counts as being in it, in metres. Generous:
+## a resupply you have to go hunting for the exact spot of is a chore rather
+## than a place on the map.
+@export var resupply_radius := 14.0
+
 ## How fast the view settles back after weapon recoil, per second.
 @export var recoil_recovery := 7.0
+## How fast a shaken view settles, in radians per second.
+@export var shake_recovery := 0.09
 
 ## Fraction of the aim pitch the third-person torso copies, so the weapon
 ## tracks roughly where you are aiming without the whole body tipping over.
@@ -61,6 +73,18 @@ signal died
 
 const PITCH_LIMIT := deg_to_rad(89.0)
 const MIN_STEP_SPEED := 0.5
+## How far from the map's start point a networked soldier may appear, in metres,
+## and the fraction of the terrain's own draw distance that may be used for it.
+##
+## Both, because either alone gets it wrong. A fixed distance goes stale the
+## moment the draw distance is retuned; a pure fraction of a generous draw
+## distance would fling people to opposite ends of a field they can see across
+## but would take half a minute to cross. Whichever is smaller wins, so people
+## start near each other and always inside the ground each other is standing on.
+const SPAWN_SCATTER := 16.0
+const SPAWN_SCATTER_OF_VIEW := 0.25
+## How many spots to try before giving up and using the map's own spawn point.
+const SPAWN_TRIES := 12
 ## Footfalls sit well under the weapon; landing is 4dB above a normal step.
 const STEP_VOLUME_DB := -10.0
 
@@ -86,7 +110,11 @@ const LOADOUT_SCREEN: PackedScene = preload("res://scenes/loadout_select.tscn")
 @onready var bar: Equipment = $Head/Camera3D/WeaponSocket/WeaponBAR
 @onready var m1911: Equipment = $Head/Camera3D/WeaponSocket/WeaponM1911
 @onready var johnson: Equipment = $Head/Camera3D/WeaponSocket/WeaponJohnson
+@onready var radio: Equipment = $Head/Camera3D/WeaponSocket/WeaponRadio
+@onready var tnt: Equipment = $Head/Camera3D/WeaponSocket/WeaponTNT
 @onready var shovel: Equipment = $Head/Camera3D/WeaponSocket/WeaponShovel
+@onready var smoke: Equipment = $Head/Camera3D/WeaponSocket/WeaponSmoke
+@onready var medic: Equipment = $Head/Camera3D/WeaponSocket/WeaponMedic
 @onready var camera_fp: Camera3D = $Head/Camera3D
 @onready var camera_tp: Camera3D = $Head/SpringArm3D/CameraTP
 @onready var spring_arm: SpringArm3D = $Head/SpringArm3D
@@ -107,7 +135,11 @@ const LOADOUT_SCREEN: PackedScene = preload("res://scenes/loadout_select.tscn")
 	&"bar": bar,
 	&"m1911": m1911,
 	&"johnson": johnson,
+	&"radio": radio,
+	&"tnt": tnt,
 	&"shovel": shovel,
+	&"smoke": smoke,
+	&"medic": medic,
 	&"grenade": grenade,
 }
 
@@ -136,22 +168,51 @@ var _rest_fov := 75.0
 var health := 0.0
 var _dead := false
 var _spawn_transform := Transform3D.IDENTITY
+## The side our own body is dressed as, so it is repainted only when the side
+## changes rather than on every roster message.
+var _team := ""
 var _death_tween: Tween
 ## Holds the respawn loadout screen while it is up; null the rest of the time.
 var _select_layer: CanvasLayer
+## The screen inside that layer, kept so the countdown can be fed to it.
+var _select_screen: Control
+## Seconds left before getting back up is allowed. Counts down only while dead.
+var _respawn_in := 0.0
+## Whether the current visit to the base has already been announced, so walking
+## in wounded says so once rather than every frame you stand there.
+var _resupply_told := false
+## The tank being driven, if any. While this is set the player is parked: the
+## vehicle reads the input and moves us, and everything below stands down.
+var _vehicle: Node3D
 var _voxel_world: Node
 # Alternates each footfall so the gait phase runs 0..2PI over two steps, which
 # lands each footplant exactly on its footstep sound.
 var _step_parity := false
 var _shoot_recency := 0.0
+## Peak jitter left in the view, in radians. Set by anything that goes off hard
+## enough to be felt rather than merely heard.
+var _shake := 0.0
 ## Everything the player can hold; index 0 is slot 1.
 var loadout: Array[Equipment] = []
 var weapon: Equipment
 var _slot := -1
+## Last values handed to the body's walk cycle, kept so the same numbers can be
+## published to everyone else rather than having them guess at a gait from a
+## position that only arrives twenty times a second.
+var _gait_phase := 0.0
+var _gait_speed := 0.0
+
+
+## The vehicle being ridden, for anything outside that needs to know -- the HUD
+## reads it to show the tank's ammunition instead of a rifle magazine.
+func riding() -> Node3D:
+	return _vehicle
 
 
 func _ready() -> void:
 	Input.mouse_mode = Input.MOUSE_MODE_CAPTURED
+	add_to_group(Lethality.DAMAGEABLE)
+	add_to_group(Blast.VIEWERS)
 	_head_rest_y = head.position.y
 	_stand_height = (collision_shape.shape as CapsuleShape3D).height
 	_rest_fov = camera_fp.fov
@@ -171,15 +232,59 @@ func _ready() -> void:
 	_set_shadows(viewmodel, GeometryInstance3D.SHADOW_CASTING_SETTING_OFF)
 	_equip(0)
 	_apply_view()
+	# Our own uniform matters over the shoulder and in our shadow, and the side
+	# it shows is only settled once the server has put us on one.
+	Net.roster_changed.connect(_refresh_team)
+	_refresh_team()
+
+	# Hand ourselves to the network last, once everything above is settled: the
+	# first thing it does is ask where we are and what we are holding.
+	Net.attach_local(self)
+	# Onto the map's own start point, alone or not. The map is the thing that
+	# knows where a side comes in, and the scene's position is only the fallback
+	# for a world that has no map at all.
+	_move_to(_scattered_spawn())
+	if Net.active():
+		Net.report_spawn(global_position)
+
+
+## Dresses our own soldier as the side the roster has us on.
+func _refresh_team() -> void:
+	var side := Net.my_team()
+	if side == _team:
+		return
+	_team = side
+	body_model.set_team_colour(Net.team_colour(side))
 
 
 func _unhandled_input(event: InputEvent) -> void:
+	# Neither does somebody waiting for the ground to finish.
+	if not _terrain_ready():
+		return
 	# A corpse takes no orders, and while the loadout screen is up the number
-	# keys belong to it rather than to weapon slots.
+	# keys belong to it rather than to weapon slots. The one exception is
+	# asking to get back up: there is no reason to make anyone watch the timer
+	# run down if they are ready to go.
 	if _dead:
+		if _select_layer == null and (
+			event.is_action_pressed("shoot")
+			or event.is_action_pressed("jump")
+			or event.is_action_pressed("ui_accept")
+		):
+			_open_loadout_select()
 		return
 
 	var captured := Input.mouse_mode == Input.MOUSE_MODE_CAPTURED
+
+	if event.is_action_pressed("interact"):
+		if _vehicle != null:
+			_vehicle.exit()
+		else:
+			_board_nearby_vehicle()
+		return
+	# Aboard, the vehicle has the controls; nothing here should answer.
+	if _vehicle != null:
+		return
 
 	if event is InputEventMouseMotion and captured:
 		# Sighted aiming slows the turn rate in proportion to the zoom.
@@ -215,9 +320,57 @@ func _unhandled_input(event: InputEvent) -> void:
 		Input.mouse_mode = Input.MOUSE_MODE_CAPTURED
 
 
+## Whether there is a whole world to play in yet. True in any world that streams
+## rather than prebuilds, and true forever once the build finishes.
+func _terrain_ready() -> bool:
+	if _voxel_world != null:
+		# The whole map, when the map is built in one go before anybody plays.
+		if not _voxel_world.is_terrain_ready():
+			return false
+		# And, far more often, the ground under this particular pair of boots.
+		#
+		# Streaming builds outward from whoever is looking, so for the first
+		# second or two of a life there is a described world and no built one.
+		# Standing still through that looks like a brief pause; letting gravity
+		# have you instead means falling through terrain that is about to exist
+		# and dying to the void before it does, which is exactly what a spawn
+		# that kills you a second after loading is.
+		if not _voxel_world.is_ground_ready(global_position.x, global_position.z):
+			return false
+	# Nor between rounds. The scoreboard is up, the ground is being put back and
+	# the count is being reset; anybody still moving about during that would be
+	# playing a round that has already been decided.
+	return not Net.round_over
+
+
+## Whether this soldier can act yet, for the HUD to put a screen over the wait.
+func is_ready_to_play() -> bool:
+	return _terrain_ready()
+
+
+## A fresh round. Everything a respawn does, plus getting out of whatever was
+## being driven and taking down the kit screen if it was up, because neither
+## belongs to the round that just ended.
+func round_reset() -> void:
+	if _vehicle != null:
+		_vehicle.exit()
+	if _select_layer != null:
+		_select_layer.queue_free()
+		_select_layer = null
+		_select_screen = null
+	_respawn_in = 0.0
+	respawn()
+
+
 func _process(delta: float) -> void:
+	if not _terrain_ready():
+		return
 	if _dead:
-		# The death tween owns the camera; leave it alone.
+		# The death tween owns the camera; all there is to do is run the clock.
+		_update_respawn_clock(delta)
+		return
+	if _vehicle != null:
+		# Riding: the vehicle owns the camera, the aim and the guns.
 		return
 
 	# Recoil decays toward zero and is layered on top of the aim angles, so a
@@ -229,13 +382,17 @@ func _process(delta: float) -> void:
 	rotation.y = _aim_yaw + _recoil_yaw
 	var pitch := clampf(_aim_pitch + _recoil_pitch, -PITCH_LIMIT, PITCH_LIMIT)
 	head.rotation.x = pitch
-	body_model.spine_pitch = pitch * spine_pitch_ratio if _third_person else 0.0
+	_apply_shake(delta)
+	body_model.spine_pitch = pitch * spine_pitch_ratio if _over_shoulder() else 0.0
 
 	# Aim state is evaluated even when the mouse is released, so letting go of
 	# the cursor lowers the weapon instead of leaving it stuck sighted.
 	# Iron sights are first-person only; the pose is solved against the camera.
 	var captured := Input.mouse_mode == Input.MOUSE_MODE_CAPTURED
-	weapon.set_aiming(captured and not _third_person and Input.is_action_pressed("aim"))
+	weapon.set_aiming(captured and not _over_shoulder() and Input.is_action_pressed("aim"))
+	# Lying down puts a bipod on the ground, which is the whole reason to carry
+	# an automatic rifle. Whether that means anything is the weapon's business.
+	weapon.set_braced(_prone)
 	camera_fp.fov = lerpf(_rest_fov, _sighted_fov(), weapon.aim_ratio())
 
 	if not captured:
@@ -254,6 +411,15 @@ func _process(delta: float) -> void:
 
 
 func _physics_process(delta: float) -> void:
+	# Nothing moves until the ground is finished. Standing still on an unbuilt
+	# map only looks like waiting; falling through it, which is what happens the
+	# moment gravity is allowed to apply, looks like the game being broken.
+	if not _terrain_ready():
+		velocity = Vector3.ZERO
+		return
+	if _vehicle != null:
+		# The tank puts us where it goes; no gravity, no footsteps, no input.
+		return
 	_check_out_of_bounds()
 	if _dead:
 		# Still fall, but take no input and make no footfalls.
@@ -265,6 +431,8 @@ func _physics_process(delta: float) -> void:
 		return
 
 	_shoot_recency = maxf(_shoot_recency - delta, 0.0)
+	_update_resupply()
+	_update_ammo_box()
 	_update_crouch(delta)
 	var was_on_floor := is_on_floor()
 	var fall_speed := velocity.y
@@ -350,6 +518,10 @@ func _current_speed() -> float:
 		speed = minf(speed, walk_speed)
 	if _crouching:
 		speed = minf(speed, crouch_speed)
+	# Kit has weight, and it is carried in every stance: a burden takes its cut
+	# off whatever pace the restrictions above have left you with, rather than
+	# competing with them for the slowest.
+	speed *= 1.0 - weapon.move_penalty
 	# Blended rather than switched, so raising the sights eases you down to a
 	# shuffle instead of snapping.
 	return lerpf(speed, minf(speed, shuffle_speed), weapon.aim_ratio())
@@ -394,18 +566,49 @@ func _update_prone_hold(delta: float) -> void:
 ## invisible but still casting an animated shadow.
 func _drive_gait(delta: float) -> void:
 	var ground_speed := Vector2(velocity.x, velocity.z).length()
-	var phase := (_stride_accum / stride_length) * PI
+	_gait_phase = (_stride_accum / stride_length) * PI
 	if _step_parity:
-		phase += PI
+		_gait_phase += PI
+	_gait_speed = clampf(ground_speed / walk_speed, 0.0, 1.3)
 	body_model.prone_amount = _prone_blend
-	body_model.set_gait(
-		phase, clampf(ground_speed / walk_speed, 0.0, 1.3), is_on_floor(), _crouch, delta
-	)
+	body_model.set_gait(_gait_phase, _gait_speed, is_on_floor(), _crouch, delta)
+
+
+## Everything another client needs to draw this soldier, in the order
+## RemotePlayer reads it back out. Sent twenty times a second, so it carries the
+## smoothed stance values rather than the flags behind them: the far end is
+## interpolating anyway and has no use for "the crouch key is down".
+##
+## Packed floats rather than an array of values, because this is the one message
+## sent on a timer and everything else is sent when something happens. A plain
+## Array puts a type tag on every entry and sends every float at full width; ten
+## packed floats are forty bytes and no tags. That difference is what decides how
+## long a client that has stopped draining its socket -- a browser tab in the
+## background, mostly -- can fall behind before the buffer gives up and starts
+## discarding packets that matter.
+func net_state() -> PackedFloat32Array:
+	var flags := 0
+	if is_on_floor():
+		flags |= RemotePlayer.FLAG_ON_FLOOR
+	if _dead:
+		flags |= RemotePlayer.FLAG_DEAD
+	if _vehicle != null:
+		flags |= RemotePlayer.FLAG_RIDING
+	return PackedFloat32Array([
+		global_position.x, global_position.y, global_position.z,
+		_aim_yaw, _aim_pitch, _crouch, _prone_blend,
+		_gait_phase, _gait_speed, float(flags),
+	])
 
 
 ## Signature matches TargetCharacter so anything that damages one can damage
 ## the other -- grenade fragments do not care who they hit.
-func take_damage(amount: float, _hit_position := Vector3.ZERO, _from: Vector3 = Vector3.ZERO) -> void:
+func take_damage(
+	amount: float,
+	_hit_position := Vector3.ZERO,
+	_from: Vector3 = Vector3.ZERO,
+	_kind: StringName = Lethality.BLAST
+) -> void:
 	if _dead:
 		return
 	health = maxf(health - amount, 0.0)
@@ -435,12 +638,33 @@ func _check_out_of_bounds() -> void:
 		_die()
 
 
-## Drops the camera to the ground, collapses the body and respawns after a
-## delay. Input is ignored throughout.
+## How long until getting back up is allowed, for the HUD to show. Zero once the
+## wait is served, and zero while alive.
+func respawn_countdown() -> float:
+	return _respawn_in
+
+
+## Runs the wait down and gets us back up at the end of it. If the loadout
+## screen is open the player is still choosing, so the clock running out only
+## unlocks its deploy button; confirming is what actually stands us up.
+func _update_respawn_clock(delta: float) -> void:
+	_respawn_in = maxf(_respawn_in - delta, 0.0)
+	if _select_screen != null:
+		_select_screen.hold_for(_respawn_in)
+	elif _respawn_in <= 0.0:
+		# Deferred: standing back up reparents the whole loadout between sockets,
+		# and the frame's own process pass is no place to be rebuilding the tree.
+		respawn.call_deferred()
+
+
+## Drops the camera to the ground and collapses the body, which then lies where
+## it fell until the wait is served. Input is ignored throughout, bar asking for
+## the loadout screen.
 func _die() -> void:
 	if _dead:
 		return
 	_dead = true
+	_respawn_in = respawn_delay
 	velocity = Vector3.ZERO
 	weapon.set_aiming(false)
 	# Nothing to see from inside your own corpse.
@@ -448,18 +672,20 @@ func _die() -> void:
 	weapon.visible = false
 	body_model.die(false)
 	died.emit()
+	# Who gets the credit is the network's business, not ours: it knows who last
+	# put a round into us, and a fall or the boundary line has nobody behind it.
+	Net.report_death(Net.last_attacker())
 
 	_death_tween = create_tween().set_parallel(true)
 	_death_tween.set_ease(Tween.EASE_OUT).set_trans(Tween.TRANS_CUBIC)
 	_death_tween.tween_property(head, "position:y", 0.32, 1.0)
 	_death_tween.tween_property(head, "rotation:z", deg_to_rad(74.0), 1.1)
 	_death_tween.tween_property(head, "rotation:x", deg_to_rad(-12.0), 1.1)
-	_death_tween.chain().tween_interval(respawn_delay)
-	_death_tween.chain().tween_callback(_open_loadout_select)
 
 
-## Offers the kit for the next life. Respawning waits on the answer, so this is
-## the one thing standing between dying and getting back up.
+## Offers the kit for the next life. Choosing it is something to do while the
+## wait runs down rather than a way of cutting it short: the screen is told how
+## long is left and keeps its own deploy button shut until there is none.
 func _open_loadout_select() -> void:
 	if _select_layer != null:
 		return
@@ -474,26 +700,41 @@ func _open_loadout_select() -> void:
 	screen.loads_world = false
 	screen.confirmed.connect(_on_loadout_confirmed)
 	_select_layer.add_child(screen)
+	_select_screen = screen
+	screen.hold_for(_respawn_in)
 
 
 func _on_loadout_confirmed(_picks: Array) -> void:
+	_close_loadout_select()
+	Input.mouse_mode = Input.MOUSE_MODE_CAPTURED
+	# The screen will not deploy early, so this is only ever reached with the
+	# wait served. Checked anyway, because nothing else is standing between a
+	# confirmation and being back on your feet.
+	if _respawn_in <= 0.0:
+		respawn()
+
+
+func _close_loadout_select() -> void:
 	if _select_layer != null:
 		_select_layer.queue_free()
 		_select_layer = null
-	Input.mouse_mode = Input.MOUSE_MODE_CAPTURED
-	respawn()
+	_select_screen = null
 
 
 func respawn() -> void:
 	if _death_tween != null and _death_tween.is_valid():
 		_death_tween.kill()
 	_dead = false
+	_respawn_in = 0.0
+	_close_loadout_select()
 	health = max_health
 	health_changed.emit(health, max_health)
 
-	global_transform = _spawn_transform
+	# Always back at your own side's base, whether or not anyone else is on the
+	# field: where you fell is somebody else's ground now, and the map is the
+	# thing that says where yours is.
+	_move_to(_scattered_spawn())
 	velocity = Vector3.ZERO
-	_aim_yaw = _spawn_transform.basis.get_euler().y
 	_aim_pitch = 0.0
 	_recoil_pitch = 0.0
 	_recoil_yaw = 0.0
@@ -522,6 +763,161 @@ func respawn() -> void:
 	_slot = -1
 	_equip(0)
 	_apply_view()
+	Net.report_spawn(global_position)
+
+
+## Puts the soldier somewhere, keeping the aim pointed the way the body is.
+func _move_to(at: Vector3) -> void:
+	global_position = at
+	# Facing out into the map rather than whichever way the scene happened to
+	# leave the node. You spawn inside your own base, so the scene's heading
+	# points you at the nearest wall of it; turning to face the middle costs a
+	# second off every life and is where the fighting is anyway.
+	if at.length_squared() > 1.0:
+		rotation.y = atan2(at.x, at.z)
+	else:
+		rotation.y = _spawn_transform.basis.get_euler().y
+	_aim_yaw = rotation.y
+	_aim_pitch = 0.0
+
+
+## Standing in your own base puts you right: full health and a full loadout.
+##
+## A base you can only respawn at is a place you visit once a life; one that
+## restocks you is a place worth walking back to with a bazooka empty, which is
+## what makes the ground between the bases matter more than the bases do.
+##
+## Announced once per visit rather than every frame you stand there.
+func _update_resupply() -> void:
+	if _voxel_world == null or _dead:
+		return
+	var home: Vector2 = _voxel_world.team_spawn(Net.my_team())
+	if home == Vector2.ZERO:
+		return
+	var away := Vector2(global_position.x, global_position.z).distance_to(home)
+	if away > resupply_radius:
+		_resupply_told = false
+		return
+	if _resupply_told:
+		return
+	_resupply_told = true
+	var wanted := health < max_health
+	health = max_health
+	health_changed.emit(health, max_health)
+	for item: Equipment in _catalogue.values():
+		item.restock()
+	if wanted:
+		Net.notice.emit("resupplied")
+
+
+## Ammunition boxes standing on the map, which fill everything you carry and
+## then go empty for a while.
+##
+## Nothing happens while you are carrying a full load, so walking past a box on
+## the way somewhere costs nobody anything -- a box is only spent by somebody
+## who actually needed it. It hands over ammunition alone: your own base and a
+## man with a medical pack are what put health back, and a crate that did that
+## too would leave both with nothing to offer.
+##
+## Only one box per pass, and it stops at the first one in reach. Two crates
+## close enough together to both be in range is a thing a map can do, and
+## emptying both to fill one soldier would be a waste of the map's ammunition.
+func _update_ammo_box() -> void:
+	if _dead:
+		return
+	var wanting := false
+	for item: Equipment in _catalogue.values():
+		if not item.is_full():
+			wanting = true
+			break
+	if not wanting:
+		return
+
+	for node in get_tree().get_nodes_in_group(AmmoBox.BOXES):
+		var box := node as AmmoBox
+		if box == null or not box.has_stock():
+			continue
+		if global_position.distance_to(box.global_position) > box.reach:
+			continue
+		for item: Equipment in _catalogue.values():
+			item.restock()
+		box.empty_out()
+		# The box is part of the map, so everybody has their own copy of it and
+		# every one of those copies has to shut.
+		Net.report_ammo(box)
+		Net.notice.emit("ammunition")
+		return
+
+
+## Where this soldier's side comes into the world. The map says, because the map
+## is the thing that knows where its bases are; falling back to wherever the
+## scene put the player covers a map that names no sides at all, which is what
+## the test harnesses run on.
+func _team_origin() -> Vector3:
+	if _voxel_world == null:
+		return _spawn_transform.origin
+	var at: Vector2 = _voxel_world.team_spawn(Net.my_team())
+	if at == Vector2.ZERO:
+		return _spawn_transform.origin
+	return Vector3(at.x, _spawn_transform.origin.y, at.y)
+
+
+## A spot near the start point rather than on it, dropped onto whatever ground
+## is there. Sharing a field with other people means the start point is both
+## crowded and watched, and appearing inside somebody else is worse than either.
+func _scattered_spawn() -> Vector3:
+	var origin := _team_origin()
+	var limit := SPAWN_SCATTER
+	if _voxel_world != null:
+		limit = minf(limit, _voxel_world.view_distance() * SPAWN_SCATTER_OF_VIEW)
+	if _voxel_world == null:
+		return origin
+
+	# Try a few spots and take the first with room to stand in. Asking the world
+	# how high the ground is and dropping somebody there is not enough: bases are
+	# walled, yards are full of containers, and a soldier put down inside any of
+	# it gets squeezed out through the floor and falls until the void kills them.
+	for _attempt in SPAWN_TRIES:
+		var angle := randf() * TAU
+		var reach := randf_range(limit * 0.35, limit)
+		var at := origin + Vector3(cos(angle) * reach, 0.0, sin(angle) * reach)
+		var stand: float = _voxel_world.standing_height(at.x, at.z)
+		if not is_nan(stand):
+			# Clear of the ground rather than level with it, so the first thing
+			# that happens is a short drop and not a scramble out of a hillside.
+			at.y = stand + 0.3
+			return at
+
+	# Everywhere we looked was built on. The map's own spawn point is the one
+	# spot its author definitely meant to be standable, so fall back to that.
+	var home: float = _voxel_world.standing_height(origin.x, origin.z)
+	return Vector3(origin.x, (home if not is_nan(home) else origin.y) + 0.3, origin.z)
+
+
+## Treated by somebody else's medic while still on your feet. Full health, not
+## a top-up: the pack is a scarce thing and reaching a man under fire ought to
+## be worth the whole of what it costs to carry.
+func heal_full() -> void:
+	if _dead:
+		return
+	health = max_health
+	health_changed.emit(health, max_health)
+
+
+## Carried off and put back in the line. Returns whether it actually took --
+## false if we were never down, or gave up and respawned before the medic got
+## here. Net leans on that answer: only a real revive refunds the side its man.
+func revive_from_aid() -> bool:
+	if not _dead:
+		return false
+	if _select_layer != null:
+		_select_layer.queue_free()
+		_select_layer = null
+		_select_screen = null
+	_respawn_in = 0.0
+	Input.mouse_mode = Input.MOUSE_MODE_CAPTURED
+	respawn()
+	return true
 
 
 func heal(amount: float) -> void:
@@ -570,6 +966,7 @@ func _equip(index: int) -> void:
 	weapon = loadout[index]
 	weapon.visible = true
 	weapon.fired.connect(_on_weapon_fired)
+	Net.report_equip(_catalogue_index(weapon))
 	# Each item solves its own raised pose relative to the camera; convert that
 	# into socket-local space, since the socket is what it hangs from.
 	weapon.set_aim_pose(
@@ -577,40 +974,115 @@ func _equip(index: int) -> void:
 	)
 	weapon.on_equipped()
 	viewmodel.set_weapon(weapon)
-	body_arms.set_weapon(weapon if _third_person else null)
-	_set_shadows(
-		weapon,
-		GeometryInstance3D.SHADOW_CASTING_SETTING_ON if _third_person
-		else GeometryInstance3D.SHADOW_CASTING_SETTING_OFF
-	)
+	# What is now in hand may want a different camera than the last thing did.
+	# This also settles the arms and the shadows, so nothing else has to here.
+	_apply_view()
+
+
+## Where an item sits in the catalogue, which is how the network names it. -1
+## for something not in the catalogue at all, which nothing currently is.
+func _catalogue_index(item: Equipment) -> int:
+	for key: StringName in _catalogue:
+		if _catalogue[key] == item:
+			for i in LoadoutConfig.ITEMS.size():
+				if LoadoutConfig.ITEMS[i]["key"] == key:
+					return i
+	return -1
+
+
+## Rattles the view. Called on everyone at once by whatever went off, so the
+## amount is the shake at its peak rather than anything to do with distance.
+func shake_view(radians: float) -> void:
+	_shake = maxf(_shake, radians)
+
+
+## Jitter laid over the aim rather than added to it: pitch is rewritten from
+## the aim angles every frame and yaw is never touched, so a shake cannot drag
+## anyone off target the way recoil deliberately does.
+func _apply_shake(delta: float) -> void:
+	if _shake <= 0.0:
+		head.rotation.y = 0.0
+		head.rotation.z = 0.0
+		return
+	_shake = maxf(_shake - shake_recovery * delta, 0.0)
+	head.rotation.x += randf_range(-_shake, _shake)
+	head.rotation.y = randf_range(-_shake, _shake)
+	head.rotation.z = randf_range(-_shake, _shake)
+
+
+## Climbs into whatever is close enough and will have us. Reach is generous:
+## the hull is wide, and hunting for a hotspot on it is nobody's idea of fun.
+func _board_nearby_vehicle() -> void:
+	if _dead:
+		return
+	var nearest: Node3D = null
+	var best := vehicle_reach
+	for node in get_tree().get_nodes_in_group(Tank.VEHICLES):
+		if not (node is Node3D) or not node.has_method("can_be_entered"):
+			continue
+		if not node.can_be_entered():
+			continue
+		var d: float = global_position.distance_to((node as Node3D).global_position)
+		if d < best:
+			best = d
+			nearest = node
+	if nearest == null:
+		return
+
+	_vehicle = nearest
+	velocity = Vector3.ZERO
+	visible = false
+	weapon.visible = false
+	viewmodel.visible = false
+	body_model.set_shadow_only(false)
+	nearest.enter(self)
+
+
+## Called by the vehicle when we get out, or when it is knocked out from under
+## us. `at` is where it wants to put us down.
+func leave_vehicle(at: Vector3) -> void:
+	_vehicle = null
+	global_position = at
+	velocity = Vector3.ZERO
+	visible = true
+	_apply_view()
+	if weapon != null:
+		weapon.visible = true
+
+
+## Whether the camera is over the shoulder: either the player asked for it with
+## the view key, or what they are holding has to be used from out there.
+func _over_shoulder() -> bool:
+	return _third_person or (weapon != null and weapon.wants_third_person())
 
 
 ## Moves the weapon between the viewmodel socket and the body socket, and swaps
 ## which camera and which set of arms is live.
 func _apply_view() -> void:
-	var socket: Node3D = socket_tp if _third_person else socket_fp
+	var third := _over_shoulder()
+	var socket: Node3D = socket_tp if third else socket_fp
 	# The whole loadout travels together; only the equipped item is visible.
 	for item: Equipment in loadout:
 		if item.get_parent() != socket:
 			item.reparent(socket, false)
-	if _third_person:
+	if third:
 		weapon.set_aiming(false)
 		camera_fp.fov = _rest_fov
-	camera_fp.current = not _third_person
-	camera_tp.current = _third_person
-	viewmodel.visible = not _third_person
+	camera_fp.current = not third
+	camera_tp.current = third
+	viewmodel.visible = not third
 
 	# The body is never hidden — in first person it is switched to shadows-only
 	# so we still cast a silhouette. Its arms drop to their idle carry pose,
 	# since the weapon they were gripping has moved up to the camera.
-	body_model.set_shadow_only(not _third_person)
-	body_arms.set_weapon(weapon if _third_person else null)
+	body_model.set_shadow_only(not third)
+	body_arms.set_weapon(weapon if third else null)
 	_set_shadows(
 		weapon,
-		GeometryInstance3D.SHADOW_CASTING_SETTING_ON if _third_person
+		GeometryInstance3D.SHADOW_CASTING_SETTING_ON if third
 		else GeometryInstance3D.SHADOW_CASTING_SETTING_OFF
 	)
-	if not _third_person:
+	if not third:
 		body_model.spine_pitch = 0.0
 
 
@@ -622,6 +1094,10 @@ func _set_shadows(root: Node, mode: int) -> void:
 func _on_weapon_fired(pitch_kick: float, yaw_kick: float) -> void:
 	_recoil_pitch += pitch_kick
 	_recoil_yaw += yaw_kick
+	# Every real shot passes through here, which makes it the one place worth
+	# telling everyone else about. What the round hit is not their business:
+	# it was traced here, and whoever it hit has already been told.
+	Net.report_fire()
 
 
 func _update_footsteps(delta: float) -> void:

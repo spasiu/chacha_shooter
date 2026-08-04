@@ -1,0 +1,1628 @@
+{
+ "name": "arena",
+ "size": 896,
+ "block": 0.25,
+ "metres": 224.0,
+ "depth_blocks": 16,
+ "build_height": 48,
+ "team_spawns": {
+  "blue": [
+   -56.0,
+   -92.25
+  ],
+  "red": [
+   73.5,
+   73.5
+  ]
+ },
+ "capture_points": [
+  {
+   "name": "NUKETOWN",
+   "x": 56.0,
+   "z": -56.0,
+   "radius": 10.0
+  },
+  {
+   "name": "SHIPMENT",
+   "x": -56.0,
+   "z": 56.0,
+   "radius": 9.0
+  }
+ ],
+ "ammo_boxes": [
+  [
+   -66.5,
+   -44.0
+  ],
+  [
+   -44.0,
+   -66.0
+  ],
+  [
+   -56.5,
+   -36.5
+  ],
+  [
+   38.5,
+   -51.0
+  ],
+  [
+   72.5,
+   -62.5
+  ],
+  [
+   57.0,
+   -37.5
+  ],
+  [
+   -74.5,
+   41.5
+  ],
+  [
+   -38.0,
+   64.5
+  ],
+  [
+   -59.0,
+   75.0
+  ],
+  [
+   39.5,
+   47.5
+  ],
+  [
+   51.0,
+   36.5
+  ],
+  [
+   -12.0,
+   -12.0
+  ],
+  [
+   12.0,
+   12.0
+  ],
+  [
+   -11.0,
+   13.0
+  ],
+  [
+   13.0,
+   -13.0
+  ],
+  [
+   0.0,
+   -56.0
+  ],
+  [
+   0.0,
+   56.0
+  ],
+  [
+   -56.0,
+   0.0
+  ],
+  [
+   56.0,
+   0.0
+  ]
+ ],
+ "structures": [
+  {
+   "name": "nuketown house north",
+   "x0": 576,
+   "z0": 146,
+   "x1": 656,
+   "z1": 202,
+   "from": 0,
+   "height": 22,
+   "type": "plaster",
+   "flat": true,
+   "gy": 17
+  },
+  {
+   "name": "nuketown house north inside 0",
+   "x0": 578,
+   "z0": 148,
+   "x1": 654,
+   "z1": 200,
+   "from": 1,
+   "height": 11,
+   "clear": true,
+   "flat": true,
+   "gy": 17
+  },
+  {
+   "name": "nuketown house north inside 1",
+   "x0": 578,
+   "z0": 148,
+   "x1": 654,
+   "z1": 200,
+   "from": 12,
+   "height": 22,
+   "clear": true,
+   "flat": true,
+   "gy": 17
+  },
+  {
+   "name": "nuketown house north roof",
+   "x0": 574,
+   "z0": 144,
+   "x1": 658,
+   "z1": 204,
+   "from": 0,
+   "height": 2,
+   "type": "tile",
+   "flat": true,
+   "gy": 39
+  },
+  {
+   "name": "nuketown house north door",
+   "x0": 612,
+   "z0": 200,
+   "x1": 626,
+   "z1": 202,
+   "from": 0,
+   "height": 9,
+   "clear": true,
+   "flat": true,
+   "gy": 17
+  },
+  {
+   "name": "nuketown house south",
+   "x0": 688,
+   "z0": 246,
+   "x1": 768,
+   "z1": 302,
+   "from": 0,
+   "height": 22,
+   "type": "plaster",
+   "flat": true,
+   "gy": 17
+  },
+  {
+   "name": "nuketown house south inside 0",
+   "x0": 690,
+   "z0": 248,
+   "x1": 766,
+   "z1": 300,
+   "from": 1,
+   "height": 11,
+   "clear": true,
+   "flat": true,
+   "gy": 17
+  },
+  {
+   "name": "nuketown house south inside 1",
+   "x0": 690,
+   "z0": 248,
+   "x1": 766,
+   "z1": 300,
+   "from": 12,
+   "height": 22,
+   "clear": true,
+   "flat": true,
+   "gy": 17
+  },
+  {
+   "name": "nuketown house south roof",
+   "x0": 686,
+   "z0": 244,
+   "x1": 770,
+   "z1": 304,
+   "from": 0,
+   "height": 2,
+   "type": "tile",
+   "flat": true,
+   "gy": 39
+  },
+  {
+   "name": "nuketown house south door",
+   "x0": 718,
+   "z0": 244,
+   "x1": 732,
+   "z1": 246,
+   "from": 0,
+   "height": 9,
+   "clear": true,
+   "flat": true,
+   "gy": 17
+  },
+  {
+   "name": "nuketown wall north",
+   "x0": 562,
+   "z0": 208,
+   "x1": 642,
+   "z1": 212,
+   "from": 0,
+   "height": 5,
+   "type": "plaster"
+  },
+  {
+   "name": "nuketown wall south",
+   "x0": 702,
+   "z0": 236,
+   "x1": 782,
+   "z1": 240,
+   "from": 0,
+   "height": 5,
+   "type": "plaster"
+  },
+  {
+   "name": "nuketown wall west",
+   "x0": 554,
+   "z0": 208,
+   "x1": 558,
+   "z1": 264,
+   "from": 0,
+   "height": 5,
+   "type": "plaster"
+  },
+  {
+   "name": "nuketown wall east",
+   "x0": 786,
+   "z0": 184,
+   "x1": 790,
+   "z1": 240,
+   "from": 0,
+   "height": 5,
+   "type": "plaster"
+  },
+  {
+   "name": "nuketown bus",
+   "x0": 654,
+   "z0": 217,
+   "x1": 690,
+   "z1": 231,
+   "from": 0,
+   "height": 11,
+   "type": "rust"
+  },
+  {
+   "name": "nuketown bus roof",
+   "x0": 654,
+   "z0": 217,
+   "x1": 690,
+   "z1": 231,
+   "from": 11,
+   "height": 1,
+   "type": "concrete"
+  },
+  {
+   "name": "nuketown post",
+   "x0": 638,
+   "z0": 218,
+   "x1": 646,
+   "z1": 230,
+   "from": 0,
+   "height": 4,
+   "type": "concrete"
+  },
+  {
+   "name": "nuketown post mast",
+   "x0": 641,
+   "z0": 223,
+   "x1": 643,
+   "z1": 225,
+   "from": 0,
+   "height": 14,
+   "type": "wood"
+  },
+  {
+   "name": "crossfire west 0",
+   "x0": 96,
+   "z0": 128,
+   "x1": 166,
+   "z1": 174,
+   "from": 0,
+   "height": 22,
+   "type": "plaster",
+   "flat": true,
+   "gy": 17
+  },
+  {
+   "name": "crossfire west 0 inside 0",
+   "x0": 98,
+   "z0": 130,
+   "x1": 164,
+   "z1": 172,
+   "from": 1,
+   "height": 11,
+   "clear": true,
+   "flat": true,
+   "gy": 17
+  },
+  {
+   "name": "crossfire west 0 inside 1",
+   "x0": 98,
+   "z0": 130,
+   "x1": 164,
+   "z1": 172,
+   "from": 12,
+   "height": 22,
+   "clear": true,
+   "flat": true,
+   "gy": 17
+  },
+  {
+   "name": "crossfire west 0 roof",
+   "x0": 94,
+   "z0": 126,
+   "x1": 168,
+   "z1": 176,
+   "from": 0,
+   "height": 2,
+   "type": "tile",
+   "flat": true,
+   "gy": 39
+  },
+  {
+   "name": "crossfire west 0 door",
+   "x0": 164,
+   "z0": 146,
+   "x1": 166,
+   "z1": 158,
+   "from": 0,
+   "height": 9,
+   "clear": true,
+   "flat": true,
+   "gy": 17
+  },
+  {
+   "name": "crossfire east 0",
+   "x0": 282,
+   "z0": 148,
+   "x1": 352,
+   "z1": 194,
+   "from": 0,
+   "height": 33,
+   "type": "sand",
+   "flat": true,
+   "gy": 17
+  },
+  {
+   "name": "crossfire east 0 inside 0",
+   "x0": 284,
+   "z0": 150,
+   "x1": 350,
+   "z1": 192,
+   "from": 1,
+   "height": 11,
+   "clear": true,
+   "flat": true,
+   "gy": 17
+  },
+  {
+   "name": "crossfire east 0 inside 1",
+   "x0": 284,
+   "z0": 150,
+   "x1": 350,
+   "z1": 192,
+   "from": 12,
+   "height": 22,
+   "clear": true,
+   "flat": true,
+   "gy": 17
+  },
+  {
+   "name": "crossfire east 0 inside 2",
+   "x0": 284,
+   "z0": 150,
+   "x1": 350,
+   "z1": 192,
+   "from": 23,
+   "height": 33,
+   "clear": true,
+   "flat": true,
+   "gy": 17
+  },
+  {
+   "name": "crossfire east 0 roof",
+   "x0": 280,
+   "z0": 146,
+   "x1": 354,
+   "z1": 196,
+   "from": 0,
+   "height": 2,
+   "type": "tile",
+   "flat": true,
+   "gy": 50
+  },
+  {
+   "name": "crossfire east 0 door",
+   "x0": 282,
+   "z0": 166,
+   "x1": 284,
+   "z1": 178,
+   "from": 0,
+   "height": 9,
+   "clear": true,
+   "flat": true,
+   "gy": 17
+  },
+  {
+   "name": "crossfire west 1",
+   "x0": 96,
+   "z0": 192,
+   "x1": 166,
+   "z1": 238,
+   "from": 0,
+   "height": 33,
+   "type": "plaster",
+   "flat": true,
+   "gy": 17
+  },
+  {
+   "name": "crossfire west 1 inside 0",
+   "x0": 98,
+   "z0": 194,
+   "x1": 164,
+   "z1": 236,
+   "from": 1,
+   "height": 11,
+   "clear": true,
+   "flat": true,
+   "gy": 17
+  },
+  {
+   "name": "crossfire west 1 inside 1",
+   "x0": 98,
+   "z0": 194,
+   "x1": 164,
+   "z1": 236,
+   "from": 12,
+   "height": 22,
+   "clear": true,
+   "flat": true,
+   "gy": 17
+  },
+  {
+   "name": "crossfire west 1 inside 2",
+   "x0": 98,
+   "z0": 194,
+   "x1": 164,
+   "z1": 236,
+   "from": 23,
+   "height": 33,
+   "clear": true,
+   "flat": true,
+   "gy": 17
+  },
+  {
+   "name": "crossfire west 1 roof",
+   "x0": 94,
+   "z0": 190,
+   "x1": 168,
+   "z1": 240,
+   "from": 0,
+   "height": 2,
+   "type": "tile",
+   "flat": true,
+   "gy": 50
+  },
+  {
+   "name": "crossfire west 1 door",
+   "x0": 164,
+   "z0": 210,
+   "x1": 166,
+   "z1": 222,
+   "from": 0,
+   "height": 9,
+   "clear": true,
+   "flat": true,
+   "gy": 17
+  },
+  {
+   "name": "crossfire east 1",
+   "x0": 282,
+   "z0": 212,
+   "x1": 352,
+   "z1": 258,
+   "from": 0,
+   "height": 22,
+   "type": "sand",
+   "flat": true,
+   "gy": 17
+  },
+  {
+   "name": "crossfire east 1 inside 0",
+   "x0": 284,
+   "z0": 214,
+   "x1": 350,
+   "z1": 256,
+   "from": 1,
+   "height": 11,
+   "clear": true,
+   "flat": true,
+   "gy": 17
+  },
+  {
+   "name": "crossfire east 1 inside 1",
+   "x0": 284,
+   "z0": 214,
+   "x1": 350,
+   "z1": 256,
+   "from": 12,
+   "height": 22,
+   "clear": true,
+   "flat": true,
+   "gy": 17
+  },
+  {
+   "name": "crossfire east 1 roof",
+   "x0": 280,
+   "z0": 210,
+   "x1": 354,
+   "z1": 260,
+   "from": 0,
+   "height": 2,
+   "type": "tile",
+   "flat": true,
+   "gy": 39
+  },
+  {
+   "name": "crossfire east 1 door",
+   "x0": 282,
+   "z0": 230,
+   "x1": 284,
+   "z1": 242,
+   "from": 0,
+   "height": 9,
+   "clear": true,
+   "flat": true,
+   "gy": 17
+  },
+  {
+   "name": "crossfire west 2",
+   "x0": 96,
+   "z0": 256,
+   "x1": 166,
+   "z1": 302,
+   "from": 0,
+   "height": 22,
+   "type": "plaster",
+   "flat": true,
+   "gy": 17
+  },
+  {
+   "name": "crossfire west 2 inside 0",
+   "x0": 98,
+   "z0": 258,
+   "x1": 164,
+   "z1": 300,
+   "from": 1,
+   "height": 11,
+   "clear": true,
+   "flat": true,
+   "gy": 17
+  },
+  {
+   "name": "crossfire west 2 inside 1",
+   "x0": 98,
+   "z0": 258,
+   "x1": 164,
+   "z1": 300,
+   "from": 12,
+   "height": 22,
+   "clear": true,
+   "flat": true,
+   "gy": 17
+  },
+  {
+   "name": "crossfire west 2 roof",
+   "x0": 94,
+   "z0": 254,
+   "x1": 168,
+   "z1": 304,
+   "from": 0,
+   "height": 2,
+   "type": "tile",
+   "flat": true,
+   "gy": 39
+  },
+  {
+   "name": "crossfire west 2 door",
+   "x0": 164,
+   "z0": 274,
+   "x1": 166,
+   "z1": 286,
+   "from": 0,
+   "height": 9,
+   "clear": true,
+   "flat": true,
+   "gy": 17
+  },
+  {
+   "name": "crossfire east 2",
+   "x0": 282,
+   "z0": 276,
+   "x1": 352,
+   "z1": 322,
+   "from": 0,
+   "height": 33,
+   "type": "sand",
+   "flat": true,
+   "gy": 17
+  },
+  {
+   "name": "crossfire east 2 inside 0",
+   "x0": 284,
+   "z0": 278,
+   "x1": 350,
+   "z1": 320,
+   "from": 1,
+   "height": 11,
+   "clear": true,
+   "flat": true,
+   "gy": 17
+  },
+  {
+   "name": "crossfire east 2 inside 1",
+   "x0": 284,
+   "z0": 278,
+   "x1": 350,
+   "z1": 320,
+   "from": 12,
+   "height": 22,
+   "clear": true,
+   "flat": true,
+   "gy": 17
+  },
+  {
+   "name": "crossfire east 2 inside 2",
+   "x0": 284,
+   "z0": 278,
+   "x1": 350,
+   "z1": 320,
+   "from": 23,
+   "height": 33,
+   "clear": true,
+   "flat": true,
+   "gy": 17
+  },
+  {
+   "name": "crossfire east 2 roof",
+   "x0": 280,
+   "z0": 274,
+   "x1": 354,
+   "z1": 324,
+   "from": 0,
+   "height": 2,
+   "type": "tile",
+   "flat": true,
+   "gy": 50
+  },
+  {
+   "name": "crossfire east 2 door",
+   "x0": 282,
+   "z0": 294,
+   "x1": 284,
+   "z1": 306,
+   "from": 0,
+   "height": 9,
+   "clear": true,
+   "flat": true,
+   "gy": 17
+  },
+  {
+   "name": "crossfire west 3",
+   "x0": 96,
+   "z0": 320,
+   "x1": 166,
+   "z1": 366,
+   "from": 0,
+   "height": 33,
+   "type": "plaster",
+   "flat": true,
+   "gy": 17
+  },
+  {
+   "name": "crossfire west 3 inside 0",
+   "x0": 98,
+   "z0": 322,
+   "x1": 164,
+   "z1": 364,
+   "from": 1,
+   "height": 11,
+   "clear": true,
+   "flat": true,
+   "gy": 17
+  },
+  {
+   "name": "crossfire west 3 inside 1",
+   "x0": 98,
+   "z0": 322,
+   "x1": 164,
+   "z1": 364,
+   "from": 12,
+   "height": 22,
+   "clear": true,
+   "flat": true,
+   "gy": 17
+  },
+  {
+   "name": "crossfire west 3 inside 2",
+   "x0": 98,
+   "z0": 322,
+   "x1": 164,
+   "z1": 364,
+   "from": 23,
+   "height": 33,
+   "clear": true,
+   "flat": true,
+   "gy": 17
+  },
+  {
+   "name": "crossfire west 3 roof",
+   "x0": 94,
+   "z0": 318,
+   "x1": 168,
+   "z1": 368,
+   "from": 0,
+   "height": 2,
+   "type": "tile",
+   "flat": true,
+   "gy": 50
+  },
+  {
+   "name": "crossfire west 3 door",
+   "x0": 164,
+   "z0": 338,
+   "x1": 166,
+   "z1": 350,
+   "from": 0,
+   "height": 9,
+   "clear": true,
+   "flat": true,
+   "gy": 17
+  },
+  {
+   "name": "crossfire east 3",
+   "x0": 282,
+   "z0": 340,
+   "x1": 352,
+   "z1": 386,
+   "from": 0,
+   "height": 22,
+   "type": "sand",
+   "flat": true,
+   "gy": 17
+  },
+  {
+   "name": "crossfire east 3 inside 0",
+   "x0": 284,
+   "z0": 342,
+   "x1": 350,
+   "z1": 384,
+   "from": 1,
+   "height": 11,
+   "clear": true,
+   "flat": true,
+   "gy": 17
+  },
+  {
+   "name": "crossfire east 3 inside 1",
+   "x0": 284,
+   "z0": 342,
+   "x1": 350,
+   "z1": 384,
+   "from": 12,
+   "height": 22,
+   "clear": true,
+   "flat": true,
+   "gy": 17
+  },
+  {
+   "name": "crossfire east 3 roof",
+   "x0": 280,
+   "z0": 338,
+   "x1": 354,
+   "z1": 388,
+   "from": 0,
+   "height": 2,
+   "type": "tile",
+   "flat": true,
+   "gy": 39
+  },
+  {
+   "name": "crossfire east 3 door",
+   "x0": 282,
+   "z0": 358,
+   "x1": 284,
+   "z1": 370,
+   "from": 0,
+   "height": 9,
+   "clear": true,
+   "flat": true,
+   "gy": 17
+  },
+  {
+   "name": "crossfire rubble 0",
+   "x0": 238,
+   "z0": 144,
+   "x1": 254,
+   "z1": 156,
+   "from": 0,
+   "height": 4,
+   "type": "sand"
+  },
+  {
+   "name": "crossfire rubble 3",
+   "x0": 206,
+   "z0": 264,
+   "x1": 222,
+   "z1": 276,
+   "from": 0,
+   "height": 4,
+   "type": "sand"
+  },
+  {
+   "name": "crossfire rubble 4",
+   "x0": 238,
+   "z0": 304,
+   "x1": 254,
+   "z1": 316,
+   "from": 0,
+   "height": 6,
+   "type": "sand"
+  },
+  {
+   "name": "blue base floor",
+   "x0": 158,
+   "z0": 46,
+   "x1": 290,
+   "z1": 112,
+   "from": 0,
+   "height": 1,
+   "type": "team_blue"
+  },
+  {
+   "name": "blue base wall north",
+   "x0": 158,
+   "z0": 46,
+   "x1": 290,
+   "z1": 52,
+   "from": 0,
+   "height": 14,
+   "type": "concrete"
+  },
+  {
+   "name": "blue base wall west",
+   "x0": 158,
+   "z0": 46,
+   "x1": 164,
+   "z1": 112,
+   "from": 0,
+   "height": 14,
+   "type": "concrete"
+  },
+  {
+   "name": "blue base wall east",
+   "x0": 284,
+   "z0": 46,
+   "x1": 290,
+   "z1": 112,
+   "from": 0,
+   "height": 14,
+   "type": "concrete"
+  },
+  {
+   "name": "blue base wall south west",
+   "x0": 158,
+   "z0": 106,
+   "x1": 202,
+   "z1": 112,
+   "from": 0,
+   "height": 14,
+   "type": "concrete"
+  },
+  {
+   "name": "blue base wall south east",
+   "x0": 246,
+   "z0": 106,
+   "x1": 290,
+   "z1": 112,
+   "from": 0,
+   "height": 14,
+   "type": "concrete"
+  },
+  {
+   "name": "blue base colours",
+   "x0": 164,
+   "z0": 52,
+   "x1": 284,
+   "z1": 56,
+   "from": 0,
+   "height": 16,
+   "type": "team_blue"
+  },
+  {
+   "name": "blue base mast",
+   "x0": 222,
+   "z0": 72,
+   "x1": 226,
+   "z1": 76,
+   "from": 0,
+   "height": 26,
+   "type": "team_blue"
+  },
+  {
+   "name": "shipment wall n",
+   "x0": 162,
+   "z0": 610,
+   "x1": 286,
+   "z1": 615,
+   "from": 0,
+   "height": 12,
+   "type": "concrete"
+  },
+  {
+   "name": "shipment wall s",
+   "x0": 162,
+   "z0": 729,
+   "x1": 286,
+   "z1": 734,
+   "from": 0,
+   "height": 12,
+   "type": "concrete"
+  },
+  {
+   "name": "shipment wall w",
+   "x0": 162,
+   "z0": 610,
+   "x1": 167,
+   "z1": 734,
+   "from": 0,
+   "height": 12,
+   "type": "concrete"
+  },
+  {
+   "name": "shipment wall e",
+   "x0": 281,
+   "z0": 610,
+   "x1": 286,
+   "z1": 734,
+   "from": 0,
+   "height": 12,
+   "type": "concrete"
+  },
+  {
+   "name": "ship mid nw",
+   "x0": 194,
+   "z0": 640,
+   "x1": 218,
+   "z1": 650,
+   "from": 0,
+   "height": 10,
+   "type": "rust",
+   "flat": true,
+   "gy": 17
+  },
+  {
+   "name": "ship mid ne",
+   "x0": 230,
+   "z0": 640,
+   "x1": 254,
+   "z1": 650,
+   "from": 0,
+   "height": 10,
+   "type": "concrete",
+   "flat": true,
+   "gy": 17
+  },
+  {
+   "name": "ship mid sw",
+   "x0": 194,
+   "z0": 694,
+   "x1": 218,
+   "z1": 704,
+   "from": 0,
+   "height": 10,
+   "type": "concrete",
+   "flat": true,
+   "gy": 17
+  },
+  {
+   "name": "ship mid se",
+   "x0": 230,
+   "z0": 694,
+   "x1": 254,
+   "z1": 704,
+   "from": 0,
+   "height": 10,
+   "type": "rust",
+   "flat": true,
+   "gy": 17
+  },
+  {
+   "name": "ship edge 0",
+   "x0": 172,
+   "z0": 622,
+   "x1": 182,
+   "z1": 646,
+   "from": 0,
+   "height": 10,
+   "type": "rust",
+   "flat": true,
+   "gy": 17
+  },
+  {
+   "name": "ship edge 0 upper",
+   "x0": 172,
+   "z0": 622,
+   "x1": 182,
+   "z1": 646,
+   "from": 0,
+   "height": 10,
+   "type": "rust",
+   "flat": true,
+   "gy": 27
+  },
+  {
+   "name": "ship edge 1",
+   "x0": 172,
+   "z0": 676,
+   "x1": 182,
+   "z1": 700,
+   "from": 0,
+   "height": 10,
+   "type": "team_red",
+   "flat": true,
+   "gy": 17
+  },
+  {
+   "name": "ship edge 2",
+   "x0": 266,
+   "z0": 622,
+   "x1": 276,
+   "z1": 646,
+   "from": 0,
+   "height": 10,
+   "type": "rust",
+   "flat": true,
+   "gy": 17
+  },
+  {
+   "name": "ship edge 3",
+   "x0": 266,
+   "z0": 676,
+   "x1": 276,
+   "z1": 700,
+   "from": 0,
+   "height": 10,
+   "type": "team_blue",
+   "flat": true,
+   "gy": 17
+  },
+  {
+   "name": "ship edge 3 upper",
+   "x0": 266,
+   "z0": 676,
+   "x1": 276,
+   "z1": 700,
+   "from": 0,
+   "height": 10,
+   "type": "team_blue",
+   "flat": true,
+   "gy": 27
+  },
+  {
+   "name": "ship edge 4",
+   "x0": 204,
+   "z0": 620,
+   "x1": 228,
+   "z1": 630,
+   "from": 0,
+   "height": 10,
+   "type": "concrete",
+   "flat": true,
+   "gy": 17
+  },
+  {
+   "name": "ship edge 5",
+   "x0": 236,
+   "z0": 620,
+   "x1": 260,
+   "z1": 630,
+   "from": 0,
+   "height": 10,
+   "type": "rust",
+   "flat": true,
+   "gy": 17
+  },
+  {
+   "name": "ship edge 6",
+   "x0": 204,
+   "z0": 716,
+   "x1": 228,
+   "z1": 726,
+   "from": 0,
+   "height": 10,
+   "type": "rust",
+   "flat": true,
+   "gy": 17
+  },
+  {
+   "name": "ship edge 6 upper",
+   "x0": 204,
+   "z0": 716,
+   "x1": 228,
+   "z1": 726,
+   "from": 0,
+   "height": 10,
+   "type": "rust",
+   "flat": true,
+   "gy": 27
+  },
+  {
+   "name": "ship edge 7",
+   "x0": 236,
+   "z0": 716,
+   "x1": 260,
+   "z1": 726,
+   "from": 0,
+   "height": 10,
+   "type": "team_red",
+   "flat": true,
+   "gy": 17
+  },
+  {
+   "name": "shipment post",
+   "x0": 218,
+   "z0": 666,
+   "x1": 230,
+   "z1": 678,
+   "from": 0,
+   "height": 2,
+   "type": "concrete"
+  },
+  {
+   "name": "shipment mast",
+   "x0": 222,
+   "z0": 670,
+   "x1": 226,
+   "z1": 674,
+   "from": 0,
+   "height": 18,
+   "type": "wood"
+  },
+  {
+   "name": "red base floor",
+   "x0": 674,
+   "z0": 682,
+   "x1": 810,
+   "z1": 802,
+   "from": 0,
+   "height": 1,
+   "type": "team_red"
+  },
+  {
+   "name": "red base wall east",
+   "x0": 804,
+   "z0": 682,
+   "x1": 810,
+   "z1": 802,
+   "from": 0,
+   "height": 16,
+   "type": "concrete"
+  },
+  {
+   "name": "red base wall south",
+   "x0": 674,
+   "z0": 796,
+   "x1": 810,
+   "z1": 802,
+   "from": 0,
+   "height": 16,
+   "type": "concrete"
+  },
+  {
+   "name": "red base wall north east",
+   "x0": 758,
+   "z0": 682,
+   "x1": 810,
+   "z1": 688,
+   "from": 0,
+   "height": 16,
+   "type": "concrete"
+  },
+  {
+   "name": "red base wall west south",
+   "x0": 674,
+   "z0": 750,
+   "x1": 680,
+   "z1": 802,
+   "from": 0,
+   "height": 16,
+   "type": "concrete"
+  },
+  {
+   "name": "red base roof",
+   "x0": 680,
+   "z0": 712,
+   "x1": 804,
+   "z1": 796,
+   "from": 0,
+   "height": 2,
+   "type": "concrete",
+   "flat": true,
+   "gy": 32
+  },
+  {
+   "name": "red base colours",
+   "x0": 800,
+   "z0": 688,
+   "x1": 804,
+   "z1": 796,
+   "from": 0,
+   "height": 18,
+   "type": "team_red"
+  },
+  {
+   "name": "red base mast",
+   "x0": 772,
+   "z0": 740,
+   "x1": 776,
+   "z1": 744,
+   "from": 0,
+   "height": 28,
+   "type": "team_red"
+  },
+  {
+   "name": "red base ramp 0",
+   "x0": 682,
+   "z0": 782,
+   "x1": 688,
+   "z1": 794,
+   "from": 0,
+   "height": 2,
+   "type": "concrete",
+   "flat": true,
+   "gy": 16
+  },
+  {
+   "name": "red base ramp 1",
+   "x0": 688,
+   "z0": 782,
+   "x1": 694,
+   "z1": 794,
+   "from": 0,
+   "height": 4,
+   "type": "concrete",
+   "flat": true,
+   "gy": 16
+  },
+  {
+   "name": "red base ramp 2",
+   "x0": 694,
+   "z0": 782,
+   "x1": 700,
+   "z1": 794,
+   "from": 0,
+   "height": 6,
+   "type": "concrete",
+   "flat": true,
+   "gy": 16
+  },
+  {
+   "name": "red base ramp 3",
+   "x0": 700,
+   "z0": 782,
+   "x1": 706,
+   "z1": 794,
+   "from": 0,
+   "height": 8,
+   "type": "concrete",
+   "flat": true,
+   "gy": 16
+  },
+  {
+   "name": "red base ramp 4",
+   "x0": 706,
+   "z0": 782,
+   "x1": 712,
+   "z1": 794,
+   "from": 0,
+   "height": 10,
+   "type": "concrete",
+   "flat": true,
+   "gy": 16
+  },
+  {
+   "name": "red base ramp 5",
+   "x0": 712,
+   "z0": 782,
+   "x1": 718,
+   "z1": 794,
+   "from": 0,
+   "height": 12,
+   "type": "concrete",
+   "flat": true,
+   "gy": 16
+  },
+  {
+   "name": "red base ramp 6",
+   "x0": 718,
+   "z0": 782,
+   "x1": 724,
+   "z1": 794,
+   "from": 0,
+   "height": 14,
+   "type": "concrete",
+   "flat": true,
+   "gy": 16
+  },
+  {
+   "name": "red base ramp 7",
+   "x0": 724,
+   "z0": 782,
+   "x1": 730,
+   "z1": 794,
+   "from": 0,
+   "height": 16,
+   "type": "concrete",
+   "flat": true,
+   "gy": 16
+  },
+  {
+   "name": "gulch rock 0",
+   "x0": 681,
+   "z0": 635,
+   "x1": 687,
+   "z1": 641,
+   "from": 0,
+   "height": 10,
+   "type": "stone"
+  },
+  {
+   "name": "gulch rock 2",
+   "x0": 713,
+   "z0": 642,
+   "x1": 724,
+   "z1": 653,
+   "from": 0,
+   "height": 6,
+   "type": "stone"
+  },
+  {
+   "name": "gulch rock 3",
+   "x0": 522,
+   "z0": 569,
+   "x1": 530,
+   "z1": 577,
+   "from": 0,
+   "height": 5,
+   "type": "stone"
+  },
+  {
+   "name": "gulch rock 4",
+   "x0": 638,
+   "z0": 699,
+   "x1": 647,
+   "z1": 708,
+   "from": 0,
+   "height": 12,
+   "type": "stone"
+  },
+  {
+   "name": "gulch rock 5",
+   "x0": 708,
+   "z0": 656,
+   "x1": 717,
+   "z1": 665,
+   "from": 0,
+   "height": 6,
+   "type": "stone"
+  },
+  {
+   "name": "gulch rock 6",
+   "x0": 660,
+   "z0": 536,
+   "x1": 675,
+   "z1": 551,
+   "from": 0,
+   "height": 9,
+   "type": "stone"
+  },
+  {
+   "name": "gulch rock 7",
+   "x0": 565,
+   "z0": 555,
+   "x1": 577,
+   "z1": 567,
+   "from": 0,
+   "height": 4,
+   "type": "stone"
+  },
+  {
+   "name": "gulch rock 8",
+   "x0": 607,
+   "z0": 588,
+   "x1": 623,
+   "z1": 604,
+   "from": 0,
+   "height": 12,
+   "type": "stone"
+  },
+  {
+   "name": "gulch rock 9",
+   "x0": 713,
+   "z0": 631,
+   "x1": 727,
+   "z1": 645,
+   "from": 0,
+   "height": 11,
+   "type": "stone"
+  },
+  {
+   "name": "gulch rock 10",
+   "x0": 696,
+   "z0": 569,
+   "x1": 703,
+   "z1": 576,
+   "from": 0,
+   "height": 10,
+   "type": "stone"
+  },
+  {
+   "name": "gulch rock 11",
+   "x0": 607,
+   "z0": 702,
+   "x1": 618,
+   "z1": 713,
+   "from": 0,
+   "height": 12,
+   "type": "stone"
+  },
+  {
+   "name": "gulch rock 12",
+   "x0": 524,
+   "z0": 711,
+   "x1": 537,
+   "z1": 724,
+   "from": 0,
+   "height": 12,
+   "type": "stone"
+  },
+  {
+   "name": "gulch rock 13",
+   "x0": 713,
+   "z0": 613,
+   "x1": 727,
+   "z1": 627,
+   "from": 0,
+   "height": 11,
+   "type": "stone"
+  },
+  {
+   "name": "middle cover 0",
+   "x0": 501,
+   "z0": 571,
+   "x1": 516,
+   "z1": 578,
+   "from": 0,
+   "height": 5,
+   "type": "concrete"
+  },
+  {
+   "name": "middle cover 1",
+   "x0": 570,
+   "z0": 316,
+   "x1": 583,
+   "z1": 322,
+   "from": 0,
+   "height": 8,
+   "type": "sand"
+  },
+  {
+   "name": "middle cover 3",
+   "x0": 561,
+   "z0": 469,
+   "x1": 571,
+   "z1": 474,
+   "from": 0,
+   "height": 8,
+   "type": "sand"
+  },
+  {
+   "name": "middle cover 5",
+   "x0": 456,
+   "z0": 377,
+   "x1": 470,
+   "z1": 384,
+   "from": 0,
+   "height": 8,
+   "type": "sand"
+  },
+  {
+   "name": "middle cover 6",
+   "x0": 476,
+   "z0": 593,
+   "x1": 490,
+   "z1": 600,
+   "from": 0,
+   "height": 10,
+   "type": "concrete"
+  },
+  {
+   "name": "middle cover 7",
+   "x0": 458,
+   "z0": 326,
+   "x1": 475,
+   "z1": 334,
+   "from": 0,
+   "height": 5,
+   "type": "sand"
+  },
+  {
+   "name": "middle cover 8",
+   "x0": 471,
+   "z0": 563,
+   "x1": 489,
+   "z1": 572,
+   "from": 0,
+   "height": 7,
+   "type": "concrete"
+  },
+  {
+   "name": "middle cover 10",
+   "x0": 513,
+   "z0": 301,
+   "x1": 530,
+   "z1": 309,
+   "from": 0,
+   "height": 10,
+   "type": "concrete"
+  },
+  {
+   "name": "middle cover 11",
+   "x0": 516,
+   "z0": 304,
+   "x1": 537,
+   "z1": 314,
+   "from": 0,
+   "height": 6,
+   "type": "sand"
+  },
+  {
+   "name": "middle cover 12",
+   "x0": 592,
+   "z0": 392,
+   "x1": 602,
+   "z1": 397,
+   "from": 0,
+   "height": 7,
+   "type": "concrete"
+  },
+  {
+   "name": "middle cover 15",
+   "x0": 384,
+   "z0": 460,
+   "x1": 397,
+   "z1": 466,
+   "from": 0,
+   "height": 6,
+   "type": "sand"
+  },
+  {
+   "name": "crossroads block",
+   "x0": 440,
+   "z0": 440,
+   "x1": 456,
+   "z1": 456,
+   "from": 0,
+   "height": 3,
+   "type": "concrete"
+  },
+  {
+   "name": "crossroads mast",
+   "x0": 446,
+   "z0": 446,
+   "x1": 450,
+   "z1": 450,
+   "from": 0,
+   "height": 22,
+   "type": "wood"
+  }
+ ]
+}

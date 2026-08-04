@@ -1,139 +1,308 @@
-; Placeholder infantryman, ~1.8m, built from primitives. Origin at the feet.
-; Everything above the waist hangs off Spine, which the player pitches so the
-; weapon tracks where you are aiming. WeaponSocket is the attachment point --
-; swapping weapons means reparenting a different scene onto it.
-[gd_scene load_steps=29 format=3]
+; Infantryman, ~1.55m to the top of the helmet, built from primitives. Origin
+; at the feet. Everything above the waist hangs off Spine, which the player
+; pitches so the weapon tracks where you are aiming. WeaponSocket is the
+; attachment point -- swapping weapons means reparenting a different scene onto
+; it.
+;
+; The shapes are round because a man is: the chest, waist, hips and skull are
+; ovals rather than boxes, and the joints are covered by the shoulder caps so
+; the arms grow out of the body instead of floating beside it. What is left
+; boxy is what is boxy on the real thing -- pouches, the pack, boots.
+;
+; The kit is doing as much work as the anatomy. A belt, cross straps, two ammo
+; pouches, a canteen, a bayonet and a slung pack are what make a shape at a
+; hundred yards read as a soldier rather than as a person out for a walk, and
+; they break up the silhouette so a man against a hedgerow is not one flat
+; olive blob.
+;
+; Every anchor the rest of the game reaches for is where it always was: hips at
+; y=0.73, knees a 0.315 segment below, Spine at 0.84, the arm rig's shoulders at
+; +-0.21 from it, and the bottom of the skull on the 1.32 headshot line.
+[gd_scene load_steps=46 format=3]
 
 [ext_resource type="Script" path="res://scripts/arm_rig.gd" id="1_rig"]
 [ext_resource type="Script" path="res://scripts/character_body.gd" id="4_model"]
 [ext_resource type="PackedScene" path="res://scenes/hand_right.tscn" id="2_hand_r"]
 [ext_resource type="PackedScene" path="res://scenes/hand_left.tscn" id="3_hand_l"]
+[ext_resource type="Texture2D" path="res://assets/textures/cloth_grain.tres" id="5_grain"]
 
+; Wool serge. Triplanar because these are primitives with no UVs worth the
+; name, and a cylinder's seam would otherwise run down the middle of every limb.
 [sub_resource type="StandardMaterial3D" id="Mat_uniform"]
-albedo_color = Color(0.29, 0.3, 0.2, 1)
-roughness = 0.9
+albedo_color = Color(0.285, 0.3, 0.205, 1)
+albedo_texture = ExtResource("5_grain")
+roughness = 0.94
+roughness_texture = ExtResource("5_grain")
+metallic_specular = 0.18
+uv1_scale = Vector3(5, 5, 5)
+uv1_triplanar = true
 
+; Cotton duck: webbing, pouches, pack. Thirstier and lighter than the wool.
 [sub_resource type="StandardMaterial3D" id="Mat_webbing"]
-albedo_color = Color(0.42, 0.38, 0.26, 1)
-roughness = 0.95
+albedo_color = Color(0.45, 0.41, 0.28, 1)
+albedo_texture = ExtResource("5_grain")
+roughness = 0.97
+roughness_texture = ExtResource("5_grain")
+metallic_specular = 0.12
+uv1_scale = Vector3(7, 7, 7)
+uv1_triplanar = true
 
-[sub_resource type="StandardMaterial3D" id="Mat_cap"]
-albedo_color = Color(0.24, 0.27, 0.18, 1)
-roughness = 0.9
-
-[sub_resource type="StandardMaterial3D" id="Mat_skin"]
-albedo_color = Color(0.72, 0.53, 0.4, 1)
-roughness = 0.75
-
-[sub_resource type="StandardMaterial3D" id="Mat_boot"]
-albedo_color = Color(0.14, 0.11, 0.09, 1)
-roughness = 0.8
+; Boots, belt, slings. Dark and the only thing on him with a shine worth
+; noticing.
+[sub_resource type="StandardMaterial3D" id="Mat_leather"]
+albedo_color = Color(0.165, 0.13, 0.098, 1)
+albedo_texture = ExtResource("5_grain")
+roughness = 0.62
+roughness_texture = ExtResource("5_grain")
+metallic_specular = 0.35
+uv1_scale = Vector3(9, 9, 9)
+uv1_triplanar = true
 
 [sub_resource type="StandardMaterial3D" id="Mat_sole"]
-albedo_color = Color(0.07, 0.07, 0.07, 1)
+albedo_color = Color(0.065, 0.065, 0.065, 1)
 roughness = 0.95
 
+; Painted steel, worn back to a sheen on the crown. Slightly metallic so the
+; helmet catches the sun and picks a man out of a hedgerow, which is the one
+; part of him that should.
+[sub_resource type="StandardMaterial3D" id="Mat_steel"]
+albedo_color = Color(0.275, 0.29, 0.235, 1)
+albedo_texture = ExtResource("5_grain")
+metallic = 0.1
+metallic_specular = 0.4
+roughness = 0.58
+roughness_texture = ExtResource("5_grain")
+uv1_scale = Vector3(6, 6, 6)
+uv1_triplanar = true
+
+[sub_resource type="StandardMaterial3D" id="Mat_brass"]
+albedo_color = Color(0.42, 0.35, 0.16, 1)
+metallic = 0.7
+roughness = 0.42
+
+; Skin scatters light rather than stopping it at the surface, which is most of
+; the difference between a face and a painted egg.
+[sub_resource type="StandardMaterial3D" id="Mat_skin"]
+albedo_color = Color(0.7, 0.52, 0.4, 1)
+albedo_texture = ExtResource("5_grain")
+roughness = 0.72
+metallic_specular = 0.3
+uv1_scale = Vector3(14, 14, 14)
+uv1_triplanar = true
+subsurf_scatter_enabled = true
+subsurf_scatter_strength = 0.25
+
+[sub_resource type="StandardMaterial3D" id="Mat_eye"]
+albedo_color = Color(0.1, 0.085, 0.075, 1)
+roughness = 0.95
+metallic_specular = 0.0
+
 [sub_resource type="BoxMesh" id="Mesh_boot"]
-material = SubResource("Mat_boot")
-size = Vector3(0.135, 0.095, 0.28)
+material = SubResource("Mat_leather")
+size = Vector3(0.126, 0.088, 0.262)
 
 [sub_resource type="BoxMesh" id="Mesh_sole"]
 material = SubResource("Mat_sole")
-size = Vector3(0.142, 0.028, 0.292)
+size = Vector3(0.129, 0.034, 0.266)
 
 ; Laced upper that swallows the bottom half of the shin. Hangs off the knee
 ; rather than the foot so it follows the shin instead of staying flat.
 [sub_resource type="CylinderMesh" id="Mesh_boot_shaft"]
-material = SubResource("Mat_boot")
+material = SubResource("Mat_leather")
 top_radius = 0.062
-bottom_radius = 0.07
-height = 0.215
-radial_segments = 10
+bottom_radius = 0.074
+height = 0.2
+radial_segments = 12
 rings = 1
 
 [sub_resource type="CylinderMesh" id="Mesh_boot_cuff"]
-material = SubResource("Mat_boot")
-top_radius = 0.072
-bottom_radius = 0.068
-height = 0.032
-radial_segments = 10
+material = SubResource("Mat_leather")
+top_radius = 0.078
+bottom_radius = 0.07
+height = 0.03
+radial_segments = 12
 rings = 1
 
 [sub_resource type="CylinderMesh" id="Mesh_shin"]
 material = SubResource("Mat_uniform")
-top_radius = 0.06
-bottom_radius = 0.05
+top_radius = 0.068
+bottom_radius = 0.052
 height = 0.315
-radial_segments = 10
+radial_segments = 14
 rings = 1
 
 [sub_resource type="CylinderMesh" id="Mesh_thigh"]
 material = SubResource("Mat_uniform")
-top_radius = 0.082
-bottom_radius = 0.066
+top_radius = 0.092
+bottom_radius = 0.072
 height = 0.315
-radial_segments = 10
+radial_segments = 14
 rings = 1
 
-[sub_resource type="BoxMesh" id="Mesh_hips"]
+; Trunk in three sections, each an oval: hips, waist, chest. Squashed front to
+; back by the node scale rather than modelled that way, so one cylinder serves
+; all three.
+[sub_resource type="CylinderMesh" id="Mesh_hips"]
 material = SubResource("Mat_uniform")
-size = Vector3(0.32, 0.18, 0.2)
+top_radius = 0.132
+bottom_radius = 0.152
+height = 0.17
+radial_segments = 16
+rings = 1
 
-[sub_resource type="BoxMesh" id="Mesh_torso"]
+[sub_resource type="CylinderMesh" id="Mesh_abdomen"]
 material = SubResource("Mat_uniform")
-size = Vector3(0.36, 0.42, 0.22)
+top_radius = 0.142
+bottom_radius = 0.13
+height = 0.14
+radial_segments = 16
+rings = 1
 
-[sub_resource type="BoxMesh" id="Mesh_webbing"]
-material = SubResource("Mat_webbing")
-size = Vector3(0.38, 0.06, 0.24)
+[sub_resource type="CylinderMesh" id="Mesh_chest"]
+material = SubResource("Mat_uniform")
+top_radius = 0.152
+bottom_radius = 0.14
+height = 0.3
+radial_segments = 18
+rings = 1
 
-[sub_resource type="BoxMesh" id="Mesh_pack"]
-material = SubResource("Mat_webbing")
-size = Vector3(0.28, 0.24, 0.14)
+; Deltoids. They cover the gap between the chest and where the arm rig hangs
+; its bones, which is what stops the arms reading as two poles beside a barrel.
+[sub_resource type="SphereMesh" id="Mesh_shoulder"]
+material = SubResource("Mat_uniform")
+radius = 0.076
+height = 0.152
+radial_segments = 14
+rings = 7
+
+[sub_resource type="CylinderMesh" id="Mesh_collar"]
+material = SubResource("Mat_uniform")
+top_radius = 0.082
+bottom_radius = 0.102
+height = 0.07
+radial_segments = 14
+rings = 1
 
 [sub_resource type="CylinderMesh" id="Mesh_neck"]
 material = SubResource("Mat_skin")
-top_radius = 0.05
-bottom_radius = 0.055
-height = 0.09
-radial_segments = 8
+top_radius = 0.052
+bottom_radius = 0.058
+height = 0.12
+radial_segments = 12
 rings = 1
 
-[sub_resource type="BoxMesh" id="Mesh_head"]
+[sub_resource type="SphereMesh" id="Mesh_skull"]
 material = SubResource("Mat_skin")
-size = Vector3(0.16, 0.2, 0.18)
+radius = 0.082
+height = 0.2
+radial_segments = 16
+rings = 9
 
-; Olive field cap: boxy crown, a band that grips the head, and a short stiff
-; visor over the brow.
-[sub_resource type="BoxMesh" id="Mesh_cap_crown"]
-material = SubResource("Mat_cap")
-size = Vector3(0.172, 0.075, 0.196)
+[sub_resource type="SphereMesh" id="Mesh_jaw"]
+material = SubResource("Mat_skin")
+radius = 0.068
+height = 0.115
+radial_segments = 14
+rings = 7
 
-[sub_resource type="BoxMesh" id="Mesh_cap_band"]
-material = SubResource("Mat_cap")
-size = Vector3(0.178, 0.028, 0.202)
+[sub_resource type="BoxMesh" id="Mesh_nose"]
+material = SubResource("Mat_skin")
+size = Vector3(0.026, 0.036, 0.034)
 
-[sub_resource type="BoxMesh" id="Mesh_cap_visor"]
-material = SubResource("Mat_cap")
-size = Vector3(0.158, 0.016, 0.082)
+[sub_resource type="BoxMesh" id="Mesh_eye"]
+material = SubResource("Mat_eye")
+size = Vector3(0.019, 0.011, 0.011)
+
+; Steel helmet: a dome with a rolled brim, sat over the skull with a couple of
+; centimetres of liner between. Far and away the most recognisable thing on the
+; man, and the thing the eye finds first at range.
+[sub_resource type="SphereMesh" id="Mesh_helmet_shell"]
+material = SubResource("Mat_steel")
+radius = 0.118
+height = 0.142
+is_hemisphere = true
+radial_segments = 20
+rings = 8
+
+[sub_resource type="TorusMesh" id="Mesh_helmet_brim"]
+material = SubResource("Mat_steel")
+inner_radius = 0.106
+outer_radius = 0.136
+rings = 24
+ring_segments = 6
+
+[sub_resource type="BoxMesh" id="Mesh_chinstrap"]
+material = SubResource("Mat_leather")
+size = Vector3(0.01, 0.048, 0.009)
+
+[sub_resource type="TorusMesh" id="Mesh_belt"]
+material = SubResource("Mat_leather")
+inner_radius = 0.126
+outer_radius = 0.146
+rings = 24
+ring_segments = 8
+
+[sub_resource type="BoxMesh" id="Mesh_buckle"]
+material = SubResource("Mat_brass")
+size = Vector3(0.05, 0.036, 0.018)
+
+[sub_resource type="BoxMesh" id="Mesh_strap_front"]
+material = SubResource("Mat_webbing")
+size = Vector3(0.042, 0.33, 0.016)
+
+[sub_resource type="BoxMesh" id="Mesh_strap_back"]
+material = SubResource("Mat_webbing")
+size = Vector3(0.042, 0.29, 0.016)
+
+[sub_resource type="BoxMesh" id="Mesh_strap_shoulder"]
+material = SubResource("Mat_webbing")
+size = Vector3(0.046, 0.018, 0.15)
+
+[sub_resource type="BoxMesh" id="Mesh_pouch"]
+material = SubResource("Mat_webbing")
+size = Vector3(0.095, 0.085, 0.055)
+
+[sub_resource type="CylinderMesh" id="Mesh_canteen"]
+material = SubResource("Mat_webbing")
+top_radius = 0.048
+bottom_radius = 0.048
+height = 0.115
+radial_segments = 12
+rings = 1
+
+[sub_resource type="BoxMesh" id="Mesh_scabbard"]
+material = SubResource("Mat_leather")
+size = Vector3(0.02, 0.2, 0.026)
+
+[sub_resource type="BoxMesh" id="Mesh_pack"]
+material = SubResource("Mat_webbing")
+size = Vector3(0.208, 0.185, 0.085)
+
+[sub_resource type="CylinderMesh" id="Mesh_roll"]
+material = SubResource("Mat_webbing")
+top_radius = 0.037
+bottom_radius = 0.037
+height = 0.216
+radial_segments = 12
+rings = 1
 
 [sub_resource type="BoxMesh" id="Mesh_gun_shadow"]
 size = Vector3(0.07, 0.18, 0.82)
 
 [sub_resource type="CylinderMesh" id="Mesh_arm_upper"]
 material = SubResource("Mat_uniform")
-top_radius = 0.058
-bottom_radius = 0.046
+top_radius = 0.062
+bottom_radius = 0.05
 height = 1.0
-radial_segments = 10
+radial_segments = 14
 rings = 1
 
 [sub_resource type="CylinderMesh" id="Mesh_arm_fore"]
 material = SubResource("Mat_uniform")
-top_radius = 0.046
-bottom_radius = 0.036
+top_radius = 0.05
+bottom_radius = 0.038
 height = 1.0
-radial_segments = 10
+radial_segments = 14
 rings = 1
 
 [node name="CharacterBody" type="Node3D"]
@@ -145,14 +314,14 @@ script = ExtResource("4_model")
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -0.11, 0.73, 0)
 
 [node name="Thigh" type="MeshInstance3D" parent="LeftLeg"]
-transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, -0.1575, 0)
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 0.94, 0, -0.1575, 0)
 mesh = SubResource("Mesh_thigh")
 
 [node name="Knee" type="Node3D" parent="LeftLeg"]
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, -0.315, 0)
 
 [node name="Shin" type="MeshInstance3D" parent="LeftLeg/Knee"]
-transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, -0.1575, 0)
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 0.94, 0, -0.1575, 0)
 mesh = SubResource("Mesh_shin")
 
 ; Shaft and cuff ride with the shin; only the foot below is counter-rotated to
@@ -170,21 +339,21 @@ transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, -0.3475, -0.02)
 mesh = SubResource("Mesh_boot")
 
 [node name="Sole" type="MeshInstance3D" parent="LeftLeg/Knee/Boot"]
-transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, -0.0535, 0)
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, -0.0505, 0)
 mesh = SubResource("Mesh_sole")
 
 [node name="RightLeg" type="Node3D" parent="."]
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0.11, 0.73, 0)
 
 [node name="Thigh" type="MeshInstance3D" parent="RightLeg"]
-transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, -0.1575, 0)
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 0.94, 0, -0.1575, 0)
 mesh = SubResource("Mesh_thigh")
 
 [node name="Knee" type="Node3D" parent="RightLeg"]
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, -0.315, 0)
 
 [node name="Shin" type="MeshInstance3D" parent="RightLeg/Knee"]
-transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, -0.1575, 0)
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 0.94, 0, -0.1575, 0)
 mesh = SubResource("Mesh_shin")
 
 [node name="BootShaft" type="MeshInstance3D" parent="RightLeg/Knee"]
@@ -200,52 +369,139 @@ transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, -0.3475, -0.02)
 mesh = SubResource("Mesh_boot")
 
 [node name="Sole" type="MeshInstance3D" parent="RightLeg/Knee/Boot"]
-transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, -0.0535, 0)
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, -0.0505, 0)
 mesh = SubResource("Mesh_sole")
 
 [node name="Spine" type="Node3D" parent="."]
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0.84, 0)
 
 [node name="Hips" type="MeshInstance3D" parent="Spine"]
-transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, -0.03, 0)
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 0.75, 0, -0.075, 0)
 mesh = SubResource("Mesh_hips")
 
+[node name="Abdomen" type="MeshInstance3D" parent="Spine"]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 0.73, 0, 0.05, 0)
+mesh = SubResource("Mesh_abdomen")
+
 [node name="Torso" type="MeshInstance3D" parent="Spine"]
-transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0.21, 0)
-mesh = SubResource("Mesh_torso")
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 0.71, 0, 0.245, 0)
+mesh = SubResource("Mesh_chest")
 
-[node name="Webbing" type="MeshInstance3D" parent="Spine"]
-transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0.1, 0)
-mesh = SubResource("Mesh_webbing")
+[node name="ShoulderLeft" type="MeshInstance3D" parent="Spine"]
+transform = Transform3D(1, 0, 0, 0, 0.92, 0, 0, 0, 0.95, -0.148, 0.352, 0)
+mesh = SubResource("Mesh_shoulder")
 
-[node name="Pack" type="MeshInstance3D" parent="Spine"]
-transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0.26, 0.16)
-mesh = SubResource("Mesh_pack")
+[node name="ShoulderRight" type="MeshInstance3D" parent="Spine"]
+transform = Transform3D(1, 0, 0, 0, 0.92, 0, 0, 0, 0.95, 0.148, 0.352, 0)
+mesh = SubResource("Mesh_shoulder")
+
+[node name="Collar" type="MeshInstance3D" parent="Spine"]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 0.85, 0, 0.418, 0)
+mesh = SubResource("Mesh_collar")
 
 [node name="Neck" type="MeshInstance3D" parent="Spine"]
-transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0.455, 0)
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0.45, 0)
 mesh = SubResource("Mesh_neck")
 
+; Skull bottom lands on y=1.32 in world, which is the line the headshot test
+; uses. Moving it means moving that number too.
 [node name="Head" type="MeshInstance3D" parent="Spine"]
-transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0.58, 0)
-mesh = SubResource("Mesh_head")
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1.06, 0, 0.58, 0)
+mesh = SubResource("Mesh_skull")
 
-; Sits down over the top of the head (head top is at y=0.68) with the visor
-; jutting past the brow at -Z, the direction the body faces.
-[node name="Cap" type="Node3D" parent="Spine"]
-transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0.605, 0)
+[node name="Jaw" type="MeshInstance3D" parent="Spine"]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1.12, 0, 0.545, -0.014)
+mesh = SubResource("Mesh_jaw")
 
-[node name="Band" type="MeshInstance3D" parent="Spine/Cap"]
-transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0.014, 0)
-mesh = SubResource("Mesh_cap_band")
+[node name="Nose" type="MeshInstance3D" parent="Spine"]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0.566, -0.1)
+mesh = SubResource("Mesh_nose")
 
-[node name="Crown" type="MeshInstance3D" parent="Spine/Cap"]
-transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0.062, 0)
-mesh = SubResource("Mesh_cap_crown")
+[node name="EyeLeft" type="MeshInstance3D" parent="Spine"]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -0.031, 0.586, -0.079)
+mesh = SubResource("Mesh_eye")
 
-[node name="Visor" type="MeshInstance3D" parent="Spine/Cap"]
-transform = Transform3D(1, 0, 0, 0, 0.990268, -0.139173, 0, 0.139173, 0.990268, 0, 0.007, -0.128)
-mesh = SubResource("Mesh_cap_visor")
+[node name="EyeRight" type="MeshInstance3D" parent="Spine"]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0.031, 0.586, -0.079)
+mesh = SubResource("Mesh_eye")
+
+[node name="Helmet" type="Node3D" parent="Spine"]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0.601, 0)
+
+[node name="Shell" type="MeshInstance3D" parent="Spine/Helmet"]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1.07, 0, 0, 0.004)
+mesh = SubResource("Mesh_helmet_shell")
+
+[node name="Brim" type="MeshInstance3D" parent="Spine/Helmet"]
+transform = Transform3D(1, 0, 0, 0, 0.34953, 0.036645, 0, -0.012215, 1.04936, 0, 0.005, 0.004)
+mesh = SubResource("Mesh_helmet_brim")
+
+[node name="StrapLeft" type="MeshInstance3D" parent="Spine/Helmet"]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -0.082, -0.024, 0.014)
+mesh = SubResource("Mesh_chinstrap")
+
+[node name="StrapRight" type="MeshInstance3D" parent="Spine/Helmet"]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0.082, -0.024, 0.014)
+mesh = SubResource("Mesh_chinstrap")
+
+[node name="Belt" type="MeshInstance3D" parent="Spine"]
+transform = Transform3D(1.06, 0, 0, 0, 1, 0, 0, 0, 0.78, 0, 0, 0)
+mesh = SubResource("Mesh_belt")
+
+[node name="Buckle" type="MeshInstance3D" parent="Spine"]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0, -0.108)
+mesh = SubResource("Mesh_buckle")
+
+; Cross straps over the shoulders, front and back, carrying the pack and the
+; weight on the belt.
+[node name="StrapFrontLeft" type="MeshInstance3D" parent="Spine"]
+transform = Transform3D(1, 0, 0, 0, 0.99863, 0.05234, 0, -0.05234, 0.99863, -0.072, 0.2, -0.108)
+mesh = SubResource("Mesh_strap_front")
+
+[node name="StrapFrontRight" type="MeshInstance3D" parent="Spine"]
+transform = Transform3D(1, 0, 0, 0, 0.99863, 0.05234, 0, -0.05234, 0.99863, 0.072, 0.2, -0.108)
+mesh = SubResource("Mesh_strap_front")
+
+[node name="StrapBackLeft" type="MeshInstance3D" parent="Spine"]
+transform = Transform3D(1, 0, 0, 0, 0.99863, -0.05234, 0, 0.05234, 0.99863, -0.062, 0.2, 0.106)
+mesh = SubResource("Mesh_strap_back")
+
+[node name="StrapBackRight" type="MeshInstance3D" parent="Spine"]
+transform = Transform3D(1, 0, 0, 0, 0.99863, -0.05234, 0, 0.05234, 0.99863, 0.062, 0.2, 0.106)
+mesh = SubResource("Mesh_strap_back")
+
+[node name="StrapShoulderLeft" type="MeshInstance3D" parent="Spine"]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -0.075, 0.383, -0.005)
+mesh = SubResource("Mesh_strap_shoulder")
+
+[node name="StrapShoulderRight" type="MeshInstance3D" parent="Spine"]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0.075, 0.383, -0.005)
+mesh = SubResource("Mesh_strap_shoulder")
+
+[node name="PouchLeft" type="MeshInstance3D" parent="Spine"]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -0.1, 0.062, -0.104)
+mesh = SubResource("Mesh_pouch")
+
+[node name="PouchRight" type="MeshInstance3D" parent="Spine"]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0.1, 0.062, -0.104)
+mesh = SubResource("Mesh_pouch")
+
+[node name="Canteen" type="MeshInstance3D" parent="Spine"]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 0.6, 0.148, -0.055, 0.072)
+mesh = SubResource("Mesh_canteen")
+
+[node name="Scabbard" type="MeshInstance3D" parent="Spine"]
+transform = Transform3D(1, 0, 0, 0, 0.97815, -0.20791, 0, 0.20791, 0.97815, -0.15, -0.098, 0.042)
+mesh = SubResource("Mesh_scabbard")
+
+[node name="Pack" type="MeshInstance3D" parent="Spine"]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0.183, 0.141)
+mesh = SubResource("Mesh_pack")
+
+; Rolled shelter half strapped across the top of the pack.
+[node name="BlanketRoll" type="MeshInstance3D" parent="Spine"]
+transform = Transform3D(0, -1, 0, 1, 0, 0, 0, 0, 1, 0, 0.288, 0.134)
+mesh = SubResource("Mesh_roll")
 
 [node name="WeaponSocket" type="Node3D" parent="Spine"]
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0.06, 0.29, -0.165)

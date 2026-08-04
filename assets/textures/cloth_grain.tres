@@ -1,0 +1,25 @@
+; Fine grain shared by everything the soldier is made of. Multiplied into the
+; albedo and the roughness rather than used as a pattern of its own: cloth,
+; leather and painted steel all catch light unevenly, and a primitive with one
+; flat number for the whole surface is what makes a model look like plastic.
+;
+; The ramp is deliberately narrow. It is meant to be felt at arm's length and
+; not seen across a field.
+[gd_resource type="NoiseTexture2D" load_steps=3 format=3]
+
+[sub_resource type="FastNoiseLite" id="Noise_grain"]
+noise_type = 0
+frequency = 0.035
+fractal_octaves = 4
+fractal_gain = 0.6
+
+[sub_resource type="Gradient" id="Ramp_grain"]
+offsets = PackedFloat32Array(0, 1)
+colors = PackedColorArray(0.76, 0.76, 0.76, 1, 1, 1, 1, 1)
+
+[resource]
+width = 128
+height = 128
+seamless = true
+color_ramp = SubResource("Ramp_grain")
+noise = SubResource("Noise_grain")

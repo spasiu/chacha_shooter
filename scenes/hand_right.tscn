@@ -1,54 +1,98 @@
 ; Hand posed to wrap a grip. Its origin sits at the CENTRE of the grip
 ; it holds, so the arm rig can drop it straight onto a weapon's grip
 ; marker regardless of which weapon that is.
-[gd_scene load_steps=7 format=3]
+;
+; Fingers are capsules rather than boxes: a finger is round, and these are held
+; a hand's width from the camera in first person, which is the closest look
+; anybody gets at any part of the soldier. The wrist ball at the origin fills
+; the joint whichever way the forearm comes in, so the sleeve never separates
+; from the hand mid-reload.
+[gd_scene load_steps=9 format=3]
+
+[ext_resource type="Texture2D" path="res://assets/textures/cloth_grain.tres" id="1_grain"]
 
 [sub_resource type="StandardMaterial3D" id="Mat_skin"]
-albedo_color = Color(0.72, 0.53, 0.4, 1)
-roughness = 0.75
+albedo_color = Color(0.7, 0.52, 0.4, 1)
+albedo_texture = ExtResource("1_grain")
+roughness = 0.72
+metallic_specular = 0.3
+uv1_scale = Vector3(14, 14, 14)
+uv1_triplanar = true
+subsurf_scatter_enabled = true
+subsurf_scatter_strength = 0.25
 
-[sub_resource type="BoxMesh" id="Mesh_palm"]
+[sub_resource type="CapsuleMesh" id="Mesh_palm"]
 material = SubResource("Mat_skin")
-size = Vector3(0.026, 0.08, 0.05)
+radius = 0.025
+height = 0.082
+radial_segments = 12
+rings = 4
 
-[sub_resource type="BoxMesh" id="Mesh_finger_a"]
+[sub_resource type="SphereMesh" id="Mesh_wrist"]
 material = SubResource("Mat_skin")
-size = Vector3(0.058, 0.015, 0.018)
+radius = 0.029
+height = 0.058
+radial_segments = 12
+rings = 6
 
-[sub_resource type="BoxMesh" id="Mesh_finger_b"]
+[sub_resource type="CapsuleMesh" id="Mesh_finger_a"]
 material = SubResource("Mat_skin")
-size = Vector3(0.054, 0.014, 0.017)
+radius = 0.0092
+height = 0.058
+radial_segments = 8
+rings = 3
 
-[sub_resource type="BoxMesh" id="Mesh_finger_c"]
+[sub_resource type="CapsuleMesh" id="Mesh_finger_b"]
 material = SubResource("Mat_skin")
-size = Vector3(0.05, 0.013, 0.016)
+radius = 0.0086
+height = 0.054
+radial_segments = 8
+rings = 3
 
-[sub_resource type="BoxMesh" id="Mesh_thumb"]
+[sub_resource type="CapsuleMesh" id="Mesh_finger_c"]
 material = SubResource("Mat_skin")
-size = Vector3(0.048, 0.017, 0.019)
+radius = 0.008
+height = 0.05
+radial_segments = 8
+rings = 3
+
+[sub_resource type="CapsuleMesh" id="Mesh_thumb"]
+material = SubResource("Mat_skin")
+radius = 0.0105
+height = 0.05
+radial_segments = 8
+rings = 3
 
 [node name="HandRight" type="Node3D"]
 
+; Squashed side to side, so the palm is a palm rather than a sausage.
 [node name="Palm" type="MeshInstance3D" parent="."]
-transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0.026, 0.005, 0)
+transform = Transform3D(0.54, 0, 0, 0, 1, 0, 0, 0, 1, 0.026, 0.005, 0)
 mesh = SubResource("Mesh_palm")
 
+[node name="Wrist" type="MeshInstance3D" parent="."]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0.008, 0, 0.004)
+mesh = SubResource("Mesh_wrist")
+
+; Fingers lie along local X, wrapped round the front of the grip. Each is a
+; capsule stood on its side, hence the quarter turn.
 [node name="Finger1" type="MeshInstance3D" parent="."]
-transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0.005, 0.03, -0.031)
+transform = Transform3D(0, -1, 0, 1, 0, 0, 0, 0, 1, 0.005, 0.03, -0.031)
 mesh = SubResource("Mesh_finger_a")
 
 [node name="Finger2" type="MeshInstance3D" parent="."]
-transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0.005, 0.011, -0.032)
+transform = Transform3D(0, -1, 0, 1, 0, 0, 0, 0, 1, 0.005, 0.011, -0.032)
 mesh = SubResource("Mesh_finger_a")
 
 [node name="Finger3" type="MeshInstance3D" parent="."]
-transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0.004, -0.008, -0.031)
+transform = Transform3D(0, -1, 0, 1, 0, 0, 0, 0, 1, 0.004, -0.008, -0.031)
 mesh = SubResource("Mesh_finger_b")
 
 [node name="Finger4" type="MeshInstance3D" parent="."]
-transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0.003, -0.026, -0.029)
+transform = Transform3D(0, -1, 0, 1, 0, 0, 0, 0, 1, 0.003, -0.026, -0.029)
 mesh = SubResource("Mesh_finger_c")
 
+; Thumb lies across the grip rather than along it, cocked back off the fingers.
 [node name="Thumb" type="MeshInstance3D" parent="."]
-transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0.004, 0.028, 0.03)
+transform = Transform3D(0, -0.965926, -0.258819, 1, 0, 0, 0, -0.258819, 0.965926, 0.004, 0.028, 0.03)
 mesh = SubResource("Mesh_thumb")

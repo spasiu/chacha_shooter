@@ -5,7 +5,7 @@ extends Equipment
 ## leaves the hand partway through, and a fresh grenade appears afterwards if
 ## any remain.
 
-@export var count := 10
+@export var count := 3
 ## Throw velocity from the hip. Raising it adds `aim_throw_bonus`.
 @export var throw_speed := 15.0
 @export var aim_throw_bonus := 6.0
@@ -49,6 +49,13 @@ var _anim_tilt := Vector3.ZERO
 func _ready() -> void:
 	_rest_position = position
 	_starting_count = count
+
+
+## Which of Net's projectiles this throws, so everyone else can spawn a copy of
+## the right thing. Smoke is the same grenade with a different canister on the
+## end of it, and says so by overriding this.
+func net_projectile_kind() -> int:
+	return Net.PROJECTILE_GRENADE
 
 
 func restock() -> void:
@@ -103,6 +110,10 @@ func status_text() -> String:
 
 func is_empty() -> bool:
 	return count <= 0
+
+
+func is_full() -> bool:
+	return count >= _starting_count
 
 
 ## No sights to align; raising simply brings the grenade up and inboard ready
@@ -162,6 +173,7 @@ func _cook_off_in_hand() -> void:
 	scene_root.add_child(live)
 	live.global_position = global_position
 	live.freeze = true
+	Net.report_projectile(net_projectile_kind(), live.global_position, Vector3.ZERO, 0.02)
 
 
 func _run_throw() -> void:
@@ -208,6 +220,14 @@ func _release() -> void:
 	# Just enough tumble to look thrown, not enough to roll away on landing.
 	projectile.angular_velocity = Vector3(
 		randf_range(-2.5, 2.5), randf_range(-1.5, 1.5), randf_range(-1.0, 1.0)
+	)
+	# Everyone else gets a copy thrown from the same place at the same speed.
+	# It will not land in exactly the same spot as this one -- two physics
+	# engines never quite agree -- but it does not have to: only this copy
+	# decides anything, and the rest are there to be watched.
+	Net.report_projectile(
+		net_projectile_kind(), projectile.global_position,
+		projectile.linear_velocity, projectile.fuse_time
 	)
 
 	fired.emit(deg_to_rad(1.4), deg_to_rad(randf_range(-0.4, 0.4)))

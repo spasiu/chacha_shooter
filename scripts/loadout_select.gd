@@ -28,8 +28,10 @@ const CARD_MIN_WIDTH := 148.0
 const CARD_MIN_HEIGHT := 150.0
 ## Past this many items one row no longer fits, so they wrap onto two.
 const ONE_ROW_LIMIT := 6
-## Roughly what the title, counter, button and hint take off the height.
-const CHROME_HEIGHT := 300.0
+## Roughly what everything that is not a card takes off the height: title,
+## subtitle, name row, counter, button, hint and the gaps between them. Cards
+## get what is left, so this has to grow whenever the frame does.
+const CHROME_HEIGHT := 366.0
 ## Below this a card has no room for its description and shows the stats alone.
 const BLURB_HEIGHT := 236.0
 ## Inset from the card's edge to its text.
@@ -40,11 +42,22 @@ const CARD_PAD := 18.0
 @onready var deploy_button: Button = $Root/Deploy
 @onready var hint: Label = $Root/Hint
 @onready var subtitle: Label = $Root/Subtitle
+@onready var name_field: LineEdit = $Root/NameRow/NameField
+@onready var status: Label = $Root/Status
 
 ## Picked keys, in pick order.
 var _picked: Array[StringName] = []
 ## key -> the card Button presenting it.
 var _cards: Dictionary = {}
+## Seconds before this screen will let anyone back into the field. Zero as the
+## game's entry point, where there is nothing to wait for; a respawn overlay
+## feeds it the wait still to be served.
+var _hold := 0.0
+## What the button says once there is no wait left, taken from the scene.
+var _deploy_label := ""
+## Whole seconds last written into the button, so its text is only rebuilt when
+## the number on it actually changes rather than every frame.
+var _hold_shown := -1
 
 
 func _ready() -> void:
@@ -64,12 +77,49 @@ func _ready() -> void:
 		_cards[entry["key"]] = card
 
 	subtitle.text = "Take up to %d into the field." % LoadoutConfig.SLOTS
-	hint.text = "1-%d TOGGLE      ENTER DEPLOY" % LoadoutConfig.ITEMS.size()
+	name_field.text = LoadoutConfig.player_name
+	name_field.placeholder_text = LoadoutConfig.DEFAULT_NAME
+	# Enter in the name box joins, rather than doing nothing and looking broken.
+	name_field.text_submitted.connect(func(_t: String) -> void: _on_deploy())
+	if LoadoutConfig.player_name.is_empty():
+		name_field.grab_focus()
+	# Only the slot keys that actually exist: the catalogue is longer than the
+	# number of bound keys, and promising "1-13" when 6 upwards do nothing is
+	# worse than saying less.
+	var bound := 0
+	while InputMap.has_action("slot_%d" % (bound + 1)):
+		bound += 1
+	hint.text = "1-%d TOGGLE      ENTER JOINS" % maxi(bound, 1)
+	# Over a running match you are already in the game; what the button does is
+	# put you back on your feet.
+	if not loads_world:
+		deploy_button.text = "REDEPLOY"
+	_deploy_label = deploy_button.text
 	deploy_button.pressed.connect(_on_deploy)
+
+	# The connection is opened before this screen and lives past it, so all
+	# there is to do is show where it has got to. Nothing here waits on it:
+	# deploying with no server up drops you into the field on your own, which is
+	# the right answer both for playing offline and for a server that is down.
+	Net.status_changed.connect(_refresh_status)
+	Net.roster_changed.connect(_refresh_status)
+	_refresh_status()
 	_refresh()
 
 
+func _refresh_status() -> void:
+	if status == null:
+		return
+	status.text = Net.status_text()
+	status.modulate = (
+		Color(0.42, 0.6, 0.46) if Net.active() else Color(0.55, 0.5, 0.42)
+	)
+
+
 func _unhandled_input(event: InputEvent) -> void:
+	# Not while a name is being typed: the number keys belong to the field.
+	if name_field != null and name_field.has_focus():
+		return
 	# The number keys that pick slots in game pick items here.
 	for i in LoadoutConfig.ITEMS.size():
 		var action := "slot_%d" % (i + 1)
@@ -104,15 +154,34 @@ func _refresh() -> void:
 		slot.text = "SLOT %d" % (_picked.find(key) + 1) if picked else ""
 
 	counter.text = "%d OF %d SELECTED" % [_picked.size(), LoadoutConfig.SLOTS]
-	# Any non-empty selection will do. Requiring the full four would make this a
-	# rubber stamp whenever the catalogue is no bigger than the slot count.
-	deploy_button.disabled = _picked.is_empty()
+	_refresh_deploy()
+
+
+## Seconds still to be served before this screen will deploy anyone. Called
+## every frame by whoever owns the clock, so it is written to be cheap when
+## nothing has changed.
+func hold_for(seconds: float) -> void:
+	_hold = maxf(seconds, 0.0)
+	if ceili(_hold) != _hold_shown:
+		_refresh_deploy()
+
+
+## Any non-empty selection will do. Requiring the full four would make this a
+## rubber stamp whenever the catalogue is no bigger than the slot count -- so
+## the only other thing that can hold the button shut is a wait still running.
+func _refresh_deploy() -> void:
+	_hold_shown = ceili(_hold)
+	deploy_button.disabled = _picked.is_empty() or _hold > 0.0
+	deploy_button.text = (
+		"%s IN %d" % [_deploy_label, _hold_shown] if _hold > 0.0 else _deploy_label
+	)
 	deploy_button.modulate = Color.WHITE if not deploy_button.disabled else Color(1, 1, 1, 0.4)
 
 
 func _on_deploy() -> void:
 	if _picked.is_empty():
 		return
+	LoadoutConfig.set_player_name(name_field.text)
 	LoadoutConfig.chosen = _picked.duplicate()
 	if loads_world:
 		get_tree().change_scene_to_file(WORLD)

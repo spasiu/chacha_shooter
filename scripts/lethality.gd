@@ -8,6 +8,21 @@ class_name Lethality
 
 const YARD := 0.9144
 
+## Anything that can be hurt joins this. A blast finds its casualties by asking
+## the tree rather than by running a shape query, because over voxel terrain a
+## query fills its result limit with chunk colliders long before it reaches a
+## character -- and blast ignores line of sight anyway, so the physics engine
+## was not earning its keep.
+const DAMAGEABLE := &"damageable"
+
+## What did the damage. Passed to `take_damage` so armour can ignore what it is
+## proof against -- a tank shrugs off rifle fire and shrapnel but not a shell.
+## Everything that hurts something names itself with one of these.
+const BULLET := &"bullet"
+const FRAGMENT := &"fragment"
+const BLAST := &"blast"
+const MELEE := &"melee"
+
 const SHORT_YARDS := 5.0
 const MEDIUM_YARDS := 25.0
 const LONG_YARDS := 125.0
@@ -46,3 +61,26 @@ static func band_name(metres: float) -> String:
 	if metres < LONG_RANGE:
 		return "long"
 	return "beyond"
+
+
+## Bodies within `radius` of a burst, each paired with the nearest point on it
+## and how far away that point was. Measuring to a standing body rather than to
+## its origin, which sits down at the feet, is what makes a burst at chest
+## height read as a direct hit instead of one a yard off.
+##
+## Returns an array of [body, point, distance].
+static func casualties_near(
+	tree: SceneTree, at: Vector3, radius: float, height: float
+) -> Array:
+	var found: Array = []
+	for node in tree.get_nodes_in_group(DAMAGEABLE):
+		if not (node is Node3D) or not node.has_method("take_damage"):
+			continue
+		var foot: Vector3 = (node as Node3D).global_position
+		var point := Geometry3D.get_closest_point_to_segment(
+			at, foot, foot + Vector3.UP * height
+		)
+		var distance := at.distance_to(point)
+		if distance <= radius:
+			found.append([node, point, distance])
+	return found

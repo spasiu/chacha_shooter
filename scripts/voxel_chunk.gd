@@ -127,7 +127,12 @@ func _block_shade(gx: int, gy: int, gz: int) -> float:
 ## Weapons and fragments hit the chunk; the world resolves which block. Returns
 ## true if that block broke, which is also how a shooter knows whether there is
 ## still a surface there worth leaving a bullet mark on.
-func take_damage(amount: float, hit_position: Vector3, from_shooter: Vector3) -> bool:
+func take_damage(
+	amount: float,
+	hit_position: Vector3,
+	from_shooter: Vector3,
+	_kind: StringName = Lethality.BLAST
+) -> bool:
 	if _world == null:
 		return false
 	return _world.damage_block(hit_position, -from_shooter, amount)

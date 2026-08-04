@@ -1,0 +1,524 @@
+{
+ "name": "shipment",
+ "title": "SHIPMENT",
+ "blurb": "A container yard, and the armour parked outside it.",
+ "size": 256,
+ "block": 0.25,
+ "metres": 64.0,
+ "depth_blocks": 16,
+ "build_height": 48,
+ "team_spawns": {
+  "blue": [
+   0.0,
+   -25.0
+  ],
+  "red": [
+   0.0,
+   25.0
+  ]
+ },
+ "capture_points": [
+  {
+   "name": "SHIPMENT",
+   "x": 0.0,
+   "z": 0.0,
+   "radius": 9.0
+  }
+ ],
+ "tanks": [
+  {
+   "x": -17.0,
+   "z": -22.0,
+   "yaw": 30.0
+  },
+  {
+   "x": 17.0,
+   "z": 22.0,
+   "yaw": 210.0
+  }
+ ],
+ "ammo_boxes": [
+  [
+   -18.5,
+   -14.5
+  ],
+  [
+   18.0,
+   8.5
+  ],
+  [
+   -11.5,
+   19.0
+  ],
+  [
+   18.5,
+   -11.5
+  ],
+  [
+   -11.0,
+   10.0
+  ],
+  [
+   -19.5,
+   0.0
+  ],
+  [
+   19.5,
+   0.0
+  ]
+ ],
+ "structures": [
+  {
+   "name": "shipment wall n",
+   "x0": 66,
+   "z0": 66,
+   "x1": 190,
+   "z1": 71,
+   "from": 0,
+   "height": 12,
+   "type": "concrete"
+  },
+  {
+   "name": "shipment wall s",
+   "x0": 66,
+   "z0": 185,
+   "x1": 190,
+   "z1": 190,
+   "from": 0,
+   "height": 12,
+   "type": "concrete"
+  },
+  {
+   "name": "shipment wall w",
+   "x0": 66,
+   "z0": 66,
+   "x1": 71,
+   "z1": 190,
+   "from": 0,
+   "height": 12,
+   "type": "concrete"
+  },
+  {
+   "name": "shipment wall e",
+   "x0": 185,
+   "z0": 66,
+   "x1": 190,
+   "z1": 190,
+   "from": 0,
+   "height": 12,
+   "type": "concrete"
+  },
+  {
+   "name": "ship mid nw",
+   "x0": 98,
+   "z0": 96,
+   "x1": 122,
+   "z1": 106,
+   "from": 0,
+   "height": 10,
+   "type": "rust",
+   "flat": true,
+   "gy": 17
+  },
+  {
+   "name": "ship mid ne",
+   "x0": 134,
+   "z0": 96,
+   "x1": 158,
+   "z1": 106,
+   "from": 0,
+   "height": 10,
+   "type": "steel",
+   "flat": true,
+   "gy": 17
+  },
+  {
+   "name": "ship mid sw",
+   "x0": 98,
+   "z0": 150,
+   "x1": 122,
+   "z1": 160,
+   "from": 0,
+   "height": 10,
+   "type": "steel",
+   "flat": true,
+   "gy": 17
+  },
+  {
+   "name": "ship mid se",
+   "x0": 134,
+   "z0": 150,
+   "x1": 158,
+   "z1": 160,
+   "from": 0,
+   "height": 10,
+   "type": "rust",
+   "flat": true,
+   "gy": 17
+  },
+  {
+   "name": "ship edge 0",
+   "x0": 76,
+   "z0": 78,
+   "x1": 86,
+   "z1": 102,
+   "from": 0,
+   "height": 10,
+   "type": "rust",
+   "flat": true,
+   "gy": 17
+  },
+  {
+   "name": "ship edge 0 upper",
+   "x0": 76,
+   "z0": 78,
+   "x1": 86,
+   "z1": 102,
+   "from": 0,
+   "height": 10,
+   "type": "rust",
+   "flat": true,
+   "gy": 27
+  },
+  {
+   "name": "ship edge 1",
+   "x0": 76,
+   "z0": 132,
+   "x1": 86,
+   "z1": 156,
+   "from": 0,
+   "height": 10,
+   "type": "team_red",
+   "flat": true,
+   "gy": 17
+  },
+  {
+   "name": "ship edge 2",
+   "x0": 170,
+   "z0": 78,
+   "x1": 180,
+   "z1": 102,
+   "from": 0,
+   "height": 10,
+   "type": "steel",
+   "flat": true,
+   "gy": 17
+  },
+  {
+   "name": "ship edge 3",
+   "x0": 170,
+   "z0": 132,
+   "x1": 180,
+   "z1": 156,
+   "from": 0,
+   "height": 10,
+   "type": "team_blue",
+   "flat": true,
+   "gy": 17
+  },
+  {
+   "name": "ship edge 3 upper",
+   "x0": 170,
+   "z0": 132,
+   "x1": 180,
+   "z1": 156,
+   "from": 0,
+   "height": 10,
+   "type": "team_blue",
+   "flat": true,
+   "gy": 27
+  },
+  {
+   "name": "ship edge 4",
+   "x0": 108,
+   "z0": 76,
+   "x1": 132,
+   "z1": 86,
+   "from": 0,
+   "height": 10,
+   "type": "concrete",
+   "flat": true,
+   "gy": 17
+  },
+  {
+   "name": "ship edge 5",
+   "x0": 140,
+   "z0": 76,
+   "x1": 164,
+   "z1": 86,
+   "from": 0,
+   "height": 10,
+   "type": "rust",
+   "flat": true,
+   "gy": 17
+  },
+  {
+   "name": "ship edge 6",
+   "x0": 108,
+   "z0": 172,
+   "x1": 132,
+   "z1": 182,
+   "from": 0,
+   "height": 10,
+   "type": "rust",
+   "flat": true,
+   "gy": 17
+  },
+  {
+   "name": "ship edge 6 upper",
+   "x0": 108,
+   "z0": 172,
+   "x1": 132,
+   "z1": 182,
+   "from": 0,
+   "height": 10,
+   "type": "rust",
+   "flat": true,
+   "gy": 27
+  },
+  {
+   "name": "ship edge 7",
+   "x0": 140,
+   "z0": 172,
+   "x1": 164,
+   "z1": 182,
+   "from": 0,
+   "height": 10,
+   "type": "team_red",
+   "flat": true,
+   "gy": 17
+  },
+  {
+   "name": "shipment post",
+   "x0": 122,
+   "z0": 122,
+   "x1": 134,
+   "z1": 134,
+   "from": 0,
+   "height": 2,
+   "type": "concrete"
+  },
+  {
+   "name": "shipment mast",
+   "x0": 126,
+   "z0": 126,
+   "x1": 130,
+   "z1": 130,
+   "from": 0,
+   "height": 18,
+   "type": "wood"
+  },
+  {
+   "name": "blue base floor",
+   "x0": 88,
+   "z0": 8,
+   "x1": 168,
+   "z1": 44,
+   "from": 0,
+   "height": 1,
+   "type": "team_blue",
+   "flat": true,
+   "gy": 17
+  },
+  {
+   "name": "blue base wall north",
+   "x0": 88,
+   "z0": 8,
+   "x1": 168,
+   "z1": 14,
+   "from": 0,
+   "height": 14,
+   "type": "concrete"
+  },
+  {
+   "name": "blue base wall south a",
+   "x0": 88,
+   "z0": 38,
+   "x1": 114,
+   "z1": 44,
+   "from": 0,
+   "height": 14,
+   "type": "concrete"
+  },
+  {
+   "name": "blue base wall south b",
+   "x0": 142,
+   "z0": 38,
+   "x1": 168,
+   "z1": 44,
+   "from": 0,
+   "height": 14,
+   "type": "concrete"
+  },
+  {
+   "name": "blue base wall west",
+   "x0": 88,
+   "z0": 8,
+   "x1": 94,
+   "z1": 44,
+   "from": 0,
+   "height": 14,
+   "type": "concrete"
+  },
+  {
+   "name": "blue base wall east",
+   "x0": 162,
+   "z0": 8,
+   "x1": 168,
+   "z1": 44,
+   "from": 0,
+   "height": 14,
+   "type": "concrete"
+  },
+  {
+   "name": "blue base colours",
+   "x0": 94,
+   "z0": 14,
+   "x1": 162,
+   "z1": 18,
+   "from": 0,
+   "height": 16,
+   "type": "team_blue"
+  },
+  {
+   "name": "blue base mast",
+   "x0": 126,
+   "z0": 24,
+   "x1": 130,
+   "z1": 28,
+   "from": 0,
+   "height": 28,
+   "type": "team_blue"
+  },
+  {
+   "name": "blue base stores",
+   "x0": 100,
+   "z0": 20,
+   "x1": 118,
+   "z1": 34,
+   "from": 0,
+   "height": 7,
+   "type": "canvas",
+   "flat": true,
+   "gy": 17
+  },
+  {
+   "name": "blue base crates",
+   "x0": 138,
+   "z0": 22,
+   "x1": 154,
+   "z1": 32,
+   "from": 0,
+   "height": 6,
+   "type": "wood",
+   "flat": true,
+   "gy": 17
+  },
+  {
+   "name": "red base floor",
+   "x0": 88,
+   "z0": 212,
+   "x1": 168,
+   "z1": 248,
+   "from": 0,
+   "height": 1,
+   "type": "team_red",
+   "flat": true,
+   "gy": 17
+  },
+  {
+   "name": "red base wall north a",
+   "x0": 88,
+   "z0": 212,
+   "x1": 114,
+   "z1": 218,
+   "from": 0,
+   "height": 14,
+   "type": "concrete"
+  },
+  {
+   "name": "red base wall north b",
+   "x0": 142,
+   "z0": 212,
+   "x1": 168,
+   "z1": 218,
+   "from": 0,
+   "height": 14,
+   "type": "concrete"
+  },
+  {
+   "name": "red base wall south",
+   "x0": 88,
+   "z0": 242,
+   "x1": 168,
+   "z1": 248,
+   "from": 0,
+   "height": 14,
+   "type": "concrete"
+  },
+  {
+   "name": "red base wall west",
+   "x0": 88,
+   "z0": 212,
+   "x1": 94,
+   "z1": 248,
+   "from": 0,
+   "height": 14,
+   "type": "concrete"
+  },
+  {
+   "name": "red base wall east",
+   "x0": 162,
+   "z0": 212,
+   "x1": 168,
+   "z1": 248,
+   "from": 0,
+   "height": 14,
+   "type": "concrete"
+  },
+  {
+   "name": "red base colours",
+   "x0": 94,
+   "z0": 238,
+   "x1": 162,
+   "z1": 242,
+   "from": 0,
+   "height": 16,
+   "type": "team_red"
+  },
+  {
+   "name": "red base mast",
+   "x0": 126,
+   "z0": 228,
+   "x1": 130,
+   "z1": 232,
+   "from": 0,
+   "height": 28,
+   "type": "team_red"
+  },
+  {
+   "name": "red base stores",
+   "x0": 100,
+   "z0": 224,
+   "x1": 118,
+   "z1": 238,
+   "from": 0,
+   "height": 7,
+   "type": "canvas",
+   "flat": true,
+   "gy": 17
+  },
+  {
+   "name": "red base crates",
+   "x0": 138,
+   "z0": 226,
+   "x1": 154,
+   "z1": 236,
+   "from": 0,
+   "height": 6,
+   "type": "wood",
+   "flat": true,
+   "gy": 17
+  }
+ ]
+}

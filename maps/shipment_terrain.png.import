@@ -1,0 +1,14 @@
+[remap]
+
+importer="image"
+type="Image"
+uid="uid://cr5k6hxrjpalj"
+path="res://.godot/imported/shipment_terrain.png-8c0c46d223705519996f409e63cabcca.image"
+
+[deps]
+
+source_file="res://maps/shipment_terrain.png"
+dest_files=["res://.godot/imported/shipment_terrain.png-8c0c46d223705519996f409e63cabcca.image"]
+
+[params]
+

@@ -22,6 +22,14 @@ const JITTER := 0.03
 const EXPLOSION: AudioStream = preload("res://assets/audio/explosion.wav")
 const BULLET_HOLE: PackedScene = preload("res://scenes/bullet_hole.tscn")
 
+## True on everyone's copy but the thrower's. A ghost flies, bounces, blinks and
+## bangs exactly like the real thing -- what it does not do is decide anything.
+## The fragments are traced once, on the machine that threw it, and the results
+## sent to whoever they hit; tracing them again here would double the damage and
+## do it from a slightly different place, since two rigid bodies dropped down
+## the same slope never quite agree on where they stopped.
+var net_ghost := false
+
 @onready var mesh: Node3D = $Body
 @onready var flash: MeshInstance3D = $Flash
 @onready var flash_light: OmniLight3D = $FlashLight
@@ -41,7 +49,8 @@ func explode() -> void:
 		return
 	_exploded = true
 
-	_spray_fragments()
+	if not net_ghost:
+		_spray_fragments()
 
 	mesh.visible = false
 	freeze = true
@@ -93,7 +102,7 @@ func _spray_fragments() -> void:
 		if not is_instance_valid(collider):
 			continue
 		var entry: Array = casualties[collider]
-		collider.take_damage(entry[0], entry[1], -entry[2])
+		collider.take_damage(entry[0], entry[1], -entry[2], Lethality.FRAGMENT)
 
 
 ## Fibonacci sphere: even coverage without the clumping random directions give.

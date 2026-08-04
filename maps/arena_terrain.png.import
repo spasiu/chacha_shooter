@@ -1,0 +1,13 @@
+[remap]
+
+importer="keep"
+type=""
+uid="uid://bqxvarenaterrain1"
+
+[deps]
+
+source_file="res://maps/arena_terrain.png"
+dest_files=[]
+
+[params]
+

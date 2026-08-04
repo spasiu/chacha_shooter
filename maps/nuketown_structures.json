@@ -1,0 +1,716 @@
+{
+ "name": "nuketown",
+ "title": "NUKETOWN",
+ "blurb": "Two houses, one street, and a bus stopped across the middle of it.",
+ "size": 256,
+ "block": 0.25,
+ "metres": 64.0,
+ "depth_blocks": 16,
+ "build_height": 48,
+ "team_spawns": {
+  "blue": [
+   0.0,
+   -25.0
+  ],
+  "red": [
+   0.0,
+   25.0
+  ]
+ },
+ "capture_points": [
+  {
+   "name": "NUKETOWN",
+   "x": 0.0,
+   "z": 0.0,
+   "radius": 10.0
+  }
+ ],
+ "tanks": [
+  {
+   "x": -9.0,
+   "z": -22.0,
+   "yaw": 0.0
+  },
+  {
+   "x": 9.0,
+   "z": 22.0,
+   "yaw": 180.0
+  }
+ ],
+ "ammo_boxes": [
+  [
+   -17.5,
+   5.0
+  ],
+  [
+   16.5,
+   -6.5
+  ],
+  [
+   1.0,
+   16.0
+  ],
+  [
+   -25.0,
+   1.0
+  ],
+  [
+   25.0,
+   -1.0
+  ]
+ ],
+ "structures": [
+  {
+   "name": "nuketown house north",
+   "x0": 32,
+   "z0": 50,
+   "x1": 112,
+   "z1": 106,
+   "from": 0,
+   "height": 22,
+   "type": "plaster",
+   "flat": true,
+   "gy": 17
+  },
+  {
+   "name": "nuketown house north inside 0",
+   "x0": 34,
+   "z0": 52,
+   "x1": 110,
+   "z1": 104,
+   "from": 1,
+   "height": 11,
+   "clear": true,
+   "flat": true,
+   "gy": 17
+  },
+  {
+   "name": "nuketown house north inside 1",
+   "x0": 34,
+   "z0": 52,
+   "x1": 110,
+   "z1": 104,
+   "from": 12,
+   "height": 22,
+   "clear": true,
+   "flat": true,
+   "gy": 17
+  },
+  {
+   "name": "nuketown house north roof",
+   "x0": 30,
+   "z0": 48,
+   "x1": 114,
+   "z1": 108,
+   "from": 0,
+   "height": 2,
+   "type": "tile",
+   "flat": true,
+   "gy": 39
+  },
+  {
+   "name": "nuketown house north door",
+   "x0": 68,
+   "z0": 104,
+   "x1": 82,
+   "z1": 106,
+   "from": 0,
+   "height": 9,
+   "clear": true,
+   "flat": true,
+   "gy": 17
+  },
+  {
+   "name": "nuketown house north window 0",
+   "x0": 38,
+   "z0": 104,
+   "x1": 54,
+   "z1": 106,
+   "from": 4,
+   "height": 10,
+   "clear": true,
+   "flat": true,
+   "gy": 17
+  },
+  {
+   "name": "nuketown house north window 1",
+   "x0": 90,
+   "z0": 104,
+   "x1": 106,
+   "z1": 106,
+   "from": 4,
+   "height": 10,
+   "clear": true,
+   "flat": true,
+   "gy": 17
+  },
+  {
+   "name": "nuketown house north window 2",
+   "x0": 38,
+   "z0": 104,
+   "x1": 54,
+   "z1": 106,
+   "from": 15,
+   "height": 21,
+   "clear": true,
+   "flat": true,
+   "gy": 17
+  },
+  {
+   "name": "nuketown house north window 3",
+   "x0": 90,
+   "z0": 104,
+   "x1": 106,
+   "z1": 106,
+   "from": 15,
+   "height": 21,
+   "clear": true,
+   "flat": true,
+   "gy": 17
+  },
+  {
+   "name": "nuketown house north window 4",
+   "x0": 30,
+   "z0": 66,
+   "x1": 32,
+   "z1": 82,
+   "from": 4,
+   "height": 10,
+   "clear": true,
+   "flat": true,
+   "gy": 17
+  },
+  {
+   "name": "nuketown house south",
+   "x0": 144,
+   "z0": 150,
+   "x1": 224,
+   "z1": 206,
+   "from": 0,
+   "height": 22,
+   "type": "brick",
+   "flat": true,
+   "gy": 17
+  },
+  {
+   "name": "nuketown house south inside 0",
+   "x0": 146,
+   "z0": 152,
+   "x1": 222,
+   "z1": 204,
+   "from": 1,
+   "height": 11,
+   "clear": true,
+   "flat": true,
+   "gy": 17
+  },
+  {
+   "name": "nuketown house south inside 1",
+   "x0": 146,
+   "z0": 152,
+   "x1": 222,
+   "z1": 204,
+   "from": 12,
+   "height": 22,
+   "clear": true,
+   "flat": true,
+   "gy": 17
+  },
+  {
+   "name": "nuketown house south roof",
+   "x0": 142,
+   "z0": 148,
+   "x1": 226,
+   "z1": 208,
+   "from": 0,
+   "height": 2,
+   "type": "tile",
+   "flat": true,
+   "gy": 39
+  },
+  {
+   "name": "nuketown house south door",
+   "x0": 174,
+   "z0": 148,
+   "x1": 188,
+   "z1": 150,
+   "from": 0,
+   "height": 9,
+   "clear": true,
+   "flat": true,
+   "gy": 17
+  },
+  {
+   "name": "nuketown house south window 0",
+   "x0": 150,
+   "z0": 148,
+   "x1": 166,
+   "z1": 150,
+   "from": 4,
+   "height": 10,
+   "clear": true,
+   "flat": true,
+   "gy": 17
+  },
+  {
+   "name": "nuketown house south window 1",
+   "x0": 202,
+   "z0": 148,
+   "x1": 218,
+   "z1": 150,
+   "from": 4,
+   "height": 10,
+   "clear": true,
+   "flat": true,
+   "gy": 17
+  },
+  {
+   "name": "nuketown house south window 2",
+   "x0": 150,
+   "z0": 148,
+   "x1": 166,
+   "z1": 150,
+   "from": 15,
+   "height": 21,
+   "clear": true,
+   "flat": true,
+   "gy": 17
+  },
+  {
+   "name": "nuketown house south window 3",
+   "x0": 202,
+   "z0": 148,
+   "x1": 218,
+   "z1": 150,
+   "from": 15,
+   "height": 21,
+   "clear": true,
+   "flat": true,
+   "gy": 17
+  },
+  {
+   "name": "nuketown house south window 4",
+   "x0": 224,
+   "z0": 174,
+   "x1": 226,
+   "z1": 190,
+   "from": 4,
+   "height": 10,
+   "clear": true,
+   "flat": true,
+   "gy": 17
+  },
+  {
+   "name": "nuketown porch north",
+   "x0": 62,
+   "z0": 106,
+   "x1": 88,
+   "z1": 114,
+   "from": 0,
+   "height": 1,
+   "type": "concrete",
+   "flat": true,
+   "gy": 17
+  },
+  {
+   "name": "nuketown porch north roof",
+   "x0": 60,
+   "z0": 104,
+   "x1": 90,
+   "z1": 116,
+   "from": 0,
+   "height": 2,
+   "type": "wood",
+   "flat": true,
+   "gy": 28
+  },
+  {
+   "name": "nuketown porch north post a",
+   "x0": 61,
+   "z0": 112,
+   "x1": 63,
+   "z1": 114,
+   "from": 0,
+   "height": 12,
+   "type": "wood"
+  },
+  {
+   "name": "nuketown porch north post b",
+   "x0": 87,
+   "z0": 112,
+   "x1": 89,
+   "z1": 114,
+   "from": 0,
+   "height": 12,
+   "type": "wood"
+  },
+  {
+   "name": "nuketown porch south",
+   "x0": 168,
+   "z0": 142,
+   "x1": 194,
+   "z1": 150,
+   "from": 0,
+   "height": 1,
+   "type": "concrete",
+   "flat": true,
+   "gy": 17
+  },
+  {
+   "name": "nuketown porch south roof",
+   "x0": 166,
+   "z0": 140,
+   "x1": 196,
+   "z1": 152,
+   "from": 0,
+   "height": 2,
+   "type": "wood",
+   "flat": true,
+   "gy": 28
+  },
+  {
+   "name": "nuketown porch south post a",
+   "x0": 167,
+   "z0": 142,
+   "x1": 169,
+   "z1": 144,
+   "from": 0,
+   "height": 12,
+   "type": "wood"
+  },
+  {
+   "name": "nuketown porch south post b",
+   "x0": 193,
+   "z0": 142,
+   "x1": 195,
+   "z1": 144,
+   "from": 0,
+   "height": 12,
+   "type": "wood"
+  },
+  {
+   "name": "nuketown wall north",
+   "x0": 18,
+   "z0": 112,
+   "x1": 98,
+   "z1": 116,
+   "from": 0,
+   "height": 5,
+   "type": "brick"
+  },
+  {
+   "name": "nuketown wall south",
+   "x0": 158,
+   "z0": 140,
+   "x1": 238,
+   "z1": 144,
+   "from": 0,
+   "height": 5,
+   "type": "brick"
+  },
+  {
+   "name": "nuketown wall west",
+   "x0": 10,
+   "z0": 112,
+   "x1": 14,
+   "z1": 168,
+   "from": 0,
+   "height": 5,
+   "type": "brick"
+  },
+  {
+   "name": "nuketown wall east",
+   "x0": 242,
+   "z0": 88,
+   "x1": 246,
+   "z1": 144,
+   "from": 0,
+   "height": 5,
+   "type": "brick"
+  },
+  {
+   "name": "nuketown bus",
+   "x0": 110,
+   "z0": 121,
+   "x1": 146,
+   "z1": 135,
+   "from": 0,
+   "height": 11,
+   "type": "rust"
+  },
+  {
+   "name": "nuketown bus roof",
+   "x0": 110,
+   "z0": 121,
+   "x1": 146,
+   "z1": 135,
+   "from": 11,
+   "height": 1,
+   "type": "steel"
+  },
+  {
+   "name": "nuketown bus inside",
+   "x0": 112,
+   "z0": 123,
+   "x1": 144,
+   "z1": 133,
+   "from": 3,
+   "height": 10,
+   "clear": true,
+   "flat": true,
+   "gy": 17
+  },
+  {
+   "name": "nuketown car west",
+   "x0": 52,
+   "z0": 117,
+   "x1": 70,
+   "z1": 126,
+   "from": 0,
+   "height": 6,
+   "type": "steel"
+  },
+  {
+   "name": "nuketown car east",
+   "x0": 186,
+   "z0": 130,
+   "x1": 204,
+   "z1": 139,
+   "from": 0,
+   "height": 6,
+   "type": "rust"
+  },
+  {
+   "name": "nuketown post",
+   "x0": 94,
+   "z0": 122,
+   "x1": 102,
+   "z1": 134,
+   "from": 0,
+   "height": 4,
+   "type": "sand"
+  },
+  {
+   "name": "nuketown post mast",
+   "x0": 97,
+   "z0": 127,
+   "x1": 99,
+   "z1": 129,
+   "from": 0,
+   "height": 14,
+   "type": "wood"
+  },
+  {
+   "name": "blue base floor",
+   "x0": 82,
+   "z0": 6,
+   "x1": 174,
+   "z1": 46,
+   "from": 0,
+   "height": 1,
+   "type": "team_blue",
+   "flat": true,
+   "gy": 17
+  },
+  {
+   "name": "blue base wall north",
+   "x0": 82,
+   "z0": 6,
+   "x1": 174,
+   "z1": 12,
+   "from": 0,
+   "height": 14,
+   "type": "concrete"
+  },
+  {
+   "name": "blue base wall south a",
+   "x0": 82,
+   "z0": 40,
+   "x1": 112,
+   "z1": 46,
+   "from": 0,
+   "height": 14,
+   "type": "concrete"
+  },
+  {
+   "name": "blue base wall south b",
+   "x0": 144,
+   "z0": 40,
+   "x1": 174,
+   "z1": 46,
+   "from": 0,
+   "height": 14,
+   "type": "concrete"
+  },
+  {
+   "name": "blue base wall west",
+   "x0": 82,
+   "z0": 6,
+   "x1": 88,
+   "z1": 46,
+   "from": 0,
+   "height": 14,
+   "type": "concrete"
+  },
+  {
+   "name": "blue base wall east",
+   "x0": 168,
+   "z0": 6,
+   "x1": 174,
+   "z1": 46,
+   "from": 0,
+   "height": 14,
+   "type": "concrete"
+  },
+  {
+   "name": "blue base colours",
+   "x0": 88,
+   "z0": 12,
+   "x1": 168,
+   "z1": 16,
+   "from": 0,
+   "height": 16,
+   "type": "team_blue"
+  },
+  {
+   "name": "blue base mast",
+   "x0": 126,
+   "z0": 24,
+   "x1": 130,
+   "z1": 28,
+   "from": 0,
+   "height": 28,
+   "type": "team_blue"
+  },
+  {
+   "name": "blue base stores",
+   "x0": 94,
+   "z0": 18,
+   "x1": 112,
+   "z1": 32,
+   "from": 0,
+   "height": 7,
+   "type": "canvas",
+   "flat": true,
+   "gy": 17
+  },
+  {
+   "name": "blue base crates",
+   "x0": 144,
+   "z0": 20,
+   "x1": 160,
+   "z1": 30,
+   "from": 0,
+   "height": 6,
+   "type": "wood",
+   "flat": true,
+   "gy": 17
+  },
+  {
+   "name": "red base floor",
+   "x0": 82,
+   "z0": 210,
+   "x1": 174,
+   "z1": 250,
+   "from": 0,
+   "height": 1,
+   "type": "team_red",
+   "flat": true,
+   "gy": 17
+  },
+  {
+   "name": "red base wall north a",
+   "x0": 82,
+   "z0": 210,
+   "x1": 112,
+   "z1": 216,
+   "from": 0,
+   "height": 14,
+   "type": "concrete"
+  },
+  {
+   "name": "red base wall north b",
+   "x0": 144,
+   "z0": 210,
+   "x1": 174,
+   "z1": 216,
+   "from": 0,
+   "height": 14,
+   "type": "concrete"
+  },
+  {
+   "name": "red base wall south",
+   "x0": 82,
+   "z0": 244,
+   "x1": 174,
+   "z1": 250,
+   "from": 0,
+   "height": 14,
+   "type": "concrete"
+  },
+  {
+   "name": "red base wall west",
+   "x0": 82,
+   "z0": 210,
+   "x1": 88,
+   "z1": 250,
+   "from": 0,
+   "height": 14,
+   "type": "concrete"
+  },
+  {
+   "name": "red base wall east",
+   "x0": 168,
+   "z0": 210,
+   "x1": 174,
+   "z1": 250,
+   "from": 0,
+   "height": 14,
+   "type": "concrete"
+  },
+  {
+   "name": "red base colours",
+   "x0": 88,
+   "z0": 240,
+   "x1": 168,
+   "z1": 244,
+   "from": 0,
+   "height": 16,
+   "type": "team_red"
+  },
+  {
+   "name": "red base mast",
+   "x0": 126,
+   "z0": 228,
+   "x1": 130,
+   "z1": 232,
+   "from": 0,
+   "height": 28,
+   "type": "team_red"
+  },
+  {
+   "name": "red base stores",
+   "x0": 94,
+   "z0": 222,
+   "x1": 112,
+   "z1": 236,
+   "from": 0,
+   "height": 7,
+   "type": "canvas",
+   "flat": true,
+   "gy": 17
+  },
+  {
+   "name": "red base crates",
+   "x0": 144,
+   "z0": 224,
+   "x1": 160,
+   "z1": 234,
+   "from": 0,
+   "height": 6,
+   "type": "wood",
+   "flat": true,
+   "gy": 17
+  }
+ ]
+}

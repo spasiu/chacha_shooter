@@ -13,9 +13,32 @@ extends Node3D
 const BLOCK := 0.25
 const CHUNK := 16
 
-enum { AIR, GRASS, DIRT, CONCRETE, BEDROCK, WOOD, LEAVES }
+## Everything a block can be. Append only: the number is what the map file and
+## the wire both carry, so inserting in the middle repaints every existing map.
+enum {
+	AIR, GRASS, DIRT, CONCRETE, BEDROCK, WOOD, LEAVES,
+	ASPHALT, SAND, STONE, PLASTER, TILE, RUST, TEAM_RED, TEAM_BLUE,
+	BRICK, GRAVEL, CANVAS, STEEL,
+}
+
+## What the map file may call each of them. The generator writes names rather
+## than numbers so a map stays readable and survives the enum growing.
+const BLOCK_NAMES := {
+	"air": AIR, "grass": GRASS, "dirt": DIRT, "concrete": CONCRETE,
+	"bedrock": BEDROCK, "wood": WOOD, "leaves": LEAVES, "asphalt": ASPHALT,
+	"sand": SAND, "stone": STONE, "plaster": PLASTER, "tile": TILE,
+	"rust": RUST, "team_red": TEAM_RED, "team_blue": TEAM_BLUE,
+	"brick": BRICK, "gravel": GRAVEL, "canvas": CANVAS, "steel": STEEL,
+}
 
 ## Base colours per block type: [top face, side/bottom face].
+##
+## Kept deliberately desaturated. The palette is doing two jobs at once -- it
+## has to tell four quite different places apart at a glance, and it has to stay
+## inside a 1944 photograph. So the colours that separate the areas are earths
+## and greys a shade apart from each other rather than hues, and the only two
+## saturated things on the whole map are the team markings, which is exactly
+## what wants to be visible from across a field.
 const COLOURS := {
 	GRASS: [Color(0.36, 0.52, 0.24), Color(0.42, 0.31, 0.18)],
 	DIRT: [Color(0.42, 0.31, 0.18), Color(0.38, 0.28, 0.16)],
@@ -23,13 +46,51 @@ const COLOURS := {
 	BEDROCK: [Color(0.24, 0.24, 0.26), Color(0.21, 0.21, 0.23)],
 	WOOD: [Color(0.47, 0.35, 0.21), Color(0.31, 0.22, 0.12)],
 	LEAVES: [Color(0.25, 0.44, 0.19), Color(0.21, 0.38, 0.16)],
+	# Nuketown's street and the hardstanding at Shipment.
+	ASPHALT: [Color(0.25, 0.25, 0.26), Color(0.20, 0.20, 0.21)],
+	# Crossfire is a dry town; this is its ground and its rubble.
+	SAND: [Color(0.72, 0.63, 0.44), Color(0.63, 0.54, 0.37)],
+	# The walls of the gulch. Warmer and darker than concrete so a cliff never
+	# reads as a building.
+	STONE: [Color(0.48, 0.43, 0.38), Color(0.41, 0.36, 0.32)],
+	# Rendered housefronts: Nuketown's bungalows, Crossfire's terraces.
+	PLASTER: [Color(0.80, 0.76, 0.66), Color(0.72, 0.68, 0.58)],
+	# Roofs. The one red that is not a team colour, kept dark and dusty enough
+	# not to be mistaken for one.
+	TILE: [Color(0.46, 0.26, 0.20), Color(0.39, 0.22, 0.17)],
+	# Shipping containers, weathered.
+	RUST: [Color(0.55, 0.34, 0.22), Color(0.47, 0.29, 0.19)],
+	TEAM_RED: [Color(0.62, 0.17, 0.15), Color(0.52, 0.14, 0.12)],
+	TEAM_BLUE: [Color(0.18, 0.32, 0.60), Color(0.15, 0.27, 0.50)],
+	# Brickwork. Browner and far duller than the roof tile beside it, because a
+	# wall of it covers ten times the area and a saturated one would shout.
+	BRICK: [Color(0.47, 0.33, 0.27), Color(0.41, 0.28, 0.23)],
+	# Yards, verges and the scree at the foot of the gulch walls: the surface
+	# that sits between made ground and open country.
+	GRAVEL: [Color(0.50, 0.47, 0.42), Color(0.44, 0.41, 0.36)],
+	# Tentage and tarpaulins over the stores at a base.
+	CANVAS: [Color(0.58, 0.55, 0.40), Color(0.50, 0.47, 0.34)],
+	# Painted sheet: container ends, shutters, the doors on a bunker.
+	STEEL: [Color(0.34, 0.37, 0.36), Color(0.29, 0.31, 0.30)],
 }
 
 ## Per-type overrides for `block_health`. Ground and concrete are left at the
-## full 1000; foliage is not built like a bunker.
+## full 1000; foliage is not built like a bunker, and neither is a housefront.
 const HEALTH := {
 	WOOD: 600.0,
 	LEAVES: 150.0,
+	PLASTER: 450.0,
+	TILE: 350.0,
+	RUST: 500.0,
+	SAND: 700.0,
+	# Team markings are paint on whatever is underneath, so they come off about
+	# as easily as the render does.
+	TEAM_RED: 450.0,
+	TEAM_BLUE: 450.0,
+	BRICK: 700.0,
+	GRAVEL: 800.0,
+	CANVAS: 120.0,
+	STEEL: 800.0,
 }
 ## What a block past the degraded threshold blends toward.
 const DEGRADED_TINT := Color(0.14, 0.12, 0.11)
@@ -57,9 +118,22 @@ const TREE_RADIUS := 5
 ## has to survive exactly.
 @export var terrain_path := "res://maps/default_terrain.png"
 @export var structures_path := "res://maps/default_structures.json"
+## Which of the catalogue's maps to load, overriding the two paths above.
+##
+## Left empty -- which is how the world scene ships -- this takes whatever the
+## player chose on the map screen. A dedicated server names one outright
+## instead, because a server holds one map's terrain and has nobody to ask.
+@export var map_id := ""
 ## Chunks are built within this many chunk-widths of the camera and freed
-## beyond it. One chunk is 4m, so 24 is a 96m working set.
-@export var view_chunks := 10
+## beyond it. One chunk is 4m, so this is a 64m working set.
+##
+## This is a draw distance in the strong sense: past it the ground is not there
+## at all, and what you see instead is the sky meeting nothing. That is easy to
+## miss alone on a map and impossible to miss with somebody else on it -- two
+## soldiers further apart than this each stand on an island in a void, which
+## looks far more like two separate worlds than like one shared one. Whatever
+## this is set to, `Player.SPAWN_SCATTER` has to stay well inside it.
+@export var view_chunks := 16
 ## Chunk columns brought in per frame while streaming.
 @export var stream_budget := 14
 ## Colour of the boundary marker painted on the ground at the world edge.
@@ -68,8 +142,71 @@ const TREE_RADIUS := 5
 @export var boundary_width := 0.3
 ## Chunks remeshed per frame; keeps a burst of destruction from stalling.
 @export var rebuild_budget := 2
+
+@export_group("Prebuild")
+## Whether terrain is ever thrown away once it has been built.
+##
+## Off, and it is never given back. That is the setting that matters, and it is
+## what closes the whole class of bug where two clients disagree about the map:
+## the ground under anything you are not standing near still exists, so nothing
+## resting on it can fall through, and which chunks a client has stops depending
+## on where that particular player happened to walk.
+##
+## The cost is memory rather than time. The world grows to cover wherever people
+## actually go and stops there -- touring every corner of this map would reach a
+## few hundred megabytes, and a match fought over half of it far less. That is a
+## much better bargain than building the lot up front, which on this map is a ten
+## minute wait in a browser before anyone can play at all.
+@export var discard_distant := false
+## Build the entire map before anyone plays on it, rather than streaming it in
+## around whoever is looking.
+##
+## Off by default and worth leaving off. It removes terrain pop-in entirely and
+## guarantees every client is looking at the same finished world from the first
+## frame, but on a map this size the browser build meshes it in single-threaded
+## WASM for the better part of ten minutes, behind a loading screen, every time
+## anybody joins. Streaming without discarding gets almost all of the benefit for
+## none of that.
+@export var prebuild := false
+## Milliseconds per frame to spend on it. The engine still has to draw a loading
+## screen and answer the browser between helpings, and a tab that stops
+## responding altogether is one the browser offers to kill.
+@export var prebuild_ms_per_frame := 24.0
+
+## Keep building the rest of the map behind the player, once the ground around
+## them is in.
+##
+## The middle road between the two settings above, and the one to leave on. Play
+## starts the moment the streaming window is up -- exactly as it does with both
+## of those off, with no loading screen and no wait -- and from then on whatever
+## frame time is going spare goes on filling the rest of the map in, a few
+## columns at a time. Some minutes into a match every client has the whole world
+## standing and terrain pop-in has stopped happening at all, without anybody
+## having waited for it.
+##
+## The ground the player is actually near always comes first: this only gets the
+## frame once the streaming pass has nothing left to bring in, so walking into
+## fresh country still builds that country ahead of the far side of the map.
+##
+## Costs what prebuilding costs in memory and in total work. It simply declines
+## to charge any of it up front. On a machine that cannot afford the whole map,
+## turn this off rather than turning `prebuild` on.
+@export var background_fill := true
+## Milliseconds per frame to spend on it. Deliberately a fraction of
+## `prebuild_ms_per_frame`: nobody is watching a loading screen this time, they
+## are playing, and one dropped frame costs more than the fill finishing sooner.
+@export var background_fill_ms := 3.0
+
+## Emitted once the whole map is standing. Nothing should let a player move
+## before this: half a world is exactly the state all of this exists to avoid.
+signal terrain_ready
 @export var debris_per_block := 5
 @export var max_debris := 90
+## Set on the dedicated server, which keeps the world only to know what shape it
+## is in. It answers the same questions about blocks as any other copy and
+## replays the same damage, but never builds a mesh or a collider for any of it:
+## nobody is looking, and nothing there is standing on the ground.
+@export var meshless := false
 
 var height := 0
 ## Terrain is stored as columns rather than a full voxel array: at 2000x2000x33
@@ -82,13 +219,60 @@ var _tree := PackedByteArray()
 ## slices are worth scanning without touching them.
 var _top := PackedByteArray()
 var _edits := {}
+## The subset of `_edits` that players made, as opposed to the structures and
+## trees the map itself describes. Only this travels to a joining client: the
+## rest they work out from the same map file we did.
+var _player_edits := {}
+## What each of those blocks was before a player first touched it, so a round
+## can be undone without rebuilding the map. Null means it came from the
+## heightmap rather than from an edit.
+var _pristine := {}
 var _baked_trees := {}
+## Chunk columns whose trees have already been grown, so the sweep below can be
+## asked repeatedly without walking a few hundred columns every time.
+var _baked_columns := {}
 var _empty_chunks := {}
 var _stream_centre := Vector2i(9999, 9999)
+## Whole-map build progress: how many chunk columns exist in total, and how many
+## have been walked so far. Shared by both ways of building the lot -- up front
+## behind a loading screen, or a slice a frame behind a match already running --
+## because the walk itself is the same either way.
+var _prebuilding := false
+var _fill_columns := Vector2i.ZERO
+var _fill_done := 0
+## Set once the walk has been all the way round. Nothing waits on it; it is what
+## stops the fill from costing anything at all once there is nothing left to do.
+var _map_complete := false
+## Whether to fill in behind the player at all. Resolved once in `_ready`
+## because it depends on two exports agreeing, not just on the one.
+var _filling := false
+## Frame time the fill is allowed to spend, in milliseconds, banked forward.
+##
+## A column cannot be stopped in the middle -- it is up to three chunk meshes
+## and their colliders, tens of milliseconds of work with no yield point in it --
+## so a straight per-frame deadline does not bound anything: the check only comes
+## round after the damage is done. Instead the overrun is carried as a debt and
+## the fill sits out however many frames it takes to earn it back, which makes
+## `background_fill_ms` an average that is actually kept rather than a limit that
+## is politely exceeded every time.
+var _fill_credit := 0.0
+## How many 16-block layers it takes to cover `height`. Derived, because a map
+## that wants cliffs needs more of them than one that is all fields.
+var _chunk_layers := 3
 ## Set once a full pass finds nothing left to build, so a settled world
 ## stops rescanning every ring every frame. Cleared when the camera moves
 ## to a new chunk or a chunk is thrown away.
 var _stream_settled := false
+## Where each side enters the world and what there is to fight over, both read
+## off the map file. Empty on a map that names neither.
+var team_spawns := {}
+var capture_points: Array = []
+## Where the map parks its armour: {"x", "z", "yaw"} in metres and degrees.
+var tank_points: Array = []
+## Where the map wants ammunition standing, as world (x, z) in metres. The map
+## picks the spots because the map is the thing that knows which side of a wall
+## is the useful one; everything here does is hand them over.
+var ammo_points: Array[Vector2] = []
 var _damage := {}
 var _chunks := {}
 var _dirty := {}
@@ -100,13 +284,56 @@ var _debris_live := 0
 func _ready() -> void:
 	add_to_group("voxel_world")
 	add_child(_chunk_root)
-	height = depth_blocks + build_height + 1
+	# `_load_map` sets the vertical budget from the map itself; this is only the
+	# shape of a world with no map file to read.
+	_set_vertical_budget()
 	_load_map()
+	if meshless:
+		# The server keeps the map as data and never draws a face of it, so
+		# there is nothing here worth building and no one to keep waiting.
+		Net.set_server_world(self)
+		return
 	_build_boundary_marker()
+	_fill_columns = Vector2i(
+		ceili(float(size_x) / CHUNK), ceili(float(size_z) / CHUNK)
+	)
+	_fill_done = 0
+	_prebuilding = prebuild
+	# Filling in behind the player only makes sense if what is built stays built.
+	# With `discard_distant` on the two would spend the match fighting: this
+	# builds the far side of the map and the streaming pass throws it straight
+	# back away, forever. Prebuilding already owns the whole map, so there is
+	# nothing left for the fill to do there either.
+	_filling = background_fill and not discard_distant and not prebuild
 
 
 func _process(_delta: float) -> void:
-	_update_streaming()
+	if meshless:
+		return
+	if prebuild:
+		# Note what is deliberately missing once this finishes: the streaming
+		# pass. It is the half that frees chunks, and having built everything the
+		# whole point is that nothing is ever taken away again.
+		if _prebuilding:
+			_prebuild_step()
+			return
+	else:
+		_update_streaming()
+		# Ground the player is near comes first, always: the fill only gets the
+		# frame once the streaming window has nothing left to bring in, so
+		# walking into fresh country still builds that country ahead of the far
+		# side of the map.
+		if _filling and not _map_complete and _stream_settled:
+			# Capped as well as accrued, so frames the fill sat out -- while the
+			# streaming pass had the ground, say -- cannot be banked and spent
+			# all at once as one long stall later.
+			_fill_credit = minf(_fill_credit + background_fill_ms, background_fill_ms)
+			if _fill_credit > 0.0:
+				var began := Time.get_ticks_usec()
+				if _fill_step(_fill_credit):
+					_map_complete = true
+					_announce_complete()
+				_fill_credit -= float(Time.get_ticks_usec() - began) / 1000.0
 	if _dirty.is_empty():
 		return
 	var done := 0
@@ -122,6 +349,92 @@ func _process(_delta: float) -> void:
 ## stand on, which is why crossing it is fatal rather than merely blocked.
 func boundary_half_extent() -> Vector2:
 	return Vector2(size_x * BLOCK * 0.5, size_z * BLOCK * 0.5)
+
+
+## True once there is a whole world to play in. Always true when prebuilding is
+## off, because then there is no moment at which the map is finished -- it is
+## built and unbuilt around whoever is looking for as long as the match lasts.
+func is_terrain_ready() -> bool:
+	return not (prebuild and _prebuilding)
+
+
+## How far along the whole-map build is, 0 to 1. The loading screen shows it
+## while prebuilding, where somebody really is waiting on it; with the
+## background fill it is nobody's business but worth being able to read.
+func terrain_progress() -> float:
+	var total := _fill_columns.x * _fill_columns.y
+	if total <= 0:
+		return 1.0
+	return clampf(float(_fill_done) / float(total), 0.0, 1.0)
+
+
+## One frame's worth of building, row by row, stopping on the clock rather than
+## on a column count. Columns vary enormously in cost -- open ground is nearly
+## free and a wooded hillside is not -- so a fixed number of them per frame
+## would take wildly different times, which shows up as a stuttering loading
+## screen up front and as dropped frames mid-match.
+##
+## Returns true once the walk has been all the way round. Columns already
+## standing cost next to nothing to pass over, so it is safe to reach here with
+## most of the map built by the streaming pass already.
+func _fill_step(budget_ms: float) -> bool:
+	var deadline := Time.get_ticks_usec() + int(budget_ms * 1000.0)
+	var total := _fill_columns.x * _fill_columns.y
+	while _fill_done < total:
+		@warning_ignore("integer_division")
+		var cz := _fill_done / _fill_columns.x
+		var cx := _fill_done % _fill_columns.x
+		_build_column(cx, cz)
+		_fill_done += 1
+		if Time.get_ticks_usec() >= deadline:
+			return false
+	return true
+
+
+## The blocking version, with a loading screen in front of it.
+func _prebuild_step() -> void:
+	if not _fill_step(prebuild_ms_per_frame):
+		return
+	_prebuilding = false
+	_announce_complete()
+
+
+func _announce_complete() -> void:
+	print("VoxelWorld: %d chunks built; the map is not going anywhere now." % _chunks.size())
+	terrain_ready.emit()
+
+
+## Whether the ground at a world position has actually been meshed and given a
+## collider yet, as opposed to merely being described by the map.
+##
+## The distinction matters to anything heavy that starts the match resting on
+## the terrain. Chunks are built a few per frame from wherever the camera is, so
+## for the first second or two of a match there is nothing under the map's
+## furniture to hold it up -- and how long that lasts depends entirely on how
+## fast the machine is. A client that streams slowly will watch the tank drop
+## out of the world while a quicker one has it sitting there in the sun, which
+## is two clients disagreeing about the map for no better reason than hardware.
+func is_ground_ready(x: float, z: float) -> bool:
+	var g := world_to_grid(Vector3(x, 0.0, z))
+	if g.x < 0 or g.x >= size_x or g.z < 0 or g.z >= size_z:
+		return true
+	var column := Vector2i(g.x / CHUNK, g.z / CHUNK)
+	# A column with nothing in it will never produce a chunk, so waiting on one
+	# would wait forever.
+	if _empty_chunks.has(column):
+		return true
+	for cy in _chunk_layers:
+		if _chunks.has(Vector3i(column.x, cy, column.y)):
+			return true
+	return false
+
+
+## How far out the ground is actually built, in metres. Not a level of detail --
+## past this the terrain does not exist, so anything that cares where a person
+## can be put down and still see the world around them asks this rather than
+## carrying a distance of its own that could drift out of step with it.
+func view_distance() -> float:
+	return view_chunks * CHUNK * BLOCK
 
 
 ## Flat red stripe laid on the ground along the edge, in place of a wall. Drawn
@@ -217,7 +530,12 @@ func block_at(gx: int, gy: int, gz: int) -> int:
 	if gy > surface:
 		return AIR
 	if gy == surface:
-		return GRASS if _material[col] == 0 else (DIRT if _material[col] == 1 else CONCRETE)
+		# The map paints its own surface: the green channel is the block type
+		# outright, so a road is asphalt and a beach is sand without anything
+		# here having to know which map it is looking at. Zero means grass,
+		# since a surface made of air is not a thing a map can mean.
+		var painted: int = _material[col]
+		return GRASS if painted == AIR else painted
 	return DIRT
 
 
@@ -262,11 +580,19 @@ func damage_block(at: Vector3, into: Vector3, amount: float) -> bool:
 func damage_grid_block(gx: int, gy: int, gz: int, amount: float) -> bool:
 	if not in_bounds(gx, gy, gz):
 		return false
+	# Trees are grown lazily as chunks come into view, which on a headless
+	# server never happens and on a client has not happened yet for terrain
+	# somebody else is shooting at. Grow them before deciding this is thin air.
+	_bake_trees_near(gx / CHUNK, gz / CHUNK)
 	var type := block_at(gx, gy, gz)
 	if type == AIR or type == BEDROCK:
 		return false
 
 	var idx := index_of(gx, gy, gz)
+	# Everyone chews the same wall down together: this is what turns a hit here
+	# into the same hit on every other client. Net drops it when the damage
+	# arrived off the wire in the first place, so it cannot echo.
+	Net.report_terrain(idx, amount)
 	var limit := health_of(type)
 	var was := float(_damage.get(idx, 0.0))
 	var now := was + amount
@@ -285,19 +611,158 @@ func damage_grid_block(gx: int, gy: int, gz: int, amount: float) -> bool:
 func place_block(gx: int, gy: int, gz: int, type: int) -> bool:
 	if not in_bounds(gx, gy, gz) or gy > max_build_gy() or gy <= 0:
 		return false
+	_bake_trees_near(gx / CHUNK, gz / CHUNK)
 	if block_at(gx, gy, gz) != AIR:
 		return false
-	_edits[index_of(gx, gy, gz)] = type
-	_mark_dirty(gx, gy, gz)
+	var idx := index_of(gx, gy, gz)
+	_set_block(idx, gx, gy, gz, type)
+	Net.report_place(idx, type)
 	return true
 
 
 func _destroy(gx: int, gy: int, gz: int, type: int) -> void:
 	var idx := index_of(gx, gy, gz)
-	_edits[idx] = AIR
 	_damage.erase(idx)
-	_mark_dirty(gx, gy, gz)
+	_set_block(idx, gx, gy, gz, AIR)
 	_spawn_debris(gx, gy, gz, type)
+
+
+## Writes a block and remembers that a player put it there. Everything that
+## deviates from the map goes through here, which is what lets `net_snapshot`
+## hand a joining client the difference rather than the whole world.
+func _set_block(idx: int, gx: int, gy: int, gz: int, type: int) -> void:
+	# What was here before anybody touched it, remembered the first time they do.
+	# Null means the map never had an opinion and the block came from the
+	# heightmap, which is a different thing from it having been air.
+	if not _pristine.has(idx):
+		_pristine[idx] = _edits.get(idx, null)
+	_edits[idx] = type
+	_player_edits[idx] = type
+	_mark_dirty(gx, gy, gz)
+
+
+## Puts the ground back exactly as the map file describes it, and forgets every
+## shot ever fired into it. Used between rounds.
+##
+## Restoring only what was changed, rather than reloading the map, is the whole
+## reason `_pristine` is kept: rebuilding this map from scratch is a two-minute
+## job and would have to happen between every round, where undoing a few
+## thousand blocks takes a frame or two of remeshing.
+func reset_to_map() -> void:
+	for idx: int in _damage:
+		var damaged := grid_of(idx)
+		_mark_dirty(damaged.x, damaged.y, damaged.z)
+	_damage.clear()
+
+	for idx: int in _pristine:
+		var was: Variant = _pristine[idx]
+		if was == null:
+			_edits.erase(idx)
+		else:
+			_edits[idx] = was
+		var g := grid_of(idx)
+		_mark_dirty(g.x, g.y, g.z)
+	_pristine.clear()
+	_player_edits.clear()
+
+
+# --- multiplayer --------------------------------------------------------
+#
+# The wire talks in flat block indices rather than coordinates, because that is
+# what the damage and edit tables are keyed by and it is one integer instead of
+# three. These are the entry points Net applies incoming changes through.
+
+func damage_index(index: int, amount: float) -> void:
+	var g := grid_of(index)
+	damage_grid_block(g.x, g.y, g.z, amount)
+
+
+## Writes a block without asking whether it may. Unlike `place_block` this is
+## not a request -- it is state that has already happened elsewhere, so a
+## joining client applying a snapshot must end up with it whatever is currently
+## in the way.
+func place_index(index: int, type: int) -> void:
+	var g := grid_of(index)
+	if not in_bounds(g.x, g.y, g.z):
+		return
+	_bake_trees_near(g.x / CHUNK, g.z / CHUNK)
+	_set_block(index, g.x, g.y, g.z, type)
+
+
+func grid_of(index: int) -> Vector3i:
+	var gx := index % size_x
+	var rest := index / size_x
+	return Vector3i(gx, rest / size_z, rest % size_z)
+
+
+## Every way this world differs from the map on disk, flattened for the wire.
+## Blocks first, then damage: a block that was destroyed, rebuilt and then shot
+## at needs the rebuild applied before the shooting.
+func net_snapshot() -> Dictionary:
+	var place_indices := PackedInt64Array()
+	var place_types := PackedByteArray()
+	for idx: int in _player_edits:
+		place_indices.append(idx)
+		place_types.append(_player_edits[idx])
+
+	var damage_indices := PackedInt64Array()
+	var damage_amounts := PackedFloat32Array()
+	for idx: int in _damage:
+		damage_indices.append(idx)
+		damage_amounts.append(_damage[idx])
+
+	return {
+		"place_indices": place_indices,
+		"place_types": place_types,
+		"damage_indices": damage_indices,
+		"damage_amounts": damage_amounts,
+	}
+
+
+## The height a soldier can actually stand at in this column, or NAN when there
+## is nowhere in it they fit.
+##
+## Emphatically not the same thing as the height of the ground. A wall, a
+## shipping container and a housefront all sit on ground that is perfectly flat
+## underneath them, so anything that places a body by asking how high the ground
+## is will happily put them three metres inside a wall -- and a capsule spawned
+## inside solid rock does not politely stay there. The physics engine pushes it
+## out along whichever axis is shortest, which for somebody standing in the
+## middle of a base wall is straight down and through the floor.
+##
+## `headroom` is in blocks: eight is two metres, which is a soldier and a little
+## to spare.
+func standing_height(x: float, z: float, headroom := 8) -> float:
+	var gx := floori(x / BLOCK) + size_x / 2
+	var gz := floori(z / BLOCK) + size_z / 2
+	if gx < 0 or gx >= size_x or gz < 0 or gz >= size_z:
+		return NAN
+
+	var ceiling := max_build_gy()
+	var gy := int(_surface[column_of(gx, gz)]) + 1
+	while gy + headroom <= ceiling:
+		var blocked := -1
+		for step in headroom:
+			if block_at(gx, gy + step, gz) != AIR:
+				blocked = step
+				break
+		if blocked < 0:
+			return block_bottom_y(gy)
+		# Skip past whatever was in the way rather than testing the next block
+		# up: inside a wall that would mean one query per block of its height.
+		gy += blocked + 1
+	return NAN
+
+
+## Ground level in metres at a world position, for standing somebody on it.
+## Reads the map's own column heights rather than dropping a ray, so it works
+## before any terrain has been meshed -- which is the case at spawn time.
+func ground_height(x: float, z: float) -> float:
+	var gx := floori(x / BLOCK) + size_x / 2
+	var gz := floori(z / BLOCK) + size_z / 2
+	if gx < 0 or gx >= size_x or gz < 0 or gz >= size_z:
+		return 0.0
+	return block_bottom_y(_surface[column_of(gx, gz)] + 1)
 
 
 ## A handful of shards per block, capped globally so a grenade levelling a wall
@@ -331,6 +796,8 @@ func _on_debris_expired() -> void:
 
 
 func _mark_dirty(gx: int, gy: int, gz: int) -> void:
+	if meshless:
+		return
 	# Neighbouring chunks too: removing a block exposes faces across the seam.
 	var cx := gx / CHUNK
 	var cy := gy / CHUNK
@@ -353,7 +820,35 @@ func _mark_dirty(gx: int, gy: int, gz: int) -> void:
 ## Reads the authored map: one pixel per column carrying surface height,
 ## material and a tree marker, plus a JSON list of concrete works. Nothing here
 ## is rolled at runtime -- the same files produce the same map every time.
+## Works out how tall the world is and how many chunk layers that takes. Both
+## are derived rather than fixed because a map that wants a canyon in it needs
+## far more room overhead than one that is all fields, and paying for that
+## everywhere would mean scanning empty sky on every column of every flat map.
+func _set_vertical_budget() -> void:
+	height = depth_blocks + build_height + 1
+	_chunk_layers = ceili(float(height) / CHUNK)
+
+
 func _load_map() -> void:
+	# The chosen ground, or the one this node was told to hold. Resolved here
+	# rather than in the scene so every map is loaded through the same door.
+	var chosen := map_id if not map_id.is_empty() else Net.map_id
+	if MapCatalogue.has(chosen):
+		terrain_path = MapCatalogue.terrain_path(chosen)
+		structures_path = MapCatalogue.structures_path(chosen)
+		# A server holding one map's terrain is a server whose field is that
+		# map; everything it replays to a joiner is only right for that one.
+		if not map_id.is_empty():
+			Net.map_id = chosen
+
+	# Read before the heightmap: the map's own idea of how deep the ground goes
+	# and how much sky it needs decides how the columns below are indexed.
+	var meta := _read_meta()
+	depth_blocks = int(meta.get("depth_blocks", depth_blocks))
+	build_height = int(meta.get("build_height", build_height))
+	_set_vertical_budget()
+	_read_places(meta)
+
 	if not FileAccess.file_exists(terrain_path):
 		push_error("VoxelWorld cannot find %s; the world will be empty." % terrain_path)
 		return
@@ -382,33 +877,80 @@ func _load_map() -> void:
 		# A tree adds roughly its own height above the ground it stands on.
 		_top[i] = mini(surface + (TREE_REACH if pixels[p + 2] != 0 else 0), height - 1)
 
-	_load_structures()
+	_build_structures(_read_meta())
 
 
-func _load_structures() -> void:
+## The map's companion file, or an empty dictionary if it has none.
+func _read_meta() -> Dictionary:
 	if not FileAccess.file_exists(structures_path):
-		return
-	var text := FileAccess.get_file_as_string(structures_path)
-	var parsed: Variant = JSON.parse_string(text)
+		return {}
+	var parsed: Variant = JSON.parse_string(
+		FileAccess.get_file_as_string(structures_path)
+	)
 	if typeof(parsed) != TYPE_DICTIONARY:
 		push_warning("Could not read %s" % structures_path)
-		return
+		return {}
+	return parsed
 
-	for entry: Dictionary in parsed.get("structures", []):
+
+## Where each side starts and what there is to fight over. Read straight off the
+## map, because these are properties of a place rather than of the game -- a
+## different map puts its bases somewhere else and nothing else should have to
+## know that.
+func _read_places(meta: Dictionary) -> void:
+	team_spawns.clear()
+	capture_points.clear()
+	ammo_points.clear()
+	tank_points.clear()
+	for at: Array in meta.get("ammo_boxes", []):
+		ammo_points.append(Vector2(float(at[0]), float(at[1])))
+	for spot: Dictionary in meta.get("tanks", []):
+		tank_points.append({
+			"position": Vector2(float(spot["x"]), float(spot["z"])),
+			"yaw": float(spot.get("yaw", 0.0)),
+		})
+	for side: String in meta.get("team_spawns", {}):
+		var at: Array = meta["team_spawns"][side]
+		team_spawns[side] = Vector2(float(at[0]), float(at[1]))
+	for point: Dictionary in meta.get("capture_points", []):
+		capture_points.append({
+			"name": String(point.get("name", "objective")),
+			"position": Vector2(float(point["x"]), float(point["z"])),
+			"radius": float(point.get("radius", 8.0)),
+		})
+
+
+## Where a side comes into the world, in metres. Falls back to the middle of the
+## map, which is where a map that names no sides puts everybody anyway.
+func team_spawn(side: String) -> Vector2:
+	return team_spawns.get(side, Vector2.ZERO)
+
+
+func _build_structures(meta: Dictionary) -> void:
+	for entry: Dictionary in meta.get("structures", []):
 		var from: int = int(entry.get("from", 0))
 		var to: int = int(entry.get("height", 1))
 		var clear: bool = bool(entry.get("clear", false))
+		# Structures name their material, so a housefront is plaster, a cliff is
+		# stone and a base is painted in its own colour, rather than everything
+		# built out of the same concrete.
+		var type: int = BLOCK_NAMES.get(String(entry.get("type", "concrete")), CONCRETE)
+		# Anchored to the ground it stands on by default; a structure that has to
+		# sit at one height regardless of the slope under it says so instead,
+		# which is what keeps a container stack level and a roof flat.
+		var flat: bool = bool(entry.get("flat", false))
+		var floor_gy: int = int(entry.get("gy", 0))
 		for gz in range(int(entry["z0"]), int(entry["z1"]) + 1):
 			for gx in range(int(entry["x0"]), int(entry["x1"]) + 1):
 				if gx < 0 or gx >= size_x or gz < 0 or gz >= size_z:
 					continue
 				var col := column_of(gx, gz)
-				var base: int = _surface[col] + 1
+				var base: int = floor_gy if flat else _surface[col] + 1
 				for step in range(from, to):
 					var gy := base + step
-					if gy >= height:
-						break
-					_edits[index_of(gx, gy, gz)] = AIR if clear else CONCRETE
+					if gy >= height or gy < 1:
+						continue
+					_edits[index_of(gx, gy, gz)] = AIR if clear else type
 				if not clear:
 					_top[col] = mini(maxi(_top[col], base + to), height - 1)
 
@@ -416,6 +958,10 @@ func _load_structures() -> void:
 ## Trees are marked in the map but only turned into blocks when a chunk near
 ## them is first built, so a 500m forest does not have to exist all at once.
 func _bake_trees_near(cx: int, cz: int) -> void:
+	var column := Vector2i(cx, cz)
+	if _baked_columns.has(column):
+		return
+	_baked_columns[column] = true
 	var x0 := maxi(cx * CHUNK - TREE_RADIUS, 0)
 	var z0 := maxi(cz * CHUNK - TREE_RADIUS, 0)
 	var x1 := mini(cx * CHUNK + CHUNK + TREE_RADIUS, size_x - 1)
@@ -469,14 +1015,21 @@ func _update_streaming() -> void:
 	var here := world_to_grid(camera.global_position)
 	var centre := Vector2i(here.x / CHUNK, here.z / CHUNK)
 
-	# Drop anything that fell outside the window, however we got here.
+	# Moving to a new chunk means there is probably fresh ground to bring in, so
+	# the settled flag comes off and the rings get another look.
 	if centre != _stream_centre:
 		_stream_centre = centre
 		_stream_settled = false
-		for key: Vector3i in _chunks.keys():
-			if absi(key.x - centre.x) > view_chunks or absi(key.z - centre.y) > view_chunks:
-				_chunks[key].queue_free()
-				_chunks.erase(key)
+		# Giving ground back is optional, and off by default. Everything that
+		# has ever been built stays built: it is the only way the map under a
+		# tank -- or under anybody's feet -- is guaranteed to still be there
+		# after somebody walks away from it and back.
+		if discard_distant:
+			for key: Vector3i in _chunks.keys():
+				if absi(key.x - centre.x) > view_chunks \
+						or absi(key.z - centre.y) > view_chunks:
+					_chunks[key].queue_free()
+					_chunks.erase(key)
 
 	if _stream_settled:
 		return
@@ -520,7 +1073,9 @@ func _build_column(cx: int, cz: int) -> bool:
 			highest = maxi(highest, _top[col])
 
 	var built := false
-	for cy in range(maxi((lowest - 1) / CHUNK, 0), mini((highest + 1) / CHUNK + 1, 3)):
+	for cy in range(
+			maxi((lowest - 1) / CHUNK, 0),
+			mini((highest + 1) / CHUNK + 1, _chunk_layers)):
 		_rebuild_chunk(Vector3i(cx, cy, cz))
 		built = true
 	if not built:

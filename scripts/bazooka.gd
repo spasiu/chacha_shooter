@@ -14,11 +14,6 @@ extends Weapon
 ## default, for two reasons: past it the numbers are noise against a block's
 ## thousand health, and the cell loop grows with the cube of the reach.
 @export var crater_yards := 1.0
-## Standing height a body is measured against, so a rocket into someone's chest
-## reads as a direct hit rather than as one a yard from their feet.
-@export var target_height := 1.8
-
-const EXPLOSION: AudioStream = preload("res://assets/audio/explosion.wav")
 ## Trim on each voice of the burst. Loud on purpose -- it should carry across
 ## the map and be plainly the biggest thing in the mix.
 const BURST_VOLUME_DB := 8.0
@@ -69,116 +64,27 @@ func _raycast() -> void:
 	# A rocket that finds nothing burns out at the end of its run.
 	var burst: Vector3 = hit.position if not hit.is_empty() else origin + direction * max_range
 
-	_blast_bodies(burst)
-	_blast_terrain(burst)
-	_show_burst(burst)
+	_detonate(burst)
 
 
-## Everything with a body in reach takes the blast, scaled by how far it stood
-## from the burst. Deliberately no line-of-sight check.
-func _blast_bodies(at: Vector3) -> void:
-	var shape := SphereShape3D.new()
-	shape.radius = blast_radius
-	var query := PhysicsShapeQueryParameters3D.new()
-	query.shape = shape
-	query.transform = Transform3D(Basis.IDENTITY, at)
-	query.collide_with_areas = false
-
-	for entry: Dictionary in get_world_3d().direct_space_state.intersect_shape(query, 32):
-		var body: Object = entry.get("collider")
-		if body == null or not body.has_method("take_damage"):
-			continue
-		# Terrain is dealt with block by block below. Left in here, a chunk
-		# would soak the whole blast into whichever single block sits nearest.
-		if body is VoxelChunk:
-			continue
-		if not (body is Node3D):
-			continue
-
-		# Measure to the nearest point on the body's standing height rather than
-		# to its origin, which sits down at the feet.
-		var foot: Vector3 = (body as Node3D).global_position
-		var point := Geometry3D.get_closest_point_to_segment(
-			at, foot, foot + Vector3.UP * target_height
-		)
-		var dealt := damage_at(at.distance_to(point))
-		if dealt > 0.0:
-			body.take_damage(dealt, point, (point - at).normalized())
+## Sets the warhead off. All three parts are Blast's, so a rocket and an
+## artillery shell go off in exactly the same way.
+func _detonate(at: Vector3) -> void:
+	Blast.hurt(get_tree(), at, band_yards, _bands())
+	Blast.crater(get_tree(), at, band_yards, _bands(), crater_yards)
+	Blast.effect(
+		get_tree().current_scene, at, 22.0, blast_radius * 2.0, BURST_VOLUME_DB, true
+	)
+	# A rocket has no projectile anyone else has a copy of -- it is traced and
+	# spent in the same frame -- so the flash and the bang have to be sent. The
+	# crater travels on its own, as terrain damage, and the casualties were told
+	# directly by `hurt` above.
+	Net.report_blast(at, 22.0, blast_radius * 2.0, BURST_VOLUME_DB, true, 0.0)
 
 
-## Carves the ground. Blocks are damaged one at a time so the crater falls away
-## with distance exactly as the casualties do.
-func _blast_terrain(at: Vector3) -> void:
-	var world: Node = get_tree().get_first_node_in_group("voxel_world")
-	if world == null:
-		return
-
-	var reach_m: float = minf(crater_yards * Lethality.YARD, blast_radius)
-	var reach := int(ceil(reach_m / VoxelWorld.BLOCK))
-	var centre: Vector3i = world.world_to_grid(at)
-	for dx in range(-reach, reach + 1):
-		for dy in range(-reach, reach + 1):
-			for dz in range(-reach, reach + 1):
-				var gx: int = centre.x + dx
-				var gy: int = centre.y + dy
-				var gz: int = centre.z + dz
-				if not world.in_bounds(gx, gy, gz):
-					continue
-				# Cheapest rejections first: empty cells, then the corners of
-				# the cube that fall outside the sphere.
-				if world.block_at(gx, gy, gz) == VoxelWorld.AIR:
-					continue
-				var distance := at.distance_to(world.grid_to_world(gx, gy, gz))
-				if distance > reach_m:
-					continue
-				var dealt := damage_at(distance)
-				if dealt > 0.0:
-					world.damage_grid_block(gx, gy, gz, dealt)
-
-
-## A flash and a bang out where the rocket went off. Built in code rather than
-## as its own scene because nothing else in the game needs one.
-func _show_burst(at: Vector3) -> void:
-	var scene_root := get_tree().current_scene
-	if scene_root == null:
-		return
-
-	var light := OmniLight3D.new()
-	scene_root.add_child(light)
-	light.global_position = at
-	light.light_color = Color(1.0, 0.76, 0.42)
-	light.light_energy = 22.0
-	light.omni_range = maxf(blast_radius * 2.0, 1.0)
-	var fade := light.create_tween()
-	fade.tween_property(light, "light_energy", 0.0, 0.5)
-	fade.tween_callback(light.queue_free)
-
-	# Two voices rather than one: the crack at pitch, then a slower, deeper
-	# copy a beat behind it. One sample on its own reads as a pop from any
-	# distance; the pair reads as something large going off.
-	_burst_sound(scene_root, at, 1.0, BURST_VOLUME_DB, 0.0)
-	_burst_sound(scene_root, at, 0.42, BURST_VOLUME_DB - 2.0, 0.06)
-
-
-## One voice of the burst. `delay` is in seconds, so the rumble can trail the
-## crack without either being a separate asset.
-func _burst_sound(
-	scene_root: Node, at: Vector3, pitch: float, volume_db: float, delay: float
-) -> void:
-	var sound := AudioStreamPlayer3D.new()
-	scene_root.add_child(sound)
-	sound.global_position = at
-	sound.stream = EXPLOSION
-	sound.pitch_scale = pitch
-	sound.volume_db = volume_db
-	# Carries much further than a rifle shot, and stays loud while it does.
-	sound.unit_size = 40.0
-	sound.max_distance = 220.0
-	sound.finished.connect(sound.queue_free)
-	if delay > 0.0:
-		get_tree().create_timer(delay).timeout.connect(sound.play)
-	else:
-		sound.play()
+## This rocket's own profile, in the shape Blast wants it.
+func _bands() -> Array:
+	return [damage_short, damage_medium, damage_long, damage_beyond]
 
 
 ## Tube comes down off the shoulder, a fresh rocket goes in the back of it, and

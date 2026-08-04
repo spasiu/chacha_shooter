@@ -1,0 +1,60 @@
+; A planted charge sitting on whatever it was stuck to, counting down. See
+; tnt_charge.gd -- once planted it runs on its own clock and is not owned by
+; whoever set it.
+[gd_scene load_steps=7 format=3]
+
+[ext_resource type="Script" path="res://scripts/tnt_charge.gd" id="1_charge"]
+
+[sub_resource type="StandardMaterial3D" id="Mat_stick"]
+albedo_color = Color(0.5, 0.14, 0.1, 1)
+roughness = 0.8
+
+[sub_resource type="StandardMaterial3D" id="Mat_band"]
+albedo_color = Color(0.16, 0.13, 0.1, 1)
+roughness = 0.9
+
+[sub_resource type="StandardMaterial3D" id="Mat_lamp"]
+shading_mode = 0
+albedo_color = Color(1, 0.25, 0.15, 1)
+emission_enabled = true
+emission = Color(1, 0.3, 0.15, 1)
+emission_energy_multiplier = 5.0
+
+[sub_resource type="CylinderMesh" id="Mesh_bundle"]
+material = SubResource("Mat_stick")
+top_radius = 0.075
+bottom_radius = 0.075
+height = 0.19
+radial_segments = 12
+rings = 1
+
+[sub_resource type="BoxMesh" id="Mesh_band"]
+material = SubResource("Mat_band")
+size = Vector3(0.16, 0.05, 0.16)
+
+[sub_resource type="SphereMesh" id="Mesh_lamp"]
+material = SubResource("Mat_lamp")
+radius = 0.02
+height = 0.04
+radial_segments = 8
+rings = 4
+
+[node name="TNTCharge" type="Node3D"]
+script = ExtResource("1_charge")
+
+; Lying on its side, the way a satchel of sticks sits once it is put down.
+[node name="Bundle" type="MeshInstance3D" parent="."]
+transform = Transform3D(1, 0, 0, 0, 0, -1, 0, 1, 0, 0, 0.075, 0)
+mesh = SubResource("Mesh_bundle")
+
+[node name="Band" type="MeshInstance3D" parent="."]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0.075, 0)
+mesh = SubResource("Mesh_band")
+
+[node name="Lamp" type="MeshInstance3D" parent="."]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0.14, 0)
+mesh = SubResource("Mesh_lamp")
+
+[node name="Sound" type="AudioStreamPlayer3D" parent="."]
+unit_size = 6.0
+max_distance = 40.0

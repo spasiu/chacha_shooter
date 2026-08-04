@@ -6,18 +6,30 @@
 ; The slide is the node named BoltHandle: the base magazine reload racks it
 ; back and forward at the end, which is exactly what loading a pistol looks
 ; like. The magazine lives inside the grip and drops out the bottom of it.
-[gd_scene load_steps=17 format=3]
+[gd_scene load_steps=25 format=3]
 
 [ext_resource type="Script" path="res://scripts/weapon.gd" id="1_weapon"]
+[ext_resource type="Texture2D" path="res://assets/textures/wood_grain.tres" id="90_wood"]
+[ext_resource type="Texture2D" path="res://assets/textures/cloth_grain.tres" id="91_wear"]
 
 [sub_resource type="StandardMaterial3D" id="Mat_metal"]
-albedo_color = Color(0.16, 0.16, 0.18, 1)
-metallic = 0.85
-roughness = 0.35
+albedo_color = Color(0.082, 0.082, 0.088, 1)
+albedo_texture = ExtResource("91_wear")
+metallic = 0.8
+metallic_specular = 0.5
+roughness = 0.52
+roughness_texture = ExtResource("91_wear")
+uv1_scale = Vector3(9, 9, 9)
+uv1_triplanar = true
 
 [sub_resource type="StandardMaterial3D" id="Mat_grip"]
-albedo_color = Color(0.27, 0.16, 0.09, 1)
-roughness = 0.7
+albedo_color = Color(0.205, 0.115, 0.06, 1)
+albedo_texture = ExtResource("90_wood")
+roughness = 0.52
+roughness_texture = ExtResource("90_wood")
+metallic_specular = 0.32
+uv1_scale = Vector3(24, 24, 3.4)
+uv1_triplanar = true
 
 [sub_resource type="StandardMaterial3D" id="Mat_flash"]
 transparency = 1
@@ -51,9 +63,12 @@ size = Vector3(0.032, 0.088, 0.042)
 material = SubResource("Mat_metal")
 size = Vector3(0.022, 0.084, 0.032)
 
-[sub_resource type="BoxMesh" id="Mesh_guard"]
+[sub_resource type="TorusMesh" id="Mesh_guard"]
 material = SubResource("Mat_metal")
-size = Vector3(0.01, 0.022, 0.034)
+inner_radius = 0.008
+outer_radius = 0.011
+rings = 16
+ring_segments = 6
 
 [sub_resource type="BoxMesh" id="Mesh_hammer"]
 material = SubResource("Mat_metal")
@@ -70,20 +85,54 @@ size = Vector3(0.006, 0.012, 0.006)
 ; Front post is deliberately oversized and pale so it reads against a dark
 ; target; a scale-accurate blade is only a few pixels wide.
 [sub_resource type="StandardMaterial3D" id="Mat_front_post"]
-albedo_color = Color(0.62, 0.63, 0.66, 1)
-metallic = 0.4
-roughness = 0.5
+albedo_color = Color(0.52, 0.53, 0.56, 1)
+metallic = 0.35
+roughness = 0.55
 
 [sub_resource type="BoxMesh" id="Mesh_front_blade"]
 material = SubResource("Mat_front_post")
 size = Vector3(0.006, 0.014, 0.006)
 
-[sub_resource type="SphereMesh" id="Mesh_flash"]
+[sub_resource type="CylinderMesh" id="Mesh_flash"]
 material = SubResource("Mat_flash")
-radius = 0.05
-height = 0.1
+top_radius = 0.0
+bottom_radius = 0.042
+height = 0.115
 radial_segments = 10
-rings = 5
+rings = 1
+cap_top = false
+
+
+; Openings -- ejection ports and the like. Near black and matte, so a shallow
+; inset reads as a hole rather than as a panel bolted on.
+[sub_resource type="StandardMaterial3D" id="Mat_shadow"]
+albedo_color = Color(0.022, 0.022, 0.024, 1)
+roughness = 1.0
+
+[sub_resource type="BoxMesh" id="Mesh_serration"]
+material = SubResource("Mat_metal")
+size = Vector3(0.0295, 0.026, 0.0035)
+
+[sub_resource type="BoxMesh" id="Mesh_port"]
+material = SubResource("Mat_shadow")
+size = Vector3(0.006, 0.013, 0.05)
+
+[sub_resource type="BoxMesh" id="Mesh_trigger"]
+material = SubResource("Mat_metal")
+size = Vector3(0.006, 0.018, 0.007)
+
+; Beavertail behind the hammer, which is where the web of the hand sits.
+[sub_resource type="BoxMesh" id="Mesh_tang"]
+material = SubResource("Mat_metal")
+size = Vector3(0.024, 0.012, 0.028)
+
+[sub_resource type="CylinderMesh" id="Mesh_bore"]
+material = SubResource("Mat_shadow")
+top_radius = 0.0052
+bottom_radius = 0.0052
+height = 0.03
+radial_segments = 10
+rings = 1
 
 [node name="WeaponM1911" type="Node3D"]
 script = ExtResource("1_weapon")
@@ -110,7 +159,6 @@ aim_recoil_factor = 0.5
 sway_amplitude = 1.6
 sway_period = 3.0
 magazine_size = 7
-reserve_ammo = 35
 reload_time = 2.0
 
 [node name="BoltHandle" type="MeshInstance3D" parent="."]
@@ -138,7 +186,7 @@ transform = Transform3D(1, 0, 0, 0, 0.951057, 0.309017, 0, -0.309017, 0.951057, 
 mesh = SubResource("Mesh_mag")
 
 [node name="TriggerGuard" type="MeshInstance3D" parent="."]
-transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, -0.026, -0.012)
+transform = Transform3D(0, -1, 0, 1, 0, 0, 0, 0, 1.5, 0, -0.026, -0.012)
 mesh = SubResource("Mesh_guard")
 
 ; Sight line runs at y=0.044 along the top of the slide.
@@ -176,7 +224,7 @@ transform = Transform3D(1, 0, 0, 0, 0.951057, 0.309017, 0, -0.309017, 0.951057, 
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0.022, -0.162)
 
 [node name="MuzzleFlash" type="MeshInstance3D" parent="Muzzle"]
-transform = Transform3D(0.7, 0, 0, 0, 0.6, 0, 0, 0, 1.3, 0, 0, -0.04)
+transform = Transform3D(0.7, 0, 0, 0, 0, 0.6, 0, -1.3, 0, 0, 0, -0.072)
 visible = false
 mesh = SubResource("Mesh_flash")
 
@@ -189,3 +237,37 @@ omni_range = 7.0
 [node name="FireSound" type="AudioStreamPlayer" parent="."]
 
 [node name="ReloadSound" type="AudioStreamPlayer" parent="."]
+
+[node name="SerrationA" type="MeshInstance3D" parent="BoltHandle"]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0, 0.062)
+mesh = SubResource("Mesh_serration")
+
+[node name="SerrationB" type="MeshInstance3D" parent="BoltHandle"]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0, 0.073)
+mesh = SubResource("Mesh_serration")
+
+[node name="SerrationC" type="MeshInstance3D" parent="BoltHandle"]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0, 0.084)
+mesh = SubResource("Mesh_serration")
+
+[node name="SerrationD" type="MeshInstance3D" parent="BoltHandle"]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0, 0.095)
+mesh = SubResource("Mesh_serration")
+
+[node name="EjectionPort" type="MeshInstance3D" parent="BoltHandle"]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0.0125, 0.006, 0.035)
+mesh = SubResource("Mesh_port")
+
+[node name="Trigger" type="MeshInstance3D" parent="."]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, -0.022, -0.006)
+mesh = SubResource("Mesh_trigger")
+
+[node name="Tang" type="MeshInstance3D" parent="."]
+transform = Transform3D(1, 0, 0, 0, 0.99619, 0.08716, 0, -0.08716, 0.99619, 0, 0.014, 0.056)
+mesh = SubResource("Mesh_tang")
+
+; The hole the round leaves by. Recessed a little so it stays dark from any
+; angle rather than catching the sun like a coin.
+[node name="Bore" type="MeshInstance3D" parent="."]
+transform = Transform3D(1, 0, 0, 0, 0, -1, 0, 1, 0, 0, 0.022, -0.155)
+mesh = SubResource("Mesh_bore")

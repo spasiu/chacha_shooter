@@ -1,0 +1,73 @@
+; Somebody else's soldier. The same body the local player wears, on a physics
+; body so it stops bullets, plus the two things only a remote soldier needs: a
+; name over its head and a positional voice for its gunfire and its wounds.
+;
+; AnimatableBody3D rather than CharacterBody3D because nothing here simulates:
+; the position arrives off the wire and is written straight in.
+;
+; It sits on layer 2 and collides with nothing, which is what keeps soldiers
+; from shoving each other. That is not a preference -- a body whose position is
+; teleported twenty times a second is not a body a physics engine can push
+; against sanely, and two of them overlapping resolve the overlap by launching
+; each other into the sky. Walking through somebody is a far smaller price than
+; that, and layer 2 is still hit by every ray in the game: rounds, fragments and
+; the tank's coaxial all query every layer, so a soldier standing there stops
+; them exactly as before.
+[gd_scene load_steps=4 format=3]
+
+[ext_resource type="Script" path="res://scripts/remote_player.gd" id="1_remote"]
+[ext_resource type="PackedScene" path="res://scenes/character_body.tscn" id="2_body"]
+
+[sub_resource type="CapsuleShape3D" id="CapsuleShape3D_1"]
+radius = 0.4
+height = 1.8
+
+[node name="RemotePlayer" type="AnimatableBody3D"]
+collision_layer = 2
+collision_mask = 0
+sync_to_physics = false
+script = ExtResource("1_remote")
+
+[node name="CollisionShape3D" type="CollisionShape3D" parent="."]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0.9, 0)
+shape = SubResource("CapsuleShape3D_1")
+
+[node name="CharacterBody" parent="." instance=ExtResource("2_body")]
+
+; Deliberately a marker rather than a label on a body: fixed size so it stays
+; legible from across the field, and drawn over the terrain rather than behind
+; it, so a soldier in dead ground or over a rise still shows.
+;
+; That is a real choice and not a free one -- it means you can see where people
+; are through solid earth, which in a shooter is normally the last thing you
+; want. It is here because the alternative turned out to be worse: on a 228m
+; map, two people who cannot find each other conclude they are in separate
+; games, and a shared world nobody can find anybody in is not worth much. If
+; this ever wants to become a competitive game rather than a place to muck about
+; with friends, this is the first thing to take back out.
+[node name="NameTag" type="Label3D" parent="."]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 2.05, 0)
+billboard = 1
+shaded = false
+no_depth_test = true
+fixed_size = true
+render_priority = 2
+outline_render_priority = 1
+pixel_size = 0.0004
+outline_size = 26
+modulate = Color(1, 1, 1, 0.85)
+outline_modulate = Color(0, 0, 0, 0.8)
+font_size = 96
+text = "SOLDIER"
+
+[node name="HitSound" type="AudioStreamPlayer3D" parent="."]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 1.2, 0)
+unit_size = 6.0
+max_distance = 60.0
+
+; Carries as far as a rifle shot should, which is a good deal further than the
+; default rolloff would let it.
+[node name="ShotSound" type="AudioStreamPlayer3D" parent="."]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 1.5, 0)
+unit_size = 18.0
+max_distance = 200.0

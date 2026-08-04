@@ -1,0 +1,22 @@
+; The dedicated server, which is the whole game with everything drawable taken
+; out of it. All that is left is one copy of the terrain, kept so that somebody
+; joining an hour late arrives in the world everyone else has been shooting at
+; rather than a pristine one.
+;
+; It simulates no soldiers, traces no rounds and renders nothing. Run it with:
+;   godot --headless --path . res://scenes/server.tscn -- --server
+[gd_scene load_steps=3 format=3]
+
+[ext_resource type="Script" path="res://scripts/server_root.gd" id="1_server"]
+[ext_resource type="Script" path="res://scripts/voxel_world.gd" id="2_voxel"]
+
+[node name="Server" type="Node"]
+script = ExtResource("1_server")
+
+; A dedicated server holds one map's terrain and has nobody to ask which, so it
+; names one. Players who picked a different ground still share the socket and
+; still play each other -- they just get a clean world rather than this one's.
+[node name="VoxelWorld" type="Node3D" parent="."]
+map_id = "shipment"
+script = ExtResource("2_voxel")
+meshless = true

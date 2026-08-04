@@ -1,0 +1,92 @@
+; Thrown smoke canister. The cloud is a GPU particle system of billboarded
+; quads; `visibility_aabb` is deliberately generous because the particles drift
+; well outside the emitter and would otherwise be culled as the camera turns.
+[gd_scene load_steps=12 format=3]
+
+[ext_resource type="Script" path="res://scripts/smoke_projectile.gd" id="1_smoke"]
+[ext_resource type="Texture2D" path="res://assets/textures/smoke_puff.png" id="3_puff"]
+
+[sub_resource type="PhysicsMaterial" id="Phys_can"]
+friction = 1.0
+bounce = 0.04
+
+[sub_resource type="CylinderShape3D" id="Shape_can"]
+radius = 0.034
+height = 0.115
+
+[sub_resource type="StandardMaterial3D" id="Mat_can"]
+albedo_color = Color(0.29, 0.32, 0.26, 1)
+metallic = 0.55
+roughness = 0.6
+
+[sub_resource type="CylinderMesh" id="Mesh_can"]
+material = SubResource("Mat_can")
+top_radius = 0.032
+bottom_radius = 0.032
+height = 0.115
+radial_segments = 10
+rings = 1
+
+; Alpha in, then a long fade out, so the cloud thins rather than blinking away.
+[sub_resource type="Gradient" id="Grad_smoke"]
+offsets = PackedFloat32Array(0, 0.18, 0.7, 1)
+colors = PackedColorArray(1, 1, 1, 0, 1, 1, 1, 0.42, 1, 1, 1, 0.3, 1, 1, 1, 0)
+
+[sub_resource type="GradientTexture1D" id="GradTex_smoke"]
+gradient = SubResource("Grad_smoke")
+
+[sub_resource type="ParticleProcessMaterial" id="Proc_smoke"]
+emission_shape = 1
+emission_sphere_radius = 0.4
+direction = Vector3(0, 1, 0)
+spread = 62.0
+initial_velocity_min = 0.5
+initial_velocity_max = 1.9
+gravity = Vector3(0, 0.07, 0)
+damping_min = 0.5
+damping_max = 1.1
+scale_min = 1.7
+scale_max = 3.4
+color_ramp = SubResource("GradTex_smoke")
+
+[sub_resource type="StandardMaterial3D" id="Mat_smoke"]
+transparency = 1
+shading_mode = 0
+vertex_color_use_as_albedo = true
+albedo_color = Color(0.85, 0.85, 0.88, 1)
+albedo_texture = ExtResource("3_puff")
+billboard_mode = 1
+billboard_keep_scale = true
+
+[sub_resource type="QuadMesh" id="Mesh_puff"]
+material = SubResource("Mat_smoke")
+size = Vector2(1.7, 1.7)
+
+[node name="SmokeProjectile" type="RigidBody3D"]
+physics_material_override = SubResource("Phys_can")
+continuous_cd = true
+linear_damp = 0.4
+angular_damp = 6.0
+script = ExtResource("1_smoke")
+
+[node name="CollisionShape3D" type="CollisionShape3D" parent="."]
+shape = SubResource("Shape_can")
+
+[node name="Body" type="MeshInstance3D" parent="."]
+mesh = SubResource("Mesh_can")
+
+[node name="Smoke" type="GPUParticles3D" parent="."]
+emitting = false
+amount = 170
+lifetime = 6.5
+randomness = 0.5
+fixed_fps = 30
+visibility_aabb = AABB(-7, -2, -7, 14, 11, 14)
+local_coords = false
+draw_order = 2
+process_material = SubResource("Proc_smoke")
+draw_pass_1 = SubResource("Mesh_puff")
+
+[node name="Sound" type="AudioStreamPlayer3D" parent="."]
+unit_size = 8.0
+max_distance = 55.0

@@ -1,4 +1,4 @@
-[gd_scene load_steps=16 format=3]
+[gd_scene load_steps=20 format=3]
 
 [ext_resource type="Script" path="res://scripts/player.gd" id="1_player"]
 [ext_resource type="PackedScene" path="res://scenes/weapon_thompson.tscn" id="2_weapon"]
@@ -11,7 +11,11 @@
 [ext_resource type="PackedScene" path="res://scenes/weapon_bar.tscn" id="11_bar"]
 [ext_resource type="PackedScene" path="res://scenes/weapon_m1911.tscn" id="12_m1911"]
 [ext_resource type="PackedScene" path="res://scenes/weapon_johnson.tscn" id="13_johnson"]
+[ext_resource type="PackedScene" path="res://scenes/weapon_radio.tscn" id="14_radio"]
+[ext_resource type="PackedScene" path="res://scenes/weapon_tnt.tscn" id="16_tnt"]
 [ext_resource type="PackedScene" path="res://scenes/weapon_shovel.tscn" id="20_shovel"]
+[ext_resource type="PackedScene" path="res://scenes/weapon_smoke.tscn" id="21_smoke"]
+[ext_resource type="PackedScene" path="res://scenes/weapon_medic.tscn" id="22_medic"]
 [ext_resource type="PackedScene" path="res://scenes/viewmodel_arms.tscn" id="4_arms"]
 [ext_resource type="PackedScene" path="res://scenes/character_body.tscn" id="5_body"]
 
@@ -65,7 +69,20 @@ visible = false
 [node name="WeaponJohnson" parent="Head/Camera3D/WeaponSocket" instance=ExtResource("13_johnson")]
 visible = false
 
+[node name="WeaponRadio" parent="Head/Camera3D/WeaponSocket" instance=ExtResource("14_radio")]
+visible = false
+
+[node name="WeaponTNT" parent="Head/Camera3D/WeaponSocket" instance=ExtResource("16_tnt")]
+visible = false
+
+
 [node name="WeaponShovel" parent="Head/Camera3D/WeaponSocket" instance=ExtResource("20_shovel")]
+visible = false
+
+[node name="WeaponSmoke" parent="Head/Camera3D/WeaponSocket" instance=ExtResource("21_smoke")]
+visible = false
+
+[node name="WeaponMedic" parent="Head/Camera3D/WeaponSocket" instance=ExtResource("22_medic")]
 visible = false
 
 [node name="ViewmodelArms" parent="Head/Camera3D" instance=ExtResource("4_arms")]

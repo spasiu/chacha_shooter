@@ -1,0 +1,69 @@
+; A called fire mission. Added to the world by the radio and left to run its
+; own clock; see artillery_strike.gd for the timeline.
+;
+; Only Zone is scaled to the beaten zone -- the column deliberately is not, or
+; scaling a fifty yard radius would stretch it into a wall hundreds of metres
+; high. Both skip the depth test: the point of the marker is to be seen from
+; anywhere, including from inside the zone, where the ground it is lying on is
+; about to stop existing.
+[gd_scene load_steps=6 format=3]
+
+[ext_resource type="Script" path="res://scripts/artillery_strike.gd" id="1_strike"]
+
+[sub_resource type="StandardMaterial3D" id="Mat_ring"]
+transparency = 1
+shading_mode = 0
+no_depth_test = true
+cull_mode = 2
+albedo_color = Color(1, 0.26, 0.16, 0.42)
+emission_enabled = true
+emission = Color(1, 0.3, 0.16, 1)
+emission_energy_multiplier = 2.5
+
+[sub_resource type="StandardMaterial3D" id="Mat_column"]
+transparency = 1
+shading_mode = 0
+no_depth_test = true
+cull_mode = 2
+albedo_color = Color(1, 0.3, 0.18, 0.16)
+emission_enabled = true
+emission = Color(1, 0.34, 0.18, 1)
+emission_energy_multiplier = 1.6
+
+; Unit radius: the strike scales Zone to the real one. Thin, because at fifty
+; yards across even a narrow band covers a lot of ground.
+[sub_resource type="TorusMesh" id="Mesh_ring"]
+material = SubResource("Mat_ring")
+inner_radius = 0.965
+outer_radius = 1.0
+rings = 64
+ring_segments = 6
+
+[sub_resource type="CylinderMesh" id="Mesh_column"]
+material = SubResource("Mat_column")
+top_radius = 0.9
+bottom_radius = 1.6
+height = 70.0
+radial_segments = 12
+rings = 1
+
+[node name="ArtilleryStrike" type="Node3D"]
+script = ExtResource("1_strike")
+
+[node name="Marker" type="Node3D" parent="."]
+
+[node name="Zone" type="Node3D" parent="Marker"]
+
+[node name="Ring" type="MeshInstance3D" parent="Marker/Zone"]
+mesh = SubResource("Mesh_ring")
+
+; Goes up rather than out: from ground level the ring is edge on and nearly
+; invisible, and this is what you actually see coming from across the map.
+[node name="Column" type="MeshInstance3D" parent="Marker"]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 35, 0)
+mesh = SubResource("Mesh_column")
+
+; Not positional: the battery is miles away, so its report arrives the same
+; wherever you happen to be standing.
+[node name="CannonSound" type="AudioStreamPlayer" parent="."]
+volume_db = 6.0

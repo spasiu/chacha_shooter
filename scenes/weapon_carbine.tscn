@@ -4,23 +4,35 @@
 ; Sight line runs at y=0.068, clear of the receiver, handguard, barrel band and
 ; the operating slide handle -- the handle sits on the right flank rather than
 ; on top, which is where it would block the aperture.
-[gd_scene load_steps=23 format=3]
+[gd_scene load_steps=30 format=3]
 
 [ext_resource type="Script" path="res://scripts/weapon.gd" id="1_weapon"]
+[ext_resource type="Texture2D" path="res://assets/textures/wood_grain.tres" id="90_wood"]
+[ext_resource type="Texture2D" path="res://assets/textures/cloth_grain.tres" id="91_wear"]
 
 [sub_resource type="StandardMaterial3D" id="Mat_steel"]
-albedo_color = Color(0.1, 0.1, 0.12, 1)
-metallic = 0.85
-roughness = 0.32
+albedo_color = Color(0.082, 0.082, 0.088, 1)
+albedo_texture = ExtResource("91_wear")
+metallic = 0.8
+metallic_specular = 0.5
+roughness = 0.52
+roughness_texture = ExtResource("91_wear")
+uv1_scale = Vector3(9, 9, 9)
+uv1_triplanar = true
 
 [sub_resource type="StandardMaterial3D" id="Mat_wood"]
-albedo_color = Color(0.42, 0.22, 0.12, 1)
-roughness = 0.6
+albedo_color = Color(0.205, 0.115, 0.06, 1)
+albedo_texture = ExtResource("90_wood")
+roughness = 0.52
+roughness_texture = ExtResource("90_wood")
+metallic_specular = 0.32
+uv1_scale = Vector3(24, 24, 3.4)
+uv1_triplanar = true
 
 [sub_resource type="StandardMaterial3D" id="Mat_front"]
-albedo_color = Color(0.62, 0.63, 0.66, 1)
-metallic = 0.4
-roughness = 0.5
+albedo_color = Color(0.52, 0.53, 0.56, 1)
+metallic = 0.35
+roughness = 0.55
 
 [sub_resource type="StandardMaterial3D" id="Mat_flash"]
 transparency = 1
@@ -36,8 +48,8 @@ size = Vector3(0.042, 0.058, 0.26)
 
 [sub_resource type="CylinderMesh" id="Mesh_barrel"]
 material = SubResource("Mat_steel")
-top_radius = 0.011
-bottom_radius = 0.012
+top_radius = 0.0102
+bottom_radius = 0.0122
 height = 0.4
 radial_segments = 12
 rings = 1
@@ -70,9 +82,12 @@ size = Vector3(0.05, 0.105, 0.012)
 material = SubResource("Mat_steel")
 size = Vector3(0.026, 0.1, 0.042)
 
-[sub_resource type="BoxMesh" id="Mesh_guard"]
+[sub_resource type="TorusMesh" id="Mesh_guard"]
 material = SubResource("Mat_steel")
-size = Vector3(0.03, 0.022, 0.055)
+inner_radius = 0.009
+outer_radius = 0.013
+rings = 16
+ring_segments = 6
 
 [sub_resource type="BoxMesh" id="Mesh_bolt"]
 material = SubResource("Mat_steel")
@@ -98,15 +113,50 @@ size = Vector3(0.008, 0.024, 0.008)
 material = SubResource("Mat_steel")
 size = Vector3(0.005, 0.03, 0.008)
 
-[sub_resource type="SphereMesh" id="Mesh_flash"]
+[sub_resource type="CylinderMesh" id="Mesh_flash"]
 material = SubResource("Mat_flash")
-radius = 0.045
-height = 0.09
+top_radius = 0.0
+bottom_radius = 0.042
+height = 0.115
 radial_segments = 10
-rings = 5
+rings = 1
+cap_top = false
+
+
+; Openings -- ejection ports and the like. Near black and matte, so a shallow
+; inset reads as a hole rather than as a panel bolted on.
+[sub_resource type="StandardMaterial3D" id="Mat_shadow"]
+albedo_color = Color(0.022, 0.022, 0.024, 1)
+roughness = 1.0
+
+[sub_resource type="BoxMesh" id="Mesh_trigger"]
+material = SubResource("Mat_steel")
+size = Vector3(0.007, 0.026, 0.009)
+
+[sub_resource type="BoxMesh" id="Mesh_port"]
+material = SubResource("Mat_shadow")
+size = Vector3(0.006, 0.02, 0.052)
+
+; Sling swivels. Barely a centimetre across and worth every one of their
+; triangles: nothing else says "issued to a soldier" at fifty yards.
+[sub_resource type="TorusMesh" id="Mesh_swivel"]
+material = SubResource("Mat_steel")
+inner_radius = 0.005
+outer_radius = 0.009
+rings = 12
+ring_segments = 6
+
+[sub_resource type="CylinderMesh" id="Mesh_bore"]
+material = SubResource("Mat_shadow")
+top_radius = 0.0055
+bottom_radius = 0.0055
+height = 0.03
+radial_segments = 10
+rings = 1
 
 [node name="WeaponCarbine" type="Node3D"]
 script = ExtResource("1_weapon")
+move_penalty = 0.1
 rounds_per_minute = 350.0
 max_range = 228.6
 automatic = false
@@ -115,11 +165,10 @@ min_spread = 0.15
 max_spread = 2.0
 bloom_per_shot = 0.1
 bloom_recovery = 1.1
-recoil_pitch = 0.95
-recoil_yaw = 0.28
-kick_back = 0.045
+recoil_pitch = 0.6
+recoil_yaw = 0.18
+kick_back = 0.03
 magazine_size = 15
-reserve_ammo = 90
 reload_time = 2.2
 sway_amplitude = 1.5
 damage_short = 100.0
@@ -166,7 +215,7 @@ transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, -0.068, -0.06)
 mesh = SubResource("Mesh_magazine")
 
 [node name="TriggerGuard" type="MeshInstance3D" parent="."]
-transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, -0.048, 0.01)
+transform = Transform3D(0, -1, 0, 1, 0, 0, 0, 0, 1.9, 0, -0.048, 0.01)
 mesh = SubResource("Mesh_guard")
 
 [node name="BoltHandle" type="MeshInstance3D" parent="."]
@@ -219,7 +268,7 @@ transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, -0.005, -0.33)
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0.028, -0.605)
 
 [node name="MuzzleFlash" type="MeshInstance3D" parent="Muzzle"]
-transform = Transform3D(0.9, 0, 0, 0, 0.75, 0, 0, 0, 1.9, 0, 0, -0.04)
+transform = Transform3D(0.9, 0, 0, 0, 0, 0.75, 0, -1.9, 0, 0, 0, -0.104)
 visible = false
 mesh = SubResource("Mesh_flash")
 
@@ -232,3 +281,25 @@ omni_range = 7.0
 [node name="FireSound" type="AudioStreamPlayer" parent="."]
 
 [node name="ReloadSound" type="AudioStreamPlayer" parent="."]
+
+[node name="Trigger" type="MeshInstance3D" parent="."]
+transform = Transform3D(1, 0, 0, 0, 0.98481, 0.17365, 0, -0.17365, 0.98481, 0, -0.042, 0.013)
+mesh = SubResource("Mesh_trigger")
+
+[node name="EjectionPort" type="MeshInstance3D" parent="."]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0.0195, 0.026, -0.078)
+mesh = SubResource("Mesh_port")
+
+[node name="SwivelFront" type="MeshInstance3D" parent="."]
+transform = Transform3D(0, -1, 0, 1, 0, 0, 0, 0, 1, 0, -0.008, -0.445)
+mesh = SubResource("Mesh_swivel")
+
+[node name="SwivelRear" type="MeshInstance3D" parent="."]
+transform = Transform3D(0, -1, 0, 1, 0, 0, 0, 0, 1, 0, -0.08, 0.27)
+mesh = SubResource("Mesh_swivel")
+
+; The hole the round leaves by. Recessed a little so it stays dark from any
+; angle rather than catching the sun like a coin.
+[node name="Bore" type="MeshInstance3D" parent="."]
+transform = Transform3D(1, 0, 0, 0, 0, -1, 0, 1, 0, 0, 0.028, -0.596)
+mesh = SubResource("Mesh_bore")

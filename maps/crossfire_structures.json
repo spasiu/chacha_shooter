@@ -1,0 +1,715 @@
+{
+ "name": "crossfire",
+ "title": "CROSSFIRE",
+ "blurb": "A village street. Long one way, blind the other, and armour in it.",
+ "size": 256,
+ "block": 0.25,
+ "metres": 64.0,
+ "depth_blocks": 16,
+ "build_height": 48,
+ "team_spawns": {
+  "blue": [
+   0.0,
+   -25.0
+  ],
+  "red": [
+   0.0,
+   25.0
+  ]
+ },
+ "capture_points": [],
+ "tanks": [
+  {
+   "x": 0.0,
+   "z": -16.5,
+   "yaw": 0.0
+  },
+  {
+   "x": 0.0,
+   "z": 16.5,
+   "yaw": 180.0
+  }
+ ],
+ "ammo_boxes": [
+  [
+   -10.5,
+   12.0
+  ],
+  [
+   14.5,
+   -10.0
+  ],
+  [
+   7.5,
+   14.0
+  ],
+  [
+   -13.0,
+   -18.5
+  ],
+  [
+   15.0,
+   27.5
+  ],
+  [
+   -11.5,
+   0.0
+  ],
+  [
+   11.5,
+   0.0
+  ]
+ ],
+ "structures": [
+  {
+   "name": "crossfire west 0",
+   "x0": 0,
+   "z0": 96,
+   "x1": 70,
+   "z1": 142,
+   "from": 0,
+   "height": 22,
+   "type": "plaster",
+   "flat": true,
+   "gy": 17
+  },
+  {
+   "name": "crossfire west 0 inside 0",
+   "x0": 2,
+   "z0": 98,
+   "x1": 68,
+   "z1": 140,
+   "from": 1,
+   "height": 11,
+   "clear": true,
+   "flat": true,
+   "gy": 17
+  },
+  {
+   "name": "crossfire west 0 inside 1",
+   "x0": 2,
+   "z0": 98,
+   "x1": 68,
+   "z1": 140,
+   "from": 12,
+   "height": 22,
+   "clear": true,
+   "flat": true,
+   "gy": 17
+  },
+  {
+   "name": "crossfire west 0 roof",
+   "x0": -2,
+   "z0": 94,
+   "x1": 72,
+   "z1": 144,
+   "from": 0,
+   "height": 2,
+   "type": "tile",
+   "flat": true,
+   "gy": 39
+  },
+  {
+   "name": "crossfire west 0 door",
+   "x0": 68,
+   "z0": 114,
+   "x1": 70,
+   "z1": 126,
+   "from": 0,
+   "height": 9,
+   "clear": true,
+   "flat": true,
+   "gy": 17
+  },
+  {
+   "name": "crossfire west 0 window 0",
+   "x0": 68,
+   "z0": 100,
+   "x1": 70,
+   "z1": 112,
+   "from": 4,
+   "height": 10,
+   "clear": true,
+   "flat": true,
+   "gy": 17
+  },
+  {
+   "name": "crossfire west 0 window 1",
+   "x0": 68,
+   "z0": 128,
+   "x1": 70,
+   "z1": 138,
+   "from": 4,
+   "height": 10,
+   "clear": true,
+   "flat": true,
+   "gy": 17
+  },
+  {
+   "name": "crossfire west 0 window 2",
+   "x0": 68,
+   "z0": 104,
+   "x1": 70,
+   "z1": 116,
+   "from": 15,
+   "height": 21,
+   "clear": true,
+   "flat": true,
+   "gy": 17
+  },
+  {
+   "name": "crossfire east 0",
+   "x0": 186,
+   "z0": 116,
+   "x1": 256,
+   "z1": 162,
+   "from": 0,
+   "height": 33,
+   "type": "brick",
+   "flat": true,
+   "gy": 17
+  },
+  {
+   "name": "crossfire east 0 inside 0",
+   "x0": 188,
+   "z0": 118,
+   "x1": 254,
+   "z1": 160,
+   "from": 1,
+   "height": 11,
+   "clear": true,
+   "flat": true,
+   "gy": 17
+  },
+  {
+   "name": "crossfire east 0 inside 1",
+   "x0": 188,
+   "z0": 118,
+   "x1": 254,
+   "z1": 160,
+   "from": 12,
+   "height": 22,
+   "clear": true,
+   "flat": true,
+   "gy": 17
+  },
+  {
+   "name": "crossfire east 0 inside 2",
+   "x0": 188,
+   "z0": 118,
+   "x1": 254,
+   "z1": 160,
+   "from": 23,
+   "height": 33,
+   "clear": true,
+   "flat": true,
+   "gy": 17
+  },
+  {
+   "name": "crossfire east 0 roof",
+   "x0": 184,
+   "z0": 114,
+   "x1": 258,
+   "z1": 164,
+   "from": 0,
+   "height": 2,
+   "type": "tile",
+   "flat": true,
+   "gy": 50
+  },
+  {
+   "name": "crossfire east 0 door",
+   "x0": 186,
+   "z0": 134,
+   "x1": 188,
+   "z1": 146,
+   "from": 0,
+   "height": 9,
+   "clear": true,
+   "flat": true,
+   "gy": 17
+  },
+  {
+   "name": "crossfire east 0 window 0",
+   "x0": 186,
+   "z0": 120,
+   "x1": 188,
+   "z1": 130,
+   "from": 4,
+   "height": 10,
+   "clear": true,
+   "flat": true,
+   "gy": 17
+  },
+  {
+   "name": "crossfire east 0 window 1",
+   "x0": 186,
+   "z0": 150,
+   "x1": 188,
+   "z1": 160,
+   "from": 4,
+   "height": 10,
+   "clear": true,
+   "flat": true,
+   "gy": 17
+  },
+  {
+   "name": "crossfire east 0 window 2",
+   "x0": 186,
+   "z0": 124,
+   "x1": 188,
+   "z1": 134,
+   "from": 15,
+   "height": 21,
+   "clear": true,
+   "flat": true,
+   "gy": 17
+  },
+  {
+   "name": "crossfire west 1",
+   "x0": 0,
+   "z0": 160,
+   "x1": 70,
+   "z1": 206,
+   "from": 0,
+   "height": 33,
+   "type": "plaster",
+   "flat": true,
+   "gy": 17
+  },
+  {
+   "name": "crossfire west 1 inside 0",
+   "x0": 2,
+   "z0": 162,
+   "x1": 68,
+   "z1": 204,
+   "from": 1,
+   "height": 11,
+   "clear": true,
+   "flat": true,
+   "gy": 17
+  },
+  {
+   "name": "crossfire west 1 inside 1",
+   "x0": 2,
+   "z0": 162,
+   "x1": 68,
+   "z1": 204,
+   "from": 12,
+   "height": 22,
+   "clear": true,
+   "flat": true,
+   "gy": 17
+  },
+  {
+   "name": "crossfire west 1 inside 2",
+   "x0": 2,
+   "z0": 162,
+   "x1": 68,
+   "z1": 204,
+   "from": 23,
+   "height": 33,
+   "clear": true,
+   "flat": true,
+   "gy": 17
+  },
+  {
+   "name": "crossfire west 1 roof",
+   "x0": -2,
+   "z0": 158,
+   "x1": 72,
+   "z1": 208,
+   "from": 0,
+   "height": 2,
+   "type": "tile",
+   "flat": true,
+   "gy": 50
+  },
+  {
+   "name": "crossfire west 1 door",
+   "x0": 68,
+   "z0": 178,
+   "x1": 70,
+   "z1": 190,
+   "from": 0,
+   "height": 9,
+   "clear": true,
+   "flat": true,
+   "gy": 17
+  },
+  {
+   "name": "crossfire west 1 window 0",
+   "x0": 68,
+   "z0": 164,
+   "x1": 70,
+   "z1": 176,
+   "from": 4,
+   "height": 10,
+   "clear": true,
+   "flat": true,
+   "gy": 17
+  },
+  {
+   "name": "crossfire west 1 window 1",
+   "x0": 68,
+   "z0": 192,
+   "x1": 70,
+   "z1": 202,
+   "from": 4,
+   "height": 10,
+   "clear": true,
+   "flat": true,
+   "gy": 17
+  },
+  {
+   "name": "crossfire west 1 window 2",
+   "x0": 68,
+   "z0": 168,
+   "x1": 70,
+   "z1": 180,
+   "from": 15,
+   "height": 21,
+   "clear": true,
+   "flat": true,
+   "gy": 17
+  },
+  {
+   "name": "crossfire east 1",
+   "x0": 186,
+   "z0": 180,
+   "x1": 256,
+   "z1": 226,
+   "from": 0,
+   "height": 22,
+   "type": "brick",
+   "flat": true,
+   "gy": 17
+  },
+  {
+   "name": "crossfire east 1 inside 0",
+   "x0": 188,
+   "z0": 182,
+   "x1": 254,
+   "z1": 224,
+   "from": 1,
+   "height": 11,
+   "clear": true,
+   "flat": true,
+   "gy": 17
+  },
+  {
+   "name": "crossfire east 1 inside 1",
+   "x0": 188,
+   "z0": 182,
+   "x1": 254,
+   "z1": 224,
+   "from": 12,
+   "height": 22,
+   "clear": true,
+   "flat": true,
+   "gy": 17
+  },
+  {
+   "name": "crossfire east 1 roof",
+   "x0": 184,
+   "z0": 178,
+   "x1": 258,
+   "z1": 228,
+   "from": 0,
+   "height": 2,
+   "type": "tile",
+   "flat": true,
+   "gy": 39
+  },
+  {
+   "name": "crossfire east 1 door",
+   "x0": 186,
+   "z0": 198,
+   "x1": 188,
+   "z1": 210,
+   "from": 0,
+   "height": 9,
+   "clear": true,
+   "flat": true,
+   "gy": 17
+  },
+  {
+   "name": "crossfire east 1 window 0",
+   "x0": 186,
+   "z0": 184,
+   "x1": 188,
+   "z1": 194,
+   "from": 4,
+   "height": 10,
+   "clear": true,
+   "flat": true,
+   "gy": 17
+  },
+  {
+   "name": "crossfire east 1 window 1",
+   "x0": 186,
+   "z0": 214,
+   "x1": 188,
+   "z1": 224,
+   "from": 4,
+   "height": 10,
+   "clear": true,
+   "flat": true,
+   "gy": 17
+  },
+  {
+   "name": "crossfire east 1 window 2",
+   "x0": 186,
+   "z0": 188,
+   "x1": 188,
+   "z1": 198,
+   "from": 15,
+   "height": 21,
+   "clear": true,
+   "flat": true,
+   "gy": 17
+  },
+  {
+   "name": "crossfire rubble 0",
+   "x0": 142,
+   "z0": 112,
+   "x1": 158,
+   "z1": 124,
+   "from": 0,
+   "height": 4,
+   "type": "sand"
+  },
+  {
+   "name": "crossfire lorry",
+   "x0": 118,
+   "z0": 228,
+   "x1": 138,
+   "z1": 254,
+   "from": 0,
+   "height": 9,
+   "type": "rust"
+  },
+  {
+   "name": "crossfire lorry cab",
+   "x0": 118,
+   "z0": 220,
+   "x1": 138,
+   "z1": 230,
+   "from": 0,
+   "height": 12,
+   "type": "steel"
+  },
+  {
+   "name": "blue base floor",
+   "x0": 82,
+   "z0": 6,
+   "x1": 174,
+   "z1": 46,
+   "from": 0,
+   "height": 1,
+   "type": "team_blue",
+   "flat": true,
+   "gy": 17
+  },
+  {
+   "name": "blue base wall north",
+   "x0": 82,
+   "z0": 6,
+   "x1": 174,
+   "z1": 12,
+   "from": 0,
+   "height": 14,
+   "type": "concrete"
+  },
+  {
+   "name": "blue base wall south a",
+   "x0": 82,
+   "z0": 40,
+   "x1": 112,
+   "z1": 46,
+   "from": 0,
+   "height": 14,
+   "type": "concrete"
+  },
+  {
+   "name": "blue base wall south b",
+   "x0": 144,
+   "z0": 40,
+   "x1": 174,
+   "z1": 46,
+   "from": 0,
+   "height": 14,
+   "type": "concrete"
+  },
+  {
+   "name": "blue base wall west",
+   "x0": 82,
+   "z0": 6,
+   "x1": 88,
+   "z1": 46,
+   "from": 0,
+   "height": 14,
+   "type": "concrete"
+  },
+  {
+   "name": "blue base wall east",
+   "x0": 168,
+   "z0": 6,
+   "x1": 174,
+   "z1": 46,
+   "from": 0,
+   "height": 14,
+   "type": "concrete"
+  },
+  {
+   "name": "blue base colours",
+   "x0": 88,
+   "z0": 12,
+   "x1": 168,
+   "z1": 16,
+   "from": 0,
+   "height": 16,
+   "type": "team_blue"
+  },
+  {
+   "name": "blue base mast",
+   "x0": 126,
+   "z0": 24,
+   "x1": 130,
+   "z1": 28,
+   "from": 0,
+   "height": 28,
+   "type": "team_blue"
+  },
+  {
+   "name": "blue base stores",
+   "x0": 94,
+   "z0": 18,
+   "x1": 112,
+   "z1": 32,
+   "from": 0,
+   "height": 7,
+   "type": "canvas",
+   "flat": true,
+   "gy": 17
+  },
+  {
+   "name": "blue base crates",
+   "x0": 144,
+   "z0": 20,
+   "x1": 160,
+   "z1": 30,
+   "from": 0,
+   "height": 6,
+   "type": "wood",
+   "flat": true,
+   "gy": 17
+  },
+  {
+   "name": "red base floor",
+   "x0": 82,
+   "z0": 210,
+   "x1": 174,
+   "z1": 250,
+   "from": 0,
+   "height": 1,
+   "type": "team_red",
+   "flat": true,
+   "gy": 17
+  },
+  {
+   "name": "red base wall north a",
+   "x0": 82,
+   "z0": 210,
+   "x1": 112,
+   "z1": 216,
+   "from": 0,
+   "height": 14,
+   "type": "concrete"
+  },
+  {
+   "name": "red base wall north b",
+   "x0": 144,
+   "z0": 210,
+   "x1": 174,
+   "z1": 216,
+   "from": 0,
+   "height": 14,
+   "type": "concrete"
+  },
+  {
+   "name": "red base wall south",
+   "x0": 82,
+   "z0": 244,
+   "x1": 174,
+   "z1": 250,
+   "from": 0,
+   "height": 14,
+   "type": "concrete"
+  },
+  {
+   "name": "red base wall west",
+   "x0": 82,
+   "z0": 210,
+   "x1": 88,
+   "z1": 250,
+   "from": 0,
+   "height": 14,
+   "type": "concrete"
+  },
+  {
+   "name": "red base wall east",
+   "x0": 168,
+   "z0": 210,
+   "x1": 174,
+   "z1": 250,
+   "from": 0,
+   "height": 14,
+   "type": "concrete"
+  },
+  {
+   "name": "red base colours",
+   "x0": 88,
+   "z0": 240,
+   "x1": 168,
+   "z1": 244,
+   "from": 0,
+   "height": 16,
+   "type": "team_red"
+  },
+  {
+   "name": "red base mast",
+   "x0": 126,
+   "z0": 228,
+   "x1": 130,
+   "z1": 232,
+   "from": 0,
+   "height": 28,
+   "type": "team_red"
+  },
+  {
+   "name": "red base stores",
+   "x0": 94,
+   "z0": 222,
+   "x1": 112,
+   "z1": 236,
+   "from": 0,
+   "height": 7,
+   "type": "canvas",
+   "flat": true,
+   "gy": 17
+  },
+  {
+   "name": "red base crates",
+   "x0": 144,
+   "z0": 224,
+   "x1": 160,
+   "z1": 234,
+   "from": 0,
+   "height": 6,
+   "type": "wood",
+   "flat": true,
+   "gy": 17
+  }
+ ]
+}

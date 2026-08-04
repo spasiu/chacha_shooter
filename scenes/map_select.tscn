@@ -1,0 +1,67 @@
+; Map screen, and the game's entry point. Only the frame lives here -- the
+; cards are built from MapCatalogue at runtime, so the catalogue is the single
+; place a map has to be listed.
+[gd_scene load_steps=2 format=3]
+
+[ext_resource type="Script" path="res://scripts/map_select.gd" id="1_maps"]
+
+[node name="MapSelect" type="Control"]
+anchor_right = 1.0
+anchor_bottom = 1.0
+script = ExtResource("1_maps")
+
+[node name="Backdrop" type="ColorRect" parent="."]
+anchor_right = 1.0
+anchor_bottom = 1.0
+mouse_filter = 2
+color = Color(0.065, 0.072, 0.065, 1)
+
+[node name="Root" type="VBoxContainer" parent="."]
+anchor_right = 1.0
+anchor_bottom = 1.0
+offset_left = 40.0
+offset_top = 32.0
+offset_right = -40.0
+offset_bottom = -32.0
+mouse_filter = 2
+alignment = 1
+theme_override_constants/separation = 18
+
+[node name="Title" type="Label" parent="Root"]
+mouse_filter = 2
+theme_override_colors/font_color = Color(0.93, 0.93, 0.9, 1)
+theme_override_font_sizes/font_size = 42
+text = "PICK YOUR GROUND"
+horizontal_alignment = 1
+
+[node name="Subtitle" type="Label" parent="Root"]
+mouse_filter = 2
+theme_override_colors/font_color = Color(0.6, 0.62, 0.58, 1)
+theme_override_font_sizes/font_size = 16
+text = "Every map is its own match."
+horizontal_alignment = 1
+
+[node name="Cards" type="HBoxContainer" parent="Root"]
+size_flags_horizontal = 4
+size_flags_vertical = 4
+theme_override_constants/separation = 16
+
+[node name="Status" type="Label" parent="Root"]
+mouse_filter = 2
+theme_override_colors/font_color = Color(0.55, 0.57, 0.53, 1)
+theme_override_font_sizes/font_size = 15
+text = "OFFLINE"
+horizontal_alignment = 1
+
+[node name="Next" type="Button" parent="Root"]
+custom_minimum_size = Vector2(280, 52)
+size_flags_horizontal = 4
+theme_override_font_sizes/font_size = 20
+text = "CHOOSE YOUR KIT"
+
+[node name="Hint" type="Label" parent="Root"]
+mouse_filter = 2
+theme_override_colors/font_color = Color(0.45, 0.47, 0.44, 1)
+theme_override_font_sizes/font_size = 13
+text = "Everyone on a map shares a field. The other maps are somebody else's match."
+horizontal_alignment = 1

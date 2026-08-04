@@ -1,22 +1,30 @@
 ; First-person arms. Bones are unit-height cylinders that the ArmRig stretches
 ; between shoulder, elbow and hand each frame, so nothing here is baked to a
 ; particular weapon. Shoulders sit behind the near plane and clip away.
-[gd_scene load_steps=7 format=3]
+[gd_scene load_steps=8 format=3]
 
 [ext_resource type="Script" path="res://scripts/arm_rig.gd" id="1_rig"]
+[ext_resource type="Texture2D" path="res://assets/textures/cloth_grain.tres" id="4_grain"]
 [ext_resource type="PackedScene" path="res://scenes/hand_right.tscn" id="2_hand_r"]
 [ext_resource type="PackedScene" path="res://scenes/hand_left.tscn" id="3_hand_l"]
 
+; The same wool as the body wears, weave and all -- these are the one part of
+; the soldier that is on screen every frame of the game.
 [sub_resource type="StandardMaterial3D" id="Mat_sleeve"]
-albedo_color = Color(0.27, 0.27, 0.18, 1)
-roughness = 0.9
+albedo_color = Color(0.285, 0.3, 0.205, 1)
+albedo_texture = ExtResource("4_grain")
+roughness = 0.94
+roughness_texture = ExtResource("4_grain")
+metallic_specular = 0.18
+uv1_scale = Vector3(5, 5, 5)
+uv1_triplanar = true
 
 [sub_resource type="CylinderMesh" id="Mesh_upper"]
 material = SubResource("Mat_sleeve")
 top_radius = 0.058
 bottom_radius = 0.048
 height = 1.0
-radial_segments = 10
+radial_segments = 16
 rings = 1
 
 [sub_resource type="CylinderMesh" id="Mesh_fore"]
@@ -24,7 +32,7 @@ material = SubResource("Mat_sleeve")
 top_radius = 0.048
 bottom_radius = 0.036
 height = 1.0
-radial_segments = 10
+radial_segments = 16
 rings = 1
 
 [node name="ViewmodelArms" type="Node3D"]

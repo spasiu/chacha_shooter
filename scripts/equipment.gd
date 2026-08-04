@@ -15,6 +15,10 @@ signal fired(pitch_kick: float, yaw_kick: float)
 ## Camera FOV to zoom to when fully raised. Zero means "whatever the player uses
 ## for irons"; only magnified optics need to override it.
 @export var sighted_fov := 0.0
+## What carrying this costs the holder's pace, as a fraction of it. A carbine
+## is barely felt; a launcher or a radio set is a real burden. Anything a
+## soldier can hang off a belt leaves this at zero.
+@export_range(0.0, 0.9, 0.01) var move_penalty := 0.0
 
 @export_group("Lethality")
 ## Damage out of 100 inside 5 yards.
@@ -45,6 +49,13 @@ func damage_at(metres: float) -> float:
 	)
 
 
+## True for items used from outside the body rather than aimed down: the radio
+## picks a spot on the ground, which you cannot do from behind your own eyes.
+## The player puts the camera over the shoulder while one of these is out.
+func wants_third_person() -> bool:
+	return false
+
+
 ## True if the action actually happened, so the caller can react to it.
 func try_fire() -> bool:
 	return false
@@ -71,6 +82,13 @@ func set_aiming(_aiming: bool) -> void:
 	pass
 
 
+## Told whether the holder is lying down, where a weapon with a bipod under it
+## is resting on the ground rather than being held up. Ignored by anything that
+## is fired off the shoulder however you happen to be lying.
+func set_braced(_braced: bool) -> void:
+	pass
+
+
 ## 0 = lowered, 1 = fully raised.
 func aim_ratio() -> float:
 	return 0.0
@@ -90,6 +108,17 @@ func set_aim_pose(_pose: Transform3D) -> void:
 	pass
 
 
+## How big a marker the HUD should draw at the aim point, as a multiplier of its
+## own size, or a negative number for none at all.
+##
+## Negative by default, and that is the right default: every weapon here carries
+## modelled iron sights and is meant to be aimed down rather than through a
+## painted cross. It is for the things with no sights on them, where the game
+## would otherwise be asking you to guess where the middle of the screen is.
+func reticule_size() -> float:
+	return -1.0
+
+
 ## Shown in the HUD's bottom-right readout.
 func status_text() -> String:
 	return ""
@@ -99,8 +128,23 @@ func is_empty() -> bool:
 	return false
 
 
+## True when this is carrying everything it went out with. A resupply point
+## reads it to tell whether there is anything to hand over, so that standing on
+## one costs nothing while there is not.
+func is_full() -> bool:
+	return true
+
+
 ## Restores starting ammunition, e.g. on respawn.
 func restock() -> void:
+	pass
+
+
+## Shows whatever this item does when it goes off, without any of the rest of
+## firing it. Only ever called on a remote player's copy: the round itself was
+## traced on the machine that fired it, and all that is left over here is the
+## flash. Silent by default, since most things a soldier carries have none.
+func show_muzzle_flash() -> void:
 	pass
 
 

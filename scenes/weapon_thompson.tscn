@@ -5,20 +5,32 @@
 ; Cutts compensator, a straight box magazine rather than a drum, a horizontal
 ; wooden forend in place of the vertical foregrip, and the bolt handle on the
 ; receiver's right flank.
-[gd_scene load_steps=22 format=3]
+[gd_scene load_steps=31 format=3]
 
 [ext_resource type="Script" path="res://scripts/weapon.gd" id="1_weapon"]
+[ext_resource type="Texture2D" path="res://assets/textures/wood_grain.tres" id="90_wood"]
+[ext_resource type="Texture2D" path="res://assets/textures/cloth_grain.tres" id="91_wear"]
 
 ; Parkerised olive-drab rather than blued: the M1A1 was a wartime austerity
 ; build and photographs distinctly greener than the shotgun or the Garand.
 [sub_resource type="StandardMaterial3D" id="Mat_metal"]
-albedo_color = Color(0.2, 0.2, 0.16, 1)
-metallic = 0.7
-roughness = 0.55
+albedo_color = Color(0.083, 0.089, 0.075, 1)
+albedo_texture = ExtResource("91_wear")
+metallic = 0.8
+metallic_specular = 0.5
+roughness = 0.52
+roughness_texture = ExtResource("91_wear")
+uv1_scale = Vector3(9, 9, 9)
+uv1_triplanar = true
 
 [sub_resource type="StandardMaterial3D" id="Mat_wood"]
-albedo_color = Color(0.42, 0.26, 0.13, 1)
-roughness = 0.6
+albedo_color = Color(0.205, 0.115, 0.06, 1)
+albedo_texture = ExtResource("90_wood")
+roughness = 0.52
+roughness_texture = ExtResource("90_wood")
+metallic_specular = 0.32
+uv1_scale = Vector3(24, 24, 3.4)
+uv1_triplanar = true
 
 [sub_resource type="StandardMaterial3D" id="Mat_flash"]
 transparency = 1
@@ -34,8 +46,8 @@ size = Vector3(0.055, 0.075, 0.2)
 
 [sub_resource type="CylinderMesh" id="Mesh_barrel"]
 material = SubResource("Mat_metal")
-top_radius = 0.012
-bottom_radius = 0.012
+top_radius = 0.0105
+bottom_radius = 0.0125
 height = 0.38
 radial_segments = 12
 rings = 1
@@ -65,9 +77,9 @@ size = Vector3(0.005, 0.022, 0.006)
 ; Front post is deliberately oversized and pale so it reads against a dark
 ; target; a scale-accurate blade is only a few pixels wide.
 [sub_resource type="StandardMaterial3D" id="Mat_front_post"]
-albedo_color = Color(0.62, 0.63, 0.66, 1)
-metallic = 0.4
-roughness = 0.5
+albedo_color = Color(0.52, 0.53, 0.56, 1)
+metallic = 0.35
+roughness = 0.55
 
 [sub_resource type="BoxMesh" id="Mesh_front_base"]
 material = SubResource("Mat_metal")
@@ -77,13 +89,19 @@ size = Vector3(0.02, 0.012, 0.016)
 material = SubResource("Mat_front_post")
 size = Vector3(0.007, 0.02, 0.007)
 
-[sub_resource type="BoxMesh" id="Mesh_bolt"]
+[sub_resource type="CapsuleMesh" id="Mesh_bolt"]
 material = SubResource("Mat_metal")
-size = Vector3(0.014, 0.014, 0.042)
+radius = 0.008
+height = 0.042
+radial_segments = 10
+rings = 3
 
-[sub_resource type="BoxMesh" id="Mesh_guard"]
+[sub_resource type="TorusMesh" id="Mesh_guard"]
 material = SubResource("Mat_metal")
-size = Vector3(0.012, 0.028, 0.05)
+inner_radius = 0.01
+outer_radius = 0.014
+rings = 16
+ring_segments = 6
 
 ; Horizontal, lying under the barrel, not the M1928's vertical foregrip.
 [sub_resource type="BoxMesh" id="Mesh_forend"]
@@ -106,15 +124,60 @@ size = Vector3(0.045, 0.095, 0.16)
 material = SubResource("Mat_metal")
 size = Vector3(0.046, 0.098, 0.01)
 
-[sub_resource type="SphereMesh" id="Mesh_flash"]
+[sub_resource type="CylinderMesh" id="Mesh_flash"]
 material = SubResource("Mat_flash")
-radius = 0.05
-height = 0.1
+top_radius = 0.0
+bottom_radius = 0.042
+height = 0.115
 radial_segments = 10
-rings = 5
+rings = 1
+cap_top = false
+
+
+; Openings -- ejection ports, the inside of a trigger guard. Near black and
+; matte, so a shallow inset reads as a hole rather than as a panel.
+[sub_resource type="StandardMaterial3D" id="Mat_shadow"]
+albedo_color = Color(0.022, 0.022, 0.024, 1)
+roughness = 1.0
+
+[sub_resource type="BoxMesh" id="Mesh_trigger"]
+material = SubResource("Mat_metal")
+size = Vector3(0.007, 0.026, 0.009)
+
+[sub_resource type="BoxMesh" id="Mesh_port"]
+material = SubResource("Mat_shadow")
+size = Vector3(0.006, 0.024, 0.062)
+
+; The step where the barrel is screwed into the receiver. Without it the
+; barrel appears to sprout from a flat face.
+[sub_resource type="BoxMesh" id="Mesh_chamber"]
+material = SubResource("Mat_metal")
+size = Vector3(0.046, 0.046, 0.055)
+
+[sub_resource type="TorusMesh" id="Mesh_swivel"]
+material = SubResource("Mat_metal")
+inner_radius = 0.005
+outer_radius = 0.009
+rings = 12
+ring_segments = 6
+
+; Raised comb along the top of the butt: the line a cheek rests on, and the
+; single thing that most separates a stock from a plank.
+[sub_resource type="BoxMesh" id="Mesh_comb"]
+material = SubResource("Mat_wood")
+size = Vector3(0.038, 0.024, 0.135)
+
+[sub_resource type="CylinderMesh" id="Mesh_bore"]
+material = SubResource("Mat_shadow")
+top_radius = 0.0062
+bottom_radius = 0.0062
+height = 0.03
+radial_segments = 10
+rings = 1
 
 [node name="WeaponThompson" type="Node3D"]
 script = ExtResource("1_weapon")
+move_penalty = 0.05
 damage_short = 100.0
 damage_medium = 50.0
 damage_long = 25.0
@@ -166,7 +229,7 @@ mesh = SubResource("Mesh_front_blade")
 ; exactly on the sight line and, being nearer the eye than the rear notch,
 ; blocks the sight picture entirely.
 [node name="BoltHandle" type="MeshInstance3D" parent="."]
-transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0.035, 0.026, 0.02)
+transform = Transform3D(1, 0, 0, 0, 0, -1, 0, 1, 0, 0.033, 0.026, 0.02)
 mesh = SubResource("Mesh_bolt")
 
 [node name="Magazine" type="MeshInstance3D" parent="."]
@@ -174,7 +237,7 @@ transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, -0.1, -0.05)
 mesh = SubResource("Mesh_magazine")
 
 [node name="TriggerGuard" type="MeshInstance3D" parent="."]
-transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, -0.05, 0.014)
+transform = Transform3D(0, -1, 0, 1, 0, 0, 0, 0, 1.7, 0, -0.05, 0.014)
 mesh = SubResource("Mesh_guard")
 
 [node name="Forend" type="MeshInstance3D" parent="."]
@@ -209,7 +272,7 @@ transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, -0.024, -0.17)
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0.018, -0.478)
 
 [node name="MuzzleFlash" type="MeshInstance3D" parent="Muzzle"]
-transform = Transform3D(0.9, 0, 0, 0, 0.75, 0, 0, 0, 1.9, 0, 0, -0.05)
+transform = Transform3D(0.9, 0, 0, 0, 0, 0.75, 0, -1.9, 0, 0, 0, -0.104)
 visible = false
 mesh = SubResource("Mesh_flash")
 
@@ -222,3 +285,34 @@ omni_range = 8.0
 [node name="FireSound" type="AudioStreamPlayer" parent="."]
 
 [node name="ReloadSound" type="AudioStreamPlayer" parent="."]
+
+[node name="Trigger" type="MeshInstance3D" parent="."]
+transform = Transform3D(1, 0, 0, 0, 0.98481, 0.17365, 0, -0.17365, 0.98481, 0, -0.043, 0.023)
+mesh = SubResource("Mesh_trigger")
+
+; Right flank, same side as the bolt handle.
+[node name="EjectionPort" type="MeshInstance3D" parent="."]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0.0265, 0.022, -0.018)
+mesh = SubResource("Mesh_port")
+
+[node name="Chamber" type="MeshInstance3D" parent="."]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0.014, -0.118)
+mesh = SubResource("Mesh_chamber")
+
+[node name="SwivelFront" type="MeshInstance3D" parent="."]
+transform = Transform3D(0, -1, 0, 1, 0, 0, 0, 0, 1, 0, -0.03, -0.212)
+mesh = SubResource("Mesh_swivel")
+
+[node name="SwivelRear" type="MeshInstance3D" parent="."]
+transform = Transform3D(0, -1, 0, 1, 0, 0, 0, 0, 1, 0, -0.079, 0.3)
+mesh = SubResource("Mesh_swivel")
+
+[node name="Comb" type="MeshInstance3D" parent="."]
+transform = Transform3D(1, 0, 0, 0, 0.996195, -0.087156, 0, 0.087156, 0.996195, 0, 0.021, 0.225)
+mesh = SubResource("Mesh_comb")
+
+; The hole the round leaves by. Recessed a little so it stays dark from any
+; angle rather than catching the sun like a coin.
+[node name="Bore" type="MeshInstance3D" parent="."]
+transform = Transform3D(1, 0, 0, 0, 0, -1, 0, 1, 0, 0, 0.018, -0.468)
+mesh = SubResource("Mesh_bore")

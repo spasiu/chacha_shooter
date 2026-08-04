@@ -5,18 +5,30 @@
 ; Heavy squad automatic: long barrel, twenty-round box under the receiver and a
 ; bipod at the muzzle. Uses the base magazine reload, so the box hangs off a
 ; node named Magazine and the charging handle off one named BoltHandle.
-[gd_scene load_steps=22 format=3]
+[gd_scene load_steps=29 format=3]
 
 [ext_resource type="Script" path="res://scripts/weapon.gd" id="1_weapon"]
+[ext_resource type="Texture2D" path="res://assets/textures/wood_grain.tres" id="90_wood"]
+[ext_resource type="Texture2D" path="res://assets/textures/cloth_grain.tres" id="91_wear"]
 
 [sub_resource type="StandardMaterial3D" id="Mat_metal"]
-albedo_color = Color(0.15, 0.15, 0.16, 1)
+albedo_color = Color(0.082, 0.082, 0.088, 1)
+albedo_texture = ExtResource("91_wear")
 metallic = 0.8
-roughness = 0.45
+metallic_specular = 0.5
+roughness = 0.52
+roughness_texture = ExtResource("91_wear")
+uv1_scale = Vector3(9, 9, 9)
+uv1_triplanar = true
 
 [sub_resource type="StandardMaterial3D" id="Mat_wood"]
-albedo_color = Color(0.33, 0.19, 0.1, 1)
-roughness = 0.62
+albedo_color = Color(0.205, 0.115, 0.06, 1)
+albedo_texture = ExtResource("90_wood")
+roughness = 0.52
+roughness_texture = ExtResource("90_wood")
+metallic_specular = 0.32
+uv1_scale = Vector3(24, 24, 3.4)
+uv1_triplanar = true
 
 [sub_resource type="StandardMaterial3D" id="Mat_flash"]
 transparency = 1
@@ -32,7 +44,7 @@ size = Vector3(0.055, 0.09, 0.3)
 
 [sub_resource type="CylinderMesh" id="Mesh_barrel"]
 material = SubResource("Mat_metal")
-top_radius = 0.014
+top_radius = 0.0135
 bottom_radius = 0.015
 height = 0.56
 radial_segments = 12
@@ -54,9 +66,12 @@ size = Vector3(0.05, 0.055, 0.24)
 material = SubResource("Mat_metal")
 size = Vector3(0.028, 0.14, 0.055)
 
-[sub_resource type="BoxMesh" id="Mesh_guard"]
+[sub_resource type="TorusMesh" id="Mesh_guard"]
 material = SubResource("Mat_metal")
-size = Vector3(0.012, 0.028, 0.05)
+inner_radius = 0.01
+outer_radius = 0.014
+rings = 16
+ring_segments = 6
 
 [sub_resource type="BoxMesh" id="Mesh_grip"]
 material = SubResource("Mat_wood")
@@ -93,23 +108,58 @@ size = Vector3(0.006, 0.026, 0.008)
 ; Front post is deliberately oversized and pale so it reads against a dark
 ; target; a scale-accurate blade is only a few pixels wide.
 [sub_resource type="StandardMaterial3D" id="Mat_front_post"]
-albedo_color = Color(0.62, 0.63, 0.66, 1)
-metallic = 0.4
-roughness = 0.5
+albedo_color = Color(0.52, 0.53, 0.56, 1)
+metallic = 0.35
+roughness = 0.55
 
 [sub_resource type="BoxMesh" id="Mesh_front_blade"]
 material = SubResource("Mat_front_post")
 size = Vector3(0.007, 0.024, 0.007)
 
-[sub_resource type="SphereMesh" id="Mesh_flash"]
+[sub_resource type="CylinderMesh" id="Mesh_flash"]
 material = SubResource("Mat_flash")
-radius = 0.05
-height = 0.1
+top_radius = 0.0
+bottom_radius = 0.042
+height = 0.115
 radial_segments = 10
-rings = 5
+rings = 1
+cap_top = false
+
+
+; Openings -- ejection ports and the like. Near black and matte, so a shallow
+; inset reads as a hole rather than as a panel bolted on.
+[sub_resource type="StandardMaterial3D" id="Mat_shadow"]
+albedo_color = Color(0.022, 0.022, 0.024, 1)
+roughness = 1.0
+
+[sub_resource type="BoxMesh" id="Mesh_trigger"]
+material = SubResource("Mat_metal")
+size = Vector3(0.007, 0.026, 0.009)
+
+[sub_resource type="BoxMesh" id="Mesh_port"]
+material = SubResource("Mat_shadow")
+size = Vector3(0.006, 0.026, 0.07)
+
+; Sling swivels. Barely a centimetre across and worth every one of their
+; triangles: nothing else says "issued to a soldier" at fifty yards.
+[sub_resource type="TorusMesh" id="Mesh_swivel"]
+material = SubResource("Mat_metal")
+inner_radius = 0.005
+outer_radius = 0.009
+rings = 12
+ring_segments = 6
+
+[sub_resource type="CylinderMesh" id="Mesh_bore"]
+material = SubResource("Mat_shadow")
+top_radius = 0.0072
+bottom_radius = 0.0072
+height = 0.03
+radial_segments = 10
+rings = 1
 
 [node name="WeaponBAR" type="Node3D"]
 script = ExtResource("1_weapon")
+move_penalty = 0.2
 damage_short = 100.0
 damage_medium = 100.0
 damage_long = 100.0
@@ -121,17 +171,17 @@ min_spread = 0.4
 max_spread = 3.4
 bloom_per_shot = 0.13
 bloom_recovery = 0.8
-recoil_pitch = 1.5
-recoil_yaw = 0.35
-kick_back = 0.06
-kick_recovery = 10.0
+recoil_pitch = 2.2
+recoil_yaw = 0.5
+kick_back = 0.082
+kick_recovery = 9.0
+braced_recoil_factor = 0.35
 aim_time = 0.24
 aim_spread_factor = 0.2
 aim_recoil_factor = 0.45
 sway_amplitude = 2.4
 sway_period = 3.8
 magazine_size = 20
-reserve_ammo = 120
 reload_time = 3.0
 
 [node name="Receiver" type="MeshInstance3D" parent="."]
@@ -155,7 +205,7 @@ transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, -0.1, -0.06)
 mesh = SubResource("Mesh_mag")
 
 [node name="TriggerGuard" type="MeshInstance3D" parent="."]
-transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, -0.058, 0)
+transform = Transform3D(0, -1, 0, 1, 0, 0, 0, 0, 1.7, 0, -0.058, 0)
 mesh = SubResource("Mesh_guard")
 
 [node name="PistolGrip" type="MeshInstance3D" parent="."]
@@ -220,7 +270,7 @@ transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, -0.042, -0.3)
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0.022, -0.78)
 
 [node name="MuzzleFlash" type="MeshInstance3D" parent="Muzzle"]
-transform = Transform3D(0.95, 0, 0, 0, 0.8, 0, 0, 0, 2, 0, 0, -0.05)
+transform = Transform3D(0.95, 0, 0, 0, 0, 0.8, 0, -2.0, 0, 0, 0, -0.110)
 visible = false
 mesh = SubResource("Mesh_flash")
 
@@ -233,3 +283,25 @@ omni_range = 9.0
 [node name="FireSound" type="AudioStreamPlayer" parent="."]
 
 [node name="ReloadSound" type="AudioStreamPlayer" parent="."]
+
+[node name="Trigger" type="MeshInstance3D" parent="."]
+transform = Transform3D(1, 0, 0, 0, 0.98481, 0.17365, 0, -0.17365, 0.98481, 0, -0.051, 0.011)
+mesh = SubResource("Mesh_trigger")
+
+[node name="EjectionPort" type="MeshInstance3D" parent="."]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0.026, 0.018, -0.055)
+mesh = SubResource("Mesh_port")
+
+[node name="SwivelFront" type="MeshInstance3D" parent="."]
+transform = Transform3D(0, -1, 0, 1, 0, 0, 0, 0, 1, 0, -0.036, -0.42)
+mesh = SubResource("Mesh_swivel")
+
+[node name="SwivelRear" type="MeshInstance3D" parent="."]
+transform = Transform3D(0, -1, 0, 1, 0, 0, 0, 0, 1, 0, -0.078, 0.34)
+mesh = SubResource("Mesh_swivel")
+
+; The hole the round leaves by. Recessed a little so it stays dark from any
+; angle rather than catching the sun like a coin.
+[node name="Bore" type="MeshInstance3D" parent="."]
+transform = Transform3D(1, 0, 0, 0, 0, -1, 0, 1, 0, 0, 0.022, -0.771)
+mesh = SubResource("Mesh_bore")

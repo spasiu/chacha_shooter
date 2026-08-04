@@ -1,0 +1,498 @@
+; One-man tank. See tank.gd: it drives itself once someone is aboard, and the
+; hull stays put as permanent cover once it is knocked out.
+;
+; The turret is its own node so it can traverse independently of the hull, and
+; so it can be thrown clear when the thing goes up. The gun pitches inside it,
+; and both muzzles hang off the gun so they follow the barrel.
+;
+; Shaped after an M4A3E8: sponsons overhanging the tracks, a cast round turret
+; with a rear bustle, six road wheels a side between a raised front sprocket and
+; a rear idler, and a muzzle brake. No roof machine gun -- only the coax beside
+; the main gun.
+[gd_scene load_steps=35 format=3]
+
+[ext_resource type="Script" path="res://scripts/tank.gd" id="1_tank"]
+[ext_resource type="Texture2D" path="res://assets/textures/smoke_puff.png" id="2_puff"]
+
+[sub_resource type="BoxShape3D" id="Shape_hull"]
+size = Vector3(2.8, 1.5, 5.6)
+
+[sub_resource type="StandardMaterial3D" id="Mat_armour"]
+albedo_color = Color(0.33, 0.37, 0.25, 1)
+metallic = 0.25
+roughness = 0.8
+
+[sub_resource type="StandardMaterial3D" id="Mat_track"]
+albedo_color = Color(0.16, 0.16, 0.17, 1)
+metallic = 0.4
+roughness = 0.85
+
+[sub_resource type="StandardMaterial3D" id="Mat_steel"]
+albedo_color = Color(0.17, 0.18, 0.18, 1)
+metallic = 0.8
+roughness = 0.45
+
+[sub_resource type="StandardMaterial3D" id="Mat_wheel"]
+albedo_color = Color(0.21, 0.23, 0.17, 1)
+metallic = 0.3
+roughness = 0.8
+
+[sub_resource type="StandardMaterial3D" id="Mat_tyre"]
+albedo_color = Color(0.09, 0.09, 0.1, 1)
+metallic = 0.1
+roughness = 0.95
+
+[sub_resource type="BoxMesh" id="Mesh_hull_lower"]
+material = SubResource("Mat_armour")
+size = Vector3(2.05, 0.62, 5.1)
+
+[sub_resource type="BoxMesh" id="Mesh_hull_upper"]
+material = SubResource("Mat_armour")
+size = Vector3(2.76, 0.42, 4.7)
+
+[sub_resource type="BoxMesh" id="Mesh_glacis"]
+material = SubResource("Mat_armour")
+size = Vector3(2.7, 1.0, 0.2)
+
+[sub_resource type="BoxMesh" id="Mesh_rear"]
+material = SubResource("Mat_armour")
+size = Vector3(2.6, 0.8, 0.18)
+
+[sub_resource type="BoxMesh" id="Mesh_deck"]
+material = SubResource("Mat_armour")
+size = Vector3(2.3, 0.14, 1.7)
+
+[sub_resource type="BoxMesh" id="Mesh_track_run"]
+material = SubResource("Mat_track")
+size = Vector3(0.46, 0.12, 4.75)
+
+[sub_resource type="BoxMesh" id="Mesh_track_top"]
+material = SubResource("Mat_track")
+size = Vector3(0.46, 0.12, 4.5)
+
+[sub_resource type="CylinderMesh" id="Mesh_sprocket"]
+material = SubResource("Mat_steel")
+top_radius = 0.42
+bottom_radius = 0.42
+height = 0.42
+radial_segments = 14
+rings = 1
+
+[sub_resource type="CylinderMesh" id="Mesh_idler"]
+material = SubResource("Mat_steel")
+top_radius = 0.4
+bottom_radius = 0.4
+height = 0.42
+radial_segments = 14
+rings = 1
+
+[sub_resource type="CylinderMesh" id="Mesh_roadwheel"]
+material = SubResource("Mat_wheel")
+top_radius = 0.34
+bottom_radius = 0.34
+height = 0.4
+radial_segments = 12
+rings = 1
+
+[sub_resource type="CylinderMesh" id="Mesh_tyre"]
+material = SubResource("Mat_tyre")
+top_radius = 0.36
+bottom_radius = 0.36
+height = 0.42
+radial_segments = 12
+rings = 1
+
+[sub_resource type="CylinderMesh" id="Mesh_roller"]
+material = SubResource("Mat_steel")
+top_radius = 0.13
+bottom_radius = 0.13
+height = 0.34
+radial_segments = 10
+rings = 1
+
+[sub_resource type="BoxMesh" id="Mesh_bogie"]
+material = SubResource("Mat_armour")
+size = Vector3(0.3, 0.34, 0.66)
+
+[sub_resource type="CylinderMesh" id="Mesh_turret"]
+material = SubResource("Mat_armour")
+top_radius = 0.82
+bottom_radius = 0.9
+height = 0.58
+radial_segments = 16
+rings = 1
+
+[sub_resource type="BoxMesh" id="Mesh_bustle"]
+material = SubResource("Mat_armour")
+size = Vector3(1.0, 0.5, 0.8)
+
+[sub_resource type="CylinderMesh" id="Mesh_cupola"]
+material = SubResource("Mat_armour")
+top_radius = 0.25
+bottom_radius = 0.27
+height = 0.2
+radial_segments = 12
+rings = 1
+
+[sub_resource type="CylinderMesh" id="Mesh_hatch"]
+material = SubResource("Mat_steel")
+top_radius = 0.2
+bottom_radius = 0.2
+height = 0.08
+radial_segments = 12
+rings = 1
+
+[sub_resource type="BoxMesh" id="Mesh_mantlet"]
+material = SubResource("Mat_steel")
+size = Vector3(0.92, 0.54, 0.36)
+
+[sub_resource type="CylinderMesh" id="Mesh_barrel"]
+material = SubResource("Mat_steel")
+top_radius = 0.085
+bottom_radius = 0.1
+height = 3.1
+radial_segments = 14
+rings = 1
+
+[sub_resource type="CylinderMesh" id="Mesh_brake"]
+material = SubResource("Mat_steel")
+top_radius = 0.14
+bottom_radius = 0.14
+height = 0.32
+radial_segments = 12
+rings = 1
+
+[sub_resource type="CylinderMesh" id="Mesh_coax"]
+material = SubResource("Mat_steel")
+top_radius = 0.035
+bottom_radius = 0.035
+height = 0.9
+radial_segments = 10
+rings = 1
+
+; Same cloud the smoke grenade pours, turned up: a burning tank is a column,
+; not a screen.
+[sub_resource type="Gradient" id="Grad_smoke"]
+offsets = PackedFloat32Array(0, 0.15, 0.65, 1)
+colors = PackedColorArray(0.25, 0.24, 0.23, 0, 0.2, 0.19, 0.18, 0.75, 0.32, 0.31, 0.3, 0.45, 0.45, 0.44, 0.43, 0)
+
+[sub_resource type="GradientTexture1D" id="GradTex_smoke"]
+gradient = SubResource("Grad_smoke")
+
+[sub_resource type="ParticleProcessMaterial" id="Proc_smoke"]
+emission_shape = 1
+emission_sphere_radius = 0.7
+direction = Vector3(0, 1, 0)
+spread = 34.0
+initial_velocity_min = 1.6
+initial_velocity_max = 4.2
+gravity = Vector3(0, 0.5, 0)
+damping_min = 0.2
+damping_max = 0.7
+scale_min = 2.4
+scale_max = 5.5
+color_ramp = SubResource("GradTex_smoke")
+
+[sub_resource type="StandardMaterial3D" id="Mat_smoke"]
+transparency = 1
+shading_mode = 0
+vertex_color_use_as_albedo = true
+albedo_color = Color(0.5, 0.49, 0.48, 1)
+albedo_texture = ExtResource("2_puff")
+billboard_mode = 1
+billboard_keep_scale = true
+
+[sub_resource type="QuadMesh" id="Mesh_puff"]
+material = SubResource("Mat_smoke")
+size = Vector2(1.6, 1.6)
+
+[node name="Tank" type="CharacterBody3D"]
+floor_snap_length = 0.6
+script = ExtResource("1_tank")
+
+[node name="CollisionShape3D" type="CollisionShape3D" parent="."]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0.75, 0)
+shape = SubResource("Shape_hull")
+
+; Lower hull sits between the tracks; the upper hull overhangs them as sponsons,
+; which is most of what makes the silhouette read as a Sherman.
+[node name="HullLower" type="MeshInstance3D" parent="."]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0.55, 0)
+mesh = SubResource("Mesh_hull_lower")
+
+[node name="HullUpper" type="MeshInstance3D" parent="."]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 1.07, 0)
+mesh = SubResource("Mesh_hull_upper")
+
+[node name="Glacis" type="MeshInstance3D" parent="."]
+transform = Transform3D(1, 0, 0, 0, 0.766044, 0.642788, 0, -0.642788, 0.766044, 0, 0.95, -2.44)
+mesh = SubResource("Mesh_glacis")
+
+[node name="RearPlate" type="MeshInstance3D" parent="."]
+transform = Transform3D(1, 0, 0, 0, 0.965926, -0.258819, 0, 0.258819, 0.965926, 0, 0.94, 2.4)
+mesh = SubResource("Mesh_rear")
+
+[node name="EngineDeck" type="MeshInstance3D" parent="."]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 1.33, 1.4)
+mesh = SubResource("Mesh_deck")
+
+; --- left running gear. Cylinders are turned to lie across the hull.
+[node name="RunningGearL" type="Node3D" parent="."]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -1.19, 0, 0)
+
+[node name="TrackRun" type="MeshInstance3D" parent="RunningGearL"]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0.04, 0)
+mesh = SubResource("Mesh_track_run")
+
+[node name="TrackTop" type="MeshInstance3D" parent="RunningGearL"]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0.9, 0.05)
+mesh = SubResource("Mesh_track_top")
+
+[node name="Sprocket" type="MeshInstance3D" parent="RunningGearL"]
+transform = Transform3D(0, -1, 0, 1, 0, 0, 0, 0, 1, 0, 0.46, -2.3)
+mesh = SubResource("Mesh_sprocket")
+
+[node name="Idler" type="MeshInstance3D" parent="RunningGearL"]
+transform = Transform3D(0, -1, 0, 1, 0, 0, 0, 0, 1, 0, 0.46, 2.3)
+mesh = SubResource("Mesh_idler")
+
+[node name="Wheel1" type="MeshInstance3D" parent="RunningGearL"]
+transform = Transform3D(0, -1, 0, 1, 0, 0, 0, 0, 1, 0, 0.38, -1.65)
+mesh = SubResource("Mesh_roadwheel")
+
+[node name="Tyre1" type="MeshInstance3D" parent="RunningGearL"]
+transform = Transform3D(0, -1, 0, 1, 0, 0, 0, 0, 1, -0.03, 0.38, -1.65)
+mesh = SubResource("Mesh_tyre")
+
+[node name="Wheel2" type="MeshInstance3D" parent="RunningGearL"]
+transform = Transform3D(0, -1, 0, 1, 0, 0, 0, 0, 1, 0, 0.38, -0.99)
+mesh = SubResource("Mesh_roadwheel")
+
+[node name="Tyre2" type="MeshInstance3D" parent="RunningGearL"]
+transform = Transform3D(0, -1, 0, 1, 0, 0, 0, 0, 1, -0.03, 0.38, -0.99)
+mesh = SubResource("Mesh_tyre")
+
+[node name="Wheel3" type="MeshInstance3D" parent="RunningGearL"]
+transform = Transform3D(0, -1, 0, 1, 0, 0, 0, 0, 1, 0, 0.38, -0.33)
+mesh = SubResource("Mesh_roadwheel")
+
+[node name="Tyre3" type="MeshInstance3D" parent="RunningGearL"]
+transform = Transform3D(0, -1, 0, 1, 0, 0, 0, 0, 1, -0.03, 0.38, -0.33)
+mesh = SubResource("Mesh_tyre")
+
+[node name="Wheel4" type="MeshInstance3D" parent="RunningGearL"]
+transform = Transform3D(0, -1, 0, 1, 0, 0, 0, 0, 1, 0, 0.38, 0.33)
+mesh = SubResource("Mesh_roadwheel")
+
+[node name="Tyre4" type="MeshInstance3D" parent="RunningGearL"]
+transform = Transform3D(0, -1, 0, 1, 0, 0, 0, 0, 1, -0.03, 0.38, 0.33)
+mesh = SubResource("Mesh_tyre")
+
+[node name="Wheel5" type="MeshInstance3D" parent="RunningGearL"]
+transform = Transform3D(0, -1, 0, 1, 0, 0, 0, 0, 1, 0, 0.38, 0.99)
+mesh = SubResource("Mesh_roadwheel")
+
+[node name="Tyre5" type="MeshInstance3D" parent="RunningGearL"]
+transform = Transform3D(0, -1, 0, 1, 0, 0, 0, 0, 1, -0.03, 0.38, 0.99)
+mesh = SubResource("Mesh_tyre")
+
+[node name="Wheel6" type="MeshInstance3D" parent="RunningGearL"]
+transform = Transform3D(0, -1, 0, 1, 0, 0, 0, 0, 1, 0, 0.38, 1.65)
+mesh = SubResource("Mesh_roadwheel")
+
+[node name="Tyre6" type="MeshInstance3D" parent="RunningGearL"]
+transform = Transform3D(0, -1, 0, 1, 0, 0, 0, 0, 1, -0.03, 0.38, 1.65)
+mesh = SubResource("Mesh_tyre")
+
+[node name="Bogie1" type="MeshInstance3D" parent="RunningGearL"]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0.68, -1.32)
+mesh = SubResource("Mesh_bogie")
+
+[node name="Bogie2" type="MeshInstance3D" parent="RunningGearL"]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0.68, 0)
+mesh = SubResource("Mesh_bogie")
+
+[node name="Bogie3" type="MeshInstance3D" parent="RunningGearL"]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0.68, 1.32)
+mesh = SubResource("Mesh_bogie")
+
+[node name="Roller1" type="MeshInstance3D" parent="RunningGearL"]
+transform = Transform3D(0, -1, 0, 1, 0, 0, 0, 0, 1, 0, 0.78, -0.66)
+mesh = SubResource("Mesh_roller")
+
+[node name="Roller2" type="MeshInstance3D" parent="RunningGearL"]
+transform = Transform3D(0, -1, 0, 1, 0, 0, 0, 0, 1, 0, 0.78, 0.66)
+mesh = SubResource("Mesh_roller")
+
+; --- right running gear, the same parts mirrored across the hull.
+[node name="RunningGearR" type="Node3D" parent="."]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 1.19, 0, 0)
+
+[node name="TrackRun" type="MeshInstance3D" parent="RunningGearR"]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0.04, 0)
+mesh = SubResource("Mesh_track_run")
+
+[node name="TrackTop" type="MeshInstance3D" parent="RunningGearR"]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0.9, 0.05)
+mesh = SubResource("Mesh_track_top")
+
+[node name="Sprocket" type="MeshInstance3D" parent="RunningGearR"]
+transform = Transform3D(0, -1, 0, 1, 0, 0, 0, 0, 1, 0, 0.46, -2.3)
+mesh = SubResource("Mesh_sprocket")
+
+[node name="Idler" type="MeshInstance3D" parent="RunningGearR"]
+transform = Transform3D(0, -1, 0, 1, 0, 0, 0, 0, 1, 0, 0.46, 2.3)
+mesh = SubResource("Mesh_idler")
+
+[node name="Wheel1" type="MeshInstance3D" parent="RunningGearR"]
+transform = Transform3D(0, -1, 0, 1, 0, 0, 0, 0, 1, 0, 0.38, -1.65)
+mesh = SubResource("Mesh_roadwheel")
+
+[node name="Tyre1" type="MeshInstance3D" parent="RunningGearR"]
+transform = Transform3D(0, -1, 0, 1, 0, 0, 0, 0, 1, 0.03, 0.38, -1.65)
+mesh = SubResource("Mesh_tyre")
+
+[node name="Wheel2" type="MeshInstance3D" parent="RunningGearR"]
+transform = Transform3D(0, -1, 0, 1, 0, 0, 0, 0, 1, 0, 0.38, -0.99)
+mesh = SubResource("Mesh_roadwheel")
+
+[node name="Tyre2" type="MeshInstance3D" parent="RunningGearR"]
+transform = Transform3D(0, -1, 0, 1, 0, 0, 0, 0, 1, 0.03, 0.38, -0.99)
+mesh = SubResource("Mesh_tyre")
+
+[node name="Wheel3" type="MeshInstance3D" parent="RunningGearR"]
+transform = Transform3D(0, -1, 0, 1, 0, 0, 0, 0, 1, 0, 0.38, -0.33)
+mesh = SubResource("Mesh_roadwheel")
+
+[node name="Tyre3" type="MeshInstance3D" parent="RunningGearR"]
+transform = Transform3D(0, -1, 0, 1, 0, 0, 0, 0, 1, 0.03, 0.38, -0.33)
+mesh = SubResource("Mesh_tyre")
+
+[node name="Wheel4" type="MeshInstance3D" parent="RunningGearR"]
+transform = Transform3D(0, -1, 0, 1, 0, 0, 0, 0, 1, 0, 0.38, 0.33)
+mesh = SubResource("Mesh_roadwheel")
+
+[node name="Tyre4" type="MeshInstance3D" parent="RunningGearR"]
+transform = Transform3D(0, -1, 0, 1, 0, 0, 0, 0, 1, 0.03, 0.38, 0.33)
+mesh = SubResource("Mesh_tyre")
+
+[node name="Wheel5" type="MeshInstance3D" parent="RunningGearR"]
+transform = Transform3D(0, -1, 0, 1, 0, 0, 0, 0, 1, 0, 0.38, 0.99)
+mesh = SubResource("Mesh_roadwheel")
+
+[node name="Tyre5" type="MeshInstance3D" parent="RunningGearR"]
+transform = Transform3D(0, -1, 0, 1, 0, 0, 0, 0, 1, 0.03, 0.38, 0.99)
+mesh = SubResource("Mesh_tyre")
+
+[node name="Wheel6" type="MeshInstance3D" parent="RunningGearR"]
+transform = Transform3D(0, -1, 0, 1, 0, 0, 0, 0, 1, 0, 0.38, 1.65)
+mesh = SubResource("Mesh_roadwheel")
+
+[node name="Tyre6" type="MeshInstance3D" parent="RunningGearR"]
+transform = Transform3D(0, -1, 0, 1, 0, 0, 0, 0, 1, 0.03, 0.38, 1.65)
+mesh = SubResource("Mesh_tyre")
+
+[node name="Bogie1" type="MeshInstance3D" parent="RunningGearR"]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0.68, -1.32)
+mesh = SubResource("Mesh_bogie")
+
+[node name="Bogie2" type="MeshInstance3D" parent="RunningGearR"]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0.68, 0)
+mesh = SubResource("Mesh_bogie")
+
+[node name="Bogie3" type="MeshInstance3D" parent="RunningGearR"]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0.68, 1.32)
+mesh = SubResource("Mesh_bogie")
+
+[node name="Roller1" type="MeshInstance3D" parent="RunningGearR"]
+transform = Transform3D(0, -1, 0, 1, 0, 0, 0, 0, 1, 0, 0.78, -0.66)
+mesh = SubResource("Mesh_roller")
+
+[node name="Roller2" type="MeshInstance3D" parent="RunningGearR"]
+transform = Transform3D(0, -1, 0, 1, 0, 0, 0, 0, 1, 0, 0.78, 0.66)
+mesh = SubResource("Mesh_roller")
+
+[node name="Turret" type="Node3D" parent="."]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 1.28, 0.3)
+
+[node name="TurretBody" type="MeshInstance3D" parent="Turret"]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0.29, 0)
+mesh = SubResource("Mesh_turret")
+
+[node name="Bustle" type="MeshInstance3D" parent="Turret"]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0.28, 0.82)
+mesh = SubResource("Mesh_bustle")
+
+; Commander's cupola, hatch closed. No gun on it.
+[node name="Cupola" type="MeshInstance3D" parent="Turret"]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -0.32, 0.66, 0.34)
+mesh = SubResource("Mesh_cupola")
+
+[node name="LoaderHatch" type="MeshInstance3D" parent="Turret"]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0.34, 0.6, 0.28)
+mesh = SubResource("Mesh_hatch")
+
+; Pitches inside the turret; both barrels hang off it so they follow together.
+[node name="Gun" type="Node3D" parent="Turret"]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0.28, -1.1)
+
+[node name="Mantlet" type="MeshInstance3D" parent="Turret/Gun"]
+mesh = SubResource("Mesh_mantlet")
+
+[node name="Barrel" type="MeshInstance3D" parent="Turret/Gun"]
+transform = Transform3D(1, 0, 0, 0, 0, -1, 0, 1, 0, 0, 0, -1.65)
+mesh = SubResource("Mesh_barrel")
+
+[node name="MuzzleBrake" type="MeshInstance3D" parent="Turret/Gun"]
+transform = Transform3D(1, 0, 0, 0, 0, -1, 0, 1, 0, 0, 0, -3.05)
+mesh = SubResource("Mesh_brake")
+
+[node name="CoaxBarrel" type="MeshInstance3D" parent="Turret/Gun"]
+transform = Transform3D(1, 0, 0, 0, 0, -1, 0, 1, 0, 0.3, -0.07, -0.55)
+mesh = SubResource("Mesh_coax")
+
+[node name="MainMuzzle" type="Marker3D" parent="Turret/Gun"]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0, -3.25)
+
+[node name="CoaxMuzzle" type="Marker3D" parent="Turret/Gun"]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0.3, -0.07, -1.02)
+
+; Rides with the turret so the view turns with the gun.
+[node name="CameraMount" type="Node3D" parent="Turret"]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 1.1, 3.4)
+
+[node name="Camera3D" type="Camera3D" parent="Turret/CameraMount"]
+transform = Transform3D(1, 0, 0, 0, 0.994522, 0.104528, 0, -0.104528, 0.994522, 0, 0, 0)
+current = false
+
+; Where the driver is put back down on getting out.
+[node name="Seat" type="Marker3D" parent="."]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 2.2, 0.2, 0)
+
+[node name="Smoke" type="GPUParticles3D" parent="."]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 1.4, 0.3)
+emitting = false
+amount = 90
+lifetime = 5.5
+visibility_aabb = AABB(-14, -4, -14, 28, 34, 28)
+process_material = SubResource("Proc_smoke")
+draw_pass_1 = SubResource("Mesh_puff")
+
+[node name="EngineSound" type="AudioStreamPlayer3D" parent="."]
+unit_size = 9.0
+max_distance = 70.0
+volume_db = -4.0
+
+[node name="TreadSound" type="AudioStreamPlayer3D" parent="."]
+unit_size = 8.0
+max_distance = 60.0
+volume_db = -8.0
+
+[node name="GunSound" type="AudioStreamPlayer3D" parent="."]
+unit_size = 28.0
+max_distance = 220.0
+volume_db = 6.0
+
+[node name="CoaxSound" type="AudioStreamPlayer3D" parent="."]
+unit_size = 12.0
+max_distance = 110.0

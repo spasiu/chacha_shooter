@@ -1,0 +1,68 @@
+; SCR-536 style handset, assembled from primitives. Held up at the ear rather
+; than aimed, which is why it carries no sights and no muzzle.
+[gd_scene load_steps=10 format=3]
+
+[ext_resource type="Script" path="res://scripts/radio.gd" id="1_radio"]
+[ext_resource type="PackedScene" path="res://scenes/artillery_strike.tscn" id="2_strike"]
+[ext_resource type="PackedScene" path="res://scenes/target_paint.tscn" id="3_paint"]
+
+[sub_resource type="StandardMaterial3D" id="Mat_case"]
+albedo_color = Color(0.22, 0.25, 0.18, 1)
+roughness = 0.75
+
+[sub_resource type="StandardMaterial3D" id="Mat_metal"]
+albedo_color = Color(0.14, 0.14, 0.15, 1)
+metallic = 0.7
+roughness = 0.45
+
+[sub_resource type="BoxMesh" id="Mesh_case"]
+material = SubResource("Mat_case")
+size = Vector3(0.075, 0.26, 0.06)
+
+[sub_resource type="BoxMesh" id="Mesh_handset"]
+material = SubResource("Mat_metal")
+size = Vector3(0.05, 0.05, 0.05)
+
+[sub_resource type="CylinderMesh" id="Mesh_aerial"]
+material = SubResource("Mat_metal")
+top_radius = 0.004
+bottom_radius = 0.007
+height = 0.42
+radial_segments = 8
+rings = 1
+
+[sub_resource type="BoxMesh" id="Mesh_dial"]
+material = SubResource("Mat_metal")
+size = Vector3(0.03, 0.03, 0.012)
+
+[node name="WeaponRadio" type="Node3D"]
+script = ExtResource("1_radio")
+move_penalty = 0.25
+strike_scene = ExtResource("2_strike")
+paint_scene = ExtResource("3_paint")
+
+[node name="Body" type="Node3D" parent="."]
+
+[node name="Case" type="MeshInstance3D" parent="Body"]
+transform = Transform3D(1, 0, 0, 0, 0.965926, 0.258819, 0, -0.258819, 0.965926, 0, -0.03, 0)
+mesh = SubResource("Mesh_case")
+
+[node name="Handset" type="MeshInstance3D" parent="Body"]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0.09, -0.02)
+mesh = SubResource("Mesh_handset")
+
+[node name="Aerial" type="MeshInstance3D" parent="Body"]
+transform = Transform3D(1, 0, 0, 0, 0.984808, -0.173648, 0, 0.173648, 0.984808, 0.026, 0.3, 0.03)
+mesh = SubResource("Mesh_aerial")
+
+[node name="Dial" type="MeshInstance3D" parent="Body"]
+transform = Transform3D(1, 0, 0, 0, 0.965926, 0.258819, 0, -0.258819, 0.965926, 0, -0.03, -0.035)
+mesh = SubResource("Mesh_dial")
+
+[node name="GripRight" type="Marker3D" parent="."]
+transform = Transform3D(1, 0, 0, 0, 0.965926, 0.258819, 0, -0.258819, 0.965926, 0, -0.06, 0.02)
+
+[node name="GripLeft" type="Marker3D" parent="."]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -0.03, 0.02, -0.03)
+
+[node name="Speaker" type="AudioStreamPlayer" parent="."]

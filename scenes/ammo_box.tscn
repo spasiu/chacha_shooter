@@ -1,0 +1,116 @@
+; Ammunition crate. Origin at the ground under it, so a spawner only has to
+; know where the ground is.
+;
+; Solid, and about waist high on the soldier model: it is cover as well as
+; supply, which is deliberate. The lid is hinged at the back edge and the scene
+; leaves it standing open with brass showing inside -- the script shuts it when
+; the box is emptied, so whether a crate is worth walking to is a thing you can
+; see from across the street rather than something you find out by arriving.
+[gd_scene load_steps=13 format=3]
+
+[ext_resource type="Script" path="res://scripts/ammo_box.gd" id="1_box"]
+[ext_resource type="Texture2D" path="res://assets/textures/cloth_grain.tres" id="2_grain"]
+[ext_resource type="Texture2D" path="res://assets/textures/wood_grain.tres" id="3_wood"]
+
+; Painted crate timber: olive over wood, knocked about.
+[sub_resource type="StandardMaterial3D" id="Mat_crate"]
+albedo_color = Color(0.235, 0.245, 0.155, 1)
+albedo_texture = ExtResource("3_wood")
+roughness = 0.82
+roughness_texture = ExtResource("2_grain")
+metallic_specular = 0.2
+uv1_scale = Vector3(3, 3, 3)
+uv1_triplanar = true
+
+; Stencilled lettering band. Not readable and not meant to be: it is a pale
+; mark at crate height, which is what the eye picks up at fifty metres.
+[sub_resource type="StandardMaterial3D" id="Mat_stencil"]
+albedo_color = Color(0.66, 0.63, 0.5, 1)
+roughness = 0.9
+
+[sub_resource type="StandardMaterial3D" id="Mat_rope"]
+albedo_color = Color(0.36, 0.31, 0.19, 1)
+albedo_texture = ExtResource("2_grain")
+roughness = 0.95
+uv1_scale = Vector3(9, 9, 9)
+uv1_triplanar = true
+
+; What is in it. Bright enough to catch the light through an open lid, which is
+; the only signal that a box is full.
+[sub_resource type="StandardMaterial3D" id="Mat_brass"]
+albedo_color = Color(0.58, 0.45, 0.16, 1)
+albedo_texture = ExtResource("2_grain")
+metallic = 0.72
+roughness = 0.38
+uv1_scale = Vector3(14, 14, 14)
+uv1_triplanar = true
+
+[sub_resource type="BoxMesh" id="Mesh_body"]
+material = SubResource("Mat_crate")
+size = Vector3(0.62, 0.33, 0.4)
+
+[sub_resource type="BoxMesh" id="Mesh_lid"]
+material = SubResource("Mat_crate")
+size = Vector3(0.63, 0.035, 0.41)
+
+[sub_resource type="BoxMesh" id="Mesh_stencil"]
+material = SubResource("Mat_stencil")
+size = Vector3(0.3, 0.055, 0.006)
+
+[sub_resource type="TorusMesh" id="Mesh_handle"]
+material = SubResource("Mat_rope")
+inner_radius = 0.035
+outer_radius = 0.05
+rings = 14
+ring_segments = 6
+
+[sub_resource type="BoxMesh" id="Mesh_rounds"]
+material = SubResource("Mat_brass")
+size = Vector3(0.55, 0.1, 0.33)
+
+[sub_resource type="BoxShape3D" id="Shape_body"]
+size = Vector3(0.62, 0.33, 0.4)
+
+[node name="AmmoBox" type="StaticBody3D"]
+script = ExtResource("1_box")
+
+[node name="Body" type="MeshInstance3D" parent="."]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0.165, 0)
+mesh = SubResource("Mesh_body")
+
+[node name="CollisionShape3D" type="CollisionShape3D" parent="."]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0.165, 0)
+shape = SubResource("Shape_body")
+
+; Sits just below the rim so the lid closes over it rather than through it.
+[node name="Rounds" type="Node3D" parent="."]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0.27, 0)
+
+[node name="Brass" type="MeshInstance3D" parent="Rounds"]
+mesh = SubResource("Mesh_rounds")
+
+; Hinge at the crate's back top edge. Left standing open at 110 degrees; the
+; script shuts it by clearing this rotation.
+[node name="Lid" type="Node3D" parent="."]
+transform = Transform3D(1, 0, 0, 0, -0.34202, -0.93969, 0, 0.93969, -0.34202, 0, 0.332, 0.2)
+
+[node name="Panel" type="MeshInstance3D" parent="Lid"]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0.018, -0.2)
+mesh = SubResource("Mesh_lid")
+
+[node name="Stencil" type="MeshInstance3D" parent="."]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0.185, -0.203)
+mesh = SubResource("Mesh_stencil")
+
+[node name="HandleLeft" type="MeshInstance3D" parent="."]
+transform = Transform3D(0, -1, 0, 1, 0, 0, 0, 0, 1, -0.318, 0.2, 0)
+mesh = SubResource("Mesh_handle")
+
+[node name="HandleRight" type="MeshInstance3D" parent="."]
+transform = Transform3D(0, -1, 0, 1, 0, 0, 0, 0, 1, 0.318, 0.2, 0)
+mesh = SubResource("Mesh_handle")
+
+[node name="Sound" type="AudioStreamPlayer3D" parent="."]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0.3, 0)
+unit_size = 6.0
+max_distance = 26.0

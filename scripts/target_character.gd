@@ -14,6 +14,10 @@ signal died
 @export var head_height := 1.32
 ## Seconds before it stands back up. Zero leaves the body down for good.
 @export var respawn_delay := 6.0
+## Which side's uniform it stands in. "auto" takes the side of whichever base it
+## is nearer, which is what a figure standing on one half of the map is: someone
+## who started there. The map decides, so moving the mannequin re-dresses it.
+@export_enum("auto", "blue", "red") var team := "auto"
 
 const HIT_FLESH: AudioStream = preload("res://assets/audio/hit_flesh.wav")
 const HIT_HEAD: AudioStream = preload("res://assets/audio/hit_head.wav")
@@ -30,8 +34,27 @@ var _alive := true
 
 
 func _ready() -> void:
+	add_to_group(Lethality.DAMAGEABLE)
 	health = max_health
 	health_changed.emit(health, max_health)
+	model.set_team_colour(Net.team_colour(_side()))
+
+
+## The side it belongs to. Worked out from where it is standing unless the scene
+## says outright, and blue when there is no map to ask -- the same side everyone
+## is on when nobody is keeping teams.
+func _side() -> String:
+	if team != "auto":
+		return team
+	var world: Node = get_tree().get_first_node_in_group("voxel_world")
+	if world == null:
+		return Net.BLUE
+	var red: Vector2 = world.team_spawn(Net.RED)
+	var blue: Vector2 = world.team_spawn(Net.BLUE)
+	if red == Vector2.ZERO or blue == Vector2.ZERO:
+		return Net.BLUE
+	var here := Vector2(global_position.x, global_position.z)
+	return Net.RED if here.distance_to(red) < here.distance_to(blue) else Net.BLUE
 
 
 func _process(delta: float) -> void:
@@ -48,9 +71,20 @@ func _process(delta: float) -> void:
 
 
 ## Called by the weapon's raycast. `from_shooter` points back at whoever fired.
-func take_damage(amount: float, hit_position: Vector3, from_shooter: Vector3) -> void:
+func take_damage(
+	amount: float,
+	hit_position: Vector3,
+	from_shooter: Vector3,
+	kind: StringName = Lethality.BLAST
+) -> void:
 	if not _alive:
 		return
+
+	# The mannequin belongs to the map, not to anyone playing, so a hit on it has
+	# to land on every copy of it. The raw figure goes out and each client works
+	# the headshot out for itself from the same impact point, which keeps the
+	# arithmetic in one place rather than trusting it across the wire.
+	Net.report_entity_damage(self, amount, hit_position, from_shooter, kind)
 
 	var local_height := hit_position.y - global_position.y
 	var headshot := local_height > head_height
@@ -93,6 +127,12 @@ func _die(from_behind: bool) -> void:
 	await get_tree().create_timer(respawn_delay).timeout
 	if is_instance_valid(self):
 		revive()
+
+
+## Back on its feet for a new round. The mannequin never moves, so there is
+## nothing to restore but the fact of being alive.
+func round_reset() -> void:
+	revive()
 
 
 func revive() -> void:

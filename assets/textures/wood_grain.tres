@@ -1,0 +1,25 @@
+; Walnut. Stretched noise standing in for grain: the material scales this hard
+; along two axes and barely at all along the third, so the streaks run down the
+; length of a stock rather than swirling over it.
+;
+; Multiplied into albedo and roughness both, because grain in oiled wood is as
+; much a difference in how it catches light as in colour.
+[gd_resource type="NoiseTexture2D" load_steps=3 format=3]
+
+[sub_resource type="FastNoiseLite" id="Noise_wood"]
+noise_type = 0
+frequency = 0.02
+fractal_octaves = 5
+fractal_lacunarity = 2.4
+fractal_gain = 0.55
+
+[sub_resource type="Gradient" id="Ramp_wood"]
+offsets = PackedFloat32Array(0, 0.45, 1)
+colors = PackedColorArray(0.62, 0.62, 0.62, 1, 0.88, 0.88, 0.88, 1, 1, 1, 1, 1)
+
+[resource]
+width = 128
+height = 128
+seamless = true
+color_ramp = SubResource("Ramp_wood")
+noise = SubResource("Noise_wood")
