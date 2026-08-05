@@ -1063,6 +1063,11 @@ func _apply_view() -> void:
 	for item: Equipment in loadout:
 		if item.get_parent() != socket:
 			item.reparent(socket, false)
+		# Which socket it is in changes how a weapon is held: a launcher carried
+		# on the shoulder in front of the camera would hang off the glove when
+		# the same instance is seen from outside.
+		if item.has_method("set_viewmodel"):
+			item.set_viewmodel(not third)
 	if third:
 		weapon.set_aiming(false)
 		camera_fp.fov = _rest_fov

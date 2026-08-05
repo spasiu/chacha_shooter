@@ -15,7 +15,7 @@ res://scenes/target_paint.tscn::3d29be1669e45dd1b22cbbe3ae55f7ec::1785765527::re
 res://scenes/tnt_charge.tscn::f17540a40bcfc77d07cc5f267cd0e5da::1785769295::res://.godot/exported/133200997/export-61d8d4b68d91f76cece88a9c9ab09736-tnt_charge.scn
 res://scenes/viewmodel_arms.tscn::e8da7854a06de51982a280b38d65c21a::1785949043::res://.godot/exported/133200997/export-1fbfca33f49c529317e2cab324353d29-viewmodel_arms.scn
 res://scenes/weapon_bar.tscn::647cf20d45b64fe2a0c6461cc7306c57::1785956010::res://.godot/exported/133200997/export-8c94f04aeb74eeeae8cbe8df03e8ed44-weapon_bar.scn
-res://scenes/weapon_bazooka.tscn::6a8f8695dee8cf86f6d1bb15d1378f1e::1785956010::res://.godot/exported/133200997/export-dcba8ea7f80af040d73f914d1d434581-weapon_bazooka.scn
+res://scenes/weapon_bazooka.tscn::c51dd655161b30fa9b199f1ae9c2da18::1785962876::res://.godot/exported/133200997/export-dcba8ea7f80af040d73f914d1d434581-weapon_bazooka.scn
 res://scenes/weapon_carbine.tscn::982a7d2c48a53427565f269335564841::1785956010::res://.godot/exported/133200997/export-19bea0148f1e89cd11770819e8611a2e-weapon_carbine.scn
 res://scenes/weapon_garand.tscn::ea2f83f031426396aa0c9fea34b6f301::1785956010::res://.godot/exported/133200997/export-e8c3ff82fb3de442d742eb5647656581-weapon_garand.scn
 res://scenes/weapon_grenade.tscn::844a4dd58bc88646ab3eb7b244af2942::1785956010::res://.godot/exported/133200997/export-82050c5a3d26118470e2ddc97b5d1316-weapon_grenade.scn
@@ -38,3 +38,4 @@ res://scenes/bot.tscn::c33afa837ca5c1471c6619e99089aecf::1785856830::res://.godo
 res://scenes/map_select.tscn::a708a433405ceac5d0ca4966000d32a8::1785861225::res://.godot/exported/133200997/export-a2e43de03ee40899bce8d18ba404c3e7-map_select.scn
 res://scenes/mech.tscn::ff4010d2eec893a80af501727777d817::1785948245::res://.godot/exported/133200997/export-7912c18959f03e179ae884102956e29c-mech.scn
 res://tools/shoot_guns.tscn::d29f296a3537e69b27d992a6ef0a734c::1785955737::res://.godot/exported/133200997/export-9337b6ffb85594ddd4b4d5c50ac1a745-shoot_guns.scn
+res://_attrition_test.tscn::740b9781267bf89e1bffceee0ab2f8e7::1785962688::res://.godot/exported/133200997/export-4235951bf3bc9d93614dcb38a4ea2fd3-_attrition_test.scn

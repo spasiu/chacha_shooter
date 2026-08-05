@@ -25,6 +25,7 @@ const HAND_OFF := Vector3(0.05, -0.32, 0.34)
 const ROCKET_BACK := Vector3(0.0, -0.03, 0.34)
 
 @onready var rocket: MeshInstance3D = $Rocket
+@onready var backblast: GPUParticles3D = $Backblast
 
 var _rocket_rest := Vector3.ZERO
 
@@ -41,6 +42,24 @@ var blast_radius: float:
 func _ready() -> void:
 	super()
 	_rocket_rest = rocket.position
+	backblast.emitting = false
+
+
+## A rocket motor vents as much out of the back as it sends out of the front,
+## which is the fact the whole weapon is arranged around: the sights are on the
+## left flank because a man with his eye behind the tube would be looking into
+## the blast.
+##
+## Hung off the muzzle flash rather than off firing, because that is the one
+## thing both paths already agree on -- your own shot lights it through
+## _show_flash, and somebody else's through show_muzzle_flash. Anything else
+## would have to be reported over the wire a second time to be seen.
+func _light_flash(scale_to: Vector3, energy: float, seconds: float) -> void:
+	super(scale_to, energy, seconds)
+	# One shot with explosiveness at 1: the whole cloud leaves at once, the way
+	# it does, rather than streaming out of the breech for half a second.
+	backblast.restart()
+	backblast.emitting = true
 
 
 ## One rocket: fly it out along the shot and set it off wherever it stops.

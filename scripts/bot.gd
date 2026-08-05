@@ -457,6 +457,10 @@ func _die(from_behind: bool) -> void:
 	model.die(from_behind)
 	$CollisionShape3D.set_deferred("disabled", true)
 	label.visible = false
+	# One off his side's roll, the same as any other man lost. BotCommand will
+	# put another out in a few seconds, and that replacement is exactly what the
+	# count is measuring.
+	Net.report_bot_death(team)
 	died.emit()
 	await get_tree().create_timer(linger).timeout
 	if is_instance_valid(self):

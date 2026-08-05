@@ -134,7 +134,10 @@ func _update_reticule() -> void:
 
 ## The running count, and the countdown while the scoreboard is up.
 func _update_round() -> void:
-	tickets.visible = Net.active() and not Net.round_over
+	# Shown alone as well as in company: with bots on the field the count moves
+	# whether or not anybody else is connected, and a number that is being kept
+	# but not shown is worse than one nobody keeps.
+	tickets.visible = not Net.round_over
 	if tickets.visible:
 		# Whoever is nearer the end is the urgent number, so both are always
 		# shown and the reading is left to the player rather than to a colour.

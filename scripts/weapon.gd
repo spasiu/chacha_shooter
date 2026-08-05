@@ -50,6 +50,16 @@ extends Equipment
 ## Bloom-per-shot multiplier while aiming: sighted fire walks off target slower.
 @export var aim_bloom_factor := 0.4
 
+@export_group("Carry")
+## How this weapon is held in the hands, on top of wherever the socket puts it.
+## First person only: the same instance is moved into the soldier's hand for the
+## third-person view, and an offset that reads as "shouldered" from behind the
+## sights reads as "floating beside the glove" from outside. Zero for anything
+## carried the ordinary way.
+@export var carry_offset := Vector3.ZERO
+## Degrees, applied with the offset above and faded out by the same aim blend.
+@export var carry_tilt_deg := Vector3.ZERO
+
 @export_group("Sway")
 ## Half-width of the figure eight at the hip, in degrees. Aiming removes it.
 @export var sway_amplitude := 2.0
@@ -149,6 +159,8 @@ var _braced := false
 var _sway := Vector2.ZERO
 var _sway_time := 0.0
 var _sway_seed := 0.0
+## Whether this is the copy in front of the camera or the one in the hand.
+var _viewmodel := true
 var _aim_position := Vector3.ZERO
 var _aim_rotation := Vector3.ZERO
 
@@ -187,6 +199,12 @@ func aim_ratio() -> float:
 
 func set_aiming(aiming: bool) -> void:
 	_aim_held = aiming
+
+
+## Told by whoever owns the socket, on every view change. Only the carry pose
+## depends on it; everything else is the same weapon either way.
+func set_viewmodel(active: bool) -> void:
+	_viewmodel = active
 
 
 func set_braced(braced: bool) -> void:
@@ -294,9 +312,17 @@ func _process(delta: float) -> void:
 	_update_sway(delta)
 
 	_kick = _kick.lerp(Vector3.ZERO, minf(kick_recovery * delta, 1.0))
-	position = _rest_position.lerp(_aim_position, _aim) + _kick + _reload_offset
+	var carried := carry_offset * (1.0 - _aim) if _viewmodel else Vector3.ZERO
+	position = _rest_position.lerp(_aim_position, _aim) + carried + _kick + _reload_offset
+	var tilt := Vector3.ZERO
+	if _viewmodel and carry_tilt_deg != Vector3.ZERO:
+		tilt = Vector3(
+			deg_to_rad(carry_tilt_deg.x), deg_to_rad(carry_tilt_deg.y),
+			deg_to_rad(carry_tilt_deg.z)
+		) * (1.0 - _aim)
 	rotation = (
 		_rest_rotation.lerp(_aim_rotation, _aim)
+		+ tilt
 		+ _reload_tilt
 		+ Vector3(_sway.y, _sway.x, 0.0)
 	)

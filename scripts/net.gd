@@ -623,11 +623,41 @@ func report_equip(item_index: int) -> void:
 
 func report_death(killer_id: int) -> void:
 	if not active():
+		# Alone, this client is the only thing keeping score, and the count still
+		# has to move: a single-player match where your own deaths are free and
+		# the bots' are not is not a match.
+		_local_casualty(my_team())
 		return
 	_send_event(EV_DIE, [killer_id])
 	# An event does not come back to whoever sent it, so the one person who
 	# most wants to know who did it would otherwise be the only one not told.
 	_announce_kill(killer_id, local_id())
+
+
+## A bot went down. Bots belong to nobody and are in no roster, so this books
+## the casualty against the side they were fighting for and nothing else -- no
+## kill credited, no name in the feed.
+##
+## They still cost their side a man, which is the whole point: a section you
+## wipe out has to be worth something on the board, or the attrition count is a
+## scoreboard for two people in a field of twelve.
+func report_bot_death(side: String) -> void:
+	if not active():
+		_local_casualty(side)
+		return
+	_bot_down.rpc_id(1, side)
+
+
+## The server's end of that. Booked against the field the client reporting it is
+## playing on, because that is the match those bots were in.
+@rpc("any_peer", "reliable", "call_remote")
+func _bot_down(side: String) -> void:
+	if mode != SERVER:
+		return
+	var from := multiplayer.get_remote_sender_id()
+	if not roster.has(from):
+		return
+	_book_casualty(String(roster[from].get("map", MapCatalogue.DEFAULT_ID)), side)
 
 
 func report_spawn(at: Vector3) -> void:
@@ -839,7 +869,16 @@ func _tally_kill(killer: int, victim: int) -> void:
 	# A death is a casualty against the side that took it, however it happened.
 	# Walking off the boundary line costs your side a man exactly as being shot
 	# does, which is the point of counting respawns rather than kills.
-	var side := team_of(victim)
+	_book_casualty(field, team_of(victim))
+
+
+## One man off a side's roll, on one field. Every way of dying arrives here --
+## a player shot, a player who walked off the edge, a bot -- because attrition
+## does not care how the man was lost, only that he was.
+func _book_casualty(field: String, side: String) -> void:
+	var books := _field(field)
+	if books["over"]:
+		return
 	var count: Dictionary = books["casualties"]
 	count[side] = int(count.get(side, 0)) + 1
 	for peer: int in _peers_on(field):
@@ -847,8 +886,31 @@ func _tally_kill(killer: int, victim: int) -> void:
 	if field == map_id:
 		casualties = count.duplicate()
 		round_changed.emit()
-	if count[side] >= CASUALTY_LIMIT:
+	if int(count[side]) >= CASUALTY_LIMIT:
 		_end_round(side, field)
+
+
+## Books a casualty with no server behind it. The same arithmetic the server
+## does, run by the one client there is.
+func _local_casualty(side: String) -> void:
+	if round_over:
+		return
+	casualties[side] = int(casualties.get(side, 0)) + 1
+	round_changed.emit()
+	if int(casualties[side]) >= CASUALTY_LIMIT:
+		_end_round_alone(side)
+
+
+## Calls the round when there is nobody to call it for us. Kept apart from
+## `_end_round` rather than folded into it: that one talks to peers, and a
+## client on its own has none to talk to.
+func _end_round_alone(loser: String) -> void:
+	round_over = true
+	round_loser = loser
+	round_standings = roster.duplicate(true)
+	round_resumes_at = Time.get_ticks_msec() / 1000.0 + INTERMISSION
+	round_changed.emit()
+	get_tree().create_timer(INTERMISSION).timeout.connect(_restart_field)
 
 
 ## Takes a casualty back off the board. The man was counted when he went down,
@@ -1079,6 +1141,12 @@ func _round_over(loser: String, standings: Dictionary, seconds: float) -> void:
 ## through it between every round.
 @rpc("authority", "reliable", "call_remote")
 func _round_start() -> void:
+	_restart_field()
+
+
+## Wipes the field and everything standing on it back to how the map has it.
+## Called from the wire on a client and directly on one playing alone.
+func _restart_field() -> void:
 	round_over = false
 	round_loser = ""
 	round_standings = {}
