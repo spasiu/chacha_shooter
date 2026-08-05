@@ -265,11 +265,39 @@ class Layout:
             "flat": True, "gy": int(gy),
         })
 
-    def wall(self, name, x0, z0, x1, z1, height=6, kind="concrete"):
+    def wall(self, name, x0, z0, x1, z1, height=6, kind="concrete", cap="stone"):
+        """A wall, with a course of something else laid along the top of it.
+        One block of coping is the difference between a wall and a slab."""
         self.box(name, x0, z0, x1, z1, height, kind)
+        if cap and height > 2:
+            self.box(name + " coping", x0 - 1, z0 - 1, x1 + 1, z1 + 1, 1, cap,
+                     flat=GROUND + height)
 
-    def building(self, name, x0, z0, x1, z1, storeys=2, walls="plaster",
-                 roof="tile", gy=GROUND + 1, door=None, windows=()):
+    # Ways a house can be dressed, picked per building from its own position so
+    # a street is not one colour and is the same street every time it is built.
+    #
+    # Each is (walls, roof, trim, roof style). Trim is the plinth, the quoins on
+    # the corners and the band under the eaves -- the parts that stand a block
+    # proud of the wall, which is what puts a shadow line on a flat face and
+    # stops a building reading as a painted box.
+    LIVERIES = [
+        # walls, roof, trim, roof style, the second roof block
+        ("whitewash", "tile", "brick", "gable", "brick"),
+        ("ochre", "slate", "brick", "gable", "steel"),
+        ("plaster", "tile", "stone", "flat", "brick"),
+        ("brick", "slate", "stone", "gable", "tin"),
+        ("whitewash", "tin", "timber", "corrugated", "slate"),
+        ("plaster", "slate", "brick", "flat", "tin"),
+        ("ochre", "tin", "timber", "corrugated", "steel"),
+        ("sand", "tile", "brick", "gable", "ochre"),
+    ]
+
+    def livery(self, x0, z0):
+        return self.LIVERIES[int(hashed(x0, z0, 71) * len(self.LIVERIES)) % len(self.LIVERIES)]
+
+    def building(self, name, x0, z0, x1, z1, storeys=2, walls=None,
+                 roof=None, gy=GROUND + 1, door=None, windows=(), trim=None,
+                 roof_style=None, chimney=True):
         """A rendered box with floors in it, a roof on top and a way in.
 
         Built flat rather than following the ground: a house on a slope with its
@@ -277,8 +305,22 @@ class Layout:
 
         Windows are holes rather than glass. Every one is a firing position and
         a way for a grenade to arrive, which is most of what makes a building
-        worth entering rather than worth walking round.
+        worth entering rather than worth walking round. Each gets a sill under
+        it and a lintel over it, both a block proud: at this block size that is
+        the difference between a window and a hole.
+
+        Everything else here is relief. A plinth at the foot, quoins up the
+        corners, a band under the eaves, a ridged or pitched roof and a chimney
+        off one corner -- none of it changes how the building plays, and all of
+        it changes whether the map looks built or extruded.
         """
+        chosen = self.livery(x0, z0)
+        walls = walls or chosen[0]
+        roof = roof or chosen[1]
+        trim = trim or chosen[2]
+        roof_style = roof_style or chosen[3]
+        second = chosen[4]
+
         storey = 11                      # 2.75m, enough to stand and shoot in
         total = storey * storeys
         self.box(name, x0, z0, x1, z1, total, walls, flat=gy)
@@ -286,14 +328,140 @@ class Layout:
             base = s * storey
             self.hollow(name + " inside %d" % s, x0 + 2, z0 + 2, x1 - 2, z1 - 2,
                         base + 1, base + storey, gy)
-        self.box(name + " roof", x0 - 2, z0 - 2, x1 + 2, z1 + 2, 2, roof,
-                 frm=0, flat=gy + total)
+
+        # Plinth: a course at the foot, standing a block out all round. Reads as
+        # the building sitting on the ground rather than being pushed into it.
+        self.box(name + " plinth", x0 - 1, z0 - 1, x1 + 1, z1 + 1, 4, trim, flat=gy)
+        # Quoins up each corner, and a band under the eaves.
+        for i, (qx, qz) in enumerate([(x0 - 1, z0 - 1), (x1 - 3, z0 - 1),
+                                      (x0 - 1, z1 - 3), (x1 - 3, z1 - 3)]):
+            self.box(name + " quoin %d" % i, qx, qz, qx + 4, qz + 4, total, trim,
+                     flat=gy)
+        self.box(name + " cornice", x0 - 1, z0 - 1, x1 + 1, z1 + 1, 3, trim,
+                 flat=gy + total - 3)
+        # And a string course between storeys, on anything tall enough to have
+        # somewhere to put one.
+        for s in range(1, storeys):
+            self.box(name + " course %d" % s, x0 - 1, z0 - 1, x1 + 1, z1 + 1, 2,
+                     trim, flat=gy + s * storey - 1)
+
         if door is not None:
             dx0, dz0, dx1, dz1 = door
             self.hollow(name + " door", dx0, dz0, dx1, dz1, 0, 9, gy)
+            # Frame round it, so a doorway is a doorway and not a missing block.
+            self.box(name + " door frame", dx0 - 2, dz0 - 1, dx1 + 2, dz1 + 1, 11,
+                     trim, flat=gy)
+            self.hollow(name + " door void", dx0, dz0 - 2, dx1, dz1 + 2, 0, 9, gy)
+
         for i, (wx0, wz0, wx1, wz1, sill) in enumerate(windows):
             self.hollow(name + " window %d" % i, wx0, wz0, wx1, wz1,
                         sill, sill + 6, gy)
+            self.box(name + " sill %d" % i, wx0 - 1, wz0 - 1, wx1 + 1, wz1 + 1, 1,
+                     trim, flat=gy + sill - 1)
+            self.box(name + " lintel %d" % i, wx0 - 1, wz0 - 1, wx1 + 1, wz1 + 1, 2,
+                     trim, flat=gy + sill + 6)
+
+        self._roof(name, x0, z0, x1, z1, gy + total, roof, roof_style, second)
+        if chimney:
+            cx0 = x0 + 4 if hashed(x0, z0, 83) < 0.5 else x1 - 10
+            self.box(name + " stack", cx0, z0 + 4, cx0 + 6, z0 + 10, 16, trim,
+                     flat=gy + total)
+            self.box(name + " pot", cx0 + 1, z0 + 5, cx0 + 5, z0 + 9, 3, "tile",
+                     flat=gy + total + 16)
+
+    def _roof(self, name, x0, z0, x1, z1, gy, roof, style, second=None):
+        """The lid, and the most patterned thing on the map.
+
+        A roof is the one big surface everybody sees from everywhere, and one
+        block type across the whole of it is what makes a village look printed.
+        So every roof here is laid in courses of two materials, the way a real
+        one is laid in courses of tile: bands two blocks deep, alternating, with
+        a capping course along the ridge and a darker one at the eaves. A few
+        patches of the second material are scattered over it as well -- a roof
+        somebody has had to repair.
+
+        Three kinds. Flat is a deck inside a parapet; gable is a pitch built as
+        steps, which at a quarter of a metre a step is what a pitched roof looks
+        like in blocks anyway; corrugated lays ridges across the deck in the
+        lighter of the two, so the light catches it one strip at a time.
+        """
+        second = second or roof
+        along_x = (x1 - x0) >= (z1 - z0)
+
+        if style == "gable":
+            span = (z1 - z0) if along_x else (x1 - x0)
+            steps = max(min(span // 8, 7), 2)
+            for i in range(steps):
+                inset = i * (span // (2 * steps))
+                # Courses alternate up the pitch, so the slope is banded the way
+                # a tiled roof is.
+                kind = roof if i % 2 == 0 else second
+                if along_x:
+                    self.box(name + " roof %d" % i, x0 - 2 + i, z0 - 2 + inset,
+                             x1 + 2 - i, z1 + 2 - inset, 2, kind, flat=gy + i * 2)
+                else:
+                    self.box(name + " roof %d" % i, x0 - 2 + inset, z0 - 2 + i,
+                             x1 + 2 - inset, z1 + 2 - i, 2, kind, flat=gy + i * 2)
+            # Ridge cap along the apex, in the other material.
+            top = gy + steps * 2
+            if along_x:
+                mid = (z0 + z1) // 2
+                self.box(name + " ridge", x0 - 1, mid - 2, x1 + 1, mid + 2, 2,
+                         second if steps % 2 == 0 else roof, flat=top)
+            else:
+                mid = (x0 + x1) // 2
+                self.box(name + " ridge", mid - 2, z0 - 1, mid + 2, z1 + 1, 2,
+                         second if steps % 2 == 0 else roof, flat=top)
+            self._roof_patches(name, x0, z0, x1, z1, gy, second)
+            return
+
+        # Both of the others start from a deck with an eaves overhang, laid in
+        # alternating courses.
+        step = 4
+        if along_x:
+            for i, z in enumerate(range(z0 - 2, z1 + 2, step)):
+                self.box(name + " course %d" % i, x0 - 2, z, x1 + 2,
+                         min(z + step, z1 + 2), 2, roof if i % 2 == 0 else second,
+                         flat=gy)
+        else:
+            for i, x in enumerate(range(x0 - 2, x1 + 2, step)):
+                self.box(name + " course %d" % i, x, z0 - 2,
+                         min(x + step, x1 + 2), z1 + 2, 2,
+                         roof if i % 2 == 0 else second, flat=gy)
+
+        if style == "corrugated":
+            # Ridges every fourth block across the short way, standing one
+            # proud. The gaps between them are the whole effect.
+            if along_x:
+                for i, z in enumerate(range(z0 - 2, z1 + 2, 4)):
+                    self.box(name + " rib %d" % i, x0 - 2, z, x1 + 2, z + 2, 1,
+                             second, flat=gy + 2)
+            else:
+                for i, x in enumerate(range(x0 - 2, x1 + 2, 4)):
+                    self.box(name + " rib %d" % i, x, z0 - 2, x + 2, z1 + 2, 1,
+                             second, flat=gy + 2)
+            self._roof_patches(name, x0, z0, x1, z1, gy + 2, roof)
+            return
+
+        # Flat: a parapet round the edge with the deck sitting inside it.
+        self.box(name + " parapet", x0 - 2, z0 - 2, x1 + 2, z1 + 2, 5, second,
+                 flat=gy + 2)
+        self.hollow(name + " roof well", x0, z0, x1, z1, 0, 4, gy + 3)
+        self._roof_patches(name, x0, z0, x1, z1, gy, second)
+
+    def _roof_patches(self, name, x0, z0, x1, z1, gy, kind):
+        """Two or three squares of the other material dropped on the roof: the
+        bit that was patched after something came through it. Placed off a hash
+        of the building's own corner, so a roof is patched the same way every
+        time the map is built."""
+        for i in range(3):
+            if hashed(x0 + i, z0 - i, 91) < 0.45:
+                continue
+            px = x0 + 2 + int(hashed(x0, z0 + i, 93) * max(x1 - x0 - 10, 1))
+            pz = z0 + 2 + int(hashed(x0 - i, z0, 97) * max(z1 - z0 - 10, 1))
+            size = 4 + int(hashed(px, pz, 101) * 6)
+            self.box(name + " patch %d" % i, px, pz, px + size, pz + size, 1, kind,
+                     flat=gy + 2)
 
     def compound(self, name, side, cx, cz, half_x, half_z, open_side="south",
                  gy=GROUND, height=14):
@@ -342,6 +510,25 @@ class Layout:
             self.box("%s colours" % name, band, z0 + 6, band + 4, z1 - 6,
                      height + 2, side)
         self.box("%s mast" % name, cx - 2, cz - 2, cx + 2, cz + 2, height + 14, side)
+        # Buttresses up the outside of the walls, every eight blocks. Cheap
+        # relief on the biggest flat faces on any map.
+        for i, x in enumerate(range(x0 + 8, x1 - 6, 16)):
+            self.box("%s pier n %d" % (name, i), x, z0 - 2, x + 5, z0 + 2,
+                     height - 2, "stone")
+            self.box("%s pier s %d" % (name, i), x, z1 - 2, x + 5, z1 + 2,
+                     height - 2, "stone")
+        for i, z in enumerate(range(z0 + 8, z1 - 6, 16)):
+            self.box("%s pier w %d" % (name, i), x0 - 2, z, x0 + 2, z + 5,
+                     height - 2, "stone")
+            self.box("%s pier e %d" % (name, i), x1 - 2, z, x1 + 2, z + 5,
+                     height - 2, "stone")
+        # A coping course along the top of the wall, in the side's own colour,
+        # so a base is capped rather than cut off.
+        self.box("%s coping" % name, x0 - 2, z0 - 2, x1 + 2, z1 + 2, 2, side,
+                 flat=gy + height)
+        # And a corrugated lean-to over the stores in the corner.
+        self._roof("%s stores roof" % name, x0 + 10, z0 + 10, x0 + 32, z0 + 28,
+                   gy + 8, "tin", "corrugated", "slate")
         # Stores under canvas, so a base has something in it at ground level to
         # take cover behind on the way out.
         self.box("%s stores" % name, x0 + 12, z0 + 12, x0 + 30, z0 + 26, 7, "canvas",
@@ -606,14 +793,39 @@ def build_shipment(m, cx, cz, level=GROUND):
 
     # Containers: 6m x 2.4m, so 24 x 10 blocks, 10 blocks tall.
     def container(name, x, z, turned, kind, stacked=False):
+        """A box, ribbed the way a real one is: corrugation up the long sides
+        every four blocks and a capping course along the top. Ten blocks of flat
+        steel is the one shape on this map that most needs breaking up, because
+        there are twenty of them and they are all anybody sees."""
+        def one(tag, bx, bz, bw, bd, base):
+            m.box(tag, bx, bz, bx + bw, bz + bd, 10, kind, flat=base)
+            # Ribs: proud strips up the long faces.
+            if bw >= bd:
+                for i, rx in enumerate(range(bx + 2, bx + bw - 2, 4)):
+                    m.box("%s rib %d" % (tag, i), rx, bz - 1, rx + 2, bz + bd + 1,
+                          8, "steel", flat=base + 1)
+            else:
+                for i, rz in enumerate(range(bz + 2, bz + bd - 2, 4)):
+                    m.box("%s rib %d" % (tag, i), bx - 1, rz, bx + bw + 1, rz + 2,
+                          8, "steel", flat=base + 1)
+            # Capping rail, and the doors at one end in a darker sheet.
+            m.box(tag + " cap", bx - 1, bz - 1, bx + bw + 1, bz + bd + 1, 1, "steel",
+                  flat=base + 10)
+            if bw >= bd:
+                m.box(tag + " doors", bx + bw - 2, bz, bx + bw + 1, bz + bd, 9,
+                      "rust" if kind != "rust" else "steel", flat=base + 1)
+            else:
+                m.box(tag + " doors", bx, bz + bd - 2, bx + bw, bz + bd + 1, 9,
+                      "rust" if kind != "rust" else "steel", flat=base + 1)
+
         if turned:
-            m.box(name, x, z, x + 10, z + 24, 10, kind, flat=level + 1)
+            one(name, x, z, 10, 24, level + 1)
             if stacked:
-                m.box(name + " upper", x, z, x + 10, z + 24, 10, kind, flat=level + 11)
+                one(name + " upper", x, z, 10, 24, level + 11)
         else:
-            m.box(name, x, z, x + 24, z + 10, 10, kind, flat=level + 1)
+            one(name, x, z, 24, 10, level + 1)
             if stacked:
-                m.box(name + " upper", x, z, x + 24, z + 10, 10, kind, flat=level + 11)
+                one(name + " upper", x, z, 24, 10, level + 11)
 
     kinds = ["rust", "team_red", "steel", "team_blue", "concrete", "rust"]
     # The four in the middle, boxing in the objective.

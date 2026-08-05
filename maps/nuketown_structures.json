@@ -97,16 +97,88 @@
    "gy": 17
   },
   {
-   "name": "nuketown house north roof",
-   "x0": 30,
-   "z0": 48,
-   "x1": 114,
-   "z1": 108,
+   "name": "nuketown house north plinth",
+   "x0": 31,
+   "z0": 49,
+   "x1": 113,
+   "z1": 107,
+   "from": 0,
+   "height": 4,
+   "type": "brick",
+   "flat": true,
+   "gy": 17
+  },
+  {
+   "name": "nuketown house north quoin 0",
+   "x0": 31,
+   "z0": 49,
+   "x1": 35,
+   "z1": 53,
+   "from": 0,
+   "height": 22,
+   "type": "brick",
+   "flat": true,
+   "gy": 17
+  },
+  {
+   "name": "nuketown house north quoin 1",
+   "x0": 109,
+   "z0": 49,
+   "x1": 113,
+   "z1": 53,
+   "from": 0,
+   "height": 22,
+   "type": "brick",
+   "flat": true,
+   "gy": 17
+  },
+  {
+   "name": "nuketown house north quoin 2",
+   "x0": 31,
+   "z0": 103,
+   "x1": 35,
+   "z1": 107,
+   "from": 0,
+   "height": 22,
+   "type": "brick",
+   "flat": true,
+   "gy": 17
+  },
+  {
+   "name": "nuketown house north quoin 3",
+   "x0": 109,
+   "z0": 103,
+   "x1": 113,
+   "z1": 107,
+   "from": 0,
+   "height": 22,
+   "type": "brick",
+   "flat": true,
+   "gy": 17
+  },
+  {
+   "name": "nuketown house north cornice",
+   "x0": 31,
+   "z0": 49,
+   "x1": 113,
+   "z1": 107,
+   "from": 0,
+   "height": 3,
+   "type": "brick",
+   "flat": true,
+   "gy": 36
+  },
+  {
+   "name": "nuketown house north course 1",
+   "x0": 31,
+   "z0": 49,
+   "x1": 113,
+   "z1": 107,
    "from": 0,
    "height": 2,
-   "type": "tile",
+   "type": "brick",
    "flat": true,
-   "gy": 39
+   "gy": 27
   },
   {
    "name": "nuketown house north door",
@@ -114,6 +186,30 @@
    "z0": 104,
    "x1": 82,
    "z1": 106,
+   "from": 0,
+   "height": 9,
+   "clear": true,
+   "flat": true,
+   "gy": 17
+  },
+  {
+   "name": "nuketown house north door frame",
+   "x0": 66,
+   "z0": 103,
+   "x1": 84,
+   "z1": 107,
+   "from": 0,
+   "height": 11,
+   "type": "brick",
+   "flat": true,
+   "gy": 17
+  },
+  {
+   "name": "nuketown house north door void",
+   "x0": 68,
+   "z0": 102,
+   "x1": 82,
+   "z1": 108,
    "from": 0,
    "height": 9,
    "clear": true,
@@ -133,6 +229,30 @@
    "gy": 17
   },
   {
+   "name": "nuketown house north sill 0",
+   "x0": 37,
+   "z0": 103,
+   "x1": 55,
+   "z1": 107,
+   "from": 0,
+   "height": 1,
+   "type": "brick",
+   "flat": true,
+   "gy": 20
+  },
+  {
+   "name": "nuketown house north lintel 0",
+   "x0": 37,
+   "z0": 103,
+   "x1": 55,
+   "z1": 107,
+   "from": 0,
+   "height": 2,
+   "type": "brick",
+   "flat": true,
+   "gy": 27
+  },
+  {
    "name": "nuketown house north window 1",
    "x0": 90,
    "z0": 104,
@@ -143,6 +263,30 @@
    "clear": true,
    "flat": true,
    "gy": 17
+  },
+  {
+   "name": "nuketown house north sill 1",
+   "x0": 89,
+   "z0": 103,
+   "x1": 107,
+   "z1": 107,
+   "from": 0,
+   "height": 1,
+   "type": "brick",
+   "flat": true,
+   "gy": 20
+  },
+  {
+   "name": "nuketown house north lintel 1",
+   "x0": 89,
+   "z0": 103,
+   "x1": 107,
+   "z1": 107,
+   "from": 0,
+   "height": 2,
+   "type": "brick",
+   "flat": true,
+   "gy": 27
   },
   {
    "name": "nuketown house north window 2",
@@ -157,6 +301,30 @@
    "gy": 17
   },
   {
+   "name": "nuketown house north sill 2",
+   "x0": 37,
+   "z0": 103,
+   "x1": 55,
+   "z1": 107,
+   "from": 0,
+   "height": 1,
+   "type": "brick",
+   "flat": true,
+   "gy": 31
+  },
+  {
+   "name": "nuketown house north lintel 2",
+   "x0": 37,
+   "z0": 103,
+   "x1": 55,
+   "z1": 107,
+   "from": 0,
+   "height": 2,
+   "type": "brick",
+   "flat": true,
+   "gy": 38
+  },
+  {
    "name": "nuketown house north window 3",
    "x0": 90,
    "z0": 104,
@@ -169,6 +337,30 @@
    "gy": 17
   },
   {
+   "name": "nuketown house north sill 3",
+   "x0": 89,
+   "z0": 103,
+   "x1": 107,
+   "z1": 107,
+   "from": 0,
+   "height": 1,
+   "type": "brick",
+   "flat": true,
+   "gy": 31
+  },
+  {
+   "name": "nuketown house north lintel 3",
+   "x0": 89,
+   "z0": 103,
+   "x1": 107,
+   "z1": 107,
+   "from": 0,
+   "height": 2,
+   "type": "brick",
+   "flat": true,
+   "gy": 38
+  },
+  {
    "name": "nuketown house north window 4",
    "x0": 30,
    "z0": 66,
@@ -179,6 +371,186 @@
    "clear": true,
    "flat": true,
    "gy": 17
+  },
+  {
+   "name": "nuketown house north sill 4",
+   "x0": 29,
+   "z0": 65,
+   "x1": 33,
+   "z1": 83,
+   "from": 0,
+   "height": 1,
+   "type": "brick",
+   "flat": true,
+   "gy": 20
+  },
+  {
+   "name": "nuketown house north lintel 4",
+   "x0": 29,
+   "z0": 65,
+   "x1": 33,
+   "z1": 83,
+   "from": 0,
+   "height": 2,
+   "type": "brick",
+   "flat": true,
+   "gy": 27
+  },
+  {
+   "name": "nuketown house north roof 0",
+   "x0": 30,
+   "z0": 48,
+   "x1": 114,
+   "z1": 108,
+   "from": 0,
+   "height": 2,
+   "type": "tile",
+   "flat": true,
+   "gy": 39
+  },
+  {
+   "name": "nuketown house north roof 1",
+   "x0": 31,
+   "z0": 52,
+   "x1": 113,
+   "z1": 104,
+   "from": 0,
+   "height": 2,
+   "type": "ochre",
+   "flat": true,
+   "gy": 41
+  },
+  {
+   "name": "nuketown house north roof 2",
+   "x0": 32,
+   "z0": 56,
+   "x1": 112,
+   "z1": 100,
+   "from": 0,
+   "height": 2,
+   "type": "tile",
+   "flat": true,
+   "gy": 43
+  },
+  {
+   "name": "nuketown house north roof 3",
+   "x0": 33,
+   "z0": 60,
+   "x1": 111,
+   "z1": 96,
+   "from": 0,
+   "height": 2,
+   "type": "ochre",
+   "flat": true,
+   "gy": 45
+  },
+  {
+   "name": "nuketown house north roof 4",
+   "x0": 34,
+   "z0": 64,
+   "x1": 110,
+   "z1": 92,
+   "from": 0,
+   "height": 2,
+   "type": "tile",
+   "flat": true,
+   "gy": 47
+  },
+  {
+   "name": "nuketown house north roof 5",
+   "x0": 35,
+   "z0": 68,
+   "x1": 109,
+   "z1": 88,
+   "from": 0,
+   "height": 2,
+   "type": "ochre",
+   "flat": true,
+   "gy": 49
+  },
+  {
+   "name": "nuketown house north roof 6",
+   "x0": 36,
+   "z0": 72,
+   "x1": 108,
+   "z1": 84,
+   "from": 0,
+   "height": 2,
+   "type": "tile",
+   "flat": true,
+   "gy": 51
+  },
+  {
+   "name": "nuketown house north ridge",
+   "x0": 31,
+   "z0": 76,
+   "x1": 113,
+   "z1": 80,
+   "from": 0,
+   "height": 2,
+   "type": "tile",
+   "flat": true,
+   "gy": 53
+  },
+  {
+   "name": "nuketown house north patch 0",
+   "x0": 60,
+   "z0": 66,
+   "x1": 65,
+   "z1": 71,
+   "from": 0,
+   "height": 1,
+   "type": "ochre",
+   "flat": true,
+   "gy": 41
+  },
+  {
+   "name": "nuketown house north patch 1",
+   "x0": 62,
+   "z0": 84,
+   "x1": 68,
+   "z1": 90,
+   "from": 0,
+   "height": 1,
+   "type": "ochre",
+   "flat": true,
+   "gy": 41
+  },
+  {
+   "name": "nuketown house north patch 2",
+   "x0": 56,
+   "z0": 66,
+   "x1": 60,
+   "z1": 70,
+   "from": 0,
+   "height": 1,
+   "type": "ochre",
+   "flat": true,
+   "gy": 41
+  },
+  {
+   "name": "nuketown house north stack",
+   "x0": 36,
+   "z0": 54,
+   "x1": 42,
+   "z1": 60,
+   "from": 0,
+   "height": 16,
+   "type": "brick",
+   "flat": true,
+   "gy": 39
+  },
+  {
+   "name": "nuketown house north pot",
+   "x0": 37,
+   "z0": 55,
+   "x1": 41,
+   "z1": 59,
+   "from": 0,
+   "height": 3,
+   "type": "tile",
+   "flat": true,
+   "gy": 55
   },
   {
    "name": "nuketown house south",
@@ -217,16 +589,88 @@
    "gy": 17
   },
   {
-   "name": "nuketown house south roof",
-   "x0": 142,
-   "z0": 148,
-   "x1": 226,
-   "z1": 208,
+   "name": "nuketown house south plinth",
+   "x0": 143,
+   "z0": 149,
+   "x1": 225,
+   "z1": 207,
+   "from": 0,
+   "height": 4,
+   "type": "timber",
+   "flat": true,
+   "gy": 17
+  },
+  {
+   "name": "nuketown house south quoin 0",
+   "x0": 143,
+   "z0": 149,
+   "x1": 147,
+   "z1": 153,
+   "from": 0,
+   "height": 22,
+   "type": "timber",
+   "flat": true,
+   "gy": 17
+  },
+  {
+   "name": "nuketown house south quoin 1",
+   "x0": 221,
+   "z0": 149,
+   "x1": 225,
+   "z1": 153,
+   "from": 0,
+   "height": 22,
+   "type": "timber",
+   "flat": true,
+   "gy": 17
+  },
+  {
+   "name": "nuketown house south quoin 2",
+   "x0": 143,
+   "z0": 203,
+   "x1": 147,
+   "z1": 207,
+   "from": 0,
+   "height": 22,
+   "type": "timber",
+   "flat": true,
+   "gy": 17
+  },
+  {
+   "name": "nuketown house south quoin 3",
+   "x0": 221,
+   "z0": 203,
+   "x1": 225,
+   "z1": 207,
+   "from": 0,
+   "height": 22,
+   "type": "timber",
+   "flat": true,
+   "gy": 17
+  },
+  {
+   "name": "nuketown house south cornice",
+   "x0": 143,
+   "z0": 149,
+   "x1": 225,
+   "z1": 207,
+   "from": 0,
+   "height": 3,
+   "type": "timber",
+   "flat": true,
+   "gy": 36
+  },
+  {
+   "name": "nuketown house south course 1",
+   "x0": 143,
+   "z0": 149,
+   "x1": 225,
+   "z1": 207,
    "from": 0,
    "height": 2,
-   "type": "tile",
+   "type": "timber",
    "flat": true,
-   "gy": 39
+   "gy": 27
   },
   {
    "name": "nuketown house south door",
@@ -234,6 +678,30 @@
    "z0": 148,
    "x1": 188,
    "z1": 150,
+   "from": 0,
+   "height": 9,
+   "clear": true,
+   "flat": true,
+   "gy": 17
+  },
+  {
+   "name": "nuketown house south door frame",
+   "x0": 172,
+   "z0": 147,
+   "x1": 190,
+   "z1": 151,
+   "from": 0,
+   "height": 11,
+   "type": "timber",
+   "flat": true,
+   "gy": 17
+  },
+  {
+   "name": "nuketown house south door void",
+   "x0": 174,
+   "z0": 146,
+   "x1": 188,
+   "z1": 152,
    "from": 0,
    "height": 9,
    "clear": true,
@@ -253,6 +721,30 @@
    "gy": 17
   },
   {
+   "name": "nuketown house south sill 0",
+   "x0": 149,
+   "z0": 147,
+   "x1": 167,
+   "z1": 151,
+   "from": 0,
+   "height": 1,
+   "type": "timber",
+   "flat": true,
+   "gy": 20
+  },
+  {
+   "name": "nuketown house south lintel 0",
+   "x0": 149,
+   "z0": 147,
+   "x1": 167,
+   "z1": 151,
+   "from": 0,
+   "height": 2,
+   "type": "timber",
+   "flat": true,
+   "gy": 27
+  },
+  {
    "name": "nuketown house south window 1",
    "x0": 202,
    "z0": 148,
@@ -263,6 +755,30 @@
    "clear": true,
    "flat": true,
    "gy": 17
+  },
+  {
+   "name": "nuketown house south sill 1",
+   "x0": 201,
+   "z0": 147,
+   "x1": 219,
+   "z1": 151,
+   "from": 0,
+   "height": 1,
+   "type": "timber",
+   "flat": true,
+   "gy": 20
+  },
+  {
+   "name": "nuketown house south lintel 1",
+   "x0": 201,
+   "z0": 147,
+   "x1": 219,
+   "z1": 151,
+   "from": 0,
+   "height": 2,
+   "type": "timber",
+   "flat": true,
+   "gy": 27
   },
   {
    "name": "nuketown house south window 2",
@@ -277,6 +793,30 @@
    "gy": 17
   },
   {
+   "name": "nuketown house south sill 2",
+   "x0": 149,
+   "z0": 147,
+   "x1": 167,
+   "z1": 151,
+   "from": 0,
+   "height": 1,
+   "type": "timber",
+   "flat": true,
+   "gy": 31
+  },
+  {
+   "name": "nuketown house south lintel 2",
+   "x0": 149,
+   "z0": 147,
+   "x1": 167,
+   "z1": 151,
+   "from": 0,
+   "height": 2,
+   "type": "timber",
+   "flat": true,
+   "gy": 38
+  },
+  {
    "name": "nuketown house south window 3",
    "x0": 202,
    "z0": 148,
@@ -289,6 +829,30 @@
    "gy": 17
   },
   {
+   "name": "nuketown house south sill 3",
+   "x0": 201,
+   "z0": 147,
+   "x1": 219,
+   "z1": 151,
+   "from": 0,
+   "height": 1,
+   "type": "timber",
+   "flat": true,
+   "gy": 31
+  },
+  {
+   "name": "nuketown house south lintel 3",
+   "x0": 201,
+   "z0": 147,
+   "x1": 219,
+   "z1": 151,
+   "from": 0,
+   "height": 2,
+   "type": "timber",
+   "flat": true,
+   "gy": 38
+  },
+  {
    "name": "nuketown house south window 4",
    "x0": 224,
    "z0": 174,
@@ -299,6 +863,450 @@
    "clear": true,
    "flat": true,
    "gy": 17
+  },
+  {
+   "name": "nuketown house south sill 4",
+   "x0": 223,
+   "z0": 173,
+   "x1": 227,
+   "z1": 191,
+   "from": 0,
+   "height": 1,
+   "type": "timber",
+   "flat": true,
+   "gy": 20
+  },
+  {
+   "name": "nuketown house south lintel 4",
+   "x0": 223,
+   "z0": 173,
+   "x1": 227,
+   "z1": 191,
+   "from": 0,
+   "height": 2,
+   "type": "timber",
+   "flat": true,
+   "gy": 27
+  },
+  {
+   "name": "nuketown house south course 0",
+   "x0": 142,
+   "z0": 148,
+   "x1": 226,
+   "z1": 152,
+   "from": 0,
+   "height": 2,
+   "type": "tile",
+   "flat": true,
+   "gy": 39
+  },
+  {
+   "name": "nuketown house south course 1",
+   "x0": 142,
+   "z0": 152,
+   "x1": 226,
+   "z1": 156,
+   "from": 0,
+   "height": 2,
+   "type": "slate",
+   "flat": true,
+   "gy": 39
+  },
+  {
+   "name": "nuketown house south course 2",
+   "x0": 142,
+   "z0": 156,
+   "x1": 226,
+   "z1": 160,
+   "from": 0,
+   "height": 2,
+   "type": "tile",
+   "flat": true,
+   "gy": 39
+  },
+  {
+   "name": "nuketown house south course 3",
+   "x0": 142,
+   "z0": 160,
+   "x1": 226,
+   "z1": 164,
+   "from": 0,
+   "height": 2,
+   "type": "slate",
+   "flat": true,
+   "gy": 39
+  },
+  {
+   "name": "nuketown house south course 4",
+   "x0": 142,
+   "z0": 164,
+   "x1": 226,
+   "z1": 168,
+   "from": 0,
+   "height": 2,
+   "type": "tile",
+   "flat": true,
+   "gy": 39
+  },
+  {
+   "name": "nuketown house south course 5",
+   "x0": 142,
+   "z0": 168,
+   "x1": 226,
+   "z1": 172,
+   "from": 0,
+   "height": 2,
+   "type": "slate",
+   "flat": true,
+   "gy": 39
+  },
+  {
+   "name": "nuketown house south course 6",
+   "x0": 142,
+   "z0": 172,
+   "x1": 226,
+   "z1": 176,
+   "from": 0,
+   "height": 2,
+   "type": "tile",
+   "flat": true,
+   "gy": 39
+  },
+  {
+   "name": "nuketown house south course 7",
+   "x0": 142,
+   "z0": 176,
+   "x1": 226,
+   "z1": 180,
+   "from": 0,
+   "height": 2,
+   "type": "slate",
+   "flat": true,
+   "gy": 39
+  },
+  {
+   "name": "nuketown house south course 8",
+   "x0": 142,
+   "z0": 180,
+   "x1": 226,
+   "z1": 184,
+   "from": 0,
+   "height": 2,
+   "type": "tile",
+   "flat": true,
+   "gy": 39
+  },
+  {
+   "name": "nuketown house south course 9",
+   "x0": 142,
+   "z0": 184,
+   "x1": 226,
+   "z1": 188,
+   "from": 0,
+   "height": 2,
+   "type": "slate",
+   "flat": true,
+   "gy": 39
+  },
+  {
+   "name": "nuketown house south course 10",
+   "x0": 142,
+   "z0": 188,
+   "x1": 226,
+   "z1": 192,
+   "from": 0,
+   "height": 2,
+   "type": "tile",
+   "flat": true,
+   "gy": 39
+  },
+  {
+   "name": "nuketown house south course 11",
+   "x0": 142,
+   "z0": 192,
+   "x1": 226,
+   "z1": 196,
+   "from": 0,
+   "height": 2,
+   "type": "slate",
+   "flat": true,
+   "gy": 39
+  },
+  {
+   "name": "nuketown house south course 12",
+   "x0": 142,
+   "z0": 196,
+   "x1": 226,
+   "z1": 200,
+   "from": 0,
+   "height": 2,
+   "type": "tile",
+   "flat": true,
+   "gy": 39
+  },
+  {
+   "name": "nuketown house south course 13",
+   "x0": 142,
+   "z0": 200,
+   "x1": 226,
+   "z1": 204,
+   "from": 0,
+   "height": 2,
+   "type": "slate",
+   "flat": true,
+   "gy": 39
+  },
+  {
+   "name": "nuketown house south course 14",
+   "x0": 142,
+   "z0": 204,
+   "x1": 226,
+   "z1": 208,
+   "from": 0,
+   "height": 2,
+   "type": "tile",
+   "flat": true,
+   "gy": 39
+  },
+  {
+   "name": "nuketown house south rib 0",
+   "x0": 142,
+   "z0": 148,
+   "x1": 226,
+   "z1": 150,
+   "from": 0,
+   "height": 1,
+   "type": "slate",
+   "flat": true,
+   "gy": 41
+  },
+  {
+   "name": "nuketown house south rib 1",
+   "x0": 142,
+   "z0": 152,
+   "x1": 226,
+   "z1": 154,
+   "from": 0,
+   "height": 1,
+   "type": "slate",
+   "flat": true,
+   "gy": 41
+  },
+  {
+   "name": "nuketown house south rib 2",
+   "x0": 142,
+   "z0": 156,
+   "x1": 226,
+   "z1": 158,
+   "from": 0,
+   "height": 1,
+   "type": "slate",
+   "flat": true,
+   "gy": 41
+  },
+  {
+   "name": "nuketown house south rib 3",
+   "x0": 142,
+   "z0": 160,
+   "x1": 226,
+   "z1": 162,
+   "from": 0,
+   "height": 1,
+   "type": "slate",
+   "flat": true,
+   "gy": 41
+  },
+  {
+   "name": "nuketown house south rib 4",
+   "x0": 142,
+   "z0": 164,
+   "x1": 226,
+   "z1": 166,
+   "from": 0,
+   "height": 1,
+   "type": "slate",
+   "flat": true,
+   "gy": 41
+  },
+  {
+   "name": "nuketown house south rib 5",
+   "x0": 142,
+   "z0": 168,
+   "x1": 226,
+   "z1": 170,
+   "from": 0,
+   "height": 1,
+   "type": "slate",
+   "flat": true,
+   "gy": 41
+  },
+  {
+   "name": "nuketown house south rib 6",
+   "x0": 142,
+   "z0": 172,
+   "x1": 226,
+   "z1": 174,
+   "from": 0,
+   "height": 1,
+   "type": "slate",
+   "flat": true,
+   "gy": 41
+  },
+  {
+   "name": "nuketown house south rib 7",
+   "x0": 142,
+   "z0": 176,
+   "x1": 226,
+   "z1": 178,
+   "from": 0,
+   "height": 1,
+   "type": "slate",
+   "flat": true,
+   "gy": 41
+  },
+  {
+   "name": "nuketown house south rib 8",
+   "x0": 142,
+   "z0": 180,
+   "x1": 226,
+   "z1": 182,
+   "from": 0,
+   "height": 1,
+   "type": "slate",
+   "flat": true,
+   "gy": 41
+  },
+  {
+   "name": "nuketown house south rib 9",
+   "x0": 142,
+   "z0": 184,
+   "x1": 226,
+   "z1": 186,
+   "from": 0,
+   "height": 1,
+   "type": "slate",
+   "flat": true,
+   "gy": 41
+  },
+  {
+   "name": "nuketown house south rib 10",
+   "x0": 142,
+   "z0": 188,
+   "x1": 226,
+   "z1": 190,
+   "from": 0,
+   "height": 1,
+   "type": "slate",
+   "flat": true,
+   "gy": 41
+  },
+  {
+   "name": "nuketown house south rib 11",
+   "x0": 142,
+   "z0": 192,
+   "x1": 226,
+   "z1": 194,
+   "from": 0,
+   "height": 1,
+   "type": "slate",
+   "flat": true,
+   "gy": 41
+  },
+  {
+   "name": "nuketown house south rib 12",
+   "x0": 142,
+   "z0": 196,
+   "x1": 226,
+   "z1": 198,
+   "from": 0,
+   "height": 1,
+   "type": "slate",
+   "flat": true,
+   "gy": 41
+  },
+  {
+   "name": "nuketown house south rib 13",
+   "x0": 142,
+   "z0": 200,
+   "x1": 226,
+   "z1": 202,
+   "from": 0,
+   "height": 1,
+   "type": "slate",
+   "flat": true,
+   "gy": 41
+  },
+  {
+   "name": "nuketown house south rib 14",
+   "x0": 142,
+   "z0": 204,
+   "x1": 226,
+   "z1": 206,
+   "from": 0,
+   "height": 1,
+   "type": "slate",
+   "flat": true,
+   "gy": 41
+  },
+  {
+   "name": "nuketown house south patch 0",
+   "x0": 146,
+   "z0": 189,
+   "x1": 154,
+   "z1": 197,
+   "from": 0,
+   "height": 1,
+   "type": "tile",
+   "flat": true,
+   "gy": 43
+  },
+  {
+   "name": "nuketown house south patch 1",
+   "x0": 177,
+   "z0": 164,
+   "x1": 181,
+   "z1": 168,
+   "from": 0,
+   "height": 1,
+   "type": "tile",
+   "flat": true,
+   "gy": 43
+  },
+  {
+   "name": "nuketown house south patch 2",
+   "x0": 169,
+   "z0": 163,
+   "x1": 178,
+   "z1": 172,
+   "from": 0,
+   "height": 1,
+   "type": "tile",
+   "flat": true,
+   "gy": 43
+  },
+  {
+   "name": "nuketown house south stack",
+   "x0": 214,
+   "z0": 154,
+   "x1": 220,
+   "z1": 160,
+   "from": 0,
+   "height": 16,
+   "type": "timber",
+   "flat": true,
+   "gy": 39
+  },
+  {
+   "name": "nuketown house south pot",
+   "x0": 215,
+   "z0": 155,
+   "x1": 219,
+   "z1": 159,
+   "from": 0,
+   "height": 3,
+   "type": "tile",
+   "flat": true,
+   "gy": 55
   },
   {
    "name": "nuketown porch north",
@@ -399,6 +1407,18 @@
    "type": "brick"
   },
   {
+   "name": "nuketown wall north coping",
+   "x0": 17,
+   "z0": 111,
+   "x1": 99,
+   "z1": 117,
+   "from": 0,
+   "height": 1,
+   "type": "stone",
+   "flat": true,
+   "gy": 21
+  },
+  {
    "name": "nuketown wall south",
    "x0": 158,
    "z0": 140,
@@ -407,6 +1427,18 @@
    "from": 0,
    "height": 5,
    "type": "brick"
+  },
+  {
+   "name": "nuketown wall south coping",
+   "x0": 157,
+   "z0": 139,
+   "x1": 239,
+   "z1": 145,
+   "from": 0,
+   "height": 1,
+   "type": "stone",
+   "flat": true,
+   "gy": 21
   },
   {
    "name": "nuketown wall west",
@@ -419,6 +1451,18 @@
    "type": "brick"
   },
   {
+   "name": "nuketown wall west coping",
+   "x0": 9,
+   "z0": 111,
+   "x1": 15,
+   "z1": 169,
+   "from": 0,
+   "height": 1,
+   "type": "stone",
+   "flat": true,
+   "gy": 21
+  },
+  {
    "name": "nuketown wall east",
    "x0": 242,
    "z0": 88,
@@ -427,6 +1471,18 @@
    "from": 0,
    "height": 5,
    "type": "brick"
+  },
+  {
+   "name": "nuketown wall east coping",
+   "x0": 241,
+   "z0": 87,
+   "x1": 247,
+   "z1": 145,
+   "from": 0,
+   "height": 1,
+   "type": "stone",
+   "flat": true,
+   "gy": 21
   },
   {
    "name": "nuketown bus",
@@ -523,6 +1579,18 @@
    "type": "concrete"
   },
   {
+   "name": "blue base wall north coping",
+   "x0": 81,
+   "z0": 5,
+   "x1": 175,
+   "z1": 13,
+   "from": 0,
+   "height": 1,
+   "type": "stone",
+   "flat": true,
+   "gy": 30
+  },
+  {
    "name": "blue base wall south a",
    "x0": 82,
    "z0": 40,
@@ -531,6 +1599,18 @@
    "from": 0,
    "height": 14,
    "type": "concrete"
+  },
+  {
+   "name": "blue base wall south a coping",
+   "x0": 81,
+   "z0": 39,
+   "x1": 113,
+   "z1": 47,
+   "from": 0,
+   "height": 1,
+   "type": "stone",
+   "flat": true,
+   "gy": 30
   },
   {
    "name": "blue base wall south b",
@@ -543,6 +1623,18 @@
    "type": "concrete"
   },
   {
+   "name": "blue base wall south b coping",
+   "x0": 143,
+   "z0": 39,
+   "x1": 175,
+   "z1": 47,
+   "from": 0,
+   "height": 1,
+   "type": "stone",
+   "flat": true,
+   "gy": 30
+  },
+  {
    "name": "blue base wall west",
    "x0": 82,
    "z0": 6,
@@ -553,6 +1645,18 @@
    "type": "concrete"
   },
   {
+   "name": "blue base wall west coping",
+   "x0": 81,
+   "z0": 5,
+   "x1": 89,
+   "z1": 47,
+   "from": 0,
+   "height": 1,
+   "type": "stone",
+   "flat": true,
+   "gy": 30
+  },
+  {
    "name": "blue base wall east",
    "x0": 168,
    "z0": 6,
@@ -561,6 +1665,18 @@
    "from": 0,
    "height": 14,
    "type": "concrete"
+  },
+  {
+   "name": "blue base wall east coping",
+   "x0": 167,
+   "z0": 5,
+   "x1": 175,
+   "z1": 47,
+   "from": 0,
+   "height": 1,
+   "type": "stone",
+   "flat": true,
+   "gy": 30
   },
   {
    "name": "blue base colours",
@@ -581,6 +1697,326 @@
    "from": 0,
    "height": 28,
    "type": "team_blue"
+  },
+  {
+   "name": "blue base pier n 0",
+   "x0": 90,
+   "z0": 4,
+   "x1": 95,
+   "z1": 8,
+   "from": 0,
+   "height": 12,
+   "type": "stone"
+  },
+  {
+   "name": "blue base pier s 0",
+   "x0": 90,
+   "z0": 44,
+   "x1": 95,
+   "z1": 48,
+   "from": 0,
+   "height": 12,
+   "type": "stone"
+  },
+  {
+   "name": "blue base pier n 1",
+   "x0": 106,
+   "z0": 4,
+   "x1": 111,
+   "z1": 8,
+   "from": 0,
+   "height": 12,
+   "type": "stone"
+  },
+  {
+   "name": "blue base pier s 1",
+   "x0": 106,
+   "z0": 44,
+   "x1": 111,
+   "z1": 48,
+   "from": 0,
+   "height": 12,
+   "type": "stone"
+  },
+  {
+   "name": "blue base pier n 2",
+   "x0": 122,
+   "z0": 4,
+   "x1": 127,
+   "z1": 8,
+   "from": 0,
+   "height": 12,
+   "type": "stone"
+  },
+  {
+   "name": "blue base pier s 2",
+   "x0": 122,
+   "z0": 44,
+   "x1": 127,
+   "z1": 48,
+   "from": 0,
+   "height": 12,
+   "type": "stone"
+  },
+  {
+   "name": "blue base pier n 3",
+   "x0": 138,
+   "z0": 4,
+   "x1": 143,
+   "z1": 8,
+   "from": 0,
+   "height": 12,
+   "type": "stone"
+  },
+  {
+   "name": "blue base pier s 3",
+   "x0": 138,
+   "z0": 44,
+   "x1": 143,
+   "z1": 48,
+   "from": 0,
+   "height": 12,
+   "type": "stone"
+  },
+  {
+   "name": "blue base pier n 4",
+   "x0": 154,
+   "z0": 4,
+   "x1": 159,
+   "z1": 8,
+   "from": 0,
+   "height": 12,
+   "type": "stone"
+  },
+  {
+   "name": "blue base pier s 4",
+   "x0": 154,
+   "z0": 44,
+   "x1": 159,
+   "z1": 48,
+   "from": 0,
+   "height": 12,
+   "type": "stone"
+  },
+  {
+   "name": "blue base pier w 0",
+   "x0": 80,
+   "z0": 14,
+   "x1": 84,
+   "z1": 19,
+   "from": 0,
+   "height": 12,
+   "type": "stone"
+  },
+  {
+   "name": "blue base pier e 0",
+   "x0": 172,
+   "z0": 14,
+   "x1": 176,
+   "z1": 19,
+   "from": 0,
+   "height": 12,
+   "type": "stone"
+  },
+  {
+   "name": "blue base pier w 1",
+   "x0": 80,
+   "z0": 30,
+   "x1": 84,
+   "z1": 35,
+   "from": 0,
+   "height": 12,
+   "type": "stone"
+  },
+  {
+   "name": "blue base pier e 1",
+   "x0": 172,
+   "z0": 30,
+   "x1": 176,
+   "z1": 35,
+   "from": 0,
+   "height": 12,
+   "type": "stone"
+  },
+  {
+   "name": "blue base coping",
+   "x0": 80,
+   "z0": 4,
+   "x1": 176,
+   "z1": 48,
+   "from": 0,
+   "height": 2,
+   "type": "team_blue",
+   "flat": true,
+   "gy": 30
+  },
+  {
+   "name": "blue base stores roof course 0",
+   "x0": 90,
+   "z0": 14,
+   "x1": 116,
+   "z1": 18,
+   "from": 0,
+   "height": 2,
+   "type": "tin",
+   "flat": true,
+   "gy": 24
+  },
+  {
+   "name": "blue base stores roof course 1",
+   "x0": 90,
+   "z0": 18,
+   "x1": 116,
+   "z1": 22,
+   "from": 0,
+   "height": 2,
+   "type": "slate",
+   "flat": true,
+   "gy": 24
+  },
+  {
+   "name": "blue base stores roof course 2",
+   "x0": 90,
+   "z0": 22,
+   "x1": 116,
+   "z1": 26,
+   "from": 0,
+   "height": 2,
+   "type": "tin",
+   "flat": true,
+   "gy": 24
+  },
+  {
+   "name": "blue base stores roof course 3",
+   "x0": 90,
+   "z0": 26,
+   "x1": 116,
+   "z1": 30,
+   "from": 0,
+   "height": 2,
+   "type": "slate",
+   "flat": true,
+   "gy": 24
+  },
+  {
+   "name": "blue base stores roof course 4",
+   "x0": 90,
+   "z0": 30,
+   "x1": 116,
+   "z1": 34,
+   "from": 0,
+   "height": 2,
+   "type": "tin",
+   "flat": true,
+   "gy": 24
+  },
+  {
+   "name": "blue base stores roof course 5",
+   "x0": 90,
+   "z0": 34,
+   "x1": 116,
+   "z1": 36,
+   "from": 0,
+   "height": 2,
+   "type": "slate",
+   "flat": true,
+   "gy": 24
+  },
+  {
+   "name": "blue base stores roof rib 0",
+   "x0": 90,
+   "z0": 14,
+   "x1": 116,
+   "z1": 16,
+   "from": 0,
+   "height": 1,
+   "type": "slate",
+   "flat": true,
+   "gy": 26
+  },
+  {
+   "name": "blue base stores roof rib 1",
+   "x0": 90,
+   "z0": 18,
+   "x1": 116,
+   "z1": 20,
+   "from": 0,
+   "height": 1,
+   "type": "slate",
+   "flat": true,
+   "gy": 26
+  },
+  {
+   "name": "blue base stores roof rib 2",
+   "x0": 90,
+   "z0": 22,
+   "x1": 116,
+   "z1": 24,
+   "from": 0,
+   "height": 1,
+   "type": "slate",
+   "flat": true,
+   "gy": 26
+  },
+  {
+   "name": "blue base stores roof rib 3",
+   "x0": 90,
+   "z0": 26,
+   "x1": 116,
+   "z1": 28,
+   "from": 0,
+   "height": 1,
+   "type": "slate",
+   "flat": true,
+   "gy": 26
+  },
+  {
+   "name": "blue base stores roof rib 4",
+   "x0": 90,
+   "z0": 30,
+   "x1": 116,
+   "z1": 32,
+   "from": 0,
+   "height": 1,
+   "type": "slate",
+   "flat": true,
+   "gy": 26
+  },
+  {
+   "name": "blue base stores roof rib 5",
+   "x0": 90,
+   "z0": 34,
+   "x1": 116,
+   "z1": 36,
+   "from": 0,
+   "height": 1,
+   "type": "slate",
+   "flat": true,
+   "gy": 26
+  },
+  {
+   "name": "blue base stores roof patch 0",
+   "x0": 99,
+   "z0": 23,
+   "x1": 103,
+   "z1": 27,
+   "from": 0,
+   "height": 1,
+   "type": "tin",
+   "flat": true,
+   "gy": 28
+  },
+  {
+   "name": "blue base stores roof patch 1",
+   "x0": 98,
+   "z0": 23,
+   "x1": 104,
+   "z1": 29,
+   "from": 0,
+   "height": 1,
+   "type": "tin",
+   "flat": true,
+   "gy": 28
   },
   {
    "name": "blue base stores",
@@ -629,6 +2065,18 @@
    "type": "concrete"
   },
   {
+   "name": "red base wall north a coping",
+   "x0": 81,
+   "z0": 209,
+   "x1": 113,
+   "z1": 217,
+   "from": 0,
+   "height": 1,
+   "type": "stone",
+   "flat": true,
+   "gy": 30
+  },
+  {
    "name": "red base wall north b",
    "x0": 144,
    "z0": 210,
@@ -637,6 +2085,18 @@
    "from": 0,
    "height": 14,
    "type": "concrete"
+  },
+  {
+   "name": "red base wall north b coping",
+   "x0": 143,
+   "z0": 209,
+   "x1": 175,
+   "z1": 217,
+   "from": 0,
+   "height": 1,
+   "type": "stone",
+   "flat": true,
+   "gy": 30
   },
   {
    "name": "red base wall south",
@@ -649,6 +2109,18 @@
    "type": "concrete"
   },
   {
+   "name": "red base wall south coping",
+   "x0": 81,
+   "z0": 243,
+   "x1": 175,
+   "z1": 251,
+   "from": 0,
+   "height": 1,
+   "type": "stone",
+   "flat": true,
+   "gy": 30
+  },
+  {
    "name": "red base wall west",
    "x0": 82,
    "z0": 210,
@@ -659,6 +2131,18 @@
    "type": "concrete"
   },
   {
+   "name": "red base wall west coping",
+   "x0": 81,
+   "z0": 209,
+   "x1": 89,
+   "z1": 251,
+   "from": 0,
+   "height": 1,
+   "type": "stone",
+   "flat": true,
+   "gy": 30
+  },
+  {
    "name": "red base wall east",
    "x0": 168,
    "z0": 210,
@@ -667,6 +2151,18 @@
    "from": 0,
    "height": 14,
    "type": "concrete"
+  },
+  {
+   "name": "red base wall east coping",
+   "x0": 167,
+   "z0": 209,
+   "x1": 175,
+   "z1": 251,
+   "from": 0,
+   "height": 1,
+   "type": "stone",
+   "flat": true,
+   "gy": 30
   },
   {
    "name": "red base colours",
@@ -687,6 +2183,314 @@
    "from": 0,
    "height": 28,
    "type": "team_red"
+  },
+  {
+   "name": "red base pier n 0",
+   "x0": 90,
+   "z0": 208,
+   "x1": 95,
+   "z1": 212,
+   "from": 0,
+   "height": 12,
+   "type": "stone"
+  },
+  {
+   "name": "red base pier s 0",
+   "x0": 90,
+   "z0": 248,
+   "x1": 95,
+   "z1": 252,
+   "from": 0,
+   "height": 12,
+   "type": "stone"
+  },
+  {
+   "name": "red base pier n 1",
+   "x0": 106,
+   "z0": 208,
+   "x1": 111,
+   "z1": 212,
+   "from": 0,
+   "height": 12,
+   "type": "stone"
+  },
+  {
+   "name": "red base pier s 1",
+   "x0": 106,
+   "z0": 248,
+   "x1": 111,
+   "z1": 252,
+   "from": 0,
+   "height": 12,
+   "type": "stone"
+  },
+  {
+   "name": "red base pier n 2",
+   "x0": 122,
+   "z0": 208,
+   "x1": 127,
+   "z1": 212,
+   "from": 0,
+   "height": 12,
+   "type": "stone"
+  },
+  {
+   "name": "red base pier s 2",
+   "x0": 122,
+   "z0": 248,
+   "x1": 127,
+   "z1": 252,
+   "from": 0,
+   "height": 12,
+   "type": "stone"
+  },
+  {
+   "name": "red base pier n 3",
+   "x0": 138,
+   "z0": 208,
+   "x1": 143,
+   "z1": 212,
+   "from": 0,
+   "height": 12,
+   "type": "stone"
+  },
+  {
+   "name": "red base pier s 3",
+   "x0": 138,
+   "z0": 248,
+   "x1": 143,
+   "z1": 252,
+   "from": 0,
+   "height": 12,
+   "type": "stone"
+  },
+  {
+   "name": "red base pier n 4",
+   "x0": 154,
+   "z0": 208,
+   "x1": 159,
+   "z1": 212,
+   "from": 0,
+   "height": 12,
+   "type": "stone"
+  },
+  {
+   "name": "red base pier s 4",
+   "x0": 154,
+   "z0": 248,
+   "x1": 159,
+   "z1": 252,
+   "from": 0,
+   "height": 12,
+   "type": "stone"
+  },
+  {
+   "name": "red base pier w 0",
+   "x0": 80,
+   "z0": 218,
+   "x1": 84,
+   "z1": 223,
+   "from": 0,
+   "height": 12,
+   "type": "stone"
+  },
+  {
+   "name": "red base pier e 0",
+   "x0": 172,
+   "z0": 218,
+   "x1": 176,
+   "z1": 223,
+   "from": 0,
+   "height": 12,
+   "type": "stone"
+  },
+  {
+   "name": "red base pier w 1",
+   "x0": 80,
+   "z0": 234,
+   "x1": 84,
+   "z1": 239,
+   "from": 0,
+   "height": 12,
+   "type": "stone"
+  },
+  {
+   "name": "red base pier e 1",
+   "x0": 172,
+   "z0": 234,
+   "x1": 176,
+   "z1": 239,
+   "from": 0,
+   "height": 12,
+   "type": "stone"
+  },
+  {
+   "name": "red base coping",
+   "x0": 80,
+   "z0": 208,
+   "x1": 176,
+   "z1": 252,
+   "from": 0,
+   "height": 2,
+   "type": "team_red",
+   "flat": true,
+   "gy": 30
+  },
+  {
+   "name": "red base stores roof course 0",
+   "x0": 90,
+   "z0": 218,
+   "x1": 116,
+   "z1": 222,
+   "from": 0,
+   "height": 2,
+   "type": "tin",
+   "flat": true,
+   "gy": 24
+  },
+  {
+   "name": "red base stores roof course 1",
+   "x0": 90,
+   "z0": 222,
+   "x1": 116,
+   "z1": 226,
+   "from": 0,
+   "height": 2,
+   "type": "slate",
+   "flat": true,
+   "gy": 24
+  },
+  {
+   "name": "red base stores roof course 2",
+   "x0": 90,
+   "z0": 226,
+   "x1": 116,
+   "z1": 230,
+   "from": 0,
+   "height": 2,
+   "type": "tin",
+   "flat": true,
+   "gy": 24
+  },
+  {
+   "name": "red base stores roof course 3",
+   "x0": 90,
+   "z0": 230,
+   "x1": 116,
+   "z1": 234,
+   "from": 0,
+   "height": 2,
+   "type": "slate",
+   "flat": true,
+   "gy": 24
+  },
+  {
+   "name": "red base stores roof course 4",
+   "x0": 90,
+   "z0": 234,
+   "x1": 116,
+   "z1": 238,
+   "from": 0,
+   "height": 2,
+   "type": "tin",
+   "flat": true,
+   "gy": 24
+  },
+  {
+   "name": "red base stores roof course 5",
+   "x0": 90,
+   "z0": 238,
+   "x1": 116,
+   "z1": 240,
+   "from": 0,
+   "height": 2,
+   "type": "slate",
+   "flat": true,
+   "gy": 24
+  },
+  {
+   "name": "red base stores roof rib 0",
+   "x0": 90,
+   "z0": 218,
+   "x1": 116,
+   "z1": 220,
+   "from": 0,
+   "height": 1,
+   "type": "slate",
+   "flat": true,
+   "gy": 26
+  },
+  {
+   "name": "red base stores roof rib 1",
+   "x0": 90,
+   "z0": 222,
+   "x1": 116,
+   "z1": 224,
+   "from": 0,
+   "height": 1,
+   "type": "slate",
+   "flat": true,
+   "gy": 26
+  },
+  {
+   "name": "red base stores roof rib 2",
+   "x0": 90,
+   "z0": 226,
+   "x1": 116,
+   "z1": 228,
+   "from": 0,
+   "height": 1,
+   "type": "slate",
+   "flat": true,
+   "gy": 26
+  },
+  {
+   "name": "red base stores roof rib 3",
+   "x0": 90,
+   "z0": 230,
+   "x1": 116,
+   "z1": 232,
+   "from": 0,
+   "height": 1,
+   "type": "slate",
+   "flat": true,
+   "gy": 26
+  },
+  {
+   "name": "red base stores roof rib 4",
+   "x0": 90,
+   "z0": 234,
+   "x1": 116,
+   "z1": 236,
+   "from": 0,
+   "height": 1,
+   "type": "slate",
+   "flat": true,
+   "gy": 26
+  },
+  {
+   "name": "red base stores roof rib 5",
+   "x0": 90,
+   "z0": 238,
+   "x1": 116,
+   "z1": 240,
+   "from": 0,
+   "height": 1,
+   "type": "slate",
+   "flat": true,
+   "gy": 26
+  },
+  {
+   "name": "red base stores roof patch 0",
+   "x0": 94,
+   "z0": 227,
+   "x1": 99,
+   "z1": 232,
+   "from": 0,
+   "height": 1,
+   "type": "tin",
+   "flat": true,
+   "gy": 28
   },
   {
    "name": "red base stores",
@@ -711,18 +2515,6 @@
    "type": "wood",
    "flat": true,
    "gy": 17
-  }
- ],
- "mechs": [
-  {
-   "x": -15.4,
-   "z": -23.1,
-   "yaw": 213.7
-  },
-  {
-   "x": 15.4,
-   "z": 23.1,
-   "yaw": 33.7
   }
  ]
 }

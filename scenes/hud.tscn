@@ -305,6 +305,54 @@ text = "RED"
 ; Corner brackets round the aim point, for the one thing carried that has no
 ; sights of its own to look down. Scaled from code: the square is the footprint
 ; of what the next swing does, so it opens out as the shovel comes up to build.
+[node name="LegIndicator" type="Control" parent="Root"]
+anchor_left = 0.5
+anchor_top = 1.0
+anchor_right = 0.5
+anchor_bottom = 1.0
+offset_left = -110.0
+offset_top = -74.0
+offset_right = 110.0
+offset_bottom = -56.0
+mouse_filter = 2
+
+[node name="Track" type="ColorRect" parent="Root/LegIndicator"]
+anchor_right = 1.0
+offset_top = 7.0
+offset_bottom = 11.0
+mouse_filter = 2
+color = Color(0.1, 0.11, 0.1, 0.45)
+
+; Dead ahead: where the hull points when it is square under you.
+[node name="Centre" type="ColorRect" parent="Root/LegIndicator"]
+anchor_left = 0.5
+anchor_right = 0.5
+offset_left = -1.0
+offset_top = 2.0
+offset_right = 1.0
+offset_bottom = 16.0
+mouse_filter = 2
+color = Color(0.93, 0.92, 0.87, 0.5)
+
+[node name="Tick" type="ColorRect" parent="Root/LegIndicator"]
+anchor_left = 0.5
+anchor_right = 0.5
+offset_left = -3.0
+offset_top = 0.0
+offset_right = 3.0
+offset_bottom = 18.0
+mouse_filter = 2
+color = Color(0.95, 0.76, 0.35, 0.95)
+
+[node name="Label" type="Label" parent="Root/LegIndicator"]
+anchor_right = 1.0
+offset_top = -20.0
+offset_bottom = 0.0
+mouse_filter = 2
+theme_override_font_sizes/font_size = 13
+text = "HULL"
+horizontal_alignment = 1
+
 [node name="Reticule" type="Control" parent="Root"]
 anchor_left = 0.5
 anchor_top = 0.5

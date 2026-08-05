@@ -1,9 +1,14 @@
 [remap]
 
-; Kept as the file on disk rather than imported into a texture. VoxelWorld reads
-; this heightmap as raw bytes -- FileAccess.get_file_as_bytes, then
-; load_png_from_buffer -- so what has to reach the export is the PNG itself. An
-; imported image ships as a .ctex in .godot/imported and the original never goes
-; in the pack at all, which is a map that loads in the editor and an empty world
-; everywhere else.
-importer="keep"
+importer="image"
+type="Image"
+uid="uid://d23y8evc6v0op"
+path="res://.godot/imported/blood_gulch_terrain.png-952896e3b8888216f9890bb2b76ee16f.image"
+
+[deps]
+
+source_file="res://maps/blood_gulch_terrain.png"
+dest_files=["res://.godot/imported/blood_gulch_terrain.png-952896e3b8888216f9890bb2b76ee16f.image"]
+
+[params]
+

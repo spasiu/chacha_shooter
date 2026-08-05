@@ -19,6 +19,7 @@ enum {
 	AIR, GRASS, DIRT, CONCRETE, BEDROCK, WOOD, LEAVES,
 	ASPHALT, SAND, STONE, PLASTER, TILE, RUST, TEAM_RED, TEAM_BLUE,
 	BRICK, GRAVEL, CANVAS, STEEL,
+	WHITEWASH, OCHRE, SLATE, TIN, TIMBER,
 }
 
 ## What the map file may call each of them. The generator writes names rather
@@ -29,6 +30,8 @@ const BLOCK_NAMES := {
 	"sand": SAND, "stone": STONE, "plaster": PLASTER, "tile": TILE,
 	"rust": RUST, "team_red": TEAM_RED, "team_blue": TEAM_BLUE,
 	"brick": BRICK, "gravel": GRAVEL, "canvas": CANVAS, "steel": STEEL,
+	"whitewash": WHITEWASH, "ochre": OCHRE, "slate": SLATE, "tin": TIN,
+	"timber": TIMBER,
 }
 
 ## Base colours per block type: [top face, side/bottom face].
@@ -72,6 +75,21 @@ const COLOURS := {
 	CANVAS: [Color(0.58, 0.55, 0.40), Color(0.50, 0.47, 0.34)],
 	# Painted sheet: container ends, shutters, the doors on a bunker.
 	STEEL: [Color(0.34, 0.37, 0.36), Color(0.29, 0.31, 0.30)],
+	# Lime-washed render. The brightest thing on any map, which is what makes a
+	# village read as a village from the far side of it: one white gable end
+	# does more for a skyline than a dozen grey ones.
+	WHITEWASH: [Color(0.86, 0.84, 0.78), Color(0.78, 0.76, 0.70)],
+	# Yellow render, the other half of the same street.
+	OCHRE: [Color(0.74, 0.61, 0.36), Color(0.66, 0.54, 0.31)],
+	# Slate roofing. Cool where the tile is warm, so two roofs side by side are
+	# obviously two roofs.
+	SLATE: [Color(0.33, 0.36, 0.40), Color(0.28, 0.30, 0.34)],
+	# Galvanised corrugated iron: sheds, lean-tos, and the ridged roofs that
+	# catch the light one strip at a time.
+	TIN: [Color(0.56, 0.58, 0.59), Color(0.48, 0.50, 0.51)],
+	# Creosoted structural timber -- beams, posts, shutters, fence rails. Far
+	# darker than the WOOD a crate is made of, on purpose.
+	TIMBER: [Color(0.26, 0.19, 0.13), Color(0.21, 0.15, 0.10)],
 }
 
 ## Per-type overrides for `block_health`. Ground and concrete are left at the
@@ -91,6 +109,11 @@ const HEALTH := {
 	GRAVEL: 800.0,
 	CANVAS: 120.0,
 	STEEL: 800.0,
+	WHITEWASH: 450.0,
+	OCHRE: 450.0,
+	SLATE: 320.0,
+	TIN: 260.0,
+	TIMBER: 550.0,
 }
 ## What a block past the degraded threshold blends toward.
 const DEGRADED_TINT := Color(0.14, 0.12, 0.11)

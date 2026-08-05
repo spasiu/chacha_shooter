@@ -343,6 +343,25 @@ func is_dead() -> bool:
 	return _wrecked
 
 
+## Where the hull is pointing relative to the turret, in radians, negative to
+## the left. Zero when the two are square.
+##
+## Worth a readout of its own because the two come apart the moment you traverse:
+## the view turns with the turret, so after half a minute of fighting the tracks
+## can be facing anywhere, and the first you learn of it is driving off in a
+## direction you did not choose. Worse on the walker, where they are legs and
+## the thing has to turn its whole body to follow them.
+func hull_offset() -> float:
+	return -turret.rotation.y
+
+
+## How big an aim marker this wants. Larger than a rifle's: the gun is metres
+## from the eye rather than centimetres, and the shell is not going exactly
+## where a bullet would.
+func reticule_size() -> float:
+	return 1.35
+
+
 ## What the HUD shows while you are sitting in it.
 func status_text() -> String:
 	if _wrecked:

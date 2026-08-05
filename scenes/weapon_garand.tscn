@@ -234,11 +234,11 @@ size = Vector3(0.018, 0.022, 0.024)
 
 [sub_resource type="BoxMesh" id="Mesh_reticle_h"]
 material = SubResource("Mat_reticle")
-size = Vector3(0.048, 0.0016, 0.002)
+size = Vector3(0.05, 0.0004, 0.0006)
 
 [sub_resource type="BoxMesh" id="Mesh_reticle_v"]
 material = SubResource("Mat_reticle")
-size = Vector3(0.0016, 0.048, 0.002)
+size = Vector3(0.0004, 0.05, 0.0006)
 
 [sub_resource type="CylinderMesh" id="Mesh_flash"]
 material = SubResource("Mat_flash")

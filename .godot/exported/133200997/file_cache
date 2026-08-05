@@ -5,7 +5,7 @@ res://scenes/character_body.tscn::f8993b4b15ef85f85d207d0d06fc0162::1785949113::
 res://scenes/grenade_projectile.tscn::5a851d1ec241c55710fc8ccd0bbeaa72::1785760133::res://.godot/exported/133200997/export-963dd493464b626e8a8d37ef4d4fe325-grenade_projectile.scn
 res://scenes/hand_left.tscn::714658b5e8612687339867910b28aa75::1785949043::res://.godot/exported/133200997/export-728bdfa248a20eec221aa22bb805fef8-hand_left.scn
 res://scenes/hand_right.tscn::2474fa6a5e191aade44d2015f900b211::1785949043::res://.godot/exported/133200997/export-dfbab18ba49e5e494e37d70b1eb3a8f2-hand_right.scn
-res://scenes/hud.tscn::4f8d5ba0fb3a8547bbaaa9002629b011::1785802272::res://.godot/exported/133200997/export-38bf74ff262409a94a41206b2b776d33-hud.scn
+res://scenes/hud.tscn::d26ec3a92e6c8bc10c955c8c7a65df9d::1785964436::res://.godot/exported/133200997/export-38bf74ff262409a94a41206b2b776d33-hud.scn
 res://scenes/loadout_select.tscn::610ac912fc33ec267c8663da4973310a::1785860694::res://.godot/exported/133200997/export-50b77b8100af51daf8de5a65c5793cab-loadout_select.scn
 res://scenes/player.tscn::61826a434eed3095a6f58f0ce78ce881::1785963567::res://.godot/exported/133200997/export-234fb6894ec6226e856ab7f825500d3d-player.scn
 res://scenes/smoke_projectile.tscn::22a86f443c1679832b4f22564ac68a7a::1785767472::res://.godot/exported/133200997/export-1b881b498101c4cc20b2b9e3ce64faad-smoke_projectile.scn
@@ -17,7 +17,7 @@ res://scenes/viewmodel_arms.tscn::e8da7854a06de51982a280b38d65c21a::1785949043::
 res://scenes/weapon_bar.tscn::647cf20d45b64fe2a0c6461cc7306c57::1785956010::res://.godot/exported/133200997/export-8c94f04aeb74eeeae8cbe8df03e8ed44-weapon_bar.scn
 res://scenes/weapon_bazooka.tscn::c51dd655161b30fa9b199f1ae9c2da18::1785962876::res://.godot/exported/133200997/export-dcba8ea7f80af040d73f914d1d434581-weapon_bazooka.scn
 res://scenes/weapon_carbine.tscn::982a7d2c48a53427565f269335564841::1785956010::res://.godot/exported/133200997/export-19bea0148f1e89cd11770819e8611a2e-weapon_carbine.scn
-res://scenes/weapon_garand.tscn::ea2f83f031426396aa0c9fea34b6f301::1785956010::res://.godot/exported/133200997/export-e8c3ff82fb3de442d742eb5647656581-weapon_garand.scn
+res://scenes/weapon_garand.tscn::0c83e63ba327bd1287030b67fd729c03::1785964447::res://.godot/exported/133200997/export-e8c3ff82fb3de442d742eb5647656581-weapon_garand.scn
 res://scenes/weapon_grenade.tscn::844a4dd58bc88646ab3eb7b244af2942::1785956010::res://.godot/exported/133200997/export-82050c5a3d26118470e2ddc97b5d1316-weapon_grenade.scn
 res://scenes/weapon_johnson.tscn::f453c6035c08d1f6793d94952d936dc1::1785956010::res://.godot/exported/133200997/export-1792dcdb020d1cc1eb2887acec677176-weapon_johnson.scn
 res://scenes/weapon_m1911.tscn::8954fb20904cc0f9f0aea2876c904527::1785956010::res://.godot/exported/133200997/export-50ead26ad6ca04fdd6a39557417f9341-weapon_m1911.scn
@@ -39,3 +39,4 @@ res://scenes/map_select.tscn::a708a433405ceac5d0ca4966000d32a8::1785861225::res:
 res://scenes/mech.tscn::ff4010d2eec893a80af501727777d817::1785948245::res://.godot/exported/133200997/export-7912c18959f03e179ae884102956e29c-mech.scn
 res://tools/shoot_guns.tscn::d29f296a3537e69b27d992a6ef0a734c::1785955737::res://.godot/exported/133200997/export-9337b6ffb85594ddd4b4d5c50ac1a745-shoot_guns.scn
 res://scenes/weapon_jump_jet.tscn::05a8026dcd4c3e647d37603f5fde68f1::1785963532::res://.godot/exported/133200997/export-d1e47462f67b095a01c2c0c46214db99-weapon_jump_jet.scn
+res://_look.tscn::57704f2627745e6aecf0a2658316c8f8::1785964699::res://.godot/exported/133200997/export-553b0df2d9bd710288fe4a8896fc2585-_look.scn

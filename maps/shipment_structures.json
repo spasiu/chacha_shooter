@@ -47,10 +47,6 @@
    8.5
   ],
   [
-   -11.5,
-   19.0
-  ],
-  [
    18.5,
    -11.5
   ],
@@ -79,6 +75,18 @@
    "type": "concrete"
   },
   {
+   "name": "shipment wall n coping",
+   "x0": 65,
+   "z0": 65,
+   "x1": 191,
+   "z1": 72,
+   "from": 0,
+   "height": 1,
+   "type": "stone",
+   "flat": true,
+   "gy": 28
+  },
+  {
    "name": "shipment wall s",
    "x0": 66,
    "z0": 185,
@@ -87,6 +95,18 @@
    "from": 0,
    "height": 12,
    "type": "concrete"
+  },
+  {
+   "name": "shipment wall s coping",
+   "x0": 65,
+   "z0": 184,
+   "x1": 191,
+   "z1": 191,
+   "from": 0,
+   "height": 1,
+   "type": "stone",
+   "flat": true,
+   "gy": 28
   },
   {
    "name": "shipment wall w",
@@ -99,6 +119,18 @@
    "type": "concrete"
   },
   {
+   "name": "shipment wall w coping",
+   "x0": 65,
+   "z0": 65,
+   "x1": 72,
+   "z1": 191,
+   "from": 0,
+   "height": 1,
+   "type": "stone",
+   "flat": true,
+   "gy": 28
+  },
+  {
    "name": "shipment wall e",
    "x0": 185,
    "z0": 66,
@@ -107,6 +139,18 @@
    "from": 0,
    "height": 12,
    "type": "concrete"
+  },
+  {
+   "name": "shipment wall e coping",
+   "x0": 184,
+   "z0": 65,
+   "x1": 191,
+   "z1": 191,
+   "from": 0,
+   "height": 1,
+   "type": "stone",
+   "flat": true,
+   "gy": 28
   },
   {
    "name": "ship mid nw",
@@ -121,6 +165,90 @@
    "gy": 17
   },
   {
+   "name": "ship mid nw rib 0",
+   "x0": 100,
+   "z0": 95,
+   "x1": 102,
+   "z1": 107,
+   "from": 0,
+   "height": 8,
+   "type": "steel",
+   "flat": true,
+   "gy": 18
+  },
+  {
+   "name": "ship mid nw rib 1",
+   "x0": 104,
+   "z0": 95,
+   "x1": 106,
+   "z1": 107,
+   "from": 0,
+   "height": 8,
+   "type": "steel",
+   "flat": true,
+   "gy": 18
+  },
+  {
+   "name": "ship mid nw rib 2",
+   "x0": 108,
+   "z0": 95,
+   "x1": 110,
+   "z1": 107,
+   "from": 0,
+   "height": 8,
+   "type": "steel",
+   "flat": true,
+   "gy": 18
+  },
+  {
+   "name": "ship mid nw rib 3",
+   "x0": 112,
+   "z0": 95,
+   "x1": 114,
+   "z1": 107,
+   "from": 0,
+   "height": 8,
+   "type": "steel",
+   "flat": true,
+   "gy": 18
+  },
+  {
+   "name": "ship mid nw rib 4",
+   "x0": 116,
+   "z0": 95,
+   "x1": 118,
+   "z1": 107,
+   "from": 0,
+   "height": 8,
+   "type": "steel",
+   "flat": true,
+   "gy": 18
+  },
+  {
+   "name": "ship mid nw cap",
+   "x0": 97,
+   "z0": 95,
+   "x1": 123,
+   "z1": 107,
+   "from": 0,
+   "height": 1,
+   "type": "steel",
+   "flat": true,
+   "gy": 27
+  },
+  {
+   "name": "ship mid nw doors",
+   "x0": 120,
+   "z0": 96,
+   "x1": 123,
+   "z1": 106,
+   "from": 0,
+   "height": 9,
+   "type": "steel",
+   "flat": true,
+   "gy": 18
+  },
+  {
    "name": "ship mid ne",
    "x0": 134,
    "z0": 96,
@@ -131,6 +259,90 @@
    "type": "steel",
    "flat": true,
    "gy": 17
+  },
+  {
+   "name": "ship mid ne rib 0",
+   "x0": 136,
+   "z0": 95,
+   "x1": 138,
+   "z1": 107,
+   "from": 0,
+   "height": 8,
+   "type": "steel",
+   "flat": true,
+   "gy": 18
+  },
+  {
+   "name": "ship mid ne rib 1",
+   "x0": 140,
+   "z0": 95,
+   "x1": 142,
+   "z1": 107,
+   "from": 0,
+   "height": 8,
+   "type": "steel",
+   "flat": true,
+   "gy": 18
+  },
+  {
+   "name": "ship mid ne rib 2",
+   "x0": 144,
+   "z0": 95,
+   "x1": 146,
+   "z1": 107,
+   "from": 0,
+   "height": 8,
+   "type": "steel",
+   "flat": true,
+   "gy": 18
+  },
+  {
+   "name": "ship mid ne rib 3",
+   "x0": 148,
+   "z0": 95,
+   "x1": 150,
+   "z1": 107,
+   "from": 0,
+   "height": 8,
+   "type": "steel",
+   "flat": true,
+   "gy": 18
+  },
+  {
+   "name": "ship mid ne rib 4",
+   "x0": 152,
+   "z0": 95,
+   "x1": 154,
+   "z1": 107,
+   "from": 0,
+   "height": 8,
+   "type": "steel",
+   "flat": true,
+   "gy": 18
+  },
+  {
+   "name": "ship mid ne cap",
+   "x0": 133,
+   "z0": 95,
+   "x1": 159,
+   "z1": 107,
+   "from": 0,
+   "height": 1,
+   "type": "steel",
+   "flat": true,
+   "gy": 27
+  },
+  {
+   "name": "ship mid ne doors",
+   "x0": 156,
+   "z0": 96,
+   "x1": 159,
+   "z1": 106,
+   "from": 0,
+   "height": 9,
+   "type": "rust",
+   "flat": true,
+   "gy": 18
   },
   {
    "name": "ship mid sw",
@@ -145,6 +357,90 @@
    "gy": 17
   },
   {
+   "name": "ship mid sw rib 0",
+   "x0": 100,
+   "z0": 149,
+   "x1": 102,
+   "z1": 161,
+   "from": 0,
+   "height": 8,
+   "type": "steel",
+   "flat": true,
+   "gy": 18
+  },
+  {
+   "name": "ship mid sw rib 1",
+   "x0": 104,
+   "z0": 149,
+   "x1": 106,
+   "z1": 161,
+   "from": 0,
+   "height": 8,
+   "type": "steel",
+   "flat": true,
+   "gy": 18
+  },
+  {
+   "name": "ship mid sw rib 2",
+   "x0": 108,
+   "z0": 149,
+   "x1": 110,
+   "z1": 161,
+   "from": 0,
+   "height": 8,
+   "type": "steel",
+   "flat": true,
+   "gy": 18
+  },
+  {
+   "name": "ship mid sw rib 3",
+   "x0": 112,
+   "z0": 149,
+   "x1": 114,
+   "z1": 161,
+   "from": 0,
+   "height": 8,
+   "type": "steel",
+   "flat": true,
+   "gy": 18
+  },
+  {
+   "name": "ship mid sw rib 4",
+   "x0": 116,
+   "z0": 149,
+   "x1": 118,
+   "z1": 161,
+   "from": 0,
+   "height": 8,
+   "type": "steel",
+   "flat": true,
+   "gy": 18
+  },
+  {
+   "name": "ship mid sw cap",
+   "x0": 97,
+   "z0": 149,
+   "x1": 123,
+   "z1": 161,
+   "from": 0,
+   "height": 1,
+   "type": "steel",
+   "flat": true,
+   "gy": 27
+  },
+  {
+   "name": "ship mid sw doors",
+   "x0": 120,
+   "z0": 150,
+   "x1": 123,
+   "z1": 160,
+   "from": 0,
+   "height": 9,
+   "type": "rust",
+   "flat": true,
+   "gy": 18
+  },
+  {
    "name": "ship mid se",
    "x0": 134,
    "z0": 150,
@@ -155,6 +451,90 @@
    "type": "rust",
    "flat": true,
    "gy": 17
+  },
+  {
+   "name": "ship mid se rib 0",
+   "x0": 136,
+   "z0": 149,
+   "x1": 138,
+   "z1": 161,
+   "from": 0,
+   "height": 8,
+   "type": "steel",
+   "flat": true,
+   "gy": 18
+  },
+  {
+   "name": "ship mid se rib 1",
+   "x0": 140,
+   "z0": 149,
+   "x1": 142,
+   "z1": 161,
+   "from": 0,
+   "height": 8,
+   "type": "steel",
+   "flat": true,
+   "gy": 18
+  },
+  {
+   "name": "ship mid se rib 2",
+   "x0": 144,
+   "z0": 149,
+   "x1": 146,
+   "z1": 161,
+   "from": 0,
+   "height": 8,
+   "type": "steel",
+   "flat": true,
+   "gy": 18
+  },
+  {
+   "name": "ship mid se rib 3",
+   "x0": 148,
+   "z0": 149,
+   "x1": 150,
+   "z1": 161,
+   "from": 0,
+   "height": 8,
+   "type": "steel",
+   "flat": true,
+   "gy": 18
+  },
+  {
+   "name": "ship mid se rib 4",
+   "x0": 152,
+   "z0": 149,
+   "x1": 154,
+   "z1": 161,
+   "from": 0,
+   "height": 8,
+   "type": "steel",
+   "flat": true,
+   "gy": 18
+  },
+  {
+   "name": "ship mid se cap",
+   "x0": 133,
+   "z0": 149,
+   "x1": 159,
+   "z1": 161,
+   "from": 0,
+   "height": 1,
+   "type": "steel",
+   "flat": true,
+   "gy": 27
+  },
+  {
+   "name": "ship mid se doors",
+   "x0": 156,
+   "z0": 150,
+   "x1": 159,
+   "z1": 160,
+   "from": 0,
+   "height": 9,
+   "type": "steel",
+   "flat": true,
+   "gy": 18
   },
   {
    "name": "ship edge 0",
@@ -169,6 +549,90 @@
    "gy": 17
   },
   {
+   "name": "ship edge 0 rib 0",
+   "x0": 75,
+   "z0": 80,
+   "x1": 87,
+   "z1": 82,
+   "from": 0,
+   "height": 8,
+   "type": "steel",
+   "flat": true,
+   "gy": 18
+  },
+  {
+   "name": "ship edge 0 rib 1",
+   "x0": 75,
+   "z0": 84,
+   "x1": 87,
+   "z1": 86,
+   "from": 0,
+   "height": 8,
+   "type": "steel",
+   "flat": true,
+   "gy": 18
+  },
+  {
+   "name": "ship edge 0 rib 2",
+   "x0": 75,
+   "z0": 88,
+   "x1": 87,
+   "z1": 90,
+   "from": 0,
+   "height": 8,
+   "type": "steel",
+   "flat": true,
+   "gy": 18
+  },
+  {
+   "name": "ship edge 0 rib 3",
+   "x0": 75,
+   "z0": 92,
+   "x1": 87,
+   "z1": 94,
+   "from": 0,
+   "height": 8,
+   "type": "steel",
+   "flat": true,
+   "gy": 18
+  },
+  {
+   "name": "ship edge 0 rib 4",
+   "x0": 75,
+   "z0": 96,
+   "x1": 87,
+   "z1": 98,
+   "from": 0,
+   "height": 8,
+   "type": "steel",
+   "flat": true,
+   "gy": 18
+  },
+  {
+   "name": "ship edge 0 cap",
+   "x0": 75,
+   "z0": 77,
+   "x1": 87,
+   "z1": 103,
+   "from": 0,
+   "height": 1,
+   "type": "steel",
+   "flat": true,
+   "gy": 27
+  },
+  {
+   "name": "ship edge 0 doors",
+   "x0": 76,
+   "z0": 100,
+   "x1": 86,
+   "z1": 103,
+   "from": 0,
+   "height": 9,
+   "type": "steel",
+   "flat": true,
+   "gy": 18
+  },
+  {
    "name": "ship edge 0 upper",
    "x0": 76,
    "z0": 78,
@@ -179,6 +643,90 @@
    "type": "rust",
    "flat": true,
    "gy": 27
+  },
+  {
+   "name": "ship edge 0 upper rib 0",
+   "x0": 75,
+   "z0": 80,
+   "x1": 87,
+   "z1": 82,
+   "from": 0,
+   "height": 8,
+   "type": "steel",
+   "flat": true,
+   "gy": 28
+  },
+  {
+   "name": "ship edge 0 upper rib 1",
+   "x0": 75,
+   "z0": 84,
+   "x1": 87,
+   "z1": 86,
+   "from": 0,
+   "height": 8,
+   "type": "steel",
+   "flat": true,
+   "gy": 28
+  },
+  {
+   "name": "ship edge 0 upper rib 2",
+   "x0": 75,
+   "z0": 88,
+   "x1": 87,
+   "z1": 90,
+   "from": 0,
+   "height": 8,
+   "type": "steel",
+   "flat": true,
+   "gy": 28
+  },
+  {
+   "name": "ship edge 0 upper rib 3",
+   "x0": 75,
+   "z0": 92,
+   "x1": 87,
+   "z1": 94,
+   "from": 0,
+   "height": 8,
+   "type": "steel",
+   "flat": true,
+   "gy": 28
+  },
+  {
+   "name": "ship edge 0 upper rib 4",
+   "x0": 75,
+   "z0": 96,
+   "x1": 87,
+   "z1": 98,
+   "from": 0,
+   "height": 8,
+   "type": "steel",
+   "flat": true,
+   "gy": 28
+  },
+  {
+   "name": "ship edge 0 upper cap",
+   "x0": 75,
+   "z0": 77,
+   "x1": 87,
+   "z1": 103,
+   "from": 0,
+   "height": 1,
+   "type": "steel",
+   "flat": true,
+   "gy": 37
+  },
+  {
+   "name": "ship edge 0 upper doors",
+   "x0": 76,
+   "z0": 100,
+   "x1": 86,
+   "z1": 103,
+   "from": 0,
+   "height": 9,
+   "type": "steel",
+   "flat": true,
+   "gy": 28
   },
   {
    "name": "ship edge 1",
@@ -193,6 +741,90 @@
    "gy": 17
   },
   {
+   "name": "ship edge 1 rib 0",
+   "x0": 75,
+   "z0": 134,
+   "x1": 87,
+   "z1": 136,
+   "from": 0,
+   "height": 8,
+   "type": "steel",
+   "flat": true,
+   "gy": 18
+  },
+  {
+   "name": "ship edge 1 rib 1",
+   "x0": 75,
+   "z0": 138,
+   "x1": 87,
+   "z1": 140,
+   "from": 0,
+   "height": 8,
+   "type": "steel",
+   "flat": true,
+   "gy": 18
+  },
+  {
+   "name": "ship edge 1 rib 2",
+   "x0": 75,
+   "z0": 142,
+   "x1": 87,
+   "z1": 144,
+   "from": 0,
+   "height": 8,
+   "type": "steel",
+   "flat": true,
+   "gy": 18
+  },
+  {
+   "name": "ship edge 1 rib 3",
+   "x0": 75,
+   "z0": 146,
+   "x1": 87,
+   "z1": 148,
+   "from": 0,
+   "height": 8,
+   "type": "steel",
+   "flat": true,
+   "gy": 18
+  },
+  {
+   "name": "ship edge 1 rib 4",
+   "x0": 75,
+   "z0": 150,
+   "x1": 87,
+   "z1": 152,
+   "from": 0,
+   "height": 8,
+   "type": "steel",
+   "flat": true,
+   "gy": 18
+  },
+  {
+   "name": "ship edge 1 cap",
+   "x0": 75,
+   "z0": 131,
+   "x1": 87,
+   "z1": 157,
+   "from": 0,
+   "height": 1,
+   "type": "steel",
+   "flat": true,
+   "gy": 27
+  },
+  {
+   "name": "ship edge 1 doors",
+   "x0": 76,
+   "z0": 154,
+   "x1": 86,
+   "z1": 157,
+   "from": 0,
+   "height": 9,
+   "type": "rust",
+   "flat": true,
+   "gy": 18
+  },
+  {
    "name": "ship edge 2",
    "x0": 170,
    "z0": 78,
@@ -203,6 +835,90 @@
    "type": "steel",
    "flat": true,
    "gy": 17
+  },
+  {
+   "name": "ship edge 2 rib 0",
+   "x0": 169,
+   "z0": 80,
+   "x1": 181,
+   "z1": 82,
+   "from": 0,
+   "height": 8,
+   "type": "steel",
+   "flat": true,
+   "gy": 18
+  },
+  {
+   "name": "ship edge 2 rib 1",
+   "x0": 169,
+   "z0": 84,
+   "x1": 181,
+   "z1": 86,
+   "from": 0,
+   "height": 8,
+   "type": "steel",
+   "flat": true,
+   "gy": 18
+  },
+  {
+   "name": "ship edge 2 rib 2",
+   "x0": 169,
+   "z0": 88,
+   "x1": 181,
+   "z1": 90,
+   "from": 0,
+   "height": 8,
+   "type": "steel",
+   "flat": true,
+   "gy": 18
+  },
+  {
+   "name": "ship edge 2 rib 3",
+   "x0": 169,
+   "z0": 92,
+   "x1": 181,
+   "z1": 94,
+   "from": 0,
+   "height": 8,
+   "type": "steel",
+   "flat": true,
+   "gy": 18
+  },
+  {
+   "name": "ship edge 2 rib 4",
+   "x0": 169,
+   "z0": 96,
+   "x1": 181,
+   "z1": 98,
+   "from": 0,
+   "height": 8,
+   "type": "steel",
+   "flat": true,
+   "gy": 18
+  },
+  {
+   "name": "ship edge 2 cap",
+   "x0": 169,
+   "z0": 77,
+   "x1": 181,
+   "z1": 103,
+   "from": 0,
+   "height": 1,
+   "type": "steel",
+   "flat": true,
+   "gy": 27
+  },
+  {
+   "name": "ship edge 2 doors",
+   "x0": 170,
+   "z0": 100,
+   "x1": 180,
+   "z1": 103,
+   "from": 0,
+   "height": 9,
+   "type": "rust",
+   "flat": true,
+   "gy": 18
   },
   {
    "name": "ship edge 3",
@@ -217,6 +933,90 @@
    "gy": 17
   },
   {
+   "name": "ship edge 3 rib 0",
+   "x0": 169,
+   "z0": 134,
+   "x1": 181,
+   "z1": 136,
+   "from": 0,
+   "height": 8,
+   "type": "steel",
+   "flat": true,
+   "gy": 18
+  },
+  {
+   "name": "ship edge 3 rib 1",
+   "x0": 169,
+   "z0": 138,
+   "x1": 181,
+   "z1": 140,
+   "from": 0,
+   "height": 8,
+   "type": "steel",
+   "flat": true,
+   "gy": 18
+  },
+  {
+   "name": "ship edge 3 rib 2",
+   "x0": 169,
+   "z0": 142,
+   "x1": 181,
+   "z1": 144,
+   "from": 0,
+   "height": 8,
+   "type": "steel",
+   "flat": true,
+   "gy": 18
+  },
+  {
+   "name": "ship edge 3 rib 3",
+   "x0": 169,
+   "z0": 146,
+   "x1": 181,
+   "z1": 148,
+   "from": 0,
+   "height": 8,
+   "type": "steel",
+   "flat": true,
+   "gy": 18
+  },
+  {
+   "name": "ship edge 3 rib 4",
+   "x0": 169,
+   "z0": 150,
+   "x1": 181,
+   "z1": 152,
+   "from": 0,
+   "height": 8,
+   "type": "steel",
+   "flat": true,
+   "gy": 18
+  },
+  {
+   "name": "ship edge 3 cap",
+   "x0": 169,
+   "z0": 131,
+   "x1": 181,
+   "z1": 157,
+   "from": 0,
+   "height": 1,
+   "type": "steel",
+   "flat": true,
+   "gy": 27
+  },
+  {
+   "name": "ship edge 3 doors",
+   "x0": 170,
+   "z0": 154,
+   "x1": 180,
+   "z1": 157,
+   "from": 0,
+   "height": 9,
+   "type": "rust",
+   "flat": true,
+   "gy": 18
+  },
+  {
    "name": "ship edge 3 upper",
    "x0": 170,
    "z0": 132,
@@ -227,6 +1027,90 @@
    "type": "team_blue",
    "flat": true,
    "gy": 27
+  },
+  {
+   "name": "ship edge 3 upper rib 0",
+   "x0": 169,
+   "z0": 134,
+   "x1": 181,
+   "z1": 136,
+   "from": 0,
+   "height": 8,
+   "type": "steel",
+   "flat": true,
+   "gy": 28
+  },
+  {
+   "name": "ship edge 3 upper rib 1",
+   "x0": 169,
+   "z0": 138,
+   "x1": 181,
+   "z1": 140,
+   "from": 0,
+   "height": 8,
+   "type": "steel",
+   "flat": true,
+   "gy": 28
+  },
+  {
+   "name": "ship edge 3 upper rib 2",
+   "x0": 169,
+   "z0": 142,
+   "x1": 181,
+   "z1": 144,
+   "from": 0,
+   "height": 8,
+   "type": "steel",
+   "flat": true,
+   "gy": 28
+  },
+  {
+   "name": "ship edge 3 upper rib 3",
+   "x0": 169,
+   "z0": 146,
+   "x1": 181,
+   "z1": 148,
+   "from": 0,
+   "height": 8,
+   "type": "steel",
+   "flat": true,
+   "gy": 28
+  },
+  {
+   "name": "ship edge 3 upper rib 4",
+   "x0": 169,
+   "z0": 150,
+   "x1": 181,
+   "z1": 152,
+   "from": 0,
+   "height": 8,
+   "type": "steel",
+   "flat": true,
+   "gy": 28
+  },
+  {
+   "name": "ship edge 3 upper cap",
+   "x0": 169,
+   "z0": 131,
+   "x1": 181,
+   "z1": 157,
+   "from": 0,
+   "height": 1,
+   "type": "steel",
+   "flat": true,
+   "gy": 37
+  },
+  {
+   "name": "ship edge 3 upper doors",
+   "x0": 170,
+   "z0": 154,
+   "x1": 180,
+   "z1": 157,
+   "from": 0,
+   "height": 9,
+   "type": "rust",
+   "flat": true,
+   "gy": 28
   },
   {
    "name": "ship edge 4",
@@ -241,6 +1125,90 @@
    "gy": 17
   },
   {
+   "name": "ship edge 4 rib 0",
+   "x0": 110,
+   "z0": 75,
+   "x1": 112,
+   "z1": 87,
+   "from": 0,
+   "height": 8,
+   "type": "steel",
+   "flat": true,
+   "gy": 18
+  },
+  {
+   "name": "ship edge 4 rib 1",
+   "x0": 114,
+   "z0": 75,
+   "x1": 116,
+   "z1": 87,
+   "from": 0,
+   "height": 8,
+   "type": "steel",
+   "flat": true,
+   "gy": 18
+  },
+  {
+   "name": "ship edge 4 rib 2",
+   "x0": 118,
+   "z0": 75,
+   "x1": 120,
+   "z1": 87,
+   "from": 0,
+   "height": 8,
+   "type": "steel",
+   "flat": true,
+   "gy": 18
+  },
+  {
+   "name": "ship edge 4 rib 3",
+   "x0": 122,
+   "z0": 75,
+   "x1": 124,
+   "z1": 87,
+   "from": 0,
+   "height": 8,
+   "type": "steel",
+   "flat": true,
+   "gy": 18
+  },
+  {
+   "name": "ship edge 4 rib 4",
+   "x0": 126,
+   "z0": 75,
+   "x1": 128,
+   "z1": 87,
+   "from": 0,
+   "height": 8,
+   "type": "steel",
+   "flat": true,
+   "gy": 18
+  },
+  {
+   "name": "ship edge 4 cap",
+   "x0": 107,
+   "z0": 75,
+   "x1": 133,
+   "z1": 87,
+   "from": 0,
+   "height": 1,
+   "type": "steel",
+   "flat": true,
+   "gy": 27
+  },
+  {
+   "name": "ship edge 4 doors",
+   "x0": 130,
+   "z0": 76,
+   "x1": 133,
+   "z1": 86,
+   "from": 0,
+   "height": 9,
+   "type": "rust",
+   "flat": true,
+   "gy": 18
+  },
+  {
    "name": "ship edge 5",
    "x0": 140,
    "z0": 76,
@@ -251,6 +1219,90 @@
    "type": "rust",
    "flat": true,
    "gy": 17
+  },
+  {
+   "name": "ship edge 5 rib 0",
+   "x0": 142,
+   "z0": 75,
+   "x1": 144,
+   "z1": 87,
+   "from": 0,
+   "height": 8,
+   "type": "steel",
+   "flat": true,
+   "gy": 18
+  },
+  {
+   "name": "ship edge 5 rib 1",
+   "x0": 146,
+   "z0": 75,
+   "x1": 148,
+   "z1": 87,
+   "from": 0,
+   "height": 8,
+   "type": "steel",
+   "flat": true,
+   "gy": 18
+  },
+  {
+   "name": "ship edge 5 rib 2",
+   "x0": 150,
+   "z0": 75,
+   "x1": 152,
+   "z1": 87,
+   "from": 0,
+   "height": 8,
+   "type": "steel",
+   "flat": true,
+   "gy": 18
+  },
+  {
+   "name": "ship edge 5 rib 3",
+   "x0": 154,
+   "z0": 75,
+   "x1": 156,
+   "z1": 87,
+   "from": 0,
+   "height": 8,
+   "type": "steel",
+   "flat": true,
+   "gy": 18
+  },
+  {
+   "name": "ship edge 5 rib 4",
+   "x0": 158,
+   "z0": 75,
+   "x1": 160,
+   "z1": 87,
+   "from": 0,
+   "height": 8,
+   "type": "steel",
+   "flat": true,
+   "gy": 18
+  },
+  {
+   "name": "ship edge 5 cap",
+   "x0": 139,
+   "z0": 75,
+   "x1": 165,
+   "z1": 87,
+   "from": 0,
+   "height": 1,
+   "type": "steel",
+   "flat": true,
+   "gy": 27
+  },
+  {
+   "name": "ship edge 5 doors",
+   "x0": 162,
+   "z0": 76,
+   "x1": 165,
+   "z1": 86,
+   "from": 0,
+   "height": 9,
+   "type": "steel",
+   "flat": true,
+   "gy": 18
   },
   {
    "name": "ship edge 6",
@@ -265,6 +1317,90 @@
    "gy": 17
   },
   {
+   "name": "ship edge 6 rib 0",
+   "x0": 110,
+   "z0": 171,
+   "x1": 112,
+   "z1": 183,
+   "from": 0,
+   "height": 8,
+   "type": "steel",
+   "flat": true,
+   "gy": 18
+  },
+  {
+   "name": "ship edge 6 rib 1",
+   "x0": 114,
+   "z0": 171,
+   "x1": 116,
+   "z1": 183,
+   "from": 0,
+   "height": 8,
+   "type": "steel",
+   "flat": true,
+   "gy": 18
+  },
+  {
+   "name": "ship edge 6 rib 2",
+   "x0": 118,
+   "z0": 171,
+   "x1": 120,
+   "z1": 183,
+   "from": 0,
+   "height": 8,
+   "type": "steel",
+   "flat": true,
+   "gy": 18
+  },
+  {
+   "name": "ship edge 6 rib 3",
+   "x0": 122,
+   "z0": 171,
+   "x1": 124,
+   "z1": 183,
+   "from": 0,
+   "height": 8,
+   "type": "steel",
+   "flat": true,
+   "gy": 18
+  },
+  {
+   "name": "ship edge 6 rib 4",
+   "x0": 126,
+   "z0": 171,
+   "x1": 128,
+   "z1": 183,
+   "from": 0,
+   "height": 8,
+   "type": "steel",
+   "flat": true,
+   "gy": 18
+  },
+  {
+   "name": "ship edge 6 cap",
+   "x0": 107,
+   "z0": 171,
+   "x1": 133,
+   "z1": 183,
+   "from": 0,
+   "height": 1,
+   "type": "steel",
+   "flat": true,
+   "gy": 27
+  },
+  {
+   "name": "ship edge 6 doors",
+   "x0": 130,
+   "z0": 172,
+   "x1": 133,
+   "z1": 182,
+   "from": 0,
+   "height": 9,
+   "type": "steel",
+   "flat": true,
+   "gy": 18
+  },
+  {
    "name": "ship edge 6 upper",
    "x0": 108,
    "z0": 172,
@@ -277,6 +1413,90 @@
    "gy": 27
   },
   {
+   "name": "ship edge 6 upper rib 0",
+   "x0": 110,
+   "z0": 171,
+   "x1": 112,
+   "z1": 183,
+   "from": 0,
+   "height": 8,
+   "type": "steel",
+   "flat": true,
+   "gy": 28
+  },
+  {
+   "name": "ship edge 6 upper rib 1",
+   "x0": 114,
+   "z0": 171,
+   "x1": 116,
+   "z1": 183,
+   "from": 0,
+   "height": 8,
+   "type": "steel",
+   "flat": true,
+   "gy": 28
+  },
+  {
+   "name": "ship edge 6 upper rib 2",
+   "x0": 118,
+   "z0": 171,
+   "x1": 120,
+   "z1": 183,
+   "from": 0,
+   "height": 8,
+   "type": "steel",
+   "flat": true,
+   "gy": 28
+  },
+  {
+   "name": "ship edge 6 upper rib 3",
+   "x0": 122,
+   "z0": 171,
+   "x1": 124,
+   "z1": 183,
+   "from": 0,
+   "height": 8,
+   "type": "steel",
+   "flat": true,
+   "gy": 28
+  },
+  {
+   "name": "ship edge 6 upper rib 4",
+   "x0": 126,
+   "z0": 171,
+   "x1": 128,
+   "z1": 183,
+   "from": 0,
+   "height": 8,
+   "type": "steel",
+   "flat": true,
+   "gy": 28
+  },
+  {
+   "name": "ship edge 6 upper cap",
+   "x0": 107,
+   "z0": 171,
+   "x1": 133,
+   "z1": 183,
+   "from": 0,
+   "height": 1,
+   "type": "steel",
+   "flat": true,
+   "gy": 37
+  },
+  {
+   "name": "ship edge 6 upper doors",
+   "x0": 130,
+   "z0": 172,
+   "x1": 133,
+   "z1": 182,
+   "from": 0,
+   "height": 9,
+   "type": "steel",
+   "flat": true,
+   "gy": 28
+  },
+  {
    "name": "ship edge 7",
    "x0": 140,
    "z0": 172,
@@ -287,6 +1507,90 @@
    "type": "team_red",
    "flat": true,
    "gy": 17
+  },
+  {
+   "name": "ship edge 7 rib 0",
+   "x0": 142,
+   "z0": 171,
+   "x1": 144,
+   "z1": 183,
+   "from": 0,
+   "height": 8,
+   "type": "steel",
+   "flat": true,
+   "gy": 18
+  },
+  {
+   "name": "ship edge 7 rib 1",
+   "x0": 146,
+   "z0": 171,
+   "x1": 148,
+   "z1": 183,
+   "from": 0,
+   "height": 8,
+   "type": "steel",
+   "flat": true,
+   "gy": 18
+  },
+  {
+   "name": "ship edge 7 rib 2",
+   "x0": 150,
+   "z0": 171,
+   "x1": 152,
+   "z1": 183,
+   "from": 0,
+   "height": 8,
+   "type": "steel",
+   "flat": true,
+   "gy": 18
+  },
+  {
+   "name": "ship edge 7 rib 3",
+   "x0": 154,
+   "z0": 171,
+   "x1": 156,
+   "z1": 183,
+   "from": 0,
+   "height": 8,
+   "type": "steel",
+   "flat": true,
+   "gy": 18
+  },
+  {
+   "name": "ship edge 7 rib 4",
+   "x0": 158,
+   "z0": 171,
+   "x1": 160,
+   "z1": 183,
+   "from": 0,
+   "height": 8,
+   "type": "steel",
+   "flat": true,
+   "gy": 18
+  },
+  {
+   "name": "ship edge 7 cap",
+   "x0": 139,
+   "z0": 171,
+   "x1": 165,
+   "z1": 183,
+   "from": 0,
+   "height": 1,
+   "type": "steel",
+   "flat": true,
+   "gy": 27
+  },
+  {
+   "name": "ship edge 7 doors",
+   "x0": 162,
+   "z0": 172,
+   "x1": 165,
+   "z1": 182,
+   "from": 0,
+   "height": 9,
+   "type": "rust",
+   "flat": true,
+   "gy": 18
   },
   {
    "name": "shipment post",
@@ -331,6 +1635,18 @@
    "type": "concrete"
   },
   {
+   "name": "blue base wall north coping",
+   "x0": 87,
+   "z0": 7,
+   "x1": 169,
+   "z1": 15,
+   "from": 0,
+   "height": 1,
+   "type": "stone",
+   "flat": true,
+   "gy": 30
+  },
+  {
    "name": "blue base wall south a",
    "x0": 88,
    "z0": 38,
@@ -339,6 +1655,18 @@
    "from": 0,
    "height": 14,
    "type": "concrete"
+  },
+  {
+   "name": "blue base wall south a coping",
+   "x0": 87,
+   "z0": 37,
+   "x1": 115,
+   "z1": 45,
+   "from": 0,
+   "height": 1,
+   "type": "stone",
+   "flat": true,
+   "gy": 30
   },
   {
    "name": "blue base wall south b",
@@ -351,6 +1679,18 @@
    "type": "concrete"
   },
   {
+   "name": "blue base wall south b coping",
+   "x0": 141,
+   "z0": 37,
+   "x1": 169,
+   "z1": 45,
+   "from": 0,
+   "height": 1,
+   "type": "stone",
+   "flat": true,
+   "gy": 30
+  },
+  {
    "name": "blue base wall west",
    "x0": 88,
    "z0": 8,
@@ -361,6 +1701,18 @@
    "type": "concrete"
   },
   {
+   "name": "blue base wall west coping",
+   "x0": 87,
+   "z0": 7,
+   "x1": 95,
+   "z1": 45,
+   "from": 0,
+   "height": 1,
+   "type": "stone",
+   "flat": true,
+   "gy": 30
+  },
+  {
    "name": "blue base wall east",
    "x0": 162,
    "z0": 8,
@@ -369,6 +1721,18 @@
    "from": 0,
    "height": 14,
    "type": "concrete"
+  },
+  {
+   "name": "blue base wall east coping",
+   "x0": 161,
+   "z0": 7,
+   "x1": 169,
+   "z1": 45,
+   "from": 0,
+   "height": 1,
+   "type": "stone",
+   "flat": true,
+   "gy": 30
   },
   {
    "name": "blue base colours",
@@ -389,6 +1753,326 @@
    "from": 0,
    "height": 28,
    "type": "team_blue"
+  },
+  {
+   "name": "blue base pier n 0",
+   "x0": 96,
+   "z0": 6,
+   "x1": 101,
+   "z1": 10,
+   "from": 0,
+   "height": 12,
+   "type": "stone"
+  },
+  {
+   "name": "blue base pier s 0",
+   "x0": 96,
+   "z0": 42,
+   "x1": 101,
+   "z1": 46,
+   "from": 0,
+   "height": 12,
+   "type": "stone"
+  },
+  {
+   "name": "blue base pier n 1",
+   "x0": 112,
+   "z0": 6,
+   "x1": 117,
+   "z1": 10,
+   "from": 0,
+   "height": 12,
+   "type": "stone"
+  },
+  {
+   "name": "blue base pier s 1",
+   "x0": 112,
+   "z0": 42,
+   "x1": 117,
+   "z1": 46,
+   "from": 0,
+   "height": 12,
+   "type": "stone"
+  },
+  {
+   "name": "blue base pier n 2",
+   "x0": 128,
+   "z0": 6,
+   "x1": 133,
+   "z1": 10,
+   "from": 0,
+   "height": 12,
+   "type": "stone"
+  },
+  {
+   "name": "blue base pier s 2",
+   "x0": 128,
+   "z0": 42,
+   "x1": 133,
+   "z1": 46,
+   "from": 0,
+   "height": 12,
+   "type": "stone"
+  },
+  {
+   "name": "blue base pier n 3",
+   "x0": 144,
+   "z0": 6,
+   "x1": 149,
+   "z1": 10,
+   "from": 0,
+   "height": 12,
+   "type": "stone"
+  },
+  {
+   "name": "blue base pier s 3",
+   "x0": 144,
+   "z0": 42,
+   "x1": 149,
+   "z1": 46,
+   "from": 0,
+   "height": 12,
+   "type": "stone"
+  },
+  {
+   "name": "blue base pier n 4",
+   "x0": 160,
+   "z0": 6,
+   "x1": 165,
+   "z1": 10,
+   "from": 0,
+   "height": 12,
+   "type": "stone"
+  },
+  {
+   "name": "blue base pier s 4",
+   "x0": 160,
+   "z0": 42,
+   "x1": 165,
+   "z1": 46,
+   "from": 0,
+   "height": 12,
+   "type": "stone"
+  },
+  {
+   "name": "blue base pier w 0",
+   "x0": 86,
+   "z0": 16,
+   "x1": 90,
+   "z1": 21,
+   "from": 0,
+   "height": 12,
+   "type": "stone"
+  },
+  {
+   "name": "blue base pier e 0",
+   "x0": 166,
+   "z0": 16,
+   "x1": 170,
+   "z1": 21,
+   "from": 0,
+   "height": 12,
+   "type": "stone"
+  },
+  {
+   "name": "blue base pier w 1",
+   "x0": 86,
+   "z0": 32,
+   "x1": 90,
+   "z1": 37,
+   "from": 0,
+   "height": 12,
+   "type": "stone"
+  },
+  {
+   "name": "blue base pier e 1",
+   "x0": 166,
+   "z0": 32,
+   "x1": 170,
+   "z1": 37,
+   "from": 0,
+   "height": 12,
+   "type": "stone"
+  },
+  {
+   "name": "blue base coping",
+   "x0": 86,
+   "z0": 6,
+   "x1": 170,
+   "z1": 46,
+   "from": 0,
+   "height": 2,
+   "type": "team_blue",
+   "flat": true,
+   "gy": 30
+  },
+  {
+   "name": "blue base stores roof course 0",
+   "x0": 96,
+   "z0": 16,
+   "x1": 122,
+   "z1": 20,
+   "from": 0,
+   "height": 2,
+   "type": "tin",
+   "flat": true,
+   "gy": 24
+  },
+  {
+   "name": "blue base stores roof course 1",
+   "x0": 96,
+   "z0": 20,
+   "x1": 122,
+   "z1": 24,
+   "from": 0,
+   "height": 2,
+   "type": "slate",
+   "flat": true,
+   "gy": 24
+  },
+  {
+   "name": "blue base stores roof course 2",
+   "x0": 96,
+   "z0": 24,
+   "x1": 122,
+   "z1": 28,
+   "from": 0,
+   "height": 2,
+   "type": "tin",
+   "flat": true,
+   "gy": 24
+  },
+  {
+   "name": "blue base stores roof course 3",
+   "x0": 96,
+   "z0": 28,
+   "x1": 122,
+   "z1": 32,
+   "from": 0,
+   "height": 2,
+   "type": "slate",
+   "flat": true,
+   "gy": 24
+  },
+  {
+   "name": "blue base stores roof course 4",
+   "x0": 96,
+   "z0": 32,
+   "x1": 122,
+   "z1": 36,
+   "from": 0,
+   "height": 2,
+   "type": "tin",
+   "flat": true,
+   "gy": 24
+  },
+  {
+   "name": "blue base stores roof course 5",
+   "x0": 96,
+   "z0": 36,
+   "x1": 122,
+   "z1": 38,
+   "from": 0,
+   "height": 2,
+   "type": "slate",
+   "flat": true,
+   "gy": 24
+  },
+  {
+   "name": "blue base stores roof rib 0",
+   "x0": 96,
+   "z0": 16,
+   "x1": 122,
+   "z1": 18,
+   "from": 0,
+   "height": 1,
+   "type": "slate",
+   "flat": true,
+   "gy": 26
+  },
+  {
+   "name": "blue base stores roof rib 1",
+   "x0": 96,
+   "z0": 20,
+   "x1": 122,
+   "z1": 22,
+   "from": 0,
+   "height": 1,
+   "type": "slate",
+   "flat": true,
+   "gy": 26
+  },
+  {
+   "name": "blue base stores roof rib 2",
+   "x0": 96,
+   "z0": 24,
+   "x1": 122,
+   "z1": 26,
+   "from": 0,
+   "height": 1,
+   "type": "slate",
+   "flat": true,
+   "gy": 26
+  },
+  {
+   "name": "blue base stores roof rib 3",
+   "x0": 96,
+   "z0": 28,
+   "x1": 122,
+   "z1": 30,
+   "from": 0,
+   "height": 1,
+   "type": "slate",
+   "flat": true,
+   "gy": 26
+  },
+  {
+   "name": "blue base stores roof rib 4",
+   "x0": 96,
+   "z0": 32,
+   "x1": 122,
+   "z1": 34,
+   "from": 0,
+   "height": 1,
+   "type": "slate",
+   "flat": true,
+   "gy": 26
+  },
+  {
+   "name": "blue base stores roof rib 5",
+   "x0": 96,
+   "z0": 36,
+   "x1": 122,
+   "z1": 38,
+   "from": 0,
+   "height": 1,
+   "type": "slate",
+   "flat": true,
+   "gy": 26
+  },
+  {
+   "name": "blue base stores roof patch 0",
+   "x0": 111,
+   "z0": 26,
+   "x1": 116,
+   "z1": 31,
+   "from": 0,
+   "height": 1,
+   "type": "tin",
+   "flat": true,
+   "gy": 28
+  },
+  {
+   "name": "blue base stores roof patch 2",
+   "x0": 100,
+   "z0": 24,
+   "x1": 109,
+   "z1": 33,
+   "from": 0,
+   "height": 1,
+   "type": "tin",
+   "flat": true,
+   "gy": 28
   },
   {
    "name": "blue base stores",
@@ -437,6 +2121,18 @@
    "type": "concrete"
   },
   {
+   "name": "red base wall north a coping",
+   "x0": 87,
+   "z0": 211,
+   "x1": 115,
+   "z1": 219,
+   "from": 0,
+   "height": 1,
+   "type": "stone",
+   "flat": true,
+   "gy": 30
+  },
+  {
    "name": "red base wall north b",
    "x0": 142,
    "z0": 212,
@@ -445,6 +2141,18 @@
    "from": 0,
    "height": 14,
    "type": "concrete"
+  },
+  {
+   "name": "red base wall north b coping",
+   "x0": 141,
+   "z0": 211,
+   "x1": 169,
+   "z1": 219,
+   "from": 0,
+   "height": 1,
+   "type": "stone",
+   "flat": true,
+   "gy": 30
   },
   {
    "name": "red base wall south",
@@ -457,6 +2165,18 @@
    "type": "concrete"
   },
   {
+   "name": "red base wall south coping",
+   "x0": 87,
+   "z0": 241,
+   "x1": 169,
+   "z1": 249,
+   "from": 0,
+   "height": 1,
+   "type": "stone",
+   "flat": true,
+   "gy": 30
+  },
+  {
    "name": "red base wall west",
    "x0": 88,
    "z0": 212,
@@ -467,6 +2187,18 @@
    "type": "concrete"
   },
   {
+   "name": "red base wall west coping",
+   "x0": 87,
+   "z0": 211,
+   "x1": 95,
+   "z1": 249,
+   "from": 0,
+   "height": 1,
+   "type": "stone",
+   "flat": true,
+   "gy": 30
+  },
+  {
    "name": "red base wall east",
    "x0": 162,
    "z0": 212,
@@ -475,6 +2207,18 @@
    "from": 0,
    "height": 14,
    "type": "concrete"
+  },
+  {
+   "name": "red base wall east coping",
+   "x0": 161,
+   "z0": 211,
+   "x1": 169,
+   "z1": 249,
+   "from": 0,
+   "height": 1,
+   "type": "stone",
+   "flat": true,
+   "gy": 30
   },
   {
    "name": "red base colours",
@@ -495,6 +2239,326 @@
    "from": 0,
    "height": 28,
    "type": "team_red"
+  },
+  {
+   "name": "red base pier n 0",
+   "x0": 96,
+   "z0": 210,
+   "x1": 101,
+   "z1": 214,
+   "from": 0,
+   "height": 12,
+   "type": "stone"
+  },
+  {
+   "name": "red base pier s 0",
+   "x0": 96,
+   "z0": 246,
+   "x1": 101,
+   "z1": 250,
+   "from": 0,
+   "height": 12,
+   "type": "stone"
+  },
+  {
+   "name": "red base pier n 1",
+   "x0": 112,
+   "z0": 210,
+   "x1": 117,
+   "z1": 214,
+   "from": 0,
+   "height": 12,
+   "type": "stone"
+  },
+  {
+   "name": "red base pier s 1",
+   "x0": 112,
+   "z0": 246,
+   "x1": 117,
+   "z1": 250,
+   "from": 0,
+   "height": 12,
+   "type": "stone"
+  },
+  {
+   "name": "red base pier n 2",
+   "x0": 128,
+   "z0": 210,
+   "x1": 133,
+   "z1": 214,
+   "from": 0,
+   "height": 12,
+   "type": "stone"
+  },
+  {
+   "name": "red base pier s 2",
+   "x0": 128,
+   "z0": 246,
+   "x1": 133,
+   "z1": 250,
+   "from": 0,
+   "height": 12,
+   "type": "stone"
+  },
+  {
+   "name": "red base pier n 3",
+   "x0": 144,
+   "z0": 210,
+   "x1": 149,
+   "z1": 214,
+   "from": 0,
+   "height": 12,
+   "type": "stone"
+  },
+  {
+   "name": "red base pier s 3",
+   "x0": 144,
+   "z0": 246,
+   "x1": 149,
+   "z1": 250,
+   "from": 0,
+   "height": 12,
+   "type": "stone"
+  },
+  {
+   "name": "red base pier n 4",
+   "x0": 160,
+   "z0": 210,
+   "x1": 165,
+   "z1": 214,
+   "from": 0,
+   "height": 12,
+   "type": "stone"
+  },
+  {
+   "name": "red base pier s 4",
+   "x0": 160,
+   "z0": 246,
+   "x1": 165,
+   "z1": 250,
+   "from": 0,
+   "height": 12,
+   "type": "stone"
+  },
+  {
+   "name": "red base pier w 0",
+   "x0": 86,
+   "z0": 220,
+   "x1": 90,
+   "z1": 225,
+   "from": 0,
+   "height": 12,
+   "type": "stone"
+  },
+  {
+   "name": "red base pier e 0",
+   "x0": 166,
+   "z0": 220,
+   "x1": 170,
+   "z1": 225,
+   "from": 0,
+   "height": 12,
+   "type": "stone"
+  },
+  {
+   "name": "red base pier w 1",
+   "x0": 86,
+   "z0": 236,
+   "x1": 90,
+   "z1": 241,
+   "from": 0,
+   "height": 12,
+   "type": "stone"
+  },
+  {
+   "name": "red base pier e 1",
+   "x0": 166,
+   "z0": 236,
+   "x1": 170,
+   "z1": 241,
+   "from": 0,
+   "height": 12,
+   "type": "stone"
+  },
+  {
+   "name": "red base coping",
+   "x0": 86,
+   "z0": 210,
+   "x1": 170,
+   "z1": 250,
+   "from": 0,
+   "height": 2,
+   "type": "team_red",
+   "flat": true,
+   "gy": 30
+  },
+  {
+   "name": "red base stores roof course 0",
+   "x0": 96,
+   "z0": 220,
+   "x1": 122,
+   "z1": 224,
+   "from": 0,
+   "height": 2,
+   "type": "tin",
+   "flat": true,
+   "gy": 24
+  },
+  {
+   "name": "red base stores roof course 1",
+   "x0": 96,
+   "z0": 224,
+   "x1": 122,
+   "z1": 228,
+   "from": 0,
+   "height": 2,
+   "type": "slate",
+   "flat": true,
+   "gy": 24
+  },
+  {
+   "name": "red base stores roof course 2",
+   "x0": 96,
+   "z0": 228,
+   "x1": 122,
+   "z1": 232,
+   "from": 0,
+   "height": 2,
+   "type": "tin",
+   "flat": true,
+   "gy": 24
+  },
+  {
+   "name": "red base stores roof course 3",
+   "x0": 96,
+   "z0": 232,
+   "x1": 122,
+   "z1": 236,
+   "from": 0,
+   "height": 2,
+   "type": "slate",
+   "flat": true,
+   "gy": 24
+  },
+  {
+   "name": "red base stores roof course 4",
+   "x0": 96,
+   "z0": 236,
+   "x1": 122,
+   "z1": 240,
+   "from": 0,
+   "height": 2,
+   "type": "tin",
+   "flat": true,
+   "gy": 24
+  },
+  {
+   "name": "red base stores roof course 5",
+   "x0": 96,
+   "z0": 240,
+   "x1": 122,
+   "z1": 242,
+   "from": 0,
+   "height": 2,
+   "type": "slate",
+   "flat": true,
+   "gy": 24
+  },
+  {
+   "name": "red base stores roof rib 0",
+   "x0": 96,
+   "z0": 220,
+   "x1": 122,
+   "z1": 222,
+   "from": 0,
+   "height": 1,
+   "type": "slate",
+   "flat": true,
+   "gy": 26
+  },
+  {
+   "name": "red base stores roof rib 1",
+   "x0": 96,
+   "z0": 224,
+   "x1": 122,
+   "z1": 226,
+   "from": 0,
+   "height": 1,
+   "type": "slate",
+   "flat": true,
+   "gy": 26
+  },
+  {
+   "name": "red base stores roof rib 2",
+   "x0": 96,
+   "z0": 228,
+   "x1": 122,
+   "z1": 230,
+   "from": 0,
+   "height": 1,
+   "type": "slate",
+   "flat": true,
+   "gy": 26
+  },
+  {
+   "name": "red base stores roof rib 3",
+   "x0": 96,
+   "z0": 232,
+   "x1": 122,
+   "z1": 234,
+   "from": 0,
+   "height": 1,
+   "type": "slate",
+   "flat": true,
+   "gy": 26
+  },
+  {
+   "name": "red base stores roof rib 4",
+   "x0": 96,
+   "z0": 236,
+   "x1": 122,
+   "z1": 238,
+   "from": 0,
+   "height": 1,
+   "type": "slate",
+   "flat": true,
+   "gy": 26
+  },
+  {
+   "name": "red base stores roof rib 5",
+   "x0": 96,
+   "z0": 240,
+   "x1": 122,
+   "z1": 242,
+   "from": 0,
+   "height": 1,
+   "type": "slate",
+   "flat": true,
+   "gy": 26
+  },
+  {
+   "name": "red base stores roof patch 1",
+   "x0": 100,
+   "z0": 225,
+   "x1": 108,
+   "z1": 233,
+   "from": 0,
+   "height": 1,
+   "type": "tin",
+   "flat": true,
+   "gy": 28
+  },
+  {
+   "name": "red base stores roof patch 2",
+   "x0": 106,
+   "z0": 224,
+   "x1": 115,
+   "z1": 233,
+   "from": 0,
+   "height": 1,
+   "type": "tin",
+   "flat": true,
+   "gy": 28
   },
   {
    "name": "red base stores",
@@ -519,18 +2583,6 @@
    "type": "wood",
    "flat": true,
    "gy": 17
-  }
- ],
- "mechs": [
-  {
-   "x": -20.0,
-   "z": -16.8,
-   "yaw": 230.0
-  },
-  {
-   "x": 20.0,
-   "z": 16.8,
-   "yaw": 50.0
   }
  ]
 }

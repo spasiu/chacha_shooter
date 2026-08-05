@@ -16,6 +16,8 @@ extends CanvasLayer
 @onready var loading_percent: Label = $Root/Loading/LoadingPercent
 @onready var tickets: Label = $Root/Tickets
 @onready var reticule: Control = $Root/Reticule
+@onready var leg_indicator: Control = $Root/LegIndicator
+@onready var leg_tick: ColorRect = $Root/LegIndicator/Tick
 @onready var round_over: ColorRect = $Root/RoundOver
 @onready var round_title: Label = $Root/RoundOver/RoundTitle
 @onready var round_sub: Label = $Root/RoundOver/RoundSub
@@ -121,15 +123,47 @@ func _score_row(who: String, figures: String, colour: Color) -> Control:
 ## player is not in a position to use it, so it never sits on top of the death
 ## screen or the scoreboard.
 func _update_reticule() -> void:
-	var held: Equipment = _player.weapon if _player != null else null
-	var size: float = held.reticule_size() if held != null else -1.0
 	var usable: bool = (
 		_player != null and not _player.is_dead() and _player.is_ready_to_play()
-		and not Net.round_over and _player.riding() == null
+		and not Net.round_over
 	)
+	# Aboard, the vehicle's gun is what is being aimed, so the marker belongs to
+	# it. There is no crosshair on the weapon in your hands to fall back on --
+	# the weapon is parked while you drive.
+	var vehicle: Node3D = _player.riding() if _player != null else null
+	var size := -1.0
+	if vehicle != null:
+		size = vehicle.reticule_size() if vehicle.has_method("reticule_size") else 1.0
+	else:
+		var held: Equipment = _player.weapon if _player != null else null
+		size = held.reticule_size() if held != null else -1.0
+	_update_hull_bearing(vehicle, usable)
 	reticule.visible = size > 0.0 and usable
 	if reticule.visible:
 		reticule.scale = Vector2.ONE * size
+
+
+## Where the hull or the legs are pointing, relative to the way you are facing.
+##
+## The tick runs from one end of the track to the other over a half turn each
+## way, so a hull swung fully round sits at the end rather than wrapping back
+## through the middle and reading as straight ahead.
+func _update_hull_bearing(vehicle: Node3D, usable: bool) -> void:
+	var show: bool = usable and vehicle != null and vehicle.has_method("hull_offset")
+	leg_indicator.visible = show
+	if not show:
+		return
+	var offset: float = vehicle.hull_offset()
+	var half: float = leg_indicator.size.x * 0.5
+	var across: float = clampf(offset / PI, -1.0, 1.0) * half
+	leg_tick.offset_left = across - 3.0
+	leg_tick.offset_right = across + 3.0
+	# Amber while it is square, red once the legs are further round than the
+	# body can follow in a hurry.
+	leg_tick.color = (
+		Color(0.95, 0.76, 0.35, 0.95) if absf(offset) < deg_to_rad(60.0)
+		else Color(0.95, 0.42, 0.3, 0.95)
+	)
 
 
 ## The running count, and the countdown while the scoreboard is up.

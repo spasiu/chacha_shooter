@@ -40,8 +40,8 @@
    -11.0
   ],
   [
-   2.5,
-   11.0
+   0.0,
+   8.5
   ],
   [
    -8.5,
@@ -80,6 +80,18 @@
    "type": "concrete"
   },
   {
+   "name": "red base wall north a coping",
+   "x0": 145,
+   "z0": 163,
+   "x1": 176,
+   "z1": 171,
+   "from": 0,
+   "height": 1,
+   "type": "stone",
+   "flat": true,
+   "gy": 32
+  },
+  {
    "name": "red base wall north b",
    "x0": 205,
    "z0": 164,
@@ -88,6 +100,18 @@
    "from": 0,
    "height": 16,
    "type": "concrete"
+  },
+  {
+   "name": "red base wall north b coping",
+   "x0": 204,
+   "z0": 163,
+   "x1": 235,
+   "z1": 171,
+   "from": 0,
+   "height": 1,
+   "type": "stone",
+   "flat": true,
+   "gy": 32
   },
   {
    "name": "red base wall south",
@@ -100,6 +124,18 @@
    "type": "concrete"
   },
   {
+   "name": "red base wall south coping",
+   "x0": 145,
+   "z0": 209,
+   "x1": 235,
+   "z1": 217,
+   "from": 0,
+   "height": 1,
+   "type": "stone",
+   "flat": true,
+   "gy": 32
+  },
+  {
    "name": "red base wall west",
    "x0": 146,
    "z0": 164,
@@ -110,6 +146,18 @@
    "type": "concrete"
   },
   {
+   "name": "red base wall west coping",
+   "x0": 145,
+   "z0": 163,
+   "x1": 153,
+   "z1": 217,
+   "from": 0,
+   "height": 1,
+   "type": "stone",
+   "flat": true,
+   "gy": 32
+  },
+  {
    "name": "red base wall east",
    "x0": 228,
    "z0": 164,
@@ -118,6 +166,18 @@
    "from": 0,
    "height": 16,
    "type": "concrete"
+  },
+  {
+   "name": "red base wall east coping",
+   "x0": 227,
+   "z0": 163,
+   "x1": 235,
+   "z1": 217,
+   "from": 0,
+   "height": 1,
+   "type": "stone",
+   "flat": true,
+   "gy": 32
   },
   {
    "name": "red base colours",
@@ -138,6 +198,346 @@
    "from": 0,
    "height": 30,
    "type": "team_red"
+  },
+  {
+   "name": "red base pier n 0",
+   "x0": 154,
+   "z0": 162,
+   "x1": 159,
+   "z1": 166,
+   "from": 0,
+   "height": 14,
+   "type": "stone"
+  },
+  {
+   "name": "red base pier s 0",
+   "x0": 154,
+   "z0": 214,
+   "x1": 159,
+   "z1": 218,
+   "from": 0,
+   "height": 14,
+   "type": "stone"
+  },
+  {
+   "name": "red base pier n 1",
+   "x0": 170,
+   "z0": 162,
+   "x1": 175,
+   "z1": 166,
+   "from": 0,
+   "height": 14,
+   "type": "stone"
+  },
+  {
+   "name": "red base pier s 1",
+   "x0": 170,
+   "z0": 214,
+   "x1": 175,
+   "z1": 218,
+   "from": 0,
+   "height": 14,
+   "type": "stone"
+  },
+  {
+   "name": "red base pier n 2",
+   "x0": 186,
+   "z0": 162,
+   "x1": 191,
+   "z1": 166,
+   "from": 0,
+   "height": 14,
+   "type": "stone"
+  },
+  {
+   "name": "red base pier s 2",
+   "x0": 186,
+   "z0": 214,
+   "x1": 191,
+   "z1": 218,
+   "from": 0,
+   "height": 14,
+   "type": "stone"
+  },
+  {
+   "name": "red base pier n 3",
+   "x0": 202,
+   "z0": 162,
+   "x1": 207,
+   "z1": 166,
+   "from": 0,
+   "height": 14,
+   "type": "stone"
+  },
+  {
+   "name": "red base pier s 3",
+   "x0": 202,
+   "z0": 214,
+   "x1": 207,
+   "z1": 218,
+   "from": 0,
+   "height": 14,
+   "type": "stone"
+  },
+  {
+   "name": "red base pier n 4",
+   "x0": 218,
+   "z0": 162,
+   "x1": 223,
+   "z1": 166,
+   "from": 0,
+   "height": 14,
+   "type": "stone"
+  },
+  {
+   "name": "red base pier s 4",
+   "x0": 218,
+   "z0": 214,
+   "x1": 223,
+   "z1": 218,
+   "from": 0,
+   "height": 14,
+   "type": "stone"
+  },
+  {
+   "name": "red base pier w 0",
+   "x0": 144,
+   "z0": 172,
+   "x1": 148,
+   "z1": 177,
+   "from": 0,
+   "height": 14,
+   "type": "stone"
+  },
+  {
+   "name": "red base pier e 0",
+   "x0": 232,
+   "z0": 172,
+   "x1": 236,
+   "z1": 177,
+   "from": 0,
+   "height": 14,
+   "type": "stone"
+  },
+  {
+   "name": "red base pier w 1",
+   "x0": 144,
+   "z0": 188,
+   "x1": 148,
+   "z1": 193,
+   "from": 0,
+   "height": 14,
+   "type": "stone"
+  },
+  {
+   "name": "red base pier e 1",
+   "x0": 232,
+   "z0": 188,
+   "x1": 236,
+   "z1": 193,
+   "from": 0,
+   "height": 14,
+   "type": "stone"
+  },
+  {
+   "name": "red base pier w 2",
+   "x0": 144,
+   "z0": 204,
+   "x1": 148,
+   "z1": 209,
+   "from": 0,
+   "height": 14,
+   "type": "stone"
+  },
+  {
+   "name": "red base pier e 2",
+   "x0": 232,
+   "z0": 204,
+   "x1": 236,
+   "z1": 209,
+   "from": 0,
+   "height": 14,
+   "type": "stone"
+  },
+  {
+   "name": "red base coping",
+   "x0": 144,
+   "z0": 162,
+   "x1": 236,
+   "z1": 218,
+   "from": 0,
+   "height": 2,
+   "type": "team_red",
+   "flat": true,
+   "gy": 31
+  },
+  {
+   "name": "red base stores roof course 0",
+   "x0": 154,
+   "z0": 172,
+   "x1": 180,
+   "z1": 176,
+   "from": 0,
+   "height": 2,
+   "type": "tin",
+   "flat": true,
+   "gy": 23
+  },
+  {
+   "name": "red base stores roof course 1",
+   "x0": 154,
+   "z0": 176,
+   "x1": 180,
+   "z1": 180,
+   "from": 0,
+   "height": 2,
+   "type": "slate",
+   "flat": true,
+   "gy": 23
+  },
+  {
+   "name": "red base stores roof course 2",
+   "x0": 154,
+   "z0": 180,
+   "x1": 180,
+   "z1": 184,
+   "from": 0,
+   "height": 2,
+   "type": "tin",
+   "flat": true,
+   "gy": 23
+  },
+  {
+   "name": "red base stores roof course 3",
+   "x0": 154,
+   "z0": 184,
+   "x1": 180,
+   "z1": 188,
+   "from": 0,
+   "height": 2,
+   "type": "slate",
+   "flat": true,
+   "gy": 23
+  },
+  {
+   "name": "red base stores roof course 4",
+   "x0": 154,
+   "z0": 188,
+   "x1": 180,
+   "z1": 192,
+   "from": 0,
+   "height": 2,
+   "type": "tin",
+   "flat": true,
+   "gy": 23
+  },
+  {
+   "name": "red base stores roof course 5",
+   "x0": 154,
+   "z0": 192,
+   "x1": 180,
+   "z1": 194,
+   "from": 0,
+   "height": 2,
+   "type": "slate",
+   "flat": true,
+   "gy": 23
+  },
+  {
+   "name": "red base stores roof rib 0",
+   "x0": 154,
+   "z0": 172,
+   "x1": 180,
+   "z1": 174,
+   "from": 0,
+   "height": 1,
+   "type": "slate",
+   "flat": true,
+   "gy": 25
+  },
+  {
+   "name": "red base stores roof rib 1",
+   "x0": 154,
+   "z0": 176,
+   "x1": 180,
+   "z1": 178,
+   "from": 0,
+   "height": 1,
+   "type": "slate",
+   "flat": true,
+   "gy": 25
+  },
+  {
+   "name": "red base stores roof rib 2",
+   "x0": 154,
+   "z0": 180,
+   "x1": 180,
+   "z1": 182,
+   "from": 0,
+   "height": 1,
+   "type": "slate",
+   "flat": true,
+   "gy": 25
+  },
+  {
+   "name": "red base stores roof rib 3",
+   "x0": 154,
+   "z0": 184,
+   "x1": 180,
+   "z1": 186,
+   "from": 0,
+   "height": 1,
+   "type": "slate",
+   "flat": true,
+   "gy": 25
+  },
+  {
+   "name": "red base stores roof rib 4",
+   "x0": 154,
+   "z0": 188,
+   "x1": 180,
+   "z1": 190,
+   "from": 0,
+   "height": 1,
+   "type": "slate",
+   "flat": true,
+   "gy": 25
+  },
+  {
+   "name": "red base stores roof rib 5",
+   "x0": 154,
+   "z0": 192,
+   "x1": 180,
+   "z1": 194,
+   "from": 0,
+   "height": 1,
+   "type": "slate",
+   "flat": true,
+   "gy": 25
+  },
+  {
+   "name": "red base stores roof patch 1",
+   "x0": 168,
+   "z0": 179,
+   "x1": 177,
+   "z1": 188,
+   "from": 0,
+   "height": 1,
+   "type": "tin",
+   "flat": true,
+   "gy": 27
+  },
+  {
+   "name": "red base stores roof patch 2",
+   "x0": 163,
+   "z0": 180,
+   "x1": 168,
+   "z1": 185,
+   "from": 0,
+   "height": 1,
+   "type": "tin",
+   "flat": true,
+   "gy": 27
   },
   {
    "name": "red base stores",
@@ -186,6 +586,18 @@
    "type": "concrete"
   },
   {
+   "name": "blue base wall north coping",
+   "x0": 21,
+   "z0": 39,
+   "x1": 111,
+   "z1": 47,
+   "from": 0,
+   "height": 1,
+   "type": "stone",
+   "flat": true,
+   "gy": 32
+  },
+  {
    "name": "blue base wall south a",
    "x0": 22,
    "z0": 86,
@@ -194,6 +606,18 @@
    "from": 0,
    "height": 16,
    "type": "concrete"
+  },
+  {
+   "name": "blue base wall south a coping",
+   "x0": 21,
+   "z0": 85,
+   "x1": 52,
+   "z1": 93,
+   "from": 0,
+   "height": 1,
+   "type": "stone",
+   "flat": true,
+   "gy": 32
   },
   {
    "name": "blue base wall south b",
@@ -206,6 +630,18 @@
    "type": "concrete"
   },
   {
+   "name": "blue base wall south b coping",
+   "x0": 80,
+   "z0": 85,
+   "x1": 111,
+   "z1": 93,
+   "from": 0,
+   "height": 1,
+   "type": "stone",
+   "flat": true,
+   "gy": 32
+  },
+  {
    "name": "blue base wall west",
    "x0": 22,
    "z0": 40,
@@ -216,6 +652,18 @@
    "type": "concrete"
   },
   {
+   "name": "blue base wall west coping",
+   "x0": 21,
+   "z0": 39,
+   "x1": 29,
+   "z1": 93,
+   "from": 0,
+   "height": 1,
+   "type": "stone",
+   "flat": true,
+   "gy": 32
+  },
+  {
    "name": "blue base wall east",
    "x0": 104,
    "z0": 40,
@@ -224,6 +672,18 @@
    "from": 0,
    "height": 16,
    "type": "concrete"
+  },
+  {
+   "name": "blue base wall east coping",
+   "x0": 103,
+   "z0": 39,
+   "x1": 111,
+   "z1": 93,
+   "from": 0,
+   "height": 1,
+   "type": "stone",
+   "flat": true,
+   "gy": 32
   },
   {
    "name": "blue base colours",
@@ -244,6 +704,358 @@
    "from": 0,
    "height": 30,
    "type": "team_blue"
+  },
+  {
+   "name": "blue base pier n 0",
+   "x0": 30,
+   "z0": 38,
+   "x1": 35,
+   "z1": 42,
+   "from": 0,
+   "height": 14,
+   "type": "stone"
+  },
+  {
+   "name": "blue base pier s 0",
+   "x0": 30,
+   "z0": 90,
+   "x1": 35,
+   "z1": 94,
+   "from": 0,
+   "height": 14,
+   "type": "stone"
+  },
+  {
+   "name": "blue base pier n 1",
+   "x0": 46,
+   "z0": 38,
+   "x1": 51,
+   "z1": 42,
+   "from": 0,
+   "height": 14,
+   "type": "stone"
+  },
+  {
+   "name": "blue base pier s 1",
+   "x0": 46,
+   "z0": 90,
+   "x1": 51,
+   "z1": 94,
+   "from": 0,
+   "height": 14,
+   "type": "stone"
+  },
+  {
+   "name": "blue base pier n 2",
+   "x0": 62,
+   "z0": 38,
+   "x1": 67,
+   "z1": 42,
+   "from": 0,
+   "height": 14,
+   "type": "stone"
+  },
+  {
+   "name": "blue base pier s 2",
+   "x0": 62,
+   "z0": 90,
+   "x1": 67,
+   "z1": 94,
+   "from": 0,
+   "height": 14,
+   "type": "stone"
+  },
+  {
+   "name": "blue base pier n 3",
+   "x0": 78,
+   "z0": 38,
+   "x1": 83,
+   "z1": 42,
+   "from": 0,
+   "height": 14,
+   "type": "stone"
+  },
+  {
+   "name": "blue base pier s 3",
+   "x0": 78,
+   "z0": 90,
+   "x1": 83,
+   "z1": 94,
+   "from": 0,
+   "height": 14,
+   "type": "stone"
+  },
+  {
+   "name": "blue base pier n 4",
+   "x0": 94,
+   "z0": 38,
+   "x1": 99,
+   "z1": 42,
+   "from": 0,
+   "height": 14,
+   "type": "stone"
+  },
+  {
+   "name": "blue base pier s 4",
+   "x0": 94,
+   "z0": 90,
+   "x1": 99,
+   "z1": 94,
+   "from": 0,
+   "height": 14,
+   "type": "stone"
+  },
+  {
+   "name": "blue base pier w 0",
+   "x0": 20,
+   "z0": 48,
+   "x1": 24,
+   "z1": 53,
+   "from": 0,
+   "height": 14,
+   "type": "stone"
+  },
+  {
+   "name": "blue base pier e 0",
+   "x0": 108,
+   "z0": 48,
+   "x1": 112,
+   "z1": 53,
+   "from": 0,
+   "height": 14,
+   "type": "stone"
+  },
+  {
+   "name": "blue base pier w 1",
+   "x0": 20,
+   "z0": 64,
+   "x1": 24,
+   "z1": 69,
+   "from": 0,
+   "height": 14,
+   "type": "stone"
+  },
+  {
+   "name": "blue base pier e 1",
+   "x0": 108,
+   "z0": 64,
+   "x1": 112,
+   "z1": 69,
+   "from": 0,
+   "height": 14,
+   "type": "stone"
+  },
+  {
+   "name": "blue base pier w 2",
+   "x0": 20,
+   "z0": 80,
+   "x1": 24,
+   "z1": 85,
+   "from": 0,
+   "height": 14,
+   "type": "stone"
+  },
+  {
+   "name": "blue base pier e 2",
+   "x0": 108,
+   "z0": 80,
+   "x1": 112,
+   "z1": 85,
+   "from": 0,
+   "height": 14,
+   "type": "stone"
+  },
+  {
+   "name": "blue base coping",
+   "x0": 20,
+   "z0": 38,
+   "x1": 112,
+   "z1": 94,
+   "from": 0,
+   "height": 2,
+   "type": "team_blue",
+   "flat": true,
+   "gy": 31
+  },
+  {
+   "name": "blue base stores roof course 0",
+   "x0": 30,
+   "z0": 48,
+   "x1": 56,
+   "z1": 52,
+   "from": 0,
+   "height": 2,
+   "type": "tin",
+   "flat": true,
+   "gy": 23
+  },
+  {
+   "name": "blue base stores roof course 1",
+   "x0": 30,
+   "z0": 52,
+   "x1": 56,
+   "z1": 56,
+   "from": 0,
+   "height": 2,
+   "type": "slate",
+   "flat": true,
+   "gy": 23
+  },
+  {
+   "name": "blue base stores roof course 2",
+   "x0": 30,
+   "z0": 56,
+   "x1": 56,
+   "z1": 60,
+   "from": 0,
+   "height": 2,
+   "type": "tin",
+   "flat": true,
+   "gy": 23
+  },
+  {
+   "name": "blue base stores roof course 3",
+   "x0": 30,
+   "z0": 60,
+   "x1": 56,
+   "z1": 64,
+   "from": 0,
+   "height": 2,
+   "type": "slate",
+   "flat": true,
+   "gy": 23
+  },
+  {
+   "name": "blue base stores roof course 4",
+   "x0": 30,
+   "z0": 64,
+   "x1": 56,
+   "z1": 68,
+   "from": 0,
+   "height": 2,
+   "type": "tin",
+   "flat": true,
+   "gy": 23
+  },
+  {
+   "name": "blue base stores roof course 5",
+   "x0": 30,
+   "z0": 68,
+   "x1": 56,
+   "z1": 70,
+   "from": 0,
+   "height": 2,
+   "type": "slate",
+   "flat": true,
+   "gy": 23
+  },
+  {
+   "name": "blue base stores roof rib 0",
+   "x0": 30,
+   "z0": 48,
+   "x1": 56,
+   "z1": 50,
+   "from": 0,
+   "height": 1,
+   "type": "slate",
+   "flat": true,
+   "gy": 25
+  },
+  {
+   "name": "blue base stores roof rib 1",
+   "x0": 30,
+   "z0": 52,
+   "x1": 56,
+   "z1": 54,
+   "from": 0,
+   "height": 1,
+   "type": "slate",
+   "flat": true,
+   "gy": 25
+  },
+  {
+   "name": "blue base stores roof rib 2",
+   "x0": 30,
+   "z0": 56,
+   "x1": 56,
+   "z1": 58,
+   "from": 0,
+   "height": 1,
+   "type": "slate",
+   "flat": true,
+   "gy": 25
+  },
+  {
+   "name": "blue base stores roof rib 3",
+   "x0": 30,
+   "z0": 60,
+   "x1": 56,
+   "z1": 62,
+   "from": 0,
+   "height": 1,
+   "type": "slate",
+   "flat": true,
+   "gy": 25
+  },
+  {
+   "name": "blue base stores roof rib 4",
+   "x0": 30,
+   "z0": 64,
+   "x1": 56,
+   "z1": 66,
+   "from": 0,
+   "height": 1,
+   "type": "slate",
+   "flat": true,
+   "gy": 25
+  },
+  {
+   "name": "blue base stores roof rib 5",
+   "x0": 30,
+   "z0": 68,
+   "x1": 56,
+   "z1": 70,
+   "from": 0,
+   "height": 1,
+   "type": "slate",
+   "flat": true,
+   "gy": 25
+  },
+  {
+   "name": "blue base stores roof patch 0",
+   "x0": 38,
+   "z0": 54,
+   "x1": 47,
+   "z1": 63,
+   "from": 0,
+   "height": 1,
+   "type": "tin",
+   "flat": true,
+   "gy": 27
+  },
+  {
+   "name": "blue base stores roof patch 1",
+   "x0": 38,
+   "z0": 57,
+   "x1": 43,
+   "z1": 62,
+   "from": 0,
+   "height": 1,
+   "type": "tin",
+   "flat": true,
+   "gy": 27
+  },
+  {
+   "name": "blue base stores roof patch 2",
+   "x0": 37,
+   "z0": 54,
+   "x1": 41,
+   "z1": 58,
+   "from": 0,
+   "height": 1,
+   "type": "tin",
+   "flat": true,
+   "gy": 27
   },
   {
    "name": "blue base stores",
@@ -328,18 +1140,6 @@
    "from": 0,
    "height": 8,
    "type": "stone"
-  }
- ],
- "mechs": [
-  {
-   "x": -7.5,
-   "z": -5.6,
-   "yaw": 233.3
-  },
-  {
-   "x": 7.5,
-   "z": 5.6,
-   "yaw": 53.3
   }
  ]
 }
