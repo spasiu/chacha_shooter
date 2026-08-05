@@ -466,7 +466,18 @@ transform = Transform3D(1, 0, 0, 0, 0.994522, 0.104528, 0, -0.104528, 0.994522, 
 current = false
 
 ; Where the driver is put back down on getting out.
+; Where the driver's body actually rides. Inside the hull, which the collider
+; puts at x -1.4..1.4 and y 0..1.5 -- a soldier parked outside that box is a
+; soldier in the open with a tank next to him, and every bot on the field has a
+; clear line to his chest. That is what this used to be: it sat at x 2.2, eight
+; tenths of a metre clear of the armour.
 [node name="Seat" type="Marker3D" parent="."]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0.2, 0)
+
+; And where he is put down when he climbs out, which has to be the opposite:
+; clear of the hull, or he is dropped inside his own collider. The two were one
+; marker, and could not be right for both.
+[node name="Dismount" type="Marker3D" parent="."]
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 2.2, 0.2, 0)
 
 [node name="Smoke" type="GPUParticles3D" parent="."]

@@ -363,7 +363,12 @@ func _animate(delta: float) -> void:
 	elif Vector2(velocity.x, velocity.z).length() > 0.2:
 		facing = Vector3(velocity.x, 0.0, velocity.z)
 	if facing.length_squared() > 0.01:
-		var want := atan2(facing.x, facing.z)
+		# Negated, because a Node3D's front is -Z: at a yaw of theta the front
+		# points at (-sin theta, -cos theta), so facing a direction means
+		# solving for its negative. Without the signs a bot walks and shoots
+		# backwards -- which it will still do accurately, since the shot is a
+		# roll against the target rather than a ray out of the muzzle.
+		var want := atan2(-facing.x, -facing.z)
 		rotation.y = lerp_angle(rotation.y, want, minf(delta * 7.0, 1.0))
 
 	if _seen and target != null and is_instance_valid(target):

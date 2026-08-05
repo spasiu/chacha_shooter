@@ -97,6 +97,7 @@ const VEHICLES := &"vehicles"
 @onready var coax_muzzle: Marker3D = $Turret/Gun/CoaxMuzzle
 @onready var camera: Camera3D = $Turret/CameraMount/Camera3D
 @onready var seat: Marker3D = $Seat
+@onready var dismount: Marker3D = $Dismount
 @onready var engine_sound: AudioStreamPlayer3D = $EngineSound
 @onready var tread_sound: AudioStreamPlayer3D = $TreadSound
 @onready var gun_sound: AudioStreamPlayer3D = $GunSound
@@ -193,7 +194,7 @@ func exit() -> void:
 	engine_sound.stop()
 	Net.report_vehicle(self, false)
 	if who.has_method("leave_vehicle"):
-		who.leave_vehicle(seat.global_position)
+		who.leave_vehicle(dismount.global_position)
 
 
 # --- being driven by somebody else ---------------------------------------

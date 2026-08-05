@@ -9,7 +9,7 @@ res://scenes/hud.tscn::4f8d5ba0fb3a8547bbaaa9002629b011::1785802272::res://.godo
 res://scenes/loadout_select.tscn::610ac912fc33ec267c8663da4973310a::1785860694::res://.godot/exported/133200997/export-50b77b8100af51daf8de5a65c5793cab-loadout_select.scn
 res://scenes/player.tscn::9e195910615a3a2955347b20a5905851::1785793849::res://.godot/exported/133200997/export-234fb6894ec6226e856ab7f825500d3d-player.scn
 res://scenes/smoke_projectile.tscn::22a86f443c1679832b4f22564ac68a7a::1785767472::res://.godot/exported/133200997/export-1b881b498101c4cc20b2b9e3ce64faad-smoke_projectile.scn
-res://scenes/tank.tscn::c5487f685c0c27170bee74a56e722715::1785771556::res://.godot/exported/133200997/export-4194426a9d5e1d9f821ceabbd2e67492-tank.scn
+res://scenes/tank.tscn::f221bd7aec1df82456fc08275aaf2408::1785939788::res://.godot/exported/133200997/export-4194426a9d5e1d9f821ceabbd2e67492-tank.scn
 res://scenes/target_character.tscn::ad40cf9fd4395d91aaf18a9dbc71e821::1785720727::res://.godot/exported/133200997/export-b3e28e0c941e63acf3253b2e82e427e4-target_character.scn
 res://scenes/target_paint.tscn::3d29be1669e45dd1b22cbbe3ae55f7ec::1785765527::res://.godot/exported/133200997/export-ab9607078dc2f0e3ddce4c4c73073582-target_paint.scn
 res://scenes/tnt_charge.tscn::f17540a40bcfc77d07cc5f267cd0e5da::1785769295::res://.godot/exported/133200997/export-61d8d4b68d91f76cece88a9c9ab09736-tnt_charge.scn
