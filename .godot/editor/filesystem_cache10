@@ -1,7 +1,5 @@
 78098b89c88a74ebe8c20117b8754620
-::res://::1785950391
-_shot_tags.gd::GDScript::3615446759722182651::1785950391::0::1::::<>Node3D<><>0<>0<><>::
-_shot_tags.tscn::PackedScene::-1::1785950391::0::1::::<><><>0<>0<><>::res://_shot_tags.gd
+::res://::1785950545
 export_presets.cfg::TextFile::-1::1785935982::0::1::::<><><>0<>0<><>::
 netprobe.gd::GDScript::3388120863264306176::1785792064::0::1::::<>Node<><>0<>0<><>::
 ::res://__pycache__/::1785937418
@@ -35,10 +33,10 @@ smoke_puff.png::CompressedTexture2D::18799737287251226::1785767472::1785796459::
 wood_grain.tres::NoiseTexture2D::-1::1785852119::0::1::::<><><>0<>0<><>::
 ::res://build/::1785936004
 ::res://build/linux/::1785943059
-::res://build/web/::1785949587
-index.apple-touch-icon.png::CompressedTexture2D::344285027444641909::1785949587::1785796459::1::::<><><>0<>0<>56016b8850fd4fab1d2a598e0f3aff7f<>res://.godot/imported/index.apple-touch-icon.png-21031f526f7942c8019a62913b80e091.ctex::
-index.icon.png::CompressedTexture2D::2829230572938213910::1785949587::1785796459::1::::<><><>0<>0<>4c7be99e0333e1c5f8d1f08dae89d204<>res://.godot/imported/index.icon.png-a9d2f4f7433eeddc29dad75f5e7f8710.ctex::
-index.png::CompressedTexture2D::3637643214681756157::1785949587::1785796459::1::::<><><>0<>0<>abbee48fe18209cf8a43cf337791f4dd<>res://.godot/imported/index.png-7e97af7272d6fa0065ffc53e96463470.ctex::
+::res://build/web/::1785950504
+index.apple-touch-icon.png::CompressedTexture2D::344285027444641909::1785950504::1785796459::1::::<><><>0<>0<>56016b8850fd4fab1d2a598e0f3aff7f<>res://.godot/imported/index.apple-touch-icon.png-21031f526f7942c8019a62913b80e091.ctex::
+index.icon.png::CompressedTexture2D::2829230572938213910::1785950504::1785796459::1::::<><><>0<>0<>4c7be99e0333e1c5f8d1f08dae89d204<>res://.godot/imported/index.icon.png-a9d2f4f7433eeddc29dad75f5e7f8710.ctex::
+index.png::CompressedTexture2D::3637643214681756157::1785950504::1785796459::1::::<><><>0<>0<>abbee48fe18209cf8a43cf337791f4dd<>res://.godot/imported/index.png-7e97af7272d6fa0065ffc53e96463470.ctex::
 ::res://maps/::1785855687
 arena_preview.png::CompressedTexture2D::509373294099274685::1785788881::1785796459::1::::<><><>0<>0<>fa65f8a3dee9aacf67a1d6f98fa2dc64<>res://.godot/imported/arena_preview.png-0236e5c8c8dbc29db470051a8f861bf7.ctex::
 arena_structures.json::JSON::-1::1785853603::0::1::::<><><>0<>0<><>::
