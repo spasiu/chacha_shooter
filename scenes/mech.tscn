@@ -509,7 +509,7 @@ transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, -0.4, 0)
 mesh = SubResource("Mesh_shin_sleeve")
 
 [node name="Greave" type="MeshInstance3D" parent="LegL/Knee"]
-transform = Transform3D(1, 0, 0, 0, 0, -1, 0, 1, 0, 0, -0.4, -0.19)
+transform = Transform3D(1, 0, 0, 0, 0, 1, 0, -1, 0, 0, -0.4, -0.19)
 mesh = SubResource("Mesh_greave")
 
 [node name="Ankle" type="Node3D" parent="LegL/Knee"]
@@ -523,7 +523,7 @@ transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, -0.145, 0.05)
 mesh = SubResource("Mesh_sole")
 
 [node name="Toe" type="MeshInstance3D" parent="LegL/Knee/Ankle"]
-transform = Transform3D(1, 0, 0, 0, 0, -1, 0, 1, 0, 0, -0.135, -0.42)
+transform = Transform3D(1, 0, 0, 0, 0, 1, 0, -1, 0, 0, -0.135, -0.42)
 mesh = SubResource("Mesh_toe")
 
 [node name="Heel" type="MeshInstance3D" parent="LegL/Knee/Ankle"]
@@ -589,7 +589,7 @@ transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, -0.4, 0)
 mesh = SubResource("Mesh_shin_sleeve")
 
 [node name="Greave" type="MeshInstance3D" parent="LegR/Knee"]
-transform = Transform3D(1, 0, 0, 0, 0, -1, 0, 1, 0, 0, -0.4, -0.19)
+transform = Transform3D(1, 0, 0, 0, 0, 1, 0, -1, 0, 0, -0.4, -0.19)
 mesh = SubResource("Mesh_greave")
 
 [node name="Ankle" type="Node3D" parent="LegR/Knee"]
@@ -603,7 +603,7 @@ transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, -0.145, 0.05)
 mesh = SubResource("Mesh_sole")
 
 [node name="Toe" type="MeshInstance3D" parent="LegR/Knee/Ankle"]
-transform = Transform3D(1, 0, 0, 0, 0, -1, 0, 1, 0, 0, -0.135, -0.42)
+transform = Transform3D(1, 0, 0, 0, 0, 1, 0, -1, 0, 0, -0.135, -0.42)
 mesh = SubResource("Mesh_toe")
 
 [node name="Heel" type="MeshInstance3D" parent="LegR/Knee/Ankle"]
@@ -647,7 +647,7 @@ mesh = SubResource("Mesh_seam")
 ; The nose: a wedge point-forward with the vision slit cut across its face. The
 ; driver sees out of this and nothing else.
 [node name="Glacis" type="MeshInstance3D" parent="Turret"]
-transform = Transform3D(1, 0, 0, 0, 0, -1, 0, 1, 0, 0, 0.72, -0.62)
+transform = Transform3D(1, 0, 0, 0, 0, 1, 0, -1, 0, 0, 0.72, -0.62)
 mesh = SubResource("Mesh_glacis")
 
 [node name="Visor" type="MeshInstance3D" parent="Turret"]
@@ -655,7 +655,7 @@ transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0.86, -0.76)
 mesh = SubResource("Mesh_visor")
 
 [node name="Lamp" type="MeshInstance3D" parent="Turret"]
-transform = Transform3D(1, 0, 0, 0, 0, -1, 0, 1, 0, -0.46, 0.42, -0.66)
+transform = Transform3D(1, 0, 0, 0, 0, 1, 0, -1, 0, -0.46, 0.42, -0.66)
 mesh = SubResource("Mesh_lamp")
 
 [node name="HatchRing" type="MeshInstance3D" parent="Turret"]
@@ -713,27 +713,27 @@ transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0.62, 0)
 ; Right arm: the gun. A short autocannon with a muzzle brake, carried rather
 ; than mounted -- the arm is the mounting.
 [node name="ArmR" type="MeshInstance3D" parent="Turret/Gun"]
-transform = Transform3D(1, 0, 0, 0, 0, -1, 0, 1, 0, 0.94, 0.12, -0.3)
+transform = Transform3D(1, 0, 0, 0, 0, 1, 0, -1, 0, 0.94, 0.12, -0.3)
 mesh = SubResource("Mesh_arm")
 
 [node name="ArmSleeveR" type="MeshInstance3D" parent="Turret/Gun"]
-transform = Transform3D(1, 0, 0, 0, 0, -1, 0, 1, 0, 0.94, 0.12, -0.36)
+transform = Transform3D(1, 0, 0, 0, 0, 1, 0, -1, 0, 0.94, 0.12, -0.36)
 mesh = SubResource("Mesh_arm_sleeve")
 
 [node name="CannonBody" type="MeshInstance3D" parent="Turret/Gun"]
-transform = Transform3D(1, 0, 0, 0, 0, -1, 0, 1, 0, 0.94, 0.05, -1.06)
+transform = Transform3D(1, 0, 0, 0, 0, 1, 0, -1, 0, 0.94, 0.05, -1.06)
 mesh = SubResource("Mesh_cannon_body")
 
 [node name="CannonBarrel" type="MeshInstance3D" parent="Turret/Gun"]
-transform = Transform3D(1, 0, 0, 0, 0, -1, 0, 1, 0, 0.94, 0.05, -2.15)
+transform = Transform3D(1, 0, 0, 0, 0, 1, 0, -1, 0, 0.94, 0.05, -2.15)
 mesh = SubResource("Mesh_cannon_barrel")
 
 [node name="MuzzleBrake" type="MeshInstance3D" parent="Turret/Gun"]
-transform = Transform3D(1, 0, 0, 0, 0, -1, 0, 1, 0, 0.94, 0.05, -2.98)
+transform = Transform3D(1, 0, 0, 0, 0, 1, 0, -1, 0, 0.94, 0.05, -2.98)
 mesh = SubResource("Mesh_brake")
 
 [node name="BrakeRing" type="MeshInstance3D" parent="Turret/Gun"]
-transform = Transform3D(1, 0, 0, 0, 0, -1, 0, 1, 0, 0.94, 0.05, -2.86)
+transform = Transform3D(1, 0, 0, 0, 0, 1, 0, -1, 0, 0.94, 0.05, -2.86)
 mesh = SubResource("Mesh_brake_ring")
 
 [node name="MainMuzzle" type="Marker3D" parent="Turret/Gun"]
@@ -744,7 +744,7 @@ transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0.94, 0.05, -3.14)
 ; scale instead, which shows on a cone and cannot corrupt the basis the way
 ; writing an Euler angle over a laid-forward one would.
 [node name="Flash" type="MeshInstance3D" parent="Turret/Gun/MainMuzzle"]
-transform = Transform3D(1, 0, 0, 0, 0, -1, 0, 1, 0, 0, 0, -0.3)
+transform = Transform3D(1, 0, 0, 0, 0, 1, 0, -1, 0, 0, 0, -0.3)
 visible = false
 mesh = SubResource("Mesh_main_flash")
 
@@ -757,15 +757,15 @@ omni_range = 13.0
 ; Left arm: the machine gun, with a pan magazine lying flat on the receiver the
 ; way a Lewis or a DP-27 carries one, and a ringed cooling jacket on the barrel.
 [node name="ArmL" type="MeshInstance3D" parent="Turret/Gun"]
-transform = Transform3D(1, 0, 0, 0, 0, -1, 0, 1, 0, -0.94, 0.12, -0.3)
+transform = Transform3D(1, 0, 0, 0, 0, 1, 0, -1, 0, -0.94, 0.12, -0.3)
 mesh = SubResource("Mesh_arm")
 
 [node name="ArmSleeveL" type="MeshInstance3D" parent="Turret/Gun"]
-transform = Transform3D(1, 0, 0, 0, 0, -1, 0, 1, 0, -0.94, 0.12, -0.36)
+transform = Transform3D(1, 0, 0, 0, 0, 1, 0, -1, 0, -0.94, 0.12, -0.36)
 mesh = SubResource("Mesh_arm_sleeve")
 
 [node name="MgBody" type="MeshInstance3D" parent="Turret/Gun"]
-transform = Transform3D(1, 0, 0, 0, 0, -1, 0, 1, 0, -0.94, 0.05, -0.94)
+transform = Transform3D(1, 0, 0, 0, 0, 1, 0, -1, 0, -0.94, 0.05, -0.94)
 mesh = SubResource("Mesh_mg_body")
 
 [node name="Drum" type="MeshInstance3D" parent="Turret/Gun"]
@@ -773,19 +773,19 @@ transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -0.94, 0.24, -0.94)
 mesh = SubResource("Mesh_drum")
 
 [node name="MgBarrel" type="MeshInstance3D" parent="Turret/Gun"]
-transform = Transform3D(1, 0, 0, 0, 0, -1, 0, 1, 0, -0.94, 0.05, -1.8)
+transform = Transform3D(1, 0, 0, 0, 0, 1, 0, -1, 0, -0.94, 0.05, -1.8)
 mesh = SubResource("Mesh_mg_barrel")
 
 [node name="JacketRing1" type="MeshInstance3D" parent="Turret/Gun"]
-transform = Transform3D(1, 0, 0, 0, 0, -1, 0, 1, 0, -0.94, 0.05, -1.48)
+transform = Transform3D(1, 0, 0, 0, 0, 1, 0, -1, 0, -0.94, 0.05, -1.48)
 mesh = SubResource("Mesh_jacket_ring")
 
 [node name="JacketRing2" type="MeshInstance3D" parent="Turret/Gun"]
-transform = Transform3D(1, 0, 0, 0, 0, -1, 0, 1, 0, -0.94, 0.05, -1.78)
+transform = Transform3D(1, 0, 0, 0, 0, 1, 0, -1, 0, -0.94, 0.05, -1.78)
 mesh = SubResource("Mesh_jacket_ring")
 
 [node name="JacketRing3" type="MeshInstance3D" parent="Turret/Gun"]
-transform = Transform3D(1, 0, 0, 0, 0, -1, 0, 1, 0, -0.94, 0.05, -2.08)
+transform = Transform3D(1, 0, 0, 0, 0, 1, 0, -1, 0, -0.94, 0.05, -2.08)
 mesh = SubResource("Mesh_jacket_ring")
 
 [node name="CoaxMuzzle" type="Marker3D" parent="Turret/Gun"]
@@ -796,7 +796,7 @@ transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -0.94, 0.05, -2.36)
 ; scale instead, which shows on a cone and cannot corrupt the basis the way
 ; writing an Euler angle over a laid-forward one would.
 [node name="Flash" type="MeshInstance3D" parent="Turret/Gun/CoaxMuzzle"]
-transform = Transform3D(1, 0, 0, 0, 0, -1, 0, 1, 0, 0, 0, -0.14)
+transform = Transform3D(1, 0, 0, 0, 0, 1, 0, -1, 0, 0, 0, -0.14)
 visible = false
 mesh = SubResource("Mesh_coax_flash")
 

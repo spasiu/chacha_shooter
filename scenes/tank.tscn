@@ -466,15 +466,15 @@ transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0.28, -1.1)
 mesh = SubResource("Mesh_mantlet")
 
 [node name="Barrel" type="MeshInstance3D" parent="Turret/Gun"]
-transform = Transform3D(1, 0, 0, 0, 0, -1, 0, 1, 0, 0, 0, -1.65)
+transform = Transform3D(1, 0, 0, 0, 0, 1, 0, -1, 0, 0, 0, -1.65)
 mesh = SubResource("Mesh_barrel")
 
 [node name="MuzzleBrake" type="MeshInstance3D" parent="Turret/Gun"]
-transform = Transform3D(1, 0, 0, 0, 0, -1, 0, 1, 0, 0, 0, -3.05)
+transform = Transform3D(1, 0, 0, 0, 0, 1, 0, -1, 0, 0, 0, -3.05)
 mesh = SubResource("Mesh_brake")
 
 [node name="CoaxBarrel" type="MeshInstance3D" parent="Turret/Gun"]
-transform = Transform3D(1, 0, 0, 0, 0, -1, 0, 1, 0, 0.3, -0.07, -0.55)
+transform = Transform3D(1, 0, 0, 0, 0, 1, 0, -1, 0, 0.3, -0.07, -0.55)
 mesh = SubResource("Mesh_coax")
 
 [node name="MainMuzzle" type="Marker3D" parent="Turret/Gun"]
@@ -485,7 +485,7 @@ transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0, -3.25)
 ; scale instead, which shows on a cone and cannot corrupt the basis the way
 ; writing an Euler angle over a laid-forward one would.
 [node name="Flash" type="MeshInstance3D" parent="Turret/Gun/MainMuzzle"]
-transform = Transform3D(1, 0, 0, 0, 0, -1, 0, 1, 0, 0, 0, -0.425)
+transform = Transform3D(1, 0, 0, 0, 0, 1, 0, -1, 0, 0, 0, -0.425)
 visible = false
 mesh = SubResource("Mesh_main_flash")
 
@@ -503,7 +503,7 @@ transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0.3, -0.07, -1.02)
 ; scale instead, which shows on a cone and cannot corrupt the basis the way
 ; writing an Euler angle over a laid-forward one would.
 [node name="Flash" type="MeshInstance3D" parent="Turret/Gun/CoaxMuzzle"]
-transform = Transform3D(1, 0, 0, 0, 0, -1, 0, 1, 0, 0, 0, -0.15)
+transform = Transform3D(1, 0, 0, 0, 0, 1, 0, -1, 0, 0, 0, -0.15)
 visible = false
 mesh = SubResource("Mesh_coax_flash")
 

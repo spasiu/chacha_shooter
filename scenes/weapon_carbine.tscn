@@ -4,7 +4,7 @@
 ; Sight line runs at y=0.068, clear of the receiver, handguard, barrel band and
 ; the operating slide handle -- the handle sits on the right flank rather than
 ; on top, which is where it would block the aperture.
-[gd_scene load_steps=30 format=3]
+[gd_scene load_steps=31 format=3]
 
 [ext_resource type="Script" path="res://scripts/weapon.gd" id="1_weapon"]
 [ext_resource type="Texture2D" path="res://assets/textures/wood_grain.tres" id="90_wood"]
@@ -46,6 +46,14 @@ emission_energy_multiplier = 6.0
 material = SubResource("Mat_steel")
 size = Vector3(0.042, 0.058, 0.26)
 
+[sub_resource type="CylinderMesh" id="Mesh_receiver_top"]
+material = SubResource("Mat_steel")
+top_radius = 0.021
+bottom_radius = 0.021
+height = 0.26
+radial_segments = 16
+rings = 1
+
 [sub_resource type="CylinderMesh" id="Mesh_barrel"]
 material = SubResource("Mat_steel")
 top_radius = 0.0102
@@ -54,29 +62,53 @@ height = 0.4
 radial_segments = 12
 rings = 1
 
-[sub_resource type="BoxMesh" id="Mesh_handguard"]
+[sub_resource type="CylinderMesh" id="Mesh_handguard"]
 material = SubResource("Mat_wood")
-size = Vector3(0.048, 0.045, 0.22)
+top_radius = 0.021
+bottom_radius = 0.024
+height = 0.22
+radial_segments = 14
+rings = 1
 
-[sub_resource type="BoxMesh" id="Mesh_band"]
+[sub_resource type="CylinderMesh" id="Mesh_band"]
 material = SubResource("Mat_steel")
-size = Vector3(0.05, 0.05, 0.022)
+top_radius = 0.025
+bottom_radius = 0.025
+height = 0.022
+radial_segments = 16
+rings = 1
 
-[sub_resource type="BoxMesh" id="Mesh_wrist"]
+[sub_resource type="CylinderMesh" id="Mesh_wrist"]
 material = SubResource("Mat_wood")
-size = Vector3(0.038, 0.055, 0.2)
+top_radius = 0.0175
+bottom_radius = 0.019
+height = 0.2
+radial_segments = 14
+rings = 1
 
-[sub_resource type="BoxMesh" id="Mesh_butt_top"]
+[sub_resource type="CylinderMesh" id="Mesh_butt_top"]
 material = SubResource("Mat_wood")
-size = Vector3(0.048, 0.03, 0.16)
+top_radius = 0.0135
+bottom_radius = 0.015
+height = 0.16
+radial_segments = 14
+rings = 1
 
-[sub_resource type="BoxMesh" id="Mesh_butt_bottom"]
+[sub_resource type="CylinderMesh" id="Mesh_butt_bottom"]
 material = SubResource("Mat_wood")
-size = Vector3(0.048, 0.032, 0.16)
+top_radius = 0.0145
+bottom_radius = 0.016
+height = 0.16
+radial_segments = 14
+rings = 1
 
-[sub_resource type="BoxMesh" id="Mesh_buttplate"]
+[sub_resource type="CylinderMesh" id="Mesh_buttplate"]
 material = SubResource("Mat_steel")
-size = Vector3(0.05, 0.105, 0.012)
+top_radius = 0.025
+bottom_radius = 0.025
+height = 0.012
+radial_segments = 16
+rings = 1
 
 [sub_resource type="BoxMesh" id="Mesh_magazine"]
 material = SubResource("Mat_steel")
@@ -89,29 +121,48 @@ outer_radius = 0.013
 rings = 16
 ring_segments = 6
 
-[sub_resource type="BoxMesh" id="Mesh_bolt"]
+[sub_resource type="CapsuleMesh" id="Mesh_bolt"]
 material = SubResource("Mat_steel")
-size = Vector3(0.03, 0.016, 0.018)
+radius = 0.008
+height = 0.032
+radial_segments = 12
+rings = 4
 
 [sub_resource type="BoxMesh" id="Mesh_rear_base"]
 material = SubResource("Mat_steel")
 size = Vector3(0.028, 0.014, 0.01)
 
-[sub_resource type="BoxMesh" id="Mesh_rear_post"]
+[sub_resource type="CylinderMesh" id="Mesh_rear_post"]
 material = SubResource("Mat_steel")
-size = Vector3(0.008, 0.026, 0.01)
+top_radius = 0.004
+bottom_radius = 0.004
+height = 0.026
+radial_segments = 8
+rings = 1
 
-[sub_resource type="BoxMesh" id="Mesh_rear_top"]
+[sub_resource type="CylinderMesh" id="Mesh_rear_top"]
 material = SubResource("Mat_steel")
-size = Vector3(0.03, 0.007, 0.01)
+top_radius = 0.0035
+bottom_radius = 0.0035
+height = 0.03
+radial_segments = 8
+rings = 1
 
-[sub_resource type="BoxMesh" id="Mesh_front_post"]
+[sub_resource type="CylinderMesh" id="Mesh_front_post"]
 material = SubResource("Mat_front")
-size = Vector3(0.008, 0.024, 0.008)
+top_radius = 0.004
+bottom_radius = 0.004
+height = 0.024
+radial_segments = 8
+rings = 1
 
-[sub_resource type="BoxMesh" id="Mesh_front_wing"]
+[sub_resource type="CylinderMesh" id="Mesh_front_wing"]
 material = SubResource("Mat_steel")
-size = Vector3(0.005, 0.03, 0.008)
+top_radius = 0.0028
+bottom_radius = 0.0028
+height = 0.03
+radial_segments = 8
+rings = 1
 
 [sub_resource type="CylinderMesh" id="Mesh_flash"]
 material = SubResource("Mat_flash")
@@ -129,9 +180,12 @@ cap_top = false
 albedo_color = Color(0.022, 0.022, 0.024, 1)
 roughness = 1.0
 
-[sub_resource type="BoxMesh" id="Mesh_trigger"]
+[sub_resource type="CapsuleMesh" id="Mesh_trigger"]
 material = SubResource("Mat_steel")
-size = Vector3(0.007, 0.026, 0.009)
+radius = 0.0045
+height = 0.026
+radial_segments = 8
+rings = 4
 
 [sub_resource type="BoxMesh" id="Mesh_port"]
 material = SubResource("Mat_shadow")
@@ -180,34 +234,38 @@ damage_beyond = 10.0
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0.012, -0.09)
 mesh = SubResource("Mesh_receiver")
 
+[node name="ReceiverTop" type="MeshInstance3D" parent="."]
+transform = Transform3D(1.0, 0, 0, 0, 0, 0.5, 0, -1, 0, 0, 0.041, -0.09)
+mesh = SubResource("Mesh_receiver_top")
+
 [node name="Barrel" type="MeshInstance3D" parent="."]
 transform = Transform3D(1, 0, 0, 0, 0, -1, 0, 1, 0, 0, 0.028, -0.4)
 mesh = SubResource("Mesh_barrel")
 
 [node name="Handguard" type="MeshInstance3D" parent="."]
-transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0.024, -0.33)
+transform = Transform3D(1.067, 0, 0, 0, 0, 1.0, 0, -1, 0, 0, 0.024, -0.33)
 mesh = SubResource("Mesh_handguard")
 
 [node name="BarrelBand" type="MeshInstance3D" parent="."]
-transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0.026, -0.445)
+transform = Transform3D(1.0, 0, 0, 0, 0, 1.0, 0, -1, 0, 0, 0.026, -0.445)
 mesh = SubResource("Mesh_band")
 
 [node name="Wrist" type="MeshInstance3D" parent="."]
-transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, -0.012, 0.1)
+transform = Transform3D(1.0, 0, 0, 0, 0, 1.447, 0, -1, 0, 0, -0.012, 0.1)
 mesh = SubResource("Mesh_wrist")
 
 ; The butt is split into two rails so the gap between them reads as the
 ; cut-out slot in the real stock.
 [node name="ButtTop" type="MeshInstance3D" parent="."]
-transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0.0155, 0.235)
+transform = Transform3D(1.6, 0, 0, 0, 0, 1.0, 0, -1, 0, 0, 0.0155, 0.235)
 mesh = SubResource("Mesh_butt_top")
 
 [node name="ButtBottom" type="MeshInstance3D" parent="."]
-transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, -0.0585, 0.235)
+transform = Transform3D(1.5, 0, 0, 0, 0, 1.0, 0, -1, 0, 0, -0.0585, 0.235)
 mesh = SubResource("Mesh_butt_bottom")
 
 [node name="Buttplate" type="MeshInstance3D" parent="."]
-transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, -0.022, 0.309)
+transform = Transform3D(1.0, 0, 0, 0, 0, 2.1, 0, -1, 0, 0, -0.022, 0.309)
 mesh = SubResource("Mesh_buttplate")
 
 [node name="Magazine" type="MeshInstance3D" parent="."]
@@ -219,7 +277,7 @@ transform = Transform3D(0, -1, 0, 1, 0, 0, 0, 0, 1.9, 0, -0.048, 0.01)
 mesh = SubResource("Mesh_guard")
 
 [node name="BoltHandle" type="MeshInstance3D" parent="."]
-transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0.032, 0.018, -0.055)
+transform = Transform3D(0, 1, 0, -1, 0, 0, 0, 0, 1, 0.032, 0.018, -0.055)
 mesh = SubResource("Mesh_bolt")
 
 [node name="RearSight" type="Marker3D" parent="."]
@@ -238,7 +296,7 @@ transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0.011, 0.07, -0.2)
 mesh = SubResource("Mesh_rear_post")
 
 [node name="RearSightHood" type="MeshInstance3D" parent="."]
-transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0.0865, -0.2)
+transform = Transform3D(0, 1, 0, -1, 0, 0, 0, 0, 1, 0, 0.0865, -0.2)
 mesh = SubResource("Mesh_rear_top")
 
 [node name="FrontSight" type="Marker3D" parent="."]
