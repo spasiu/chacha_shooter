@@ -7,7 +7,7 @@
 ; ribbed "corncob" forend that slides on the magazine tube. The only sight is a
 ; bead at the muzzle -- RearSight is a bare marker on the receiver's top line,
 ; so the aim solve still has two points to put on the camera's centre line.
-[gd_scene load_steps=29 format=3]
+[gd_scene load_steps=30 format=3]
 
 [ext_resource type="Script" path="res://scripts/shotgun.gd" id="1_shotgun"]
 [ext_resource type="Texture2D" path="res://assets/textures/wood_grain.tres" id="90_wood"]
@@ -106,30 +106,6 @@ rings = 16
 ring_segments = 6
 
 ; Straight stock: wrist, comb and butt in line, no pistol grip.
-[sub_resource type="CylinderMesh" id="Mesh_wrist"]
-material = SubResource("Mat_wood")
-top_radius = 0.0204
-bottom_radius = 0.0210
-height = 0.1600
-radial_segments = 14
-rings = 1
-
-[sub_resource type="CylinderMesh" id="Mesh_comb"]
-material = SubResource("Mat_wood")
-top_radius = 0.0223
-bottom_radius = 0.0230
-height = 0.1500
-radial_segments = 14
-rings = 1
-
-[sub_resource type="CylinderMesh" id="Mesh_butt"]
-material = SubResource("Mat_wood")
-top_radius = 0.0228
-bottom_radius = 0.0240
-height = 0.1000
-radial_segments = 14
-rings = 1
-
 [sub_resource type="CylinderMesh" id="Mesh_buttplate"]
 material = SubResource("Mat_metal")
 top_radius = 0.0250
@@ -207,6 +183,38 @@ top_radius = 0.0105
 bottom_radius = 0.0105
 height = 0.03
 radial_segments = 10
+rings = 1
+
+[sub_resource type="CylinderMesh" id="Stock_m1"]
+material = SubResource("Mat_wood")
+top_radius = 0.0280
+bottom_radius = 0.0260
+height = 0.0806
+radial_segments = 14
+rings = 1
+
+[sub_resource type="CylinderMesh" id="Stock_m2"]
+material = SubResource("Mat_wood")
+top_radius = 0.0380
+bottom_radius = 0.0280
+height = 0.0906
+radial_segments = 14
+rings = 1
+
+[sub_resource type="CylinderMesh" id="Stock_m3"]
+material = SubResource("Mat_wood")
+top_radius = 0.0520
+bottom_radius = 0.0380
+height = 0.1007
+radial_segments = 14
+rings = 1
+
+[sub_resource type="CylinderMesh" id="Stock_m4"]
+material = SubResource("Mat_wood")
+top_radius = 0.0620
+bottom_radius = 0.0520
+height = 0.1042
+radial_segments = 14
 rings = 1
 
 [node name="WeaponShotgun" type="Node3D"]
@@ -292,18 +300,6 @@ mesh = SubResource("Mesh_forend_rib")
 transform = Transform3D(0, -1, 0, 1, 0, 0, 0, 0, 1.9, 0, -0.05, 0.02)
 mesh = SubResource("Mesh_guard")
 
-[node name="Wrist" type="MeshInstance3D" parent="."]
-transform = Transform3D(1, 0, 0, 0, 0.104528, 1.77593, 0, -0.994522, 0.186657, 0, -0.014, 0.14)
-mesh = SubResource("Mesh_wrist")
-
-[node name="Comb" type="MeshInstance3D" parent="."]
-transform = Transform3D(1, 0, 0, 0, 0.104528, 2.162, 0, -0.994522, 0.227235, 0, -0.03, 0.27)
-mesh = SubResource("Mesh_comb")
-
-[node name="Butt" type="MeshInstance3D" parent="."]
-transform = Transform3D(1, 0, 0, 0, 0.104528, 2.65206, 0, -0.994522, 0.278741, 0, -0.045, 0.375)
-mesh = SubResource("Mesh_butt")
-
 [node name="Buttplate" type="MeshInstance3D" parent="."]
 transform = Transform3D(1, 0, 0, 0, 0.104528, 2.62554, 0, -0.994522, 0.275954, 0, -0.047, 0.428)
 mesh = SubResource("Mesh_buttplate")
@@ -373,3 +369,20 @@ mesh = SubResource("Mesh_swivel")
 [node name="Bore" type="MeshInstance3D" parent="."]
 transform = Transform3D(1, 0, 0, 0, 0, -1, 0, 1, 0, 0, 0.026, -0.786)
 mesh = SubResource("Mesh_bore")
+
+[node name="Stock1" type="MeshInstance3D" parent="."]
+transform = Transform3D(0.688187, 0, 0, 0, -0.124035, -0.992278, 0, 0.992278, -0.124035, 0, -0.0150, 0.1000)
+mesh = SubResource("Stock_m1")
+
+[node name="Stock2" type="MeshInstance3D" parent="."]
+transform = Transform3D(0.579887, 0, 0, 0, -0.110432, -0.993884, 0, 0.993884, -0.110432, 0, -0.0250, 0.1850)
+mesh = SubResource("Stock_m2")
+
+[node name="Stock3" type="MeshInstance3D" parent="."]
+transform = Transform3D(0.49747, 0, 0, 0, -0.119145, -0.992877, 0, 0.992877, -0.119145, 0, -0.0360, 0.2800)
+mesh = SubResource("Stock_m3")
+
+[node name="Stock4" type="MeshInstance3D" parent="."]
+transform = Transform3D(0.422767, 0, 0, 0, -0.0575965, -0.99834, 0, 0.99834, -0.0575965, 0, -0.0450, 0.3820)
+mesh = SubResource("Stock_m4")
+

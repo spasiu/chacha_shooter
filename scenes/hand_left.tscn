@@ -4,19 +4,38 @@
 ;
 ; The right hand's mirror in every dimension that matters; see it for why the
 ; fingers are capsules and what the wrist ball is for.
-[gd_scene load_steps=9 format=3]
+[gd_scene load_steps=11 format=3]
 
 [ext_resource type="Texture2D" path="res://assets/textures/cloth_grain.tres" id="1_grain"]
 
+; The glove: a hard back-plate over a suit that runs to the fingertips. Named
+; Mat_skin still because every mesh in here points at it by that name, and a
+; gauntlet is what this scene has always actually been -- the hand that grips
+; the weapon.
 [sub_resource type="StandardMaterial3D" id="Mat_skin"]
-albedo_color = Color(0.7, 0.52, 0.4, 1)
+albedo_color = Color(0.1, 0.105, 0.11, 1)
 albedo_texture = ExtResource("1_grain")
-roughness = 0.72
-metallic_specular = 0.3
-uv1_scale = Vector3(14, 14, 14)
+metallic = 0.25
+metallic_specular = 0.4
+roughness = 0.62
+roughness_texture = ExtResource("1_grain")
+uv1_scale = Vector3(12, 12, 12)
 uv1_triplanar = true
-subsurf_scatter_enabled = true
-subsurf_scatter_strength = 0.25
+
+; The plate across the back of the hand and up the wrist.
+[sub_resource type="StandardMaterial3D" id="Mat_plate"]
+albedo_color = Color(0.255, 0.275, 0.225, 1)
+albedo_texture = ExtResource("1_grain")
+metallic = 0.32
+metallic_specular = 0.45
+roughness = 0.58
+roughness_texture = ExtResource("1_grain")
+uv1_scale = Vector3(9, 9, 9)
+uv1_triplanar = true
+
+[sub_resource type="BoxMesh" id="Mesh_cuff"]
+material = SubResource("Mat_plate")
+size = Vector3(0.045, 0.075, 0.075)
 
 [sub_resource type="CapsuleMesh" id="Mesh_palm"]
 material = SubResource("Mat_skin")
@@ -69,6 +88,11 @@ mesh = SubResource("Mesh_palm")
 [node name="Wrist" type="MeshInstance3D" parent="."]
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -0.008, 0, 0.004)
 mesh = SubResource("Mesh_wrist")
+
+; Armoured cuff over the wrist joint, standing proud of it.
+[node name="Cuff" type="MeshInstance3D" parent="."]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -0.016, -0.012, 0.012)
+mesh = SubResource("Mesh_cuff")
 
 [node name="Finger1" type="MeshInstance3D" parent="."]
 transform = Transform3D(0, -1, 0, 1, 0, 0, 0, 0, 1, -0.005, 0.03, -0.031)

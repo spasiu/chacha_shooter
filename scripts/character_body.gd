@@ -9,32 +9,42 @@ extends Node3D
 ## supplies the weapon (the player hands over its own shared instance).
 @export var weapon_scene: PackedScene
 
-## Uniform the side's colour goes on: everything cut from cloth, plus the cap.
-## Webbing, pack, boots, hands and face are left as they are -- a man dyed head
-## to foot reads as a colour swatch rather than as a soldier, and the parts left
-## olive are what keeps him looking like one.
+## The plates the side's colour goes on: the armour, and only the armour.
+##
+## The bodysuit under it, the webbing over it, the boots and the visor are left
+## alone. That is what keeps a coloured trooper looking like a trooper: the dark
+## suit showing at every joint is the thing that reads as armour, and dyeing it
+## as well would turn the whole figure into one flat swatch.
 const TEAM_PARTS: Array[NodePath] = [
 	^"Spine/Torso",
-	^"Spine/Abdomen",
+	^"Spine/Sternum",
+	^"Spine/BandLower",
+	^"Spine/BandMiddle",
+	^"Spine/BandUpper",
 	^"Spine/Hips",
 	^"Spine/Collar",
 	^"Spine/ShoulderLeft",
 	^"Spine/ShoulderRight",
-	^"LeftLeg/Thigh",
-	^"LeftLeg/Knee/Shin",
-	^"RightLeg/Thigh",
-	^"RightLeg/Knee/Shin",
+	^"Spine/Head",
+	^"Spine/Crest",
+	^"Spine/Pack",
+	^"LeftLeg/ThighPlate",
+	^"LeftLeg/Knee/KneePad",
+	^"LeftLeg/Knee/Greave",
+	^"LeftLeg/Knee/BootShaft",
+	^"RightLeg/ThighPlate",
+	^"RightLeg/Knee/KneePad",
+	^"RightLeg/Knee/Greave",
+	^"RightLeg/Knee/BootShaft",
 	^"Spine/Arms/RightUpper",
 	^"Spine/Arms/RightFore",
 	^"Spine/Arms/LeftUpper",
 	^"Spine/Arms/LeftFore",
-	^"Spine/Helmet/Shell",
-	^"Spine/Helmet/Brim",
 ]
 
-## How far each part travels toward its side's colour. Short of all the way on
-## purpose: the olive left underneath is what keeps the cap reading darker than
-## the tunic instead of the whole figure going flat.
+## How far each plate travels toward its side's colour. Short of all the way on
+## purpose: what is left of the base colour underneath is what keeps a pauldron
+## reading darker than the chest instead of the whole suit going flat.
 const TEAM_TINT := 0.72
 
 @export_group("Crouch")

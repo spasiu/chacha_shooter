@@ -4,7 +4,7 @@
 ; Sight line runs at y=0.068, clear of the receiver, handguard, barrel band and
 ; the operating slide handle -- the handle sits on the right flank rather than
 ; on top, which is where it would block the aperture.
-[gd_scene load_steps=31 format=3]
+[gd_scene load_steps=32 format=3]
 
 [ext_resource type="Script" path="res://scripts/weapon.gd" id="1_weapon"]
 [ext_resource type="Texture2D" path="res://assets/textures/wood_grain.tres" id="90_wood"]
@@ -76,30 +76,6 @@ top_radius = 0.025
 bottom_radius = 0.025
 height = 0.022
 radial_segments = 16
-rings = 1
-
-[sub_resource type="CylinderMesh" id="Mesh_wrist"]
-material = SubResource("Mat_wood")
-top_radius = 0.0175
-bottom_radius = 0.019
-height = 0.2
-radial_segments = 14
-rings = 1
-
-[sub_resource type="CylinderMesh" id="Mesh_butt_top"]
-material = SubResource("Mat_wood")
-top_radius = 0.0135
-bottom_radius = 0.015
-height = 0.16
-radial_segments = 14
-rings = 1
-
-[sub_resource type="CylinderMesh" id="Mesh_butt_bottom"]
-material = SubResource("Mat_wood")
-top_radius = 0.0145
-bottom_radius = 0.016
-height = 0.16
-radial_segments = 14
 rings = 1
 
 [sub_resource type="CylinderMesh" id="Mesh_buttplate"]
@@ -208,6 +184,38 @@ height = 0.03
 radial_segments = 10
 rings = 1
 
+[sub_resource type="CylinderMesh" id="Stock_m1"]
+material = SubResource("Mat_wood")
+top_radius = 0.0230
+bottom_radius = 0.0230
+height = 0.0703
+radial_segments = 14
+rings = 1
+
+[sub_resource type="CylinderMesh" id="Stock_m2"]
+material = SubResource("Mat_wood")
+top_radius = 0.0300
+bottom_radius = 0.0230
+height = 0.0802
+radial_segments = 14
+rings = 1
+
+[sub_resource type="CylinderMesh" id="Stock_m3"]
+material = SubResource("Mat_wood")
+top_radius = 0.0380
+bottom_radius = 0.0300
+height = 0.0900
+radial_segments = 14
+rings = 1
+
+[sub_resource type="CylinderMesh" id="Stock_m4"]
+material = SubResource("Mat_wood")
+top_radius = 0.0440
+bottom_radius = 0.0380
+height = 0.0750
+radial_segments = 14
+rings = 1
+
 [node name="WeaponCarbine" type="Node3D"]
 script = ExtResource("1_weapon")
 move_penalty = 0.1
@@ -249,20 +257,6 @@ mesh = SubResource("Mesh_handguard")
 [node name="BarrelBand" type="MeshInstance3D" parent="."]
 transform = Transform3D(1.0, 0, 0, 0, 0, 1.0, 0, -1, 0, 0, 0.026, -0.445)
 mesh = SubResource("Mesh_band")
-
-[node name="Wrist" type="MeshInstance3D" parent="."]
-transform = Transform3D(1.0, 0, 0, 0, 0, 1.447, 0, -1, 0, 0, -0.012, 0.1)
-mesh = SubResource("Mesh_wrist")
-
-; The butt is split into two rails so the gap between them reads as the
-; cut-out slot in the real stock.
-[node name="ButtTop" type="MeshInstance3D" parent="."]
-transform = Transform3D(1.6, 0, 0, 0, 0, 1.0, 0, -1, 0, 0, 0.0155, 0.235)
-mesh = SubResource("Mesh_butt_top")
-
-[node name="ButtBottom" type="MeshInstance3D" parent="."]
-transform = Transform3D(1.5, 0, 0, 0, 0, 1.0, 0, -1, 0, 0, -0.0585, 0.235)
-mesh = SubResource("Mesh_butt_bottom")
 
 [node name="Buttplate" type="MeshInstance3D" parent="."]
 transform = Transform3D(1.0, 0, 0, 0, 0, 2.1, 0, -1, 0, 0, -0.022, 0.309)
@@ -361,3 +355,20 @@ mesh = SubResource("Mesh_swivel")
 [node name="Bore" type="MeshInstance3D" parent="."]
 transform = Transform3D(1, 0, 0, 0, 0, -1, 0, 1, 0, 0, 0.028, -0.596)
 mesh = SubResource("Mesh_bore")
+
+[node name="Stock1" type="MeshInstance3D" parent="."]
+transform = Transform3D(0.76087, 0, 0, 0, -0.0995037, -0.995037, 0, 0.995037, -0.0995037, 0, -0.0135, 0.0350)
+mesh = SubResource("Stock_m1")
+
+[node name="Stock2" type="MeshInstance3D" parent="."]
+transform = Transform3D(0.664493, 0, 0, 0, -0.0623783, -0.998053, 0, 0.998053, -0.0623783, 0, -0.0195, 0.1100)
+mesh = SubResource("Stock_m2")
+
+[node name="Stock3" type="MeshInstance3D" parent="."]
+transform = Transform3D(0.592982, 0, 0, 0, -0.0222167, -0.999753, 0, 0.999753, -0.0222167, 0, -0.0230, 0.1950)
+mesh = SubResource("Stock_m3")
+
+[node name="Stock4" type="MeshInstance3D" parent="."]
+transform = Transform3D(0.526316, 0, 0, 0, 0, -1, 0, 1, 0, 0, -0.0240, 0.2775)
+mesh = SubResource("Stock_m4")
+

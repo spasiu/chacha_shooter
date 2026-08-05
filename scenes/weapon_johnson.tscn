@@ -6,7 +6,7 @@
 ; of the LEFT side of the receiver rather than hanging underneath, and the
 ; straight stock running in line with the bore, which is why the sights stand
 ; so tall -- the eye sits well above the barrel.
-[gd_scene load_steps=27 format=3]
+[gd_scene load_steps=30 format=3]
 
 [ext_resource type="Script" path="res://scripts/weapon.gd" id="1_weapon"]
 [ext_resource type="Texture2D" path="res://assets/textures/wood_grain.tres" id="90_wood"]
@@ -62,14 +62,6 @@ rings = 1
 [sub_resource type="BoxMesh" id="Mesh_mag"]
 material = SubResource("Mat_metal")
 size = Vector3(0.11, 0.07, 0.05)
-
-[sub_resource type="CylinderMesh" id="Mesh_stock"]
-material = SubResource("Mat_wood")
-top_radius = 0.0214
-bottom_radius = 0.0225
-height = 0.3000
-radial_segments = 14
-rings = 1
 
 [sub_resource type="CylinderMesh" id="Mesh_buttplate"]
 material = SubResource("Mat_metal")
@@ -182,6 +174,38 @@ height = 0.03
 radial_segments = 10
 rings = 1
 
+[sub_resource type="CylinderMesh" id="Butt_m1"]
+material = SubResource("Mat_wood")
+top_radius = 0.0260
+bottom_radius = 0.0240
+height = 0.0703
+radial_segments = 14
+rings = 1
+
+[sub_resource type="CylinderMesh" id="Butt_m2"]
+material = SubResource("Mat_wood")
+top_radius = 0.0340
+bottom_radius = 0.0260
+height = 0.0801
+radial_segments = 14
+rings = 1
+
+[sub_resource type="CylinderMesh" id="Butt_m3"]
+material = SubResource("Mat_wood")
+top_radius = 0.0410
+bottom_radius = 0.0340
+height = 0.0800
+radial_segments = 14
+rings = 1
+
+[sub_resource type="CylinderMesh" id="Butt_m4"]
+material = SubResource("Mat_wood")
+top_radius = 0.0450
+bottom_radius = 0.0410
+height = 0.0700
+radial_segments = 14
+rings = 1
+
 [node name="WeaponJohnson" type="Node3D"]
 script = ExtResource("1_weapon")
 move_penalty = 0.25
@@ -225,10 +249,6 @@ mesh = SubResource("Mesh_barrel")
 [node name="Magazine" type="MeshInstance3D" parent="."]
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -0.072, -0.008, -0.05)
 mesh = SubResource("Mesh_mag")
-
-[node name="Stock" type="MeshInstance3D" parent="."]
-transform = Transform3D(1, 0, 0, 0, 0, 1.88889, 0, -1, 0, 0, -0.004, 0.25)
-mesh = SubResource("Mesh_stock")
 
 [node name="Buttplate" type="MeshInstance3D" parent="."]
 transform = Transform3D(1, 0, 0, 0, 0, 1.89362, 0, -1, 0, 0, -0.004, 0.406)
@@ -324,3 +344,20 @@ mesh = SubResource("Mesh_swivel")
 [node name="Bore" type="MeshInstance3D" parent="."]
 transform = Transform3D(1, 0, 0, 0, 0, -1, 0, 1, 0, 0, 0.02, -0.671)
 mesh = SubResource("Mesh_bore")
+
+[node name="Butt1" type="MeshInstance3D" parent="."]
+transform = Transform3D(0.74359, 0, 0, 0, -0.0854011, -0.996347, 0, 0.996347, -0.0854011, 0, -0.0090, 0.1350)
+mesh = SubResource("Butt_m1")
+
+[node name="Butt2" type="MeshInstance3D" parent="."]
+transform = Transform3D(0.635747, 0, 0, 0, -0.0499376, -0.998752, 0, 0.998752, -0.0499376, 0, -0.0140, 0.2100)
+mesh = SubResource("Butt_m2")
+
+[node name="Butt3" type="MeshInstance3D" parent="."]
+transform = Transform3D(0.589311, 0, 0, 0, -0.0249922, -0.999688, 0, 0.999688, -0.0249922, 0, -0.0170, 0.2900)
+mesh = SubResource("Butt_m3")
+
+[node name="Butt4" type="MeshInstance3D" parent="."]
+transform = Transform3D(0.547154, 0, 0, 0, 0, -1, 0, 1, 0, 0, -0.0180, 0.3650)
+mesh = SubResource("Butt_m4")
+

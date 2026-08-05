@@ -5,7 +5,7 @@
 ; Cutts compensator, a straight box magazine rather than a drum, a horizontal
 ; wooden forend in place of the vertical foregrip, and the bolt handle on the
 ; receiver's right flank.
-[gd_scene load_steps=31 format=3]
+[gd_scene load_steps=35 format=3]
 
 [ext_resource type="Script" path="res://scripts/weapon.gd" id="1_weapon"]
 [ext_resource type="Texture2D" path="res://assets/textures/wood_grain.tres" id="90_wood"]
@@ -110,35 +110,11 @@ rings = 16
 ring_segments = 6
 
 ; Horizontal, lying under the barrel, not the M1928's vertical foregrip.
-[sub_resource type="CylinderMesh" id="Mesh_forend"]
-material = SubResource("Mat_wood")
-top_radius = 0.0190
-bottom_radius = 0.0200
-height = 0.1500
-radial_segments = 14
-rings = 1
-
 [sub_resource type="CylinderMesh" id="Mesh_grip"]
 material = SubResource("Mat_wood")
 top_radius = 0.0160
 bottom_radius = 0.0160
 height = 0.0950
-radial_segments = 14
-rings = 1
-
-[sub_resource type="CylinderMesh" id="Mesh_wrist"]
-material = SubResource("Mat_wood")
-top_radius = 0.0194
-bottom_radius = 0.0200
-height = 0.1100
-radial_segments = 14
-rings = 1
-
-[sub_resource type="CylinderMesh" id="Mesh_butt"]
-material = SubResource("Mat_wood")
-top_radius = 0.0214
-bottom_radius = 0.0225
-height = 0.1600
 radial_segments = 14
 rings = 1
 
@@ -212,6 +188,62 @@ height = 0.03
 radial_segments = 10
 rings = 1
 
+[sub_resource type="CylinderMesh" id="Stock_m1"]
+material = SubResource("Mat_wood")
+top_radius = 0.0260
+bottom_radius = 0.0240
+height = 0.0603
+radial_segments = 14
+rings = 1
+
+[sub_resource type="CylinderMesh" id="Stock_m2"]
+material = SubResource("Mat_wood")
+top_radius = 0.0340
+bottom_radius = 0.0260
+height = 0.0703
+radial_segments = 14
+rings = 1
+
+[sub_resource type="CylinderMesh" id="Stock_m3"]
+material = SubResource("Mat_wood")
+top_radius = 0.0420
+bottom_radius = 0.0340
+height = 0.0701
+radial_segments = 14
+rings = 1
+
+[sub_resource type="CylinderMesh" id="Stock_m4"]
+material = SubResource("Mat_wood")
+top_radius = 0.0460
+bottom_radius = 0.0420
+height = 0.0650
+radial_segments = 14
+rings = 1
+
+[sub_resource type="CylinderMesh" id="Grasp_m1"]
+material = SubResource("Mat_wood")
+top_radius = 0.0210
+bottom_radius = 0.0180
+height = 0.0650
+radial_segments = 14
+rings = 1
+
+[sub_resource type="CylinderMesh" id="Grasp_m2"]
+material = SubResource("Mat_wood")
+top_radius = 0.0220
+bottom_radius = 0.0210
+height = 0.0500
+radial_segments = 14
+rings = 1
+
+[sub_resource type="CylinderMesh" id="Grasp_m3"]
+material = SubResource("Mat_wood")
+top_radius = 0.0210
+bottom_radius = 0.0220
+height = 0.0350
+radial_segments = 14
+rings = 1
+
 [node name="WeaponThompson" type="Node3D"]
 script = ExtResource("1_weapon")
 move_penalty = 0.05
@@ -277,21 +309,9 @@ mesh = SubResource("Mesh_magazine")
 transform = Transform3D(0, -1, 0, 1, 0, 0, 0, 0, 1.7, 0, -0.05, 0.014)
 mesh = SubResource("Mesh_guard")
 
-[node name="Forend" type="MeshInstance3D" parent="."]
-transform = Transform3D(1.05, 0, 0, 0, 0, 1, 0, -1, 0, 0, -0.004, -0.17)
-mesh = SubResource("Mesh_forend")
-
 [node name="PistolGrip" type="MeshInstance3D" parent="."]
 transform = Transform3D(1, 0, 0, 0, 0.978148, 0.311868, 0, -0.207912, 1.46722, 0, -0.072, 0.075)
 mesh = SubResource("Mesh_grip")
-
-[node name="Wrist" type="MeshInstance3D" parent="."]
-transform = Transform3D(1, 0, 0, 0, 0.087156, 1.5441, 0, -0.996195, 0.135092, 0, -0.015, 0.145)
-mesh = SubResource("Mesh_wrist")
-
-[node name="Butt" type="MeshInstance3D" parent="."]
-transform = Transform3D(1, 0, 0, 0, 0.087156, 2.10308, 0, -0.996195, 0.183996, 0, -0.03, 0.268)
-mesh = SubResource("Mesh_butt")
 
 [node name="Buttplate" type="MeshInstance3D" parent="."]
 transform = Transform3D(1, 0, 0, 0, 0.087156, 2.12233, 0, -0.996195, 0.18568, 0, -0.03, 0.35)
@@ -353,3 +373,32 @@ mesh = SubResource("Mesh_comb")
 [node name="Bore" type="MeshInstance3D" parent="."]
 transform = Transform3D(1, 0, 0, 0, 0, -1, 0, 1, 0, 0, 0.018, -0.468)
 mesh = SubResource("Mesh_bore")
+
+[node name="Stock1" type="MeshInstance3D" parent="."]
+transform = Transform3D(0.74359, 0, 0, 0, -0.0995037, -0.995037, 0, 0.995037, -0.0995037, 0, -0.0170, 0.1200)
+mesh = SubResource("Stock_m1")
+
+[node name="Stock2" type="MeshInstance3D" parent="."]
+transform = Transform3D(0.621041, 0, 0, 0, -0.0854011, -0.996347, 0, 0.996347, -0.0854011, 0, -0.0230, 0.1850)
+mesh = SubResource("Stock_m2")
+
+[node name="Stock3" type="MeshInstance3D" parent="."]
+transform = Transform3D(0.556022, 0, 0, 0, -0.0570498, -0.998371, 0, 0.998371, -0.0570498, 0, -0.0280, 0.2550)
+mesh = SubResource("Stock_m3")
+
+[node name="Stock4" type="MeshInstance3D" parent="."]
+transform = Transform3D(0.511905, 0, 0, 0, 0, -1, 0, 1, 0, 0, -0.0300, 0.3225)
+mesh = SubResource("Stock_m4")
+
+[node name="Grasp1" type="MeshInstance3D" parent="."]
+transform = Transform3D(1, 0, 0, 0, 0, -1, 0, 1, 0, 0, -0.0040, -0.2125)
+mesh = SubResource("Grasp_m1")
+
+[node name="Grasp2" type="MeshInstance3D" parent="."]
+transform = Transform3D(1, 0, 0, 0, 0, -1, 0, 1, 0, 0, -0.0040, -0.1550)
+mesh = SubResource("Grasp_m2")
+
+[node name="Grasp3" type="MeshInstance3D" parent="."]
+transform = Transform3D(1, 0, 0, 0, 0, -1, 0, 1, 0, 0, -0.0040, -0.1125)
+mesh = SubResource("Grasp_m3")
+
