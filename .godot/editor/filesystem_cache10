@@ -32,7 +32,7 @@ cloth_grain.tres::NoiseTexture2D::-1::1785849732::0::1::::<><><>0<>0<><>::
 smoke_puff.png::CompressedTexture2D::18799737287251226::1785767472::1785796459::1::::<><><>0<>0<>517a756664e22e66ec6aaec03498fb42<>res://.godot/imported/smoke_puff.png-f26fffc7abfaa0afa6d479a34c3edd74.ctex::
 wood_grain.tres::NoiseTexture2D::-1::1785852119::0::1::::<><><>0<>0<><>::
 ::res://build/::1785936004
-::res://build/linux/::1785942107
+::res://build/linux/::1785943059
 ::res://build/web/::1785943056
 index.apple-touch-icon.png::CompressedTexture2D::344285027444641909::1785943056::1785796459::1::::<><><>0<>0<>56016b8850fd4fab1d2a598e0f3aff7f<>res://.godot/imported/index.apple-touch-icon.png-21031f526f7942c8019a62913b80e091.ctex::
 index.icon.png::CompressedTexture2D::2829230572938213910::1785943056::1785796459::1::::<><><>0<>0<>4c7be99e0333e1c5f8d1f08dae89d204<>res://.godot/imported/index.icon.png-a9d2f4f7433eeddc29dad75f5e7f8710.ctex::
@@ -41,15 +41,15 @@ index.png::CompressedTexture2D::3637643214681756157::1785943056::1785796459::1::
 arena_preview.png::CompressedTexture2D::509373294099274685::1785788881::1785796459::1::::<><><>0<>0<>fa65f8a3dee9aacf67a1d6f98fa2dc64<>res://.godot/imported/arena_preview.png-0236e5c8c8dbc29db470051a8f861bf7.ctex::
 arena_structures.json::JSON::-1::1785853603::0::1::::<><><>0<>0<><>::
 arena_terrain.png::::5023509446271097935::1785853603::1785862444::0::::<><><>0<>0<>cd5ca6bd3d8d3cb6927a763128ad45fc<>::
-blood_gulch_structures.json::JSON::-1::1785941611::0::1::::<><><>0<>0<><>::
+blood_gulch_structures.json::JSON::-1::1785943345::0::1::::<><><>0<>0<><>::
 blood_gulch_terrain.png::::9113679788112553319::1785855300::1785862444::0::::<><><>0<>0<>cd5ca6bd3d8d3cb6927a763128ad45fc<>::
-crossfire_structures.json::JSON::-1::1785941611::0::1::::<><><>0<>0<><>::
+crossfire_structures.json::JSON::-1::1785943345::0::1::::<><><>0<>0<><>::
 crossfire_terrain.png::::6339674322727797095::1785855299::1785862444::0::::<><><>0<>0<>cd5ca6bd3d8d3cb6927a763128ad45fc<>::
 default_structures.json::JSON::-1::1785763525::0::1::::<><><>0<>0<><>::
 default_terrain.png::::8126002791417691129::1785763525::1785862444::0::::<><><>0<>0<>cd5ca6bd3d8d3cb6927a763128ad45fc<>::
-nuketown_structures.json::JSON::-1::1785941611::0::1::::<><><>0<>0<><>::
+nuketown_structures.json::JSON::-1::1785943345::0::1::::<><><>0<>0<><>::
 nuketown_terrain.png::::9105378707515764071::1785855299::1785862444::0::::<><><>0<>0<>cd5ca6bd3d8d3cb6927a763128ad45fc<>::
-shipment_structures.json::JSON::-1::1785941611::0::1::::<><><>0<>0<><>::
+shipment_structures.json::JSON::-1::1785943345::0::1::::<><><>0<>0<><>::
 shipment_terrain.png::::6028645975372234087::1785855300::1785862444::0::::<><><>0<>0<>cd5ca6bd3d8d3cb6927a763128ad45fc<>::
 ::res://scenes/::1785942950
 ammo_box.tscn::PackedScene::-1::1785853764::0::1::::<><><>0<>0<><>::res://scripts/ammo_box.gd<>res://assets/textures/cloth_grain.tres<>res://assets/textures/wood_grain.tres
@@ -130,4 +130,4 @@ tnt_charge.gd::GDScript::4297264644350443969::1785774105::0::1::::TNTCharge<>Nod
 voxel_chunk.gd::GDScript::2005511766938258363::1785937288::0::1::::VoxelChunk<>StaticBody3D<><>0<>0<><>::
 voxel_world.gd::GDScript::8218766206010941416::1785941520::0::1::::VoxelWorld<>Node3D<><>0<>0<><>::
 weapon.gd::GDScript::1877676255276685892::1785790263::0::1::::Weapon<>Equipment<><>0<>0<><>::
-::res://tools/::1785943027
+::res://tools/::1785943345
