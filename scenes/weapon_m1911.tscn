@@ -13,21 +13,21 @@
 [ext_resource type="Texture2D" path="res://assets/textures/cloth_grain.tres" id="91_wear"]
 
 [sub_resource type="StandardMaterial3D" id="Mat_metal"]
-albedo_color = Color(0.082, 0.082, 0.088, 1)
+albedo_color = Color(0.3, 0.315, 0.35, 1)
 albedo_texture = ExtResource("91_wear")
-metallic = 0.8
-metallic_specular = 0.5
-roughness = 0.52
+metallic = 0.55
+metallic_specular = 0.55
+roughness = 0.4
 roughness_texture = ExtResource("91_wear")
 uv1_scale = Vector3(9, 9, 9)
 uv1_triplanar = true
 
 [sub_resource type="StandardMaterial3D" id="Mat_grip"]
-albedo_color = Color(0.205, 0.115, 0.06, 1)
+albedo_color = Color(0.36, 0.205, 0.105, 1)
 albedo_texture = ExtResource("90_wood")
-roughness = 0.52
+roughness = 0.46
 roughness_texture = ExtResource("90_wood")
-metallic_specular = 0.32
+metallic_specular = 0.38
 uv1_scale = Vector3(24, 24, 3.4)
 uv1_triplanar = true
 

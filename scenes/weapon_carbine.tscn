@@ -4,28 +4,29 @@
 ; Sight line runs at y=0.068, clear of the receiver, handguard, barrel band and
 ; the operating slide handle -- the handle sits on the right flank rather than
 ; on top, which is where it would block the aperture.
-[gd_scene load_steps=32 format=3]
+[gd_scene load_steps=29 format=3]
 
+[ext_resource type="Script" path="res://scripts/stock_mesh.gd" id="99_stock"]
 [ext_resource type="Script" path="res://scripts/weapon.gd" id="1_weapon"]
 [ext_resource type="Texture2D" path="res://assets/textures/wood_grain.tres" id="90_wood"]
 [ext_resource type="Texture2D" path="res://assets/textures/cloth_grain.tres" id="91_wear"]
 
 [sub_resource type="StandardMaterial3D" id="Mat_steel"]
-albedo_color = Color(0.082, 0.082, 0.088, 1)
+albedo_color = Color(0.3, 0.315, 0.35, 1)
 albedo_texture = ExtResource("91_wear")
-metallic = 0.8
-metallic_specular = 0.5
-roughness = 0.52
+metallic = 0.55
+metallic_specular = 0.55
+roughness = 0.4
 roughness_texture = ExtResource("91_wear")
 uv1_scale = Vector3(9, 9, 9)
 uv1_triplanar = true
 
 [sub_resource type="StandardMaterial3D" id="Mat_wood"]
-albedo_color = Color(0.205, 0.115, 0.06, 1)
+albedo_color = Color(0.36, 0.205, 0.105, 1)
 albedo_texture = ExtResource("90_wood")
-roughness = 0.52
+roughness = 0.46
 roughness_texture = ExtResource("90_wood")
-metallic_specular = 0.32
+metallic_specular = 0.38
 uv1_scale = Vector3(24, 24, 3.4)
 uv1_triplanar = true
 
@@ -184,38 +185,6 @@ height = 0.03
 radial_segments = 10
 rings = 1
 
-[sub_resource type="CylinderMesh" id="Stock_m1"]
-material = SubResource("Mat_wood")
-top_radius = 0.0230
-bottom_radius = 0.0230
-height = 0.0703
-radial_segments = 14
-rings = 1
-
-[sub_resource type="CylinderMesh" id="Stock_m2"]
-material = SubResource("Mat_wood")
-top_radius = 0.0300
-bottom_radius = 0.0230
-height = 0.0802
-radial_segments = 14
-rings = 1
-
-[sub_resource type="CylinderMesh" id="Stock_m3"]
-material = SubResource("Mat_wood")
-top_radius = 0.0380
-bottom_radius = 0.0300
-height = 0.0900
-radial_segments = 14
-rings = 1
-
-[sub_resource type="CylinderMesh" id="Stock_m4"]
-material = SubResource("Mat_wood")
-top_radius = 0.0440
-bottom_radius = 0.0380
-height = 0.0750
-radial_segments = 14
-rings = 1
-
 [node name="WeaponCarbine" type="Node3D"]
 script = ExtResource("1_weapon")
 move_penalty = 0.1
@@ -356,19 +325,7 @@ mesh = SubResource("Mesh_swivel")
 transform = Transform3D(1, 0, 0, 0, 0, -1, 0, 1, 0, 0, 0.028, -0.596)
 mesh = SubResource("Mesh_bore")
 
-[node name="Stock1" type="MeshInstance3D" parent="."]
-transform = Transform3D(0.76087, 0, 0, 0, -0.0995037, -0.995037, 0, 0.995037, -0.0995037, 0, -0.0135, 0.0350)
-mesh = SubResource("Stock_m1")
-
-[node name="Stock2" type="MeshInstance3D" parent="."]
-transform = Transform3D(0.664493, 0, 0, 0, -0.0623783, -0.998053, 0, 0.998053, -0.0623783, 0, -0.0195, 0.1100)
-mesh = SubResource("Stock_m2")
-
-[node name="Stock3" type="MeshInstance3D" parent="."]
-transform = Transform3D(0.592982, 0, 0, 0, -0.0222167, -0.999753, 0, 0.999753, -0.0222167, 0, -0.0230, 0.1950)
-mesh = SubResource("Stock_m3")
-
-[node name="Stock4" type="MeshInstance3D" parent="."]
-transform = Transform3D(0.526316, 0, 0, 0, 0, -1, 0, 1, 0, 0, -0.0240, 0.2775)
-mesh = SubResource("Stock_m4")
-
+[node name="Stock" type="MeshInstance3D" parent="."]
+script = ExtResource("99_stock")
+points = Array[Vector4]([Vector4(0, -0.01, 0.019, 0.023), Vector4(0.07, -0.017, 0.016, 0.023), Vector4(0.15, -0.022, 0.019, 0.03), Vector4(0.24, -0.024, 0.021, 0.038), Vector4(0.315, -0.024, 0.022, 0.044)])
+material = SubResource("Mat_wood")

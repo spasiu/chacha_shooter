@@ -14,29 +14,30 @@
 ; Its tube is drawn with the caps off and culling disabled, so at full zoom you
 ; are genuinely looking down the inside of it. Note these bases put local +Y
 ; toward the shooter, so on any tapered part `top_radius` is the rear rim.
-[gd_scene load_steps=53 format=3]
+[gd_scene load_steps=42 format=3]
 
+[ext_resource type="Script" path="res://scripts/stock_mesh.gd" id="99_stock"]
 [ext_resource type="Script" path="res://scripts/garand.gd" id="1_garand"]
 [ext_resource type="Texture2D" path="res://assets/textures/wood_grain.tres" id="90_wood"]
 [ext_resource type="Texture2D" path="res://assets/textures/cloth_grain.tres" id="91_wear"]
 
 [sub_resource type="StandardMaterial3D" id="Mat_metal"]
-albedo_color = Color(0.082, 0.082, 0.088, 1)
+albedo_color = Color(0.3, 0.315, 0.35, 1)
 albedo_texture = ExtResource("91_wear")
-metallic = 0.8
-metallic_specular = 0.5
-roughness = 0.52
+metallic = 0.55
+metallic_specular = 0.55
+roughness = 0.4
 roughness_texture = ExtResource("91_wear")
 uv1_scale = Vector3(9, 9, 9)
 uv1_triplanar = true
 
 ; Warmer and redder than the Thompson's furniture: Garand stocks are walnut.
 [sub_resource type="StandardMaterial3D" id="Mat_wood"]
-albedo_color = Color(0.235, 0.12, 0.058, 1)
+albedo_color = Color(0.36, 0.205, 0.105, 1)
 albedo_texture = ExtResource("90_wood")
-roughness = 0.52
+roughness = 0.46
 roughness_texture = ExtResource("90_wood")
-metallic_specular = 0.32
+metallic_specular = 0.38
 uv1_scale = Vector3(24, 24, 3.4)
 uv1_triplanar = true
 
@@ -284,102 +285,6 @@ height = 0.03
 radial_segments = 10
 rings = 1
 
-[sub_resource type="CylinderMesh" id="Stock_m1"]
-material = SubResource("Mat_wood")
-top_radius = 0.0240
-bottom_radius = 0.0280
-height = 0.0595
-radial_segments = 14
-rings = 1
-
-[sub_resource type="CylinderMesh" id="Stock_m2"]
-material = SubResource("Mat_wood")
-top_radius = 0.0310
-bottom_radius = 0.0240
-height = 0.0603
-radial_segments = 14
-rings = 1
-
-[sub_resource type="CylinderMesh" id="Stock_m3"]
-material = SubResource("Mat_wood")
-top_radius = 0.0400
-bottom_radius = 0.0310
-height = 0.0802
-radial_segments = 14
-rings = 1
-
-[sub_resource type="CylinderMesh" id="Stock_m4"]
-material = SubResource("Mat_wood")
-top_radius = 0.0490
-bottom_radius = 0.0400
-height = 0.0801
-radial_segments = 14
-rings = 1
-
-[sub_resource type="CylinderMesh" id="Stock_m5"]
-material = SubResource("Mat_wood")
-top_radius = 0.0550
-bottom_radius = 0.0490
-height = 0.0620
-radial_segments = 14
-rings = 1
-
-[sub_resource type="CylinderMesh" id="Forend_m1"]
-material = SubResource("Mat_wood")
-top_radius = 0.0260
-bottom_radius = 0.0200
-height = 0.0700
-radial_segments = 14
-rings = 1
-
-[sub_resource type="CylinderMesh" id="Forend_m2"]
-material = SubResource("Mat_wood")
-top_radius = 0.0290
-bottom_radius = 0.0260
-height = 0.1000
-radial_segments = 14
-rings = 1
-
-[sub_resource type="CylinderMesh" id="Forend_m3"]
-material = SubResource("Mat_wood")
-top_radius = 0.0310
-bottom_radius = 0.0290
-height = 0.1000
-radial_segments = 14
-rings = 1
-
-[sub_resource type="CylinderMesh" id="Forend_m4"]
-material = SubResource("Mat_wood")
-top_radius = 0.0320
-bottom_radius = 0.0310
-height = 0.0700
-radial_segments = 14
-rings = 1
-
-[sub_resource type="CylinderMesh" id="Upper_m1"]
-material = SubResource("Mat_wood")
-top_radius = 0.0140
-bottom_radius = 0.0110
-height = 0.1000
-radial_segments = 14
-rings = 1
-
-[sub_resource type="CylinderMesh" id="Upper_m2"]
-material = SubResource("Mat_wood")
-top_radius = 0.0150
-bottom_radius = 0.0140
-height = 0.1200
-radial_segments = 14
-rings = 1
-
-[sub_resource type="CylinderMesh" id="Upper_m3"]
-material = SubResource("Mat_wood")
-top_radius = 0.0130
-bottom_radius = 0.0150
-height = 0.0800
-radial_segments = 14
-rings = 1
-
 [sub_resource type="CylinderMesh" id="Mesh_receiver_top"]
 material = SubResource("Mat_metal")
 top_radius = 0.024
@@ -583,54 +488,21 @@ mesh = SubResource("Mesh_oprod")
 transform = Transform3D(1, 0, 0, 0, 0, -1, 0, 1, 0, 0, 0.01, -0.726)
 mesh = SubResource("Mesh_bore")
 
-[node name="Stock1" type="MeshInstance3D" parent="."]
-transform = Transform3D(0.767857, 0, 0, 0, -0.134364, -0.990932, 0, 0.990932, -0.134364, 0, -0.0240, 0.0405)
-mesh = SubResource("Stock_m1")
-
-[node name="Stock2" type="MeshInstance3D" parent="."]
-transform = Transform3D(0.71371, 0, 0, 0, -0.0995037, -0.995037, 0, 0.995037, -0.0995037, 0, -0.0310, 0.1000)
-mesh = SubResource("Stock_m2")
-
-[node name="Stock3" type="MeshInstance3D" parent="."]
-transform = Transform3D(0.62621, 0, 0, 0, -0.0623783, -0.998053, 0, 0.998053, -0.0623783, 0, -0.0365, 0.1700)
-mesh = SubResource("Stock_m3")
-
-[node name="Stock4" type="MeshInstance3D" parent="."]
-transform = Transform3D(0.532398, 0, 0, 0, -0.0374737, -0.999298, 0, 0.999298, -0.0374737, 0, -0.0405, 0.2500)
-mesh = SubResource("Stock_m4")
-
-[node name="Stock5" type="MeshInstance3D" parent="."]
-transform = Transform3D(0.472171, 0, 0, 0, -0.0161269, -0.99987, 0, 0.99987, -0.0161269, 0, -0.0425, 0.3210)
-mesh = SubResource("Stock_m5")
-
-[node name="Forend1" type="MeshInstance3D" parent="."]
-transform = Transform3D(0.873077, 0, 0, 0, -0.0285598, -0.999592, 0, 0.999592, -0.0285598, 0, -0.0110, -0.4650)
-mesh = SubResource("Forend_m1")
-
-[node name="Forend2" type="MeshInstance3D" parent="."]
-transform = Transform3D(0.83687, 0, 0, 0, 0, -1, 0, 1, 0, 0, -0.0120, -0.3800)
-mesh = SubResource("Forend_m2")
-
-[node name="Forend3" type="MeshInstance3D" parent="."]
-transform = Transform3D(0.817019, 0, 0, 0, 0, -1, 0, 1, 0, 0, -0.0120, -0.2800)
-mesh = SubResource("Forend_m3")
-
-[node name="Forend4" type="MeshInstance3D" parent="."]
-transform = Transform3D(0.793851, 0, 0, 0, 0, -1, 0, 1, 0, 0, -0.0120, -0.1950)
-mesh = SubResource("Forend_m4")
-
-[node name="Upper1" type="MeshInstance3D" parent="."]
-transform = Transform3D(1.68506, 0, 0, 0, 0, -1, 0, 1, 0, 0, 0.0300, -0.4300)
-mesh = SubResource("Upper_m1")
-
-[node name="Upper2" type="MeshInstance3D" parent="."]
-transform = Transform3D(1.5881, 0, 0, 0, 0, -1, 0, 1, 0, 0, 0.0300, -0.3200)
-mesh = SubResource("Upper_m2")
-
-[node name="Upper3" type="MeshInstance3D" parent="."]
-transform = Transform3D(1.61282, 0, 0, 0, 0, -1, 0, 1, 0, 0, 0.0300, -0.2200)
-mesh = SubResource("Upper_m3")
-
 [node name="ReceiverTop" type="MeshInstance3D" parent="."]
 transform = Transform3D(1, 0, 0, 0, 0, 0.58125, 0, -1, 0, 0, 0.02305, -0.05)
 mesh = SubResource("Mesh_receiver_top")
+
+[node name="Stock" type="MeshInstance3D" parent="."]
+script = ExtResource("99_stock")
+points = Array[Vector4]([Vector4(0.011, -0.02, 0.022, 0.028), Vector4(0.07, -0.028, 0.018, 0.024), Vector4(0.13, -0.034, 0.021, 0.031), Vector4(0.21, -0.039, 0.023, 0.04), Vector4(0.29, -0.042, 0.024, 0.049), Vector4(0.352, -0.043, 0.025, 0.055)])
+material = SubResource("Mat_wood")
+
+[node name="Forend" type="MeshInstance3D" parent="."]
+script = ExtResource("99_stock")
+points = Array[Vector4]([Vector4(-0.5, -0.01, 0.018, 0.02), Vector4(-0.43, -0.012, 0.022, 0.026), Vector4(-0.33, -0.012, 0.024, 0.029), Vector4(-0.23, -0.012, 0.025, 0.031), Vector4(-0.16, -0.012, 0.025, 0.032)])
+material = SubResource("Mat_wood")
+
+[node name="Upper" type="MeshInstance3D" parent="."]
+script = ExtResource("99_stock")
+points = Array[Vector4]([Vector4(-0.48, 0.024, 0.02, 0.016), Vector4(-0.38, 0.025, 0.024, 0.019), Vector4(-0.26, 0.025, 0.024, 0.02), Vector4(-0.17, 0.024, 0.023, 0.018)])
+material = SubResource("Mat_wood")

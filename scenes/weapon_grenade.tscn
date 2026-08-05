@@ -11,9 +11,10 @@ metallic = 0.5
 roughness = 0.65
 
 [sub_resource type="StandardMaterial3D" id="Mat_steel"]
-albedo_color = Color(0.42, 0.43, 0.45, 1)
-metallic = 0.8
+albedo_color = Color(0.3, 0.315, 0.35, 1)
+metallic = 0.55
 roughness = 0.4
+metallic_specular = 0.55
 
 [sub_resource type="SphereMesh" id="Mesh_body"]
 material = SubResource("Mat_body")

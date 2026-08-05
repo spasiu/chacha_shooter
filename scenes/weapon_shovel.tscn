@@ -5,13 +5,15 @@
 [ext_resource type="Script" path="res://scripts/shovel.gd" id="1_shovel"]
 
 [sub_resource type="StandardMaterial3D" id="Mat_wood"]
-albedo_color = Color(0.4, 0.27, 0.14, 1)
-roughness = 0.72
+albedo_color = Color(0.36, 0.205, 0.105, 1)
+roughness = 0.46
+metallic_specular = 0.38
 
 [sub_resource type="StandardMaterial3D" id="Mat_steel"]
-albedo_color = Color(0.29, 0.3, 0.32, 1)
-metallic = 0.75
-roughness = 0.45
+albedo_color = Color(0.3, 0.315, 0.35, 1)
+metallic = 0.55
+roughness = 0.4
+metallic_specular = 0.55
 
 [sub_resource type="CylinderMesh" id="Mesh_haft"]
 material = SubResource("Mat_wood")

@@ -7,8 +7,9 @@
 ; ribbed "corncob" forend that slides on the magazine tube. The only sight is a
 ; bead at the muzzle -- RearSight is a bare marker on the receiver's top line,
 ; so the aim solve still has two points to put on the camera's centre line.
-[gd_scene load_steps=31 format=3]
+[gd_scene load_steps=28 format=3]
 
+[ext_resource type="Script" path="res://scripts/stock_mesh.gd" id="99_stock"]
 [ext_resource type="Script" path="res://scripts/shotgun.gd" id="1_shotgun"]
 [ext_resource type="Texture2D" path="res://assets/textures/wood_grain.tres" id="90_wood"]
 [ext_resource type="Texture2D" path="res://assets/textures/cloth_grain.tres" id="91_wear"]
@@ -18,11 +19,11 @@ albedo_color = Color(0.022, 0.022, 0.024, 1)
 roughness = 1.0
 
 [sub_resource type="StandardMaterial3D" id="Mat_metal"]
-albedo_color = Color(0.082, 0.082, 0.088, 1)
+albedo_color = Color(0.3, 0.315, 0.35, 1)
 albedo_texture = ExtResource("91_wear")
-metallic = 0.8
-metallic_specular = 0.5
-roughness = 0.52
+metallic = 0.55
+metallic_specular = 0.55
+roughness = 0.4
 roughness_texture = ExtResource("91_wear")
 uv1_scale = Vector3(9, 9, 9)
 uv1_triplanar = true
@@ -40,11 +41,11 @@ uv1_scale = Vector3(9, 9, 9)
 uv1_triplanar = true
 
 [sub_resource type="StandardMaterial3D" id="Mat_wood"]
-albedo_color = Color(0.205, 0.115, 0.06, 1)
+albedo_color = Color(0.36, 0.205, 0.105, 1)
 albedo_texture = ExtResource("90_wood")
-roughness = 0.52
+roughness = 0.46
 roughness_texture = ExtResource("90_wood")
-metallic_specular = 0.32
+metallic_specular = 0.38
 uv1_scale = Vector3(24, 24, 3.4)
 uv1_triplanar = true
 
@@ -183,38 +184,6 @@ top_radius = 0.0105
 bottom_radius = 0.0105
 height = 0.03
 radial_segments = 10
-rings = 1
-
-[sub_resource type="CylinderMesh" id="Stock_m1"]
-material = SubResource("Mat_wood")
-top_radius = 0.0280
-bottom_radius = 0.0260
-height = 0.0806
-radial_segments = 14
-rings = 1
-
-[sub_resource type="CylinderMesh" id="Stock_m2"]
-material = SubResource("Mat_wood")
-top_radius = 0.0380
-bottom_radius = 0.0280
-height = 0.0906
-radial_segments = 14
-rings = 1
-
-[sub_resource type="CylinderMesh" id="Stock_m3"]
-material = SubResource("Mat_wood")
-top_radius = 0.0520
-bottom_radius = 0.0380
-height = 0.1007
-radial_segments = 14
-rings = 1
-
-[sub_resource type="CylinderMesh" id="Stock_m4"]
-material = SubResource("Mat_wood")
-top_radius = 0.0620
-bottom_radius = 0.0520
-height = 0.1042
-radial_segments = 14
 rings = 1
 
 [sub_resource type="CylinderMesh" id="Mesh_receiver_top"]
@@ -378,22 +347,11 @@ mesh = SubResource("Mesh_swivel")
 transform = Transform3D(1, 0, 0, 0, 0, -1, 0, 1, 0, 0, 0.026, -0.786)
 mesh = SubResource("Mesh_bore")
 
-[node name="Stock1" type="MeshInstance3D" parent="."]
-transform = Transform3D(0.688187, 0, 0, 0, -0.124035, -0.992278, 0, 0.992278, -0.124035, 0, -0.0150, 0.1000)
-mesh = SubResource("Stock_m1")
-
-[node name="Stock2" type="MeshInstance3D" parent="."]
-transform = Transform3D(0.579887, 0, 0, 0, -0.110432, -0.993884, 0, 0.993884, -0.110432, 0, -0.0250, 0.1850)
-mesh = SubResource("Stock_m2")
-
-[node name="Stock3" type="MeshInstance3D" parent="."]
-transform = Transform3D(0.49747, 0, 0, 0, -0.119145, -0.992877, 0, 0.992877, -0.119145, 0, -0.0360, 0.2800)
-mesh = SubResource("Stock_m3")
-
-[node name="Stock4" type="MeshInstance3D" parent="."]
-transform = Transform3D(0.422767, 0, 0, 0, -0.0575965, -0.99834, 0, 0.99834, -0.0575965, 0, -0.0450, 0.3820)
-mesh = SubResource("Stock_m4")
-
 [node name="ReceiverTop" type="MeshInstance3D" parent="."]
 transform = Transform3D(1, 0, 0, 0, 0, 0.7216, 0, -1, 0, 0, 0.02296, -0.05)
 mesh = SubResource("Mesh_receiver_top")
+
+[node name="Stock" type="MeshInstance3D" parent="."]
+script = ExtResource("99_stock")
+points = Array[Vector4]([Vector4(0.06, -0.01, 0.02, 0.026), Vector4(0.14, -0.02, 0.017, 0.028), Vector4(0.23, -0.03, 0.021, 0.038), Vector4(0.33, -0.042, 0.023, 0.052), Vector4(0.434, -0.048, 0.025, 0.062)])
+material = SubResource("Mat_wood")

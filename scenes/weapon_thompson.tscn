@@ -5,8 +5,9 @@
 ; Cutts compensator, a straight box magazine rather than a drum, a horizontal
 ; wooden forend in place of the vertical foregrip, and the bolt handle on the
 ; receiver's right flank.
-[gd_scene load_steps=36 format=3]
+[gd_scene load_steps=30 format=3]
 
+[ext_resource type="Script" path="res://scripts/stock_mesh.gd" id="99_stock"]
 [ext_resource type="Script" path="res://scripts/weapon.gd" id="1_weapon"]
 [ext_resource type="Texture2D" path="res://assets/textures/wood_grain.tres" id="90_wood"]
 [ext_resource type="Texture2D" path="res://assets/textures/cloth_grain.tres" id="91_wear"]
@@ -14,21 +15,21 @@
 ; Parkerised olive-drab rather than blued: the M1A1 was a wartime austerity
 ; build and photographs distinctly greener than the shotgun or the Garand.
 [sub_resource type="StandardMaterial3D" id="Mat_metal"]
-albedo_color = Color(0.083, 0.089, 0.075, 1)
+albedo_color = Color(0.3, 0.315, 0.35, 1)
 albedo_texture = ExtResource("91_wear")
-metallic = 0.8
-metallic_specular = 0.5
-roughness = 0.52
+metallic = 0.55
+metallic_specular = 0.55
+roughness = 0.4
 roughness_texture = ExtResource("91_wear")
 uv1_scale = Vector3(9, 9, 9)
 uv1_triplanar = true
 
 [sub_resource type="StandardMaterial3D" id="Mat_wood"]
-albedo_color = Color(0.205, 0.115, 0.06, 1)
+albedo_color = Color(0.36, 0.205, 0.105, 1)
 albedo_texture = ExtResource("90_wood")
-roughness = 0.52
+roughness = 0.46
 roughness_texture = ExtResource("90_wood")
-metallic_specular = 0.32
+metallic_specular = 0.38
 uv1_scale = Vector3(24, 24, 3.4)
 uv1_triplanar = true
 
@@ -188,62 +189,6 @@ height = 0.03
 radial_segments = 10
 rings = 1
 
-[sub_resource type="CylinderMesh" id="Stock_m1"]
-material = SubResource("Mat_wood")
-top_radius = 0.0260
-bottom_radius = 0.0240
-height = 0.0603
-radial_segments = 14
-rings = 1
-
-[sub_resource type="CylinderMesh" id="Stock_m2"]
-material = SubResource("Mat_wood")
-top_radius = 0.0340
-bottom_radius = 0.0260
-height = 0.0703
-radial_segments = 14
-rings = 1
-
-[sub_resource type="CylinderMesh" id="Stock_m3"]
-material = SubResource("Mat_wood")
-top_radius = 0.0420
-bottom_radius = 0.0340
-height = 0.0701
-radial_segments = 14
-rings = 1
-
-[sub_resource type="CylinderMesh" id="Stock_m4"]
-material = SubResource("Mat_wood")
-top_radius = 0.0460
-bottom_radius = 0.0420
-height = 0.0650
-radial_segments = 14
-rings = 1
-
-[sub_resource type="CylinderMesh" id="Grasp_m1"]
-material = SubResource("Mat_wood")
-top_radius = 0.0210
-bottom_radius = 0.0180
-height = 0.0650
-radial_segments = 14
-rings = 1
-
-[sub_resource type="CylinderMesh" id="Grasp_m2"]
-material = SubResource("Mat_wood")
-top_radius = 0.0220
-bottom_radius = 0.0210
-height = 0.0500
-radial_segments = 14
-rings = 1
-
-[sub_resource type="CylinderMesh" id="Grasp_m3"]
-material = SubResource("Mat_wood")
-top_radius = 0.0210
-bottom_radius = 0.0220
-height = 0.0350
-radial_segments = 14
-rings = 1
-
 [sub_resource type="CylinderMesh" id="Mesh_receiver_top"]
 material = SubResource("Mat_metal")
 top_radius = 0.0275
@@ -382,34 +327,16 @@ mesh = SubResource("Mesh_comb")
 transform = Transform3D(1, 0, 0, 0, 0, -1, 0, 1, 0, 0, 0.018, -0.468)
 mesh = SubResource("Mesh_bore")
 
-[node name="Stock1" type="MeshInstance3D" parent="."]
-transform = Transform3D(0.74359, 0, 0, 0, -0.0995037, -0.995037, 0, 0.995037, -0.0995037, 0, -0.0170, 0.1200)
-mesh = SubResource("Stock_m1")
-
-[node name="Stock2" type="MeshInstance3D" parent="."]
-transform = Transform3D(0.621041, 0, 0, 0, -0.0854011, -0.996347, 0, 0.996347, -0.0854011, 0, -0.0230, 0.1850)
-mesh = SubResource("Stock_m2")
-
-[node name="Stock3" type="MeshInstance3D" parent="."]
-transform = Transform3D(0.556022, 0, 0, 0, -0.0570498, -0.998371, 0, 0.998371, -0.0570498, 0, -0.0280, 0.2550)
-mesh = SubResource("Stock_m3")
-
-[node name="Stock4" type="MeshInstance3D" parent="."]
-transform = Transform3D(0.511905, 0, 0, 0, 0, -1, 0, 1, 0, 0, -0.0300, 0.3225)
-mesh = SubResource("Stock_m4")
-
-[node name="Grasp1" type="MeshInstance3D" parent="."]
-transform = Transform3D(1, 0, 0, 0, 0, -1, 0, 1, 0, 0, -0.0040, -0.2125)
-mesh = SubResource("Grasp_m1")
-
-[node name="Grasp2" type="MeshInstance3D" parent="."]
-transform = Transform3D(1, 0, 0, 0, 0, -1, 0, 1, 0, 0, -0.0040, -0.1550)
-mesh = SubResource("Grasp_m2")
-
-[node name="Grasp3" type="MeshInstance3D" parent="."]
-transform = Transform3D(1, 0, 0, 0, 0, -1, 0, 1, 0, 0, -0.0040, -0.1125)
-mesh = SubResource("Grasp_m3")
-
 [node name="ReceiverTop" type="MeshInstance3D" parent="."]
 transform = Transform3D(1, 0, 0, 0, 0, 0.818182, 0, -1, 0, 0, 0.015, 0)
 mesh = SubResource("Mesh_receiver_top")
+
+[node name="Stock" type="MeshInstance3D" parent="."]
+script = ExtResource("99_stock")
+points = Array[Vector4]([Vector4(0.09, -0.014, 0.02, 0.024), Vector4(0.15, -0.02, 0.017, 0.026), Vector4(0.22, -0.026, 0.02, 0.034), Vector4(0.29, -0.03, 0.022, 0.042), Vector4(0.355, -0.03, 0.023, 0.046)])
+material = SubResource("Mat_wood")
+
+[node name="Grasp" type="MeshInstance3D" parent="."]
+script = ExtResource("99_stock")
+points = Array[Vector4]([Vector4(-0.245, -0.004, 0.018, 0.018), Vector4(-0.18, -0.004, 0.021, 0.021), Vector4(-0.13, -0.004, 0.022, 0.022), Vector4(-0.095, -0.004, 0.021, 0.021)])
+material = SubResource("Mat_wood")
