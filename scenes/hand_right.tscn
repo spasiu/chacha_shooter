@@ -1,122 +1,57 @@
-; Hand posed to wrap a grip. Its origin sits at the CENTRE of the grip
-; it holds, so the arm rig can drop it straight onto a weapon's grip
-; marker regardless of which weapon that is.
+; Mitten glove, posed to wrap a grip. Its origin sits at the CENTRE of the grip
+; it holds, so the arm rig can drop it straight onto a weapon's grip marker
+; regardless of which weapon that is.
 ;
-; Fingers are capsules rather than boxes: a finger is round, and these are held
-; a hand's width from the camera in first person, which is the closest look
-; anybody gets at any part of the soldier. The wrist ball at the origin fills
-; the joint whichever way the forearm comes in, so the sleeve never separates
-; from the hand mid-reload.
-[gd_scene load_steps=11 format=3]
+; No fingers. A cartoon hand is a mitten with a thumb, and at the size these are
+; drawn -- a hand's width from the camera in first person, a few pixels in third
+; -- four separate fingers cost eight meshes to say something nobody can see.
+; What does read is the silhouette: a fat rounded palm, a thumb across the top
+; of the grip, and a cuff at the wrist.
+[gd_scene load_steps=7 format=3]
 
-[ext_resource type="Texture2D" path="res://assets/textures/cloth_grain.tres" id="1_grain"]
-
-; The glove: a hard back-plate over a suit that runs to the fingertips. Named
-; Mat_skin still because every mesh in here points at it by that name, and a
-; gauntlet is what this scene has always actually been -- the hand that grips
-; the weapon.
 [sub_resource type="StandardMaterial3D" id="Mat_skin"]
-albedo_color = Color(0.1, 0.105, 0.11, 1)
-albedo_texture = ExtResource("1_grain")
-metallic = 0.25
-metallic_specular = 0.4
-roughness = 0.62
-roughness_texture = ExtResource("1_grain")
-uv1_scale = Vector3(12, 12, 12)
-uv1_triplanar = true
+albedo_color = Color(0.5, 0.42, 0.3, 1)
+roughness = 0.88
 
-; The plate across the back of the hand and up the wrist.
-[sub_resource type="StandardMaterial3D" id="Mat_plate"]
-albedo_color = Color(0.255, 0.275, 0.225, 1)
-albedo_texture = ExtResource("1_grain")
-metallic = 0.32
-metallic_specular = 0.45
-roughness = 0.58
-roughness_texture = ExtResource("1_grain")
-uv1_scale = Vector3(9, 9, 9)
-uv1_triplanar = true
+[sub_resource type="StandardMaterial3D" id="Mat_cuff"]
+albedo_color = Color(0.62, 0.56, 0.37, 1)
+roughness = 0.95
 
-[sub_resource type="BoxMesh" id="Mesh_cuff"]
-material = SubResource("Mat_plate")
-size = Vector3(0.045, 0.075, 0.075)
-
-[sub_resource type="CapsuleMesh" id="Mesh_palm"]
+[sub_resource type="SphereMesh" id="Mesh_palm"]
 material = SubResource("Mat_skin")
-radius = 0.025
-height = 0.082
-radial_segments = 12
-rings = 4
-
-[sub_resource type="SphereMesh" id="Mesh_wrist"]
-material = SubResource("Mat_skin")
-radius = 0.029
-height = 0.058
-radial_segments = 12
-rings = 6
-
-[sub_resource type="CapsuleMesh" id="Mesh_finger_a"]
-material = SubResource("Mat_skin")
-radius = 0.0092
-height = 0.058
-radial_segments = 8
-rings = 3
-
-[sub_resource type="CapsuleMesh" id="Mesh_finger_b"]
-material = SubResource("Mat_skin")
-radius = 0.0086
-height = 0.054
-radial_segments = 8
-rings = 3
-
-[sub_resource type="CapsuleMesh" id="Mesh_finger_c"]
-material = SubResource("Mat_skin")
-radius = 0.008
-height = 0.05
-radial_segments = 8
-rings = 3
+radius = 0.042
+height = 0.092
+radial_segments = 10
+rings = 5
 
 [sub_resource type="CapsuleMesh" id="Mesh_thumb"]
 material = SubResource("Mat_skin")
-radius = 0.0105
-height = 0.05
+radius = 0.016
+height = 0.062
 radial_segments = 8
 rings = 3
 
+[sub_resource type="CylinderMesh" id="Mesh_cuff"]
+material = SubResource("Mat_cuff")
+top_radius = 0.048
+bottom_radius = 0.042
+height = 0.05
+radial_segments = 10
+rings = 1
+
 [node name="HandRight" type="Node3D"]
 
-; Squashed side to side, so the palm is a palm rather than a sausage.
+; The mitten itself, squashed side to side so it is a hand rather than a ball.
 [node name="Palm" type="MeshInstance3D" parent="."]
-transform = Transform3D(0.54, 0, 0, 0, 1, 0, 0, 0, 1, 0.026, 0.005, 0)
+transform = Transform3D(0.62, 0, 0, 0, 1.05, 0, 0, 0, 1.15, 0.022, 0, -0.004)
 mesh = SubResource("Mesh_palm")
 
-[node name="Wrist" type="MeshInstance3D" parent="."]
-transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0.008, 0, 0.004)
-mesh = SubResource("Mesh_wrist")
-
-; Armoured cuff over the wrist joint, standing proud of it.
-[node name="Cuff" type="MeshInstance3D" parent="."]
-transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0.016, -0.012, 0.012)
-mesh = SubResource("Mesh_cuff")
-
-; Fingers lie along local X, wrapped round the front of the grip. Each is a
-; capsule stood on its side, hence the quarter turn.
-[node name="Finger1" type="MeshInstance3D" parent="."]
-transform = Transform3D(0, -1, 0, 1, 0, 0, 0, 0, 1, 0.005, 0.03, -0.031)
-mesh = SubResource("Mesh_finger_a")
-
-[node name="Finger2" type="MeshInstance3D" parent="."]
-transform = Transform3D(0, -1, 0, 1, 0, 0, 0, 0, 1, 0.005, 0.011, -0.032)
-mesh = SubResource("Mesh_finger_a")
-
-[node name="Finger3" type="MeshInstance3D" parent="."]
-transform = Transform3D(0, -1, 0, 1, 0, 0, 0, 0, 1, 0.004, -0.008, -0.031)
-mesh = SubResource("Mesh_finger_b")
-
-[node name="Finger4" type="MeshInstance3D" parent="."]
-transform = Transform3D(0, -1, 0, 1, 0, 0, 0, 0, 1, 0.003, -0.026, -0.029)
-mesh = SubResource("Mesh_finger_c")
-
-; Thumb lies across the grip rather than along it, cocked back off the fingers.
+; Thumb laid across the top of the grip.
 [node name="Thumb" type="MeshInstance3D" parent="."]
-transform = Transform3D(0, -0.965926, -0.258819, 1, 0, 0, 0, -0.258819, 0.965926, 0.004, 0.028, 0.03)
+transform = Transform3D(0, -0.965926, -0.258819, 1, 0, 0, 0, -0.258819, 0.965926, 0.006, 0.03, 0.022)
 mesh = SubResource("Mesh_thumb")
+
+; Cuff at the wrist, which is also what hides the join to the sleeve.
+[node name="Wrist" type="MeshInstance3D" parent="."]
+transform = Transform3D(0, -1, 0, 1, 0, 0, 0, 0, 1, 0.014, 0, 0.03)
+mesh = SubResource("Mesh_cuff")

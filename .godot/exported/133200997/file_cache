@@ -1,10 +1,10 @@
 res://scenes/artillery_strike.tscn::474aa7f56e259682f5222361ab0d2ac8::1785766017::res://.godot/exported/133200997/export-4a63249ac4f0ee62752f54b1d82189cf-artillery_strike.scn
 res://scenes/block_debris.tscn::233bad7e32498f88e25c65d2e967d7d8::1785757574::res://.godot/exported/133200997/export-8b2554524fa6f498cdad95beab8cedfc-block_debris.scn
 res://scenes/bullet_hole.tscn::99ad1101a36ffa103eb16937d90235cd::1785715275::res://.godot/exported/133200997/export-b01499424b6bb904617e807cb579f213-bullet_hole.scn
-res://scenes/character_body.tscn::f8993b4b15ef85f85d207d0d06fc0162::1785949113::res://.godot/exported/133200997/export-314e64af2b72111055f327b034d81485-character_body.scn
+res://scenes/character_body.tscn::d22afcc2eef910aa06a333705a9a846f::1785967218::res://.godot/exported/133200997/export-314e64af2b72111055f327b034d81485-character_body.scn
 res://scenes/grenade_projectile.tscn::5a851d1ec241c55710fc8ccd0bbeaa72::1785760133::res://.godot/exported/133200997/export-963dd493464b626e8a8d37ef4d4fe325-grenade_projectile.scn
-res://scenes/hand_left.tscn::714658b5e8612687339867910b28aa75::1785949043::res://.godot/exported/133200997/export-728bdfa248a20eec221aa22bb805fef8-hand_left.scn
-res://scenes/hand_right.tscn::2474fa6a5e191aade44d2015f900b211::1785949043::res://.godot/exported/133200997/export-dfbab18ba49e5e494e37d70b1eb3a8f2-hand_right.scn
+res://scenes/hand_left.tscn::e1e8904a94f2787b562b90bc5f6f0fcb::1785967245::res://.godot/exported/133200997/export-728bdfa248a20eec221aa22bb805fef8-hand_left.scn
+res://scenes/hand_right.tscn::b4fe2879f397d0d9d51029e6f42a1bda::1785967245::res://.godot/exported/133200997/export-dfbab18ba49e5e494e37d70b1eb3a8f2-hand_right.scn
 res://scenes/hud.tscn::d26ec3a92e6c8bc10c955c8c7a65df9d::1785964436::res://.godot/exported/133200997/export-38bf74ff262409a94a41206b2b776d33-hud.scn
 res://scenes/loadout_select.tscn::610ac912fc33ec267c8663da4973310a::1785860694::res://.godot/exported/133200997/export-50b77b8100af51daf8de5a65c5793cab-loadout_select.scn
 res://scenes/player.tscn::f5814de008d8579bad04e7d4c298e1f0::1785965971::res://.godot/exported/133200997/export-234fb6894ec6226e856ab7f825500d3d-player.scn
@@ -13,7 +13,7 @@ res://scenes/tank.tscn::5419c957da1be13c1426177481033387::1785948245::res://.god
 res://scenes/target_character.tscn::ad40cf9fd4395d91aaf18a9dbc71e821::1785720727::res://.godot/exported/133200997/export-b3e28e0c941e63acf3253b2e82e427e4-target_character.scn
 res://scenes/target_paint.tscn::3d29be1669e45dd1b22cbbe3ae55f7ec::1785765527::res://.godot/exported/133200997/export-ab9607078dc2f0e3ddce4c4c73073582-target_paint.scn
 res://scenes/tnt_charge.tscn::f17540a40bcfc77d07cc5f267cd0e5da::1785769295::res://.godot/exported/133200997/export-61d8d4b68d91f76cece88a9c9ab09736-tnt_charge.scn
-res://scenes/viewmodel_arms.tscn::e8da7854a06de51982a280b38d65c21a::1785949043::res://.godot/exported/133200997/export-1fbfca33f49c529317e2cab324353d29-viewmodel_arms.scn
+res://scenes/viewmodel_arms.tscn::6218039694711c29a4823a840b4f5ca2::1785967245::res://.godot/exported/133200997/export-1fbfca33f49c529317e2cab324353d29-viewmodel_arms.scn
 res://scenes/weapon_bar.tscn::647cf20d45b64fe2a0c6461cc7306c57::1785956010::res://.godot/exported/133200997/export-8c94f04aeb74eeeae8cbe8df03e8ed44-weapon_bar.scn
 res://scenes/weapon_bazooka.tscn::c51dd655161b30fa9b199f1ae9c2da18::1785962876::res://.godot/exported/133200997/export-dcba8ea7f80af040d73f914d1d434581-weapon_bazooka.scn
 res://scenes/weapon_carbine.tscn::982a7d2c48a53427565f269335564841::1785956010::res://.godot/exported/133200997/export-19bea0148f1e89cd11770819e8611a2e-weapon_carbine.scn
@@ -40,4 +40,6 @@ res://scenes/mech.tscn::ff4010d2eec893a80af501727777d817::1785948245::res://.god
 res://tools/shoot_guns.tscn::d29f296a3537e69b27d992a6ef0a734c::1785955737::res://.godot/exported/133200997/export-9337b6ffb85594ddd4b4d5c50ac1a745-shoot_guns.scn
 res://scenes/weapon_jump_jet.tscn::05a8026dcd4c3e647d37603f5fde68f1::1785963532::res://.godot/exported/133200997/export-d1e47462f67b095a01c2c0c46214db99-weapon_jump_jet.scn
 res://scenes/weapon_shield_club.tscn::5ba6a15d1ffd3c4cf4fa64c191dce088::1785965155::res://.godot/exported/133200997/export-be8b4bac64381289805dbdea665216da-weapon_shield_club.scn
-res://scenes/weapon_body_armour.tscn::115f09fa801d8136b1f820ee174553ca::1785965971::res://.godot/exported/133200997/export-baabecfeca9359113ce1c7a7d2cf460c-weapon_body_armour.scn
+res://scenes/weapon_body_armour.tscn::15269626e8142dfc1e6ec5ca33e4875c::1785967266::res://.godot/exported/133200997/export-baabecfeca9359113ce1c7a7d2cf460c-weapon_body_armour.scn
+res://tools/shoot_kit.tscn::1e85091867b2a32a3f5fd0d7d7c60b7d::1785967042::res://.godot/exported/133200997/export-2e1bb554f305e5af21d2ad668ac204c8-shoot_kit.scn
+res://_shot_cute.tscn::b3b1d6d1e8ae1f676f4575aae14158be::1785967297::res://.godot/exported/133200997/export-605dacd72dde2a6a3bb9ffc9a9cecfac-_shot_cute.scn

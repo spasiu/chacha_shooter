@@ -11,15 +11,12 @@
 ; The same plate the body wears -- these are the one part of the soldier that is
 ; on screen every frame of the game, so they have to be the same suit rather
 ; than something that only nearly matches.
+; The same flat wool the body wears. No texture on it: these are on screen
+; every frame, and a grain that reads as cloth up here reads as noise.
 [sub_resource type="StandardMaterial3D" id="Mat_sleeve"]
-albedo_color = Color(0.255, 0.275, 0.225, 1)
-albedo_texture = ExtResource("4_grain")
-metallic = 0.32
-metallic_specular = 0.45
-roughness = 0.58
-roughness_texture = ExtResource("4_grain")
-uv1_scale = Vector3(6, 6, 6)
-uv1_triplanar = true
+albedo_color = Color(0.4, 0.45, 0.27, 1)
+roughness = 0.9
+metallic_specular = 0.15
 
 [sub_resource type="CylinderMesh" id="Mesh_upper"]
 material = SubResource("Mat_sleeve")

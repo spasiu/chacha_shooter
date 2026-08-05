@@ -20,29 +20,29 @@ roughness = 0.95
 
 [sub_resource type="BoxMesh" id="Mesh_plate"]
 material = SubResource("Mat_canvas")
-size = Vector3(0.34, 0.42, 0.07)
+size = Vector3(0.3, 0.3, 0.045)
 
 [sub_resource type="BoxMesh" id="Mesh_strap"]
 material = SubResource("Mat_strap")
-size = Vector3(0.07, 0.3, 0.05)
+size = Vector3(0.06, 0.15, 0.04)
 
 [node name="WeaponBodyArmour" type="Node3D"]
 script = ExtResource("1_ba")
 
 [node name="Front" type="MeshInstance3D" parent="."]
-transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0, -0.11)
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0, -0.17)
 mesh = SubResource("Mesh_plate")
 
 [node name="Back" type="MeshInstance3D" parent="."]
-transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0, 0.11)
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0, 0.17)
 mesh = SubResource("Mesh_plate")
 
 [node name="StrapLeft" type="MeshInstance3D" parent="."]
-transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -0.12, 0.2, 0)
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -0.105, 0.16, 0)
 mesh = SubResource("Mesh_strap")
 
 [node name="StrapRight" type="MeshInstance3D" parent="."]
-transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0.12, 0.2, 0)
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0.105, 0.16, 0)
 mesh = SubResource("Mesh_strap")
 
 [node name="GripRight" type="Marker3D" parent="."]

@@ -90,7 +90,7 @@ const STEP_VOLUME_DB := -10.0
 ## Where a jump jet rides: high on the back, clear of the legs it exhausts past.
 const JET_MOUNT := Vector3(0.0, 1.12, 0.2)
 ## Where a plate carrier sits: on the chest, over the tunic.
-const ARMOUR_MOUNT := Vector3(0.0, 0.34, 0.0)
+const ARMOUR_MOUNT := Vector3(0.0, 0.2, 0.0)
 
 const FOOTSTEPS: Array[AudioStream] = [
 	preload("res://assets/audio/footstep_01.wav"),
