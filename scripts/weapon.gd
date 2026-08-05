@@ -69,6 +69,23 @@ extends Equipment
 @export var reload_time := 2.6
 
 const FLASH_TIME := 0.045
+
+## The same flash, for when it is somebody else's.
+##
+## A muzzle flash at viewmodel size is right for the one weapon that is half a
+## metre from the camera and wrong for every other weapon on the field. At its
+## own scale it measures 23cm and lives 2.7 frames, which is seven pixels for a
+## twentieth of a second at twenty-five metres and four at forty -- present,
+## correct, and invisible. What that costs is not decoration: a flash is how you
+## work out who is shooting at you and from where, so a rifle nobody can see
+## firing is a rifle that seems to kill people from nowhere.
+##
+## Bigger and held longer, then, and only down this path: `_show_flash` is the
+## first-person one and is left alone, so your own weapon looks exactly as it
+## did. Oversized on purpose, in the way tracer is fatter than a bullet.
+const FLASH_FAR_SCALE := 2.4
+const FLASH_FAR_TIME := 0.09
+const FLASH_FAR_ENERGY := 1.8
 const MAX_BULLET_HOLES := 64
 
 const GUNSHOT: AudioStream = preload("res://assets/audio/gunshot.wav")
@@ -114,6 +131,8 @@ var _bolt_rest := Vector3.ZERO
 
 var _cooldown := 0.0
 var _flash_timer := 0.0
+var _flash_rest_scale := Vector3.ONE
+var _flash_rest_energy := 1.0
 var _bloom := 0.0
 # Firing kick and the reload pose both displace the weapon, so they are kept
 # separate and summed in _process rather than either one writing `position`.
@@ -141,6 +160,10 @@ var _holes: Array[Node3D] = []
 func _ready() -> void:
 	_rest_position = position
 	_rest_rotation = rotation
+	# Kept because both flashes are drawn with the same node at two different
+	# sizes, and the scene's own scale is the smaller of them.
+	_flash_rest_scale = muzzle_flash.scale
+	_flash_rest_energy = flash_light.light_energy
 	if magazine != null:
 		_mag_rest = magazine.position
 	if bolt_handle != null:
@@ -466,15 +489,28 @@ func _on_hole_removed(hole: Node3D) -> void:
 	_holes.erase(hole)
 
 
+## The flash as everybody else sees it: a bot's, or a remote player's. Never
+## your own -- see FLASH_FAR_SCALE for why the two are not the same size.
 func show_muzzle_flash() -> void:
-	_show_flash()
+	_light_flash(_flash_rest_scale * FLASH_FAR_SCALE,
+		_flash_rest_energy * FLASH_FAR_ENERGY, FLASH_FAR_TIME)
 
 
+## Your own, from behind the sights.
 func _show_flash() -> void:
+	_light_flash(_flash_rest_scale, _flash_rest_energy, FLASH_TIME)
+
+
+func _light_flash(scale_to: Vector3, energy: float, seconds: float) -> void:
+	# Set before the roll, because writing `rotation` rebuilds the basis from
+	# euler angles and scale together, and the scale it uses is whatever is on
+	# the node at the time.
+	muzzle_flash.scale = scale_to
 	muzzle_flash.rotation.z = randf_range(0.0, TAU)
 	muzzle_flash.visible = true
+	flash_light.light_energy = energy
 	flash_light.visible = true
-	_flash_timer = FLASH_TIME
+	_flash_timer = seconds
 
 
 func _play(player: AudioStreamPlayer, stream: AudioStream, pitch: float, volume_db: float) -> void:
