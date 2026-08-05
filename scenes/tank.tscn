@@ -9,7 +9,7 @@
 ; with a rear bustle, six road wheels a side between a raised front sprocket and
 ; a rear idler, and a muzzle brake. No roof machine gun -- only the coax beside
 ; the main gun.
-[gd_scene load_steps=35 format=3]
+[gd_scene load_steps=38 format=3]
 
 [ext_resource type="Script" path="res://scripts/tank.gd" id="1_tank"]
 [ext_resource type="Texture2D" path="res://assets/textures/smoke_puff.png" id="2_puff"]
@@ -205,6 +205,32 @@ billboard_keep_scale = true
 [sub_resource type="QuadMesh" id="Mesh_puff"]
 material = SubResource("Mat_smoke")
 size = Vector2(1.6, 1.6)
+
+[sub_resource type="StandardMaterial3D" id="Mat_flash"]
+transparency = 1
+shading_mode = 0
+albedo_color = Color(1, 0.83, 0.45, 0.9)
+emission_enabled = true
+emission = Color(1, 0.72, 0.3, 1)
+emission_energy_multiplier = 6.0
+
+[sub_resource type="CylinderMesh" id="Mesh_main_flash"]
+material = SubResource("Mat_flash")
+top_radius = 0.0
+bottom_radius = 0.3
+height = 0.85
+radial_segments = 12
+rings = 1
+cap_top = false
+
+[sub_resource type="CylinderMesh" id="Mesh_coax_flash"]
+material = SubResource("Mat_flash")
+top_radius = 0.0
+bottom_radius = 0.09
+height = 0.3
+radial_segments = 10
+rings = 1
+cap_top = false
 
 [node name="Tank" type="CharacterBody3D"]
 floor_snap_length = 0.6
@@ -454,8 +480,38 @@ mesh = SubResource("Mesh_coax")
 [node name="MainMuzzle" type="Marker3D" parent="Turret/Gun"]
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0, -3.25)
 
+; The flash. Radially symmetric, so unlike the infantry weapons' it needs no
+; random roll to look different each shot -- mech.gd and tank.gd jitter its
+; scale instead, which shows on a cone and cannot corrupt the basis the way
+; writing an Euler angle over a laid-forward one would.
+[node name="Flash" type="MeshInstance3D" parent="Turret/Gun/MainMuzzle"]
+transform = Transform3D(1, 0, 0, 0, 0, -1, 0, 1, 0, 0, 0, -0.425)
+visible = false
+mesh = SubResource("Mesh_main_flash")
+
+[node name="FlashLight" type="OmniLight3D" parent="Turret/Gun/MainMuzzle"]
+visible = false
+light_color = Color(1, 0.75, 0.42, 1)
+light_energy = 9.0
+omni_range = 16.0
+
 [node name="CoaxMuzzle" type="Marker3D" parent="Turret/Gun"]
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0.3, -0.07, -1.02)
+
+; The flash. Radially symmetric, so unlike the infantry weapons' it needs no
+; random roll to look different each shot -- mech.gd and tank.gd jitter its
+; scale instead, which shows on a cone and cannot corrupt the basis the way
+; writing an Euler angle over a laid-forward one would.
+[node name="Flash" type="MeshInstance3D" parent="Turret/Gun/CoaxMuzzle"]
+transform = Transform3D(1, 0, 0, 0, 0, -1, 0, 1, 0, 0, 0, -0.15)
+visible = false
+mesh = SubResource("Mesh_coax_flash")
+
+[node name="FlashLight" type="OmniLight3D" parent="Turret/Gun/CoaxMuzzle"]
+visible = false
+light_color = Color(1, 0.75, 0.42, 1)
+light_energy = 4.0
+omni_range = 7.0
 
 ; The gunner's sight, and the only way the tank is seen from inside it.
 ;

@@ -79,6 +79,11 @@ signal destroyed
 ## low enough that the twenty-a-second stream reads as movement.
 const NET_FOLLOW_RATE := 12.0
 
+## How long a muzzle flash stays up. Rather less than it takes to notice one
+## deliberately, which is the point of it: what a flash is for is telling
+## everybody else which direction the shot came from.
+const FLASH_TIME := 0.055
+
 const CANNON: AudioStream = preload("res://assets/audio/cannon_fire.wav")
 const GUNSHOT: AudioStream = preload("res://assets/audio/gunshot.wav")
 const BULLET_HOLE: PackedScene = preload("res://scenes/bullet_hole.tscn")
@@ -95,6 +100,10 @@ const VEHICLES := &"vehicles"
 @onready var gun: Node3D = $Turret/Gun
 @onready var main_muzzle: Marker3D = $Turret/Gun/MainMuzzle
 @onready var coax_muzzle: Marker3D = $Turret/Gun/CoaxMuzzle
+@onready var main_flash: MeshInstance3D = $Turret/Gun/MainMuzzle/Flash
+@onready var main_flash_light: OmniLight3D = $Turret/Gun/MainMuzzle/FlashLight
+@onready var coax_flash: MeshInstance3D = $Turret/Gun/CoaxMuzzle/Flash
+@onready var coax_flash_light: OmniLight3D = $Turret/Gun/CoaxMuzzle/FlashLight
 ## On the gun rather than on the turret, so the view pitches with the barrel.
 ## The HUD takes the crosshair away while you are aboard, which makes the gun
 ## itself the aim -- and an aim you cannot see is not one.
@@ -129,6 +138,8 @@ var _elevation := 0.0
 var _world: Node
 var _main_cooldown := 0.0
 var _coax_cooldown := 0.0
+var _main_flash_left := 0.0
+var _coax_flash_left := 0.0
 var _main_left := 0
 var _coax_left := 0
 var _holes: Array[Node3D] = []
@@ -250,6 +261,11 @@ func round_reset() -> void:
 	_coax_left = coax_rounds
 	_main_cooldown = 0.0
 	_coax_cooldown = 0.0
+	# A round can end between a flash being lit and the frame that would have
+	# put it out, which would leave one burning on a whole tank for a whole
+	# round.
+	_main_flash_left = _tick_flash(0.001, 1.0, main_flash, main_flash_light)
+	_coax_flash_left = _tick_flash(0.001, 1.0, coax_flash, coax_flash_light)
 	velocity = Vector3.ZERO
 	global_transform = _start_transform
 	turret.transform = _turret_rest
@@ -551,6 +567,15 @@ func _drive(delta: float) -> void:
 func _process(delta: float) -> void:
 	_main_cooldown = maxf(_main_cooldown - delta, 0.0)
 	_coax_cooldown = maxf(_coax_cooldown - delta, 0.0)
+	# Above the early return, not below it: a flash lit on the last frame before
+	# the driver got out, or before the hull brewed up, has to be put out by
+	# somebody, and after that return nobody would.
+	_main_flash_left = _tick_flash(
+		_main_flash_left, delta, main_flash, main_flash_light
+	)
+	_coax_flash_left = _tick_flash(
+		_coax_flash_left, delta, coax_flash, coax_flash_light
+	)
 	if driver == null or _wrecked:
 		return
 
@@ -614,6 +639,8 @@ func _fire_main() -> void:
 	Blast.shake(get_tree(), 0.02)
 	Net.report_blast(burst, 26.0, 14.0, 8.0, true, 0.02)
 
+	_main_flash_left = _light_flash(main_flash, main_flash_light, 0.25)
+
 	gun_sound.stream = CANNON
 	gun_sound.pitch_scale = randf_range(1.15, 1.25)
 	gun_sound.play()
@@ -638,6 +665,8 @@ func _fire_coax() -> void:
 	query.exclude = [get_rid()]
 	var hit := get_world_3d().direct_space_state.intersect_ray(query)
 
+	_coax_flash_left = _light_flash(coax_flash, coax_flash_light, 0.35)
+
 	coax_sound.stream = GUNSHOT
 	coax_sound.pitch_scale = randf_range(0.94, 1.06)
 	coax_sound.play()
@@ -654,6 +683,33 @@ func _fire_coax() -> void:
 			_mark(hit.position, hit.normal)
 		return
 	_mark(hit.position, hit.normal)
+
+
+## Lights a muzzle flash and says how long it has to live.
+##
+## The size is jittered rather than the roll. A cone is the same shape whichever
+## way up it is, so spinning one achieves nothing -- and writing an Euler angle
+## onto a node whose basis was laid out by hand is how a barrel ends up pointing
+## at the sky.
+func _light_flash(mesh: MeshInstance3D, light: OmniLight3D, jitter: float) -> float:
+	mesh.scale = Vector3.ONE * randf_range(1.0 - jitter, 1.0 + jitter)
+	mesh.visible = true
+	light.visible = true
+	return FLASH_TIME
+
+
+## Counts a lit flash down and puts it out at the end. Returns what is left.
+func _tick_flash(
+	left: float, delta: float, mesh: MeshInstance3D, light: OmniLight3D
+) -> float:
+	if left <= 0.0:
+		return 0.0
+	left -= delta
+	if left > 0.0:
+		return left
+	mesh.visible = false
+	light.visible = false
+	return 0.0
 
 
 func _mark(at: Vector3, normal: Vector3) -> void:

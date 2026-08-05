@@ -29,7 +29,7 @@
 ;   (1,0,0, 0,1,0, 0,0,1)    upright
 ;   (1,0,0, 0,0,-1, 0,1,0)   lay the long axis forward along -Z
 ;   (0,1,0, -1,0,0, 0,0,1)   lay the long axis across the machine, along X
-[gd_scene load_steps=55 format=3]
+[gd_scene load_steps=58 format=3]
 
 [ext_resource type="Script" path="res://scripts/mech.gd" id="1_mech"]
 [ext_resource type="Texture2D" path="res://assets/textures/smoke_puff.png" id="2_puff"]
@@ -402,6 +402,32 @@ color_ramp = SubResource("GradTex_smoke")
 material = SubResource("Mat_smoke")
 size = Vector2(1.6, 1.6)
 
+[sub_resource type="StandardMaterial3D" id="Mat_flash"]
+transparency = 1
+shading_mode = 0
+albedo_color = Color(1, 0.83, 0.45, 0.9)
+emission_enabled = true
+emission = Color(1, 0.72, 0.3, 1)
+emission_energy_multiplier = 6.0
+
+[sub_resource type="CylinderMesh" id="Mesh_main_flash"]
+material = SubResource("Mat_flash")
+top_radius = 0.0
+bottom_radius = 0.2
+height = 0.6
+radial_segments = 12
+rings = 1
+cap_top = false
+
+[sub_resource type="CylinderMesh" id="Mesh_coax_flash"]
+material = SubResource("Mat_flash")
+top_radius = 0.0
+bottom_radius = 0.08
+height = 0.28
+radial_segments = 10
+rings = 1
+cap_top = false
+
 [node name="Mech" type="CharacterBody3D"]
 script = ExtResource("1_mech")
 ; Slower and lighter than the tank it inherits from, and better on its feet: it
@@ -713,6 +739,21 @@ mesh = SubResource("Mesh_brake_ring")
 [node name="MainMuzzle" type="Marker3D" parent="Turret/Gun"]
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0.94, 0.05, -3.14)
 
+; The flash. Radially symmetric, so unlike the infantry weapons' it needs no
+; random roll to look different each shot -- mech.gd and tank.gd jitter its
+; scale instead, which shows on a cone and cannot corrupt the basis the way
+; writing an Euler angle over a laid-forward one would.
+[node name="Flash" type="MeshInstance3D" parent="Turret/Gun/MainMuzzle"]
+transform = Transform3D(1, 0, 0, 0, 0, -1, 0, 1, 0, 0, 0, -0.3)
+visible = false
+mesh = SubResource("Mesh_main_flash")
+
+[node name="FlashLight" type="OmniLight3D" parent="Turret/Gun/MainMuzzle"]
+visible = false
+light_color = Color(1, 0.75, 0.42, 1)
+light_energy = 7.0
+omni_range = 13.0
+
 ; Left arm: the machine gun, with a pan magazine lying flat on the receiver the
 ; way a Lewis or a DP-27 carries one, and a ringed cooling jacket on the barrel.
 [node name="ArmL" type="MeshInstance3D" parent="Turret/Gun"]
@@ -749,6 +790,21 @@ mesh = SubResource("Mesh_jacket_ring")
 
 [node name="CoaxMuzzle" type="Marker3D" parent="Turret/Gun"]
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -0.94, 0.05, -2.36)
+
+; The flash. Radially symmetric, so unlike the infantry weapons' it needs no
+; random roll to look different each shot -- mech.gd and tank.gd jitter its
+; scale instead, which shows on a cone and cannot corrupt the basis the way
+; writing an Euler angle over a laid-forward one would.
+[node name="Flash" type="MeshInstance3D" parent="Turret/Gun/CoaxMuzzle"]
+transform = Transform3D(1, 0, 0, 0, 0, -1, 0, 1, 0, 0, 0, -0.14)
+visible = false
+mesh = SubResource("Mesh_coax_flash")
+
+[node name="FlashLight" type="OmniLight3D" parent="Turret/Gun/CoaxMuzzle"]
+visible = false
+light_color = Color(1, 0.75, 0.42, 1)
+light_energy = 4.0
+omni_range = 7.0
 
 ; Out of the vision slit. On Gun rather than on Turret for the same reason the
 ; tank's is: there is no crosshair aboard, so the arms are the aim, and a view
