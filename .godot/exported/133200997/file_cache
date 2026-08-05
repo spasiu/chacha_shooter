@@ -7,7 +7,7 @@ res://scenes/hand_left.tscn::714658b5e8612687339867910b28aa75::1785949043::res:/
 res://scenes/hand_right.tscn::2474fa6a5e191aade44d2015f900b211::1785949043::res://.godot/exported/133200997/export-dfbab18ba49e5e494e37d70b1eb3a8f2-hand_right.scn
 res://scenes/hud.tscn::4f8d5ba0fb3a8547bbaaa9002629b011::1785802272::res://.godot/exported/133200997/export-38bf74ff262409a94a41206b2b776d33-hud.scn
 res://scenes/loadout_select.tscn::610ac912fc33ec267c8663da4973310a::1785860694::res://.godot/exported/133200997/export-50b77b8100af51daf8de5a65c5793cab-loadout_select.scn
-res://scenes/player.tscn::9e195910615a3a2955347b20a5905851::1785793849::res://.godot/exported/133200997/export-234fb6894ec6226e856ab7f825500d3d-player.scn
+res://scenes/player.tscn::61826a434eed3095a6f58f0ce78ce881::1785963567::res://.godot/exported/133200997/export-234fb6894ec6226e856ab7f825500d3d-player.scn
 res://scenes/smoke_projectile.tscn::22a86f443c1679832b4f22564ac68a7a::1785767472::res://.godot/exported/133200997/export-1b881b498101c4cc20b2b9e3ce64faad-smoke_projectile.scn
 res://scenes/tank.tscn::5419c957da1be13c1426177481033387::1785948245::res://.godot/exported/133200997/export-4194426a9d5e1d9f821ceabbd2e67492-tank.scn
 res://scenes/target_character.tscn::ad40cf9fd4395d91aaf18a9dbc71e821::1785720727::res://.godot/exported/133200997/export-b3e28e0c941e63acf3253b2e82e427e4-target_character.scn
@@ -38,4 +38,4 @@ res://scenes/bot.tscn::c33afa837ca5c1471c6619e99089aecf::1785856830::res://.godo
 res://scenes/map_select.tscn::a708a433405ceac5d0ca4966000d32a8::1785861225::res://.godot/exported/133200997/export-a2e43de03ee40899bce8d18ba404c3e7-map_select.scn
 res://scenes/mech.tscn::ff4010d2eec893a80af501727777d817::1785948245::res://.godot/exported/133200997/export-7912c18959f03e179ae884102956e29c-mech.scn
 res://tools/shoot_guns.tscn::d29f296a3537e69b27d992a6ef0a734c::1785955737::res://.godot/exported/133200997/export-9337b6ffb85594ddd4b4d5c50ac1a745-shoot_guns.scn
-res://_attrition_test.tscn::740b9781267bf89e1bffceee0ab2f8e7::1785962688::res://.godot/exported/133200997/export-4235951bf3bc9d93614dcb38a4ea2fd3-_attrition_test.scn
+res://scenes/weapon_jump_jet.tscn::05a8026dcd4c3e647d37603f5fde68f1::1785963532::res://.godot/exported/133200997/export-d1e47462f67b095a01c2c0c46214db99-weapon_jump_jet.scn

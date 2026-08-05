@@ -93,12 +93,12 @@ const ITEMS: Array[Dictionary] = [
 		"accent": Color(0.45, 0.36, 0.22, 1.0),
 	},
 	{
-		"key": &"radio",
-		"name": "FIELD RADIO",
-		"kind": "FIRE SUPPORT",
-		"blurb": "Look at a spot, send the grid, then get well clear of it. Half a minute later the guns answer with a hundred rounds across fifty yards.",
-		"stats": "3 CALLS  ·  30s DELAY  ·  50 YD ZONE",
-		"accent": Color(0.36, 0.58, 0.42, 1.0),
+		"key": &"jumpjet",
+		"name": "JUMP JET",
+		"kind": "MOBILITY",
+		"blurb": "Worn, not carried: there is no slot for it and nothing to draw. Jump to climb, crouch to come down, and a minute of burn that only runs while your boots are off the ground. Filled at your own base, like everything else.",
+		"stats": "60s AIR TIME  ·  JUMP UP  ·  CROUCH DOWN",
+		"accent": Color(0.68, 0.46, 0.2, 1.0),
 	},
 	{
 		"key": &"medic",

@@ -1,7 +1,5 @@
 78098b89c88a74ebe8c20117b8754620
-::res://::1785962688
-_attrition_test.gd::GDScript::3470743868548585171::1785962688::0::1::::<>Node3D<><>0<>0<><>::
-_attrition_test.tscn::PackedScene::-1::1785962688::0::1::::<><><>0<>0<><>::res://_attrition_test.gd
+::res://::1785963173
 export_presets.cfg::TextFile::-1::1785935982::0::1::::<><><>0<>0<><>::
 netprobe.gd::GDScript::3388120863264306176::1785792064::0::1::::<>Node<><>0<>0<><>::
 ::res://__pycache__/::1785937418
@@ -35,10 +33,10 @@ smoke_puff.png::CompressedTexture2D::18799737287251226::1785767472::1785796459::
 wood_grain.tres::NoiseTexture2D::-1::1785852119::0::1::::<><><>0<>0<><>::
 ::res://build/::1785936004
 ::res://build/linux/::1785943059
-::res://build/web/::1785956754
-index.apple-touch-icon.png::CompressedTexture2D::344285027444641909::1785956754::1785796459::1::::<><><>0<>0<>56016b8850fd4fab1d2a598e0f3aff7f<>res://.godot/imported/index.apple-touch-icon.png-21031f526f7942c8019a62913b80e091.ctex::
-index.icon.png::CompressedTexture2D::2829230572938213910::1785956754::1785796459::1::::<><><>0<>0<>4c7be99e0333e1c5f8d1f08dae89d204<>res://.godot/imported/index.icon.png-a9d2f4f7433eeddc29dad75f5e7f8710.ctex::
-index.png::CompressedTexture2D::3637643214681756157::1785956754::1785796459::1::::<><><>0<>0<>abbee48fe18209cf8a43cf337791f4dd<>res://.godot/imported/index.png-7e97af7272d6fa0065ffc53e96463470.ctex::
+::res://build/web/::1785963974
+index.apple-touch-icon.png::CompressedTexture2D::344285027444641909::1785963974::1785796459::1::::<><><>0<>0<>56016b8850fd4fab1d2a598e0f3aff7f<>res://.godot/imported/index.apple-touch-icon.png-21031f526f7942c8019a62913b80e091.ctex::
+index.icon.png::CompressedTexture2D::2829230572938213910::1785963974::1785796459::1::::<><><>0<>0<>4c7be99e0333e1c5f8d1f08dae89d204<>res://.godot/imported/index.icon.png-a9d2f4f7433eeddc29dad75f5e7f8710.ctex::
+index.png::CompressedTexture2D::3637643214681756157::1785963974::1785796459::1::::<><><>0<>0<>abbee48fe18209cf8a43cf337791f4dd<>res://.godot/imported/index.png-7e97af7272d6fa0065ffc53e96463470.ctex::
 ::res://maps/::1785855687
 arena_preview.png::CompressedTexture2D::509373294099274685::1785788881::1785796459::1::::<><><>0<>0<>fa65f8a3dee9aacf67a1d6f98fa2dc64<>res://.godot/imported/arena_preview.png-0236e5c8c8dbc29db470051a8f861bf7.ctex::
 arena_structures.json::JSON::-1::1785853603::0::1::::<><><>0<>0<><>::
@@ -53,7 +51,7 @@ nuketown_structures.json::JSON::-1::1785943345::0::1::::<><><>0<>0<><>::
 nuketown_terrain.png::::9105378707515764071::1785855299::1785862444::0::::<><><>0<>0<>cd5ca6bd3d8d3cb6927a763128ad45fc<>::
 shipment_structures.json::JSON::-1::1785943345::0::1::::<><><>0<>0<><>::
 shipment_terrain.png::::6028645975372234087::1785855300::1785862444::0::::<><><>0<>0<>cd5ca6bd3d8d3cb6927a763128ad45fc<>::
-::res://scenes/::1785949541
+::res://scenes/::1785963532
 ammo_box.tscn::PackedScene::-1::1785853764::0::1::::<><><>0<>0<><>::res://scripts/ammo_box.gd<>res://assets/textures/cloth_grain.tres<>res://assets/textures/wood_grain.tres
 artillery_strike.tscn::PackedScene::-1::1785766017::0::1::::<><><>0<>0<><>::res://scripts/artillery_strike.gd
 block_debris.tscn::PackedScene::-1::1785757574::0::1::::<><><>0<>0<><>::res://scripts/block_debris.gd
@@ -67,7 +65,7 @@ hud.tscn::PackedScene::-1::1785802272::0::1::::<><><>0<>0<><>::res://scripts/hud
 loadout_select.tscn::PackedScene::-1::1785860694::0::1::::<><><>0<>0<><>::res://scripts/loadout_select.gd
 map_select.tscn::PackedScene::-1::1785861225::0::1::::<><><>0<>0<><>::res://scripts/map_select.gd
 mech.tscn::PackedScene::-1::1785948245::0::1::::<><><>0<>0<><>::res://scripts/mech.gd<>res://assets/textures/smoke_puff.png
-player.tscn::PackedScene::-1::1785793849::0::1::::<><><>0<>0<><>::res://scripts/player.gd<>res://scenes/weapon_thompson.tscn<>res://scenes/hud.tscn<>res://scenes/weapon_grenade.tscn<>res://scenes/weapon_shotgun.tscn<>res://scenes/weapon_garand.tscn<>res://scenes/weapon_carbine.tscn<>res://scenes/weapon_bazooka.tscn<>res://scenes/weapon_bar.tscn<>res://scenes/weapon_m1911.tscn<>res://scenes/weapon_johnson.tscn<>res://scenes/weapon_radio.tscn<>res://scenes/weapon_tnt.tscn<>res://scenes/weapon_shovel.tscn<>res://scenes/weapon_smoke.tscn<>res://scenes/weapon_medic.tscn<>res://scenes/viewmodel_arms.tscn<>res://scenes/character_body.tscn
+player.tscn::PackedScene::-1::1785963567::0::1::::<><><>0<>0<><>::res://scripts/player.gd<>res://scenes/weapon_thompson.tscn<>res://scenes/hud.tscn<>res://scenes/weapon_grenade.tscn<>res://scenes/weapon_shotgun.tscn<>res://scenes/weapon_garand.tscn<>res://scenes/weapon_carbine.tscn<>res://scenes/weapon_bazooka.tscn<>res://scenes/weapon_bar.tscn<>res://scenes/weapon_m1911.tscn<>res://scenes/weapon_johnson.tscn<>res://scenes/weapon_jump_jet.tscn<>res://scenes/weapon_tnt.tscn<>res://scenes/weapon_shovel.tscn<>res://scenes/weapon_smoke.tscn<>res://scenes/weapon_medic.tscn<>res://scenes/viewmodel_arms.tscn<>res://scenes/character_body.tscn
 remote_player.tscn::PackedScene::-1::1785779535::0::1::::<><><>0<>0<><>::res://scripts/remote_player.gd<>res://scenes/character_body.tscn
 server.tscn::PackedScene::-1::1785856482::0::1::::<><><>0<>0<><>::res://scripts/server_root.gd<>res://scripts/voxel_world.gd
 smoke_projectile.tscn::PackedScene::-1::1785767472::0::1::::<><><>0<>0<><>::res://scripts/smoke_projectile.gd<>res://assets/textures/smoke_puff.png
@@ -82,6 +80,7 @@ weapon_carbine.tscn::PackedScene::-1::1785956010::0::1::::<><><>0<>0<><>::res://
 weapon_garand.tscn::PackedScene::-1::1785956010::0::1::::<><><>0<>0<><>::res://scripts/stock_mesh.gd<>res://scripts/garand.gd<>res://assets/textures/wood_grain.tres<>res://assets/textures/cloth_grain.tres
 weapon_grenade.tscn::PackedScene::-1::1785956010::0::1::::<><><>0<>0<><>::res://scripts/grenade.gd<>res://scenes/grenade_projectile.tscn
 weapon_johnson.tscn::PackedScene::-1::1785956010::0::1::::<><><>0<>0<><>::res://scripts/stock_mesh.gd<>res://scripts/weapon.gd<>res://assets/textures/wood_grain.tres<>res://assets/textures/cloth_grain.tres
+weapon_jump_jet.tscn::PackedScene::-1::1785963532::0::1::::<><><>0<>0<><>::res://scripts/jump_jet.gd<>res://assets/textures/smoke_puff.png
 weapon_m1911.tscn::PackedScene::-1::1785956010::0::1::::<><><>0<>0<><>::res://scripts/weapon.gd<>res://assets/textures/wood_grain.tres<>res://assets/textures/cloth_grain.tres
 weapon_medic.tscn::PackedScene::-1::1785948712::0::1::::<><><>0<>0<><>::res://scripts/medic_pack.gd
 weapon_radio.tscn::PackedScene::-1::1785956010::0::1::::<><><>0<>0<><>::res://scripts/radio.gd<>res://scenes/artillery_strike.tscn<>res://scenes/target_paint.tscn
@@ -91,7 +90,7 @@ weapon_smoke.tscn::PackedScene::-1::1785956010::0::1::::<><><>0<>0<><>::res://sc
 weapon_thompson.tscn::PackedScene::-1::1785956010::0::1::::<><><>0<>0<><>::res://scripts/stock_mesh.gd<>res://scripts/weapon.gd<>res://assets/textures/wood_grain.tres<>res://assets/textures/cloth_grain.tres
 weapon_tnt.tscn::PackedScene::-1::1785769338::0::1::::<><><>0<>0<><>::res://scripts/tnt.gd<>res://scenes/tnt_charge.tscn
 world.tscn::PackedScene::-1::1785941548::0::1::::<><><>0<>0<><>::res://scenes/player.tscn<>res://scenes/target_character.tscn<>res://scripts/voxel_world.gd<>res://scenes/block_debris.tscn<>res://scenes/tank.tscn<>res://scenes/mech.tscn<>res://scripts/ammo_dump.gd<>res://scenes/ammo_box.tscn<>res://scripts/tank_park.gd<>res://scripts/bot_command.gd
-::res://scripts/::1785962912
+::res://scripts/::1785963917
 ammo_box.gd::GDScript::246689671203969854::1785853907::0::1::::AmmoBox<>StaticBody3D<><>0<>0<><>::
 ammo_dump.gd::GDScript::2414763805431841702::1785853792::0::1::::<>Node3D<><>0<>0<><>::
 arm_rig.gd::GDScript::7851186891513231705::1785720479::0::1::::ArmRig<>Node3D<><>0<>0<><>::
@@ -107,16 +106,17 @@ equipment.gd::GDScript::1369863222202937050::1785802297::0::1::::Equipment<>Node
 garand.gd::GDScript::7363414515366563511::1785759038::0::1::::Garand<>Weapon<><>0<>0<><>::
 grenade.gd::GDScript::6083400036711488351::1785790280::0::1::::Grenade<>Equipment<><>0<>0<><>::
 grenade_projectile.gd::GDScript::9044973973933644653::1785949655::0::1::::<>RigidBody3D<><>0<>0<><>::
-hud.gd::GDScript::1543978486408343174::1785962664::0::1::::<>CanvasLayer<><>0<>0<><>::
+hud.gd::GDScript::1543978486408343174::1785963660::0::1::::<>CanvasLayer<><>0<>0<><>::
+jump_jet.gd::GDScript::1301168382552579806::1785963962::0::1::::JumpJet<>Equipment<><>0<>0<><>::
 lethality.gd::GDScript::2833295179154821317::1785949591::0::1::::Lethality<>RefCounted<><>0<>0<><>::
-loadout_config.gd::GDScript::3766675202837892168::1785793849::0::1::::LoadoutConfig<>RefCounted<><>0<>0<><>::
+loadout_config.gd::GDScript::3766675202837892168::1785963567::0::1::::LoadoutConfig<>RefCounted<><>0<>0<><>::
 loadout_select.gd::GDScript::6234773266677339363::1785860694::0::1::::<>Control<><>0<>0<><>::
 map_catalogue.gd::GDScript::3177344727594652095::1785855395::0::1::::MapCatalogue<>RefCounted<><>0<>0<><>::
 map_select.gd::GDScript::735367782021197506::1785861182::0::1::::<>Control<><>0<>0<><>::
 mech.gd::GDScript::2235450522915857864::1785941479::0::1::::Mech<>Tank<><>0<>0<><>::
 medic_pack.gd::GDScript::3774503845471529758::1785793734::0::1::::MedicPack<>Equipment<><>0<>0<><>::
 net.gd::GDScript::7601844862700447241::1785962645::0::1::::<>Node<><>0<>0<><>::
-player.gd::GDScript::5332626523687789650::1785962912::0::1::::<>CharacterBody3D<><>0<>0<><>::
+player.gd::GDScript::5332626523687789650::1785963962::0::1::::<>CharacterBody3D<><>0<>0<><>::
 radio.gd::GDScript::3566137500269261477::1785791024::0::1::::Radio<>Equipment<><>0<>0<><>::
 remote_player.gd::GDScript::4342549140684150153::1785949617::0::1::::RemotePlayer<>AnimatableBody3D<><>0<>0<><>::
 server_root.gd::GDScript::3731694121574431138::1785774226::0::1::::<>Node<><>0<>0<><>::
@@ -133,6 +133,6 @@ tnt_charge.gd::GDScript::4297264644350443969::1785774105::0::1::::TNTCharge<>Nod
 voxel_chunk.gd::GDScript::2005511766938258363::1785937288::0::1::::VoxelChunk<>StaticBody3D<><>0<>0<><>::
 voxel_world.gd::GDScript::8218766206010941416::1785941520::0::1::::VoxelWorld<>Node3D<><>0<>0<><>::
 weapon.gd::GDScript::1877676255276685892::1785962906::0::1::::Weapon<>Equipment<><>0<>0<><>::
-::res://tools/::1785962953
+::res://tools/::1785963971
 shoot_guns.gd::GDScript::2049007996461809167::1785956444::0::1::::<>Node3D<><>0<>0<><>::
 shoot_guns.tscn::PackedScene::-1::1785955737::0::1::::<><><>0<>0<><>::res://tools/shoot_guns.gd

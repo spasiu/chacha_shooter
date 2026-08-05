@@ -87,6 +87,8 @@ const SPAWN_SCATTER_OF_VIEW := 0.25
 const SPAWN_TRIES := 12
 ## Footfalls sit well under the weapon; landing is 4dB above a normal step.
 const STEP_VOLUME_DB := -10.0
+## Where a jump jet rides: high on the back, clear of the legs it exhausts past.
+const JET_MOUNT := Vector3(0.0, 1.12, 0.2)
 
 const FOOTSTEPS: Array[AudioStream] = [
 	preload("res://assets/audio/footstep_01.wav"),
@@ -110,7 +112,7 @@ const LOADOUT_SCREEN: PackedScene = preload("res://scenes/loadout_select.tscn")
 @onready var bar: Equipment = $Head/Camera3D/WeaponSocket/WeaponBAR
 @onready var m1911: Equipment = $Head/Camera3D/WeaponSocket/WeaponM1911
 @onready var johnson: Equipment = $Head/Camera3D/WeaponSocket/WeaponJohnson
-@onready var radio: Equipment = $Head/Camera3D/WeaponSocket/WeaponRadio
+@onready var jump_jet: Equipment = $Head/Camera3D/WeaponSocket/WeaponJumpJet
 @onready var tnt: Equipment = $Head/Camera3D/WeaponSocket/WeaponTNT
 @onready var shovel: Equipment = $Head/Camera3D/WeaponSocket/WeaponShovel
 @onready var smoke: Equipment = $Head/Camera3D/WeaponSocket/WeaponSmoke
@@ -135,7 +137,7 @@ const LOADOUT_SCREEN: PackedScene = preload("res://scenes/loadout_select.tscn")
 	&"bar": bar,
 	&"m1911": m1911,
 	&"johnson": johnson,
-	&"radio": radio,
+	&"jumpjet": jump_jet,
 	&"tnt": tnt,
 	&"shovel": shovel,
 	&"smoke": smoke,
@@ -180,6 +182,10 @@ var _respawn_in := 0.0
 var _resupply_told := false
 ## The tank being driven, if any. While this is set the player is parked: the
 ## vehicle reads the input and moves us, and everything below stands down.
+## The pack, if one was picked. Kept apart from `loadout` on purpose: it is
+## worn rather than held, so it never enters the slot rotation and never goes
+## in the hands. Null when nobody chose one.
+var _jet: JumpJet
 var _vehicle: Node3D
 var _voxel_world: Node
 # Alternates each footfall so the gait phase runs 0..2PI over two steps, which
@@ -198,6 +204,11 @@ var _slot := -1
 ## position that only arrives twenty times a second.
 var _gait_phase := 0.0
 var _gait_speed := 0.0
+
+
+## The pack being worn, for the HUD. Null unless one was picked.
+func jet() -> JumpJet:
+	return _jet
 
 
 ## The vehicle being ridden, for anything outside that needs to know -- the HUD
@@ -428,9 +439,17 @@ func _physics_process(delta: float) -> void:
 	var fall_speed := velocity.y
 
 	if not was_on_floor:
-		velocity.y -= gravity * delta
-	elif not _prone and Input.is_action_just_pressed("jump"):
-		velocity.y = jump_velocity
+		if _jet != null and _jet.has_fuel():
+			_fly(delta)
+		else:
+			velocity.y -= gravity * delta
+			if _jet != null:
+				_jet.set_burning(false)
+	else:
+		if _jet != null:
+			_jet.set_burning(false)
+		if not _prone and Input.is_action_just_pressed("jump"):
+			velocity.y = jump_velocity
 
 	var input_dir := Input.get_vector("move_left", "move_right", "move_forward", "move_back")
 	var direction := (transform.basis * Vector3(input_dir.x, 0.0, input_dir.y)).normalized()
@@ -661,6 +680,10 @@ func _die() -> void:
 	viewmodel.visible = false
 	weapon.visible = false
 	body_model.die(false)
+	# The pack goes up with you, a chest height off the deck rather than at your
+	# boots, so it throws over cover the way a rocket would.
+	if _jet != null:
+		_jet.explode(get_tree(), global_position + Vector3.UP)
 	died.emit()
 	# Who gets the credit is the network's business, not ours: it knows who last
 	# put a round into us, and a fall or the boundary line has nobody behind it.
@@ -778,6 +801,28 @@ func _move_to(at: Vector3) -> void:
 ## what makes the ground between the bases matter more than the bases do.
 ##
 ## Announced once per visit rather than every frame you stand there.
+## Airborne with a pack on: jump climbs, crouch drops, neither sinks slowly.
+##
+## The tank burns whenever the boots are off the ground rather than only while
+## the nozzles are lit, because the pack is what is holding you up either way --
+## a minute in the air is a minute in the air, however it is spent. That is also
+## the only thing stopping a jet from being a permanent hover: idling costs the
+## same as climbing.
+func _fly(delta: float) -> void:
+	var climbing := Input.is_action_pressed("jump")
+	var dropping := Input.is_action_pressed("crouch")
+	if climbing:
+		velocity.y = move_toward(velocity.y, _jet.climb_speed, _jet.thrust_accel * delta)
+	elif dropping:
+		velocity.y = move_toward(velocity.y, -_jet.descend_speed, _jet.thrust_accel * delta)
+	else:
+		velocity.y -= gravity * _jet.idle_gravity * delta
+	_jet.spend(delta)
+	# Lit while it is doing something. Coasting down on what is left of gravity
+	# is the one airborne state that should look like falling, because it is.
+	_jet.set_burning(climbing or dropping)
+
+
 func _update_resupply() -> void:
 	if _voxel_world == null or _dead:
 		return
@@ -921,6 +966,7 @@ func heal(amount: float) -> void:
 ## walk `loadout`, so an item left behind is inert.
 func _build_loadout() -> void:
 	loadout.clear()
+	_jet = null
 	for key: StringName in LoadoutConfig.chosen:
 		# Capped here as well as on the select screen: a slot past the last one
 		# has no key bound to it, so anything beyond the cap would be carried
@@ -928,6 +974,12 @@ func _build_loadout() -> void:
 		if loadout.size() >= LoadoutConfig.SLOTS:
 			break
 		var item: Equipment = _catalogue.get(key)
+		if item is JumpJet:
+			# Worn, not held. It takes a pick on the select screen and then stays
+			# out of the hand rotation entirely, which is what "always equipped"
+			# has to mean for something strapped to your back.
+			_jet = item
+			continue
 		if item != null and not loadout.has(item):
 			loadout.append(item)
 	# Nothing in hand would break every weapon call below, so an empty or
@@ -936,6 +988,15 @@ func _build_loadout() -> void:
 		loadout.append(thompson)
 	for item: Equipment in _catalogue.values():
 		item.visible = false
+	if _jet != null:
+		# Hung off the player rather than off the body model, which is switched
+		# to shadows-only in first person -- the exhaust is worth seeing from
+		# inside the helmet as well as outside it.
+		if _jet.get_parent() != self:
+			_jet.reparent(self, false)
+		_jet.transform = Transform3D(Basis.IDENTITY, JET_MOUNT)
+		_jet.visible = true
+		_jet.refill()
 
 
 ## Swaps which item is in hand. The arm rig and HUD follow the change without

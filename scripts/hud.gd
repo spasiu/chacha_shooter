@@ -238,6 +238,12 @@ func _process(delta: float) -> void:
 	if held == null:
 		return
 	ammo_label.text = held.status_text()
+	# A jump jet is worn rather than held, so it has no turn at this readout of
+	# its own -- it goes on a line under whatever is in the hands, for as long
+	# as it is being worn.
+	var pack: JumpJet = _player.jet()
+	if pack != null:
+		ammo_label.text += "\n" + pack.status_text()
 	ammo_label.modulate = Color(1.0, 0.35, 0.3) if held.is_empty() else Color.WHITE
 
 
