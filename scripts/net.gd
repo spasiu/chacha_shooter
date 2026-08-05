@@ -58,7 +58,10 @@ const PROXY_PATH := "/ws"
 
 ## What version of this conversation the build speaks. Bump it whenever anything
 ## about what travels over the wire changes: a new message, a changed argument
-## list, a reordered enum.
+## list, a reordered enum -- and, less obviously, any edit to
+## `LoadoutConfig.ITEMS`. What `report_equip` sends is a position in that list,
+## so adding, removing or moving an entry silently re-points every index after
+## it at somebody else's weapon.
 ##
 ## It exists because the failure it catches is so quiet. Godot numbers remote
 ## calls by their order on the node, so a client and a server built from
@@ -68,7 +71,51 @@ const PROXY_PATH := "/ws"
 ## the two of them drift apart while both look perfectly healthy. Nothing is
 ## easier to do by accident, either: rebuilding the page and leaving the server
 ## running is the obvious thing to do, and it is enough.
-const PROTOCOL := 2
+## The hand-written half, for everything a person has to notice: a new message,
+## a changed argument list, a reordered enum.
+##
+## 3: the chevrons came out of the catalogue and the medic went in, which moved
+## the smoke, TNT and grenade indices. Two builds either side of that agreed on
+## every other weapon and disagreed on those, which reads as a soldier
+## respawning with kit he did not pick.
+const PROTOCOL_BASE := 3
+
+## The catalogue's half, worked out rather than remembered.
+##
+## Editing `LoadoutConfig.ITEMS` is a wire change, because `report_equip` sends a
+## position in that list. It is also the wire change nobody thinks of as one --
+## adding a weapon feels like content, not protocol -- and forgetting it is how
+## the smoke grenade above came to arrive as a medic bag. So the catalogue
+## fingerprints itself and no one has to remember.
+static var _fingerprint := -1
+
+## What version of this conversation the build speaks, both halves together.
+## Compared outright, so any difference in either one refuses the connection.
+static func protocol() -> int:
+	if _fingerprint < 0:
+		_fingerprint = _catalogue_fingerprint()
+	return PROTOCOL_BASE * 1000000 + _fingerprint
+
+
+## FNV-1a over the catalogue's keys, in order. Written out here rather than
+## reached for through `String.hash()` so the number depends on the catalogue
+## alone -- an engine free to change its own hash between versions would
+## otherwise be able to split two builds that agree about everything.
+static func _catalogue_fingerprint() -> int:
+	var h := 2166136261
+	for entry: Dictionary in LoadoutConfig.ITEMS:
+		for byte: int in String(entry["key"]).to_utf8_buffer():
+			h = ((h ^ byte) * 16777619) & 0xFFFFFFFF
+		# Between entries, so ["ab", "c"] cannot hash as ["a", "bc"].
+		h = ((h ^ 0x2C) * 16777619) & 0xFFFFFFFF
+	return h % 1000000
+
+
+## The version in a form worth putting in front of a person: the half they wrote
+## and the half the catalogue wrote, kept apart so a mismatch says which moved.
+static func protocol_text(value: int) -> String:
+	@warning_ignore("integer_division")
+	return "v%d+%06d" % [value / 1000000, value % 1000000]
 ## How long a client waits to be told the server's version before deciding it is
 ## talking to a build too old to say.
 const HANDSHAKE_SECONDS := 5.0
@@ -1332,13 +1379,22 @@ func _on_server_disconnected() -> void:
 ## Unasked because a client cannot ask a server too old to answer.
 func _on_peer_connected(id: int) -> void:
 	if mode == SERVER:
-		_server_hello.rpc_id(id, PROTOCOL)
+		_server_hello.rpc_id(id, protocol())
 
 
 @rpc("authority", "reliable", "call_remote")
-func _server_hello(protocol: int) -> void:
-	if protocol != PROTOCOL:
-		_refuse("server speaks v%d, this build v%d" % [protocol, PROTOCOL])
+func _server_hello(theirs: int) -> void:
+	var ours := protocol()
+	if theirs != ours:
+		# Which half moved is the whole of the diagnosis: the same base with a
+		# different fingerprint means somebody edited the catalogue and rebuilt
+		# only one end, which is much the commoner mistake.
+		@warning_ignore("integer_division")
+		var same_base: bool = theirs / 1000000 == ours / 1000000
+		_refuse("server speaks %s, this build %s%s" % [
+			protocol_text(theirs), protocol_text(ours),
+			" -- same protocol, different weapon catalogue" if same_base else "",
+		])
 		return
 	_verified = true
 

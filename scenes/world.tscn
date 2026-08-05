@@ -1,4 +1,4 @@
-[gd_scene load_steps=15 format=3]
+[gd_scene load_steps=16 format=3]
 
 [ext_resource type="PackedScene" path="res://scenes/player.tscn" id="1_player"]
 [ext_resource type="PackedScene" path="res://scenes/target_character.tscn" id="2_target"]
@@ -8,6 +8,7 @@
 [ext_resource type="Script" path="res://scripts/ammo_dump.gd" id="10_ammo_dump"]
 [ext_resource type="PackedScene" path="res://scenes/ammo_box.tscn" id="11_ammo_box"]
 [ext_resource type="Script" path="res://scripts/tank_park.gd" id="12_tank_park"]
+[ext_resource type="Script" path="res://scripts/bot_command.gd" id="13_bots"]
 
 [sub_resource type="ProceduralSkyMaterial" id="ProceduralSkyMaterial_1"]
 sky_horizon_color = Color(0.64625, 0.65575, 0.67075, 1)
@@ -46,6 +47,11 @@ prebuild = false
 [node name="TankPark" type="Node3D" parent="."]
 script = ExtResource("12_tank_park")
 tank_scene = ExtResource("9_tank")
+
+; Opposition, for a field with nobody else on it. Clears itself the moment
+; somebody real joins your map.
+[node name="BotCommand" type="Node3D" parent="."]
+script = ExtResource("13_bots")
 
 [node name="AmmoDump" type="Node3D" parent="."]
 script = ExtResource("10_ammo_dump")

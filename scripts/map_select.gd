@@ -15,6 +15,7 @@ const CARD_SIZE := Vector2(300, 250)
 const CARD_MIN_WIDTH := 190.0
 const CARD_PAD := 20.0
 
+@onready var wordmark: Label = $Root/Masthead/Wordmark
 @onready var cards_box: HBoxContainer = $Root/Cards
 @onready var subtitle: Label = $Root/Subtitle
 @onready var status: Label = $Root/Status
@@ -27,6 +28,11 @@ var _picked := ""
 
 func _ready() -> void:
 	Input.mouse_mode = Input.MOUSE_MODE_VISIBLE
+	# Read rather than written into the scene, so the game is renamed in one
+	# place -- the same setting the window title and the web page take.
+	wordmark.text = str(
+		ProjectSettings.get_setting("application/config/name", "KILROY")
+	).to_upper()
 	for id: String in MapCatalogue.IDS:
 		_add_card(id)
 	_choose(MapCatalogue.resolve(Net.map_id))

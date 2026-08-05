@@ -1,14 +1,9 @@
 [remap]
 
-importer="image"
-type="Image"
-uid="uid://cwk8rlnoxl5qh"
-path="res://.godot/imported/crossfire_terrain.png-aecc5f6384047f46fabcfcb7d4a7d202.image"
-
-[deps]
-
-source_file="res://maps/crossfire_terrain.png"
-dest_files=["res://.godot/imported/crossfire_terrain.png-aecc5f6384047f46fabcfcb7d4a7d202.image"]
-
-[params]
-
+; Kept as the file on disk rather than imported into a texture. VoxelWorld reads
+; this heightmap as raw bytes -- FileAccess.get_file_as_bytes, then
+; load_png_from_buffer -- so what has to reach the export is the PNG itself. An
+; imported image ships as a .ctex in .godot/imported and the original never goes
+; in the pack at all, which is a map that loads in the editor and an empty world
+; everywhere else.
+importer="keep"

@@ -1,0 +1,40 @@
+; An enemy soldier for a field with nobody else on it. The same body every
+; other soldier in the game is built from, on a capsule the same size as the
+; player's, with a rifle in its hands and BotCommand driving it.
+[gd_scene load_steps=5 format=3]
+
+[ext_resource type="Script" path="res://scripts/bot.gd" id="1_bot"]
+[ext_resource type="PackedScene" path="res://scenes/character_body.tscn" id="2_body"]
+[ext_resource type="PackedScene" path="res://scenes/weapon_carbine.tscn" id="3_carbine"]
+
+[sub_resource type="CapsuleShape3D" id="Shape_body"]
+radius = 0.4
+height = 1.8
+
+[node name="Bot" type="CharacterBody3D"]
+collision_layer = 3
+script = ExtResource("1_bot")
+
+[node name="CollisionShape3D" type="CollisionShape3D" parent="."]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0.9, 0)
+shape = SubResource("Shape_body")
+
+; The carbine rather than the Thompson: a bot with an automatic weapon at these
+; fire intervals reads as a machine gun nest wherever it happens to stand.
+[node name="Model" parent="." instance=ExtResource("2_body")]
+weapon_scene = ExtResource("3_carbine")
+
+[node name="NameTag" type="Label3D" parent="."]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 2.05, 0)
+billboard = 1
+no_depth_test = true
+fixed_size = true
+pixel_size = 0.0006
+font_size = 44
+outline_size = 14
+text = "SOLDIER"
+
+[node name="Sound" type="AudioStreamPlayer3D" parent="."]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 1.4, 0)
+unit_size = 14.0
+max_distance = 90.0

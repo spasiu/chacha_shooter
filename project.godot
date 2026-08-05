@@ -6,7 +6,7 @@ config_version=5
 
 [application]
 
-config/name="chacha_shooter"
+config/name="KILROY"
 run/main_scene="res://scenes/map_select.tscn"
 config/features=PackedStringArray("4.7", "Forward Plus")
 

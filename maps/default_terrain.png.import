@@ -1,13 +1,9 @@
 [remap]
 
+; Kept as the file on disk rather than imported into a texture. VoxelWorld reads
+; this heightmap as raw bytes -- FileAccess.get_file_as_bytes, then
+; load_png_from_buffer -- so what has to reach the export is the PNG itself. An
+; imported image ships as a .ctex in .godot/imported and the original never goes
+; in the pack at all, which is a map that loads in the editor and an empty world
+; everywhere else.
 importer="keep"
-type=""
-uid="uid://bqxvterrainmap01"
-
-[deps]
-
-source_file="res://maps/default_terrain.png"
-dest_files=[]
-
-[params]
-
