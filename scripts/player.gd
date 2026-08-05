@@ -1035,6 +1035,13 @@ func _board_nearby_vehicle() -> void:
 	weapon.visible = false
 	viewmodel.visible = false
 	body_model.set_shadow_only(false)
+	# A rider has no business being in the physics world at all: the vehicle
+	# parks our body on its seat every frame, and a seat is inside the hull, so
+	# leaving the capsule solid means the tank spends the whole drive pushing
+	# against its own driver and going nowhere. Deferred because boarding
+	# happens mid-step, and shapes may not come and go while the space is
+	# being solved.
+	collision_shape.set_deferred("disabled", true)
 	nearest.enter(self)
 
 
@@ -1045,6 +1052,7 @@ func leave_vehicle(at: Vector3) -> void:
 	global_position = at
 	velocity = Vector3.ZERO
 	visible = true
+	collision_shape.set_deferred("disabled", false)
 	_apply_view()
 	if weapon != null:
 		weapon.visible = true
