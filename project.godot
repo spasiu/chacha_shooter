@@ -8,6 +8,10 @@ config_version=5
 
 config/name="KILROY"
 run/main_scene="res://scenes/map_select.tscn"
+; A dedicated-server export has nobody to show a map chooser to, so it boots
+; straight into the server scene. Only builds exported with the dedicated
+; server flag carry that feature tag, so every other build is unaffected.
+run/main_scene.dedicated_server="res://scenes/server.tscn"
 config/features=PackedStringArray("4.7", "Forward Plus")
 
 [autoload]

@@ -40,7 +40,14 @@ roughness = 0.7
 [node name="VoxelWorld" type="Node3D" parent="."]
 script = ExtResource("4_voxel")
 debris_scene = ExtResource("5_debris")
-prebuild = false
+prebuild = true
+; Far above the default. That default was set when this map was twelve times the
+; size and the loading screen would be up for minutes, where keeping the tab
+; fully responsive mattered more than finishing. At 64 metres the screen is up
+; for seconds, so the budget is pushed until it is nearly the work itself:
+; 24ms/frame takes 13s, 200 takes about 4.5s, and past that there is nothing
+; left to win. Five frames a second is plenty for a progress bar.
+prebuild_ms_per_frame = 200.0
 
 ; Armour and ammunition, wherever the map file puts them. Both sit after
 ; VoxelWorld so the ground they stand on has been read by the time they ask.
