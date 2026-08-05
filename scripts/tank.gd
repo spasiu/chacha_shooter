@@ -95,7 +95,10 @@ const VEHICLES := &"vehicles"
 @onready var gun: Node3D = $Turret/Gun
 @onready var main_muzzle: Marker3D = $Turret/Gun/MainMuzzle
 @onready var coax_muzzle: Marker3D = $Turret/Gun/CoaxMuzzle
-@onready var camera: Camera3D = $Turret/CameraMount/Camera3D
+## On the gun rather than on the turret, so the view pitches with the barrel.
+## The HUD takes the crosshair away while you are aboard, which makes the gun
+## itself the aim -- and an aim you cannot see is not one.
+@onready var camera: Camera3D = $Turret/Gun/CameraMount/Camera3D
 @onready var seat: Marker3D = $Seat
 @onready var dismount: Marker3D = $Dismount
 @onready var engine_sound: AudioStreamPlayer3D = $EngineSound

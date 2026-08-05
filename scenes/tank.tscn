@@ -457,12 +457,20 @@ transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0, -3.25)
 [node name="CoaxMuzzle" type="Marker3D" parent="Turret/Gun"]
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0.3, -0.07, -1.02)
 
-; Rides with the turret so the view turns with the gun.
-[node name="CameraMount" type="Node3D" parent="Turret"]
-transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 1.1, 3.4)
+; The gunner's sight, and the only way the tank is seen from inside it.
+;
+; Hung off Gun rather than off Turret, which is not a detail: there is no
+; crosshair while you are aboard -- the HUD takes it away -- so the barrel is
+; the aim, and a view that did not pitch with the barrel would leave the gun
+; pointing somewhere the picture never showed. On the gun, where you look is
+; where it shoots.
+;
+; Sat above the mantlet (0.54 tall, so its top is 0.27) and ahead of its face,
+; because a camera inside its own armour looks at the inside of its own armour.
+[node name="CameraMount" type="Node3D" parent="Turret/Gun"]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0.44, -0.3)
 
-[node name="Camera3D" type="Camera3D" parent="Turret/CameraMount"]
-transform = Transform3D(1, 0, 0, 0, 0.994522, 0.104528, 0, -0.104528, 0.994522, 0, 0, 0)
+[node name="Camera3D" type="Camera3D" parent="Turret/Gun/CameraMount"]
 current = false
 
 ; Where the driver is put back down on getting out.

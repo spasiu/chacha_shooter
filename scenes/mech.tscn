@@ -3,17 +3,33 @@
 ; weapons are the tank's and are not restated here.
 ;
 ; Deliberately of its period. Nothing here is a composite panel or a smooth
-; moulded shell: it is flat rolled plate, bolted at the seams with rivet strips
-; along every edge, a vision slit rather than a screen, a stowage box on the
-; back and an exhaust stack either side of the hull. The proportions are a
-; field gun's -- squat, wide-footed and nose-heavy -- rather than an athlete's.
+; moulded shell: it is rolled and cast steel, bolted at the seams, a vision slit
+; rather than a screen, a stowage box on the back and an exhaust stack either
+; side of the hull. The proportions are a field gun's -- squat, wide-footed and
+; nose-heavy -- rather than an athlete's.
+;
+; Very little of it is a box, and that is the whole trick to it looking like a
+; machine rather than a stack of crates. Limbs are capsules with tapered sleeves
+; over them, so they have a round section and a thickness that changes along
+; their length. Joints are balls in collars, which is both what a joint looks
+; like and what lets one rotate without a corner passing through its own
+; housing. The hull is a pair of many-sided cast drums rather than a slab. Armour
+; is wedges -- prisms -- laid on at an angle, because sloped plate is what the
+; period actually did and a flat face is what reads as blocky. Boxes are left
+; only where the real thing would be one: the stowage bin and the ammunition
+; drum.
 ;
 ; The hierarchy is what the gait needs. Each leg is Leg -> Knee -> Ankle, three
 ; nested pivots with the geometry hung off them, so mech.gd swings a whole leg
 ; by turning one node and the shin and foot come with it. The torso is called
 ; Turret because that is the node tank.gd traverses; here it is the whole upper
 ; body, and the arms pitch inside it as one under Gun.
-[gd_scene load_steps=41 format=3]
+;
+; Three rotations do all the work below, written out rather than left as magic:
+;   (1,0,0, 0,1,0, 0,0,1)    upright
+;   (1,0,0, 0,0,-1, 0,1,0)   lay the long axis forward along -Z
+;   (0,1,0, -1,0,0, 0,0,1)   lay the long axis across the machine, along X
+[gd_scene load_steps=55 format=3]
 
 [ext_resource type="Script" path="res://scripts/mech.gd" id="1_mech"]
 [ext_resource type="Texture2D" path="res://assets/textures/smoke_puff.png" id="2_puff"]
@@ -36,7 +52,7 @@ albedo_color = Color(0.11, 0.11, 0.12, 1)
 metallic = 0.5
 roughness = 0.7
 
-; A shade off the hull, so the bolted seams catch the light and read as seams
+; A shade off the hull, so a bolted seam catches the light and reads as a seam
 ; rather than as a line drawn on a flat panel.
 [sub_resource type="StandardMaterial3D" id="Mat_rivet"]
 albedo_color = Color(0.38, 0.42, 0.3, 1)
@@ -49,85 +65,176 @@ emission_enabled = true
 emission = Color(1, 0.83, 0.5, 1)
 emission_energy_multiplier = 1.6
 
-[sub_resource type="BoxMesh" id="Mesh_hip"]
-material = SubResource("Mat_armour")
-size = Vector3(0.52, 0.46, 0.54)
-
-[sub_resource type="BoxMesh" id="Mesh_thigh"]
-material = SubResource("Mat_armour")
-size = Vector3(0.42, 0.95, 0.44)
-
-[sub_resource type="CylinderMesh" id="Mesh_piston"]
+; --- joints ------------------------------------------------------------------
+[sub_resource type="SphereMesh" id="Mesh_hip_ball"]
 material = SubResource("Mat_steel")
-top_radius = 0.055
-bottom_radius = 0.055
-height = 0.78
-radial_segments = 10
-rings = 1
+radius = 0.26
+height = 0.52
+radial_segments = 20
+rings = 10
 
-[sub_resource type="CylinderMesh" id="Mesh_knee"]
-material = SubResource("Mat_steel")
-top_radius = 0.21
-bottom_radius = 0.21
-height = 0.46
+[sub_resource type="CylinderMesh" id="Mesh_hip_cowl"]
+material = SubResource("Mat_armour")
+top_radius = 0.31
+bottom_radius = 0.28
+height = 0.4
 radial_segments = 14
 rings = 1
 
-[sub_resource type="BoxMesh" id="Mesh_shin"]
-material = SubResource("Mat_armour")
-size = Vector3(0.36, 0.85, 0.38)
-
-[sub_resource type="BoxMesh" id="Mesh_greave"]
-material = SubResource("Mat_armour")
-size = Vector3(0.44, 0.62, 0.1)
-
-[sub_resource type="BoxMesh" id="Mesh_foot"]
-material = SubResource("Mat_armour")
-size = Vector3(0.8, 0.22, 1.25)
-
-[sub_resource type="BoxMesh" id="Mesh_cleat"]
-material = SubResource("Mat_dark")
-size = Vector3(0.72, 0.12, 0.26)
-
-[sub_resource type="CylinderMesh" id="Mesh_waist"]
+[sub_resource type="CylinderMesh" id="Mesh_knee_joint"]
 material = SubResource("Mat_steel")
-top_radius = 0.56
-bottom_radius = 0.6
-height = 0.26
-radial_segments = 18
+top_radius = 0.19
+bottom_radius = 0.19
+height = 0.44
+radial_segments = 20
 rings = 1
 
-[sub_resource type="BoxMesh" id="Mesh_torso"]
+[sub_resource type="TorusMesh" id="Mesh_knee_collar"]
 material = SubResource("Mat_armour")
-size = Vector3(1.55, 1.05, 1.35)
+inner_radius = 0.19
+outer_radius = 0.28
+rings = 16
+ring_segments = 10
 
-[sub_resource type="BoxMesh" id="Mesh_glacis"]
+[sub_resource type="SphereMesh" id="Mesh_ankle_ball"]
+material = SubResource("Mat_steel")
+radius = 0.15
+height = 0.3
+radial_segments = 16
+rings = 8
+
+; --- limbs -------------------------------------------------------------------
+[sub_resource type="CapsuleMesh" id="Mesh_thigh"]
+material = SubResource("Mat_steel")
+radius = 0.17
+height = 1.0
+radial_segments = 18
+rings = 6
+
+; The armour over the thigh, tapered so the leg is heavier at the hip than at
+; the knee. A sleeve rather than a slab: it is what the limb is seen through.
+[sub_resource type="CylinderMesh" id="Mesh_thigh_sleeve"]
 material = SubResource("Mat_armour")
-size = Vector3(1.48, 0.58, 0.16)
+top_radius = 0.26
+bottom_radius = 0.2
+height = 0.66
+radial_segments = 14
+rings = 1
+
+[sub_resource type="CylinderMesh" id="Mesh_piston"]
+material = SubResource("Mat_steel")
+top_radius = 0.05
+bottom_radius = 0.05
+height = 0.72
+radial_segments = 10
+rings = 1
+
+[sub_resource type="CylinderMesh" id="Mesh_piston_collar"]
+material = SubResource("Mat_dark")
+top_radius = 0.075
+bottom_radius = 0.075
+height = 0.14
+radial_segments = 10
+rings = 1
+
+[sub_resource type="CapsuleMesh" id="Mesh_shin"]
+material = SubResource("Mat_steel")
+radius = 0.14
+height = 0.9
+radial_segments = 16
+rings = 6
+
+[sub_resource type="CylinderMesh" id="Mesh_shin_sleeve"]
+material = SubResource("Mat_armour")
+top_radius = 0.22
+bottom_radius = 0.17
+height = 0.6
+radial_segments = 14
+rings = 1
+
+; Sloped shin plate. A wedge laid point-forward, which is the period's answer to
+; everything and happens also to be the opposite of blocky.
+[sub_resource type="PrismMesh" id="Mesh_greave"]
+material = SubResource("Mat_armour")
+size = Vector3(0.38, 0.22, 0.62)
+
+; --- foot --------------------------------------------------------------------
+[sub_resource type="BoxMesh" id="Mesh_sole"]
+material = SubResource("Mat_steel")
+size = Vector3(0.68, 0.11, 0.95)
+
+[sub_resource type="PrismMesh" id="Mesh_toe"]
+material = SubResource("Mat_armour")
+size = Vector3(0.68, 0.42, 0.19)
+
+[sub_resource type="PrismMesh" id="Mesh_heel"]
+material = SubResource("Mat_armour")
+size = Vector3(0.6, 0.3, 0.17)
+
+[sub_resource type="CylinderMesh" id="Mesh_cleat"]
+material = SubResource("Mat_dark")
+top_radius = 0.07
+bottom_radius = 0.08
+height = 0.08
+radial_segments = 8
+rings = 1
+
+; --- hull --------------------------------------------------------------------
+[sub_resource type="TorusMesh" id="Mesh_waist"]
+material = SubResource("Mat_steel")
+inner_radius = 0.42
+outer_radius = 0.6
+rings = 20
+ring_segments = 10
+
+; The hull proper: two cast drums, the lower one belling out over the waist and
+; the upper one drawing in toward the roof. Fourteen sides, which at this size
+; reads as cast steel rather than as a cylinder.
+[sub_resource type="CylinderMesh" id="Mesh_core_lower"]
+material = SubResource("Mat_armour")
+top_radius = 0.68
+bottom_radius = 0.56
+height = 0.52
+radial_segments = 14
+rings = 1
+
+[sub_resource type="CylinderMesh" id="Mesh_core_upper"]
+material = SubResource("Mat_armour")
+top_radius = 0.52
+bottom_radius = 0.68
+height = 0.54
+radial_segments = 14
+rings = 1
+
+[sub_resource type="PrismMesh" id="Mesh_glacis"]
+material = SubResource("Mat_armour")
+size = Vector3(1.16, 0.42, 0.78)
 
 [sub_resource type="BoxMesh" id="Mesh_visor"]
 material = SubResource("Mat_dark")
-size = Vector3(0.88, 0.14, 0.09)
+size = Vector3(0.72, 0.12, 0.08)
 
-[sub_resource type="BoxMesh" id="Mesh_rivet_long"]
+[sub_resource type="TorusMesh" id="Mesh_seam"]
 material = SubResource("Mat_rivet")
-size = Vector3(1.5, 0.08, 0.08)
+inner_radius = 0.66
+outer_radius = 0.71
+rings = 18
+ring_segments = 8
 
-[sub_resource type="BoxMesh" id="Mesh_rivet_side"]
-material = SubResource("Mat_rivet")
-size = Vector3(0.08, 0.08, 1.3)
-
-[sub_resource type="BoxMesh" id="Mesh_hatch"]
+[sub_resource type="CylinderMesh" id="Mesh_hatch"]
 material = SubResource("Mat_armour")
-size = Vector3(0.62, 0.1, 0.58)
-
-[sub_resource type="CylinderMesh" id="Mesh_hatch_ring"]
-material = SubResource("Mat_steel")
-top_radius = 0.34
-bottom_radius = 0.34
-height = 0.05
+top_radius = 0.3
+bottom_radius = 0.33
+height = 0.11
 radial_segments = 16
 rings = 1
+
+[sub_resource type="TorusMesh" id="Mesh_hatch_ring"]
+material = SubResource("Mat_steel")
+inner_radius = 0.32
+outer_radius = 0.38
+rings = 16
+ring_segments = 8
 
 [sub_resource type="CylinderMesh" id="Mesh_aerial"]
 material = SubResource("Mat_steel")
@@ -139,82 +246,126 @@ rings = 1
 
 [sub_resource type="CylinderMesh" id="Mesh_exhaust"]
 material = SubResource("Mat_dark")
-top_radius = 0.085
+top_radius = 0.08
 bottom_radius = 0.095
 height = 0.66
-radial_segments = 12
+radial_segments = 14
 rings = 1
 
-[sub_resource type="CylinderMesh" id="Mesh_exhaust_cap"]
+[sub_resource type="TorusMesh" id="Mesh_exhaust_ring"]
 material = SubResource("Mat_steel")
-top_radius = 0.12
-bottom_radius = 0.1
-height = 0.09
-radial_segments = 12
-rings = 1
+inner_radius = 0.09
+outer_radius = 0.13
+rings = 12
+ring_segments = 8
 
-[sub_resource type="BoxMesh" id="Mesh_shoulder"]
-material = SubResource("Mat_armour")
-size = Vector3(0.5, 0.52, 0.68)
-
+; A stowage bin is a bin. Some things were boxes.
 [sub_resource type="BoxMesh" id="Mesh_stowage"]
 material = SubResource("Mat_armour")
-size = Vector3(0.95, 0.36, 0.32)
+size = Vector3(0.92, 0.34, 0.3)
 
 [sub_resource type="CylinderMesh" id="Mesh_lamp"]
 material = SubResource("Mat_lamp")
-top_radius = 0.13
-bottom_radius = 0.13
-height = 0.1
-radial_segments = 12
+top_radius = 0.12
+bottom_radius = 0.12
+height = 0.09
+radial_segments = 14
 rings = 1
 
-[sub_resource type="BoxMesh" id="Mesh_arm"]
-material = SubResource("Mat_armour")
-size = Vector3(0.34, 0.34, 0.82)
-
-[sub_resource type="BoxMesh" id="Mesh_shield"]
-material = SubResource("Mat_armour")
-size = Vector3(0.6, 0.6, 0.08)
-
-[sub_resource type="BoxMesh" id="Mesh_cannon_body"]
+; --- shoulders and arms ------------------------------------------------------
+[sub_resource type="SphereMesh" id="Mesh_shoulder_ball"]
 material = SubResource("Mat_steel")
-size = Vector3(0.42, 0.44, 0.9)
+radius = 0.27
+height = 0.54
+radial_segments = 18
+rings = 9
+
+; The pauldron: a half drum laid across the shoulder, open underneath so the arm
+; can swing out of it.
+[sub_resource type="CylinderMesh" id="Mesh_pauldron"]
+material = SubResource("Mat_armour")
+top_radius = 0.34
+bottom_radius = 0.3
+height = 0.42
+radial_segments = 14
+rings = 1
+
+[sub_resource type="CapsuleMesh" id="Mesh_arm"]
+material = SubResource("Mat_steel")
+radius = 0.15
+height = 0.86
+radial_segments = 16
+rings = 6
+
+[sub_resource type="CylinderMesh" id="Mesh_arm_sleeve"]
+material = SubResource("Mat_armour")
+top_radius = 0.21
+bottom_radius = 0.18
+height = 0.5
+radial_segments = 14
+rings = 1
+
+[sub_resource type="CylinderMesh" id="Mesh_cannon_body"]
+material = SubResource("Mat_steel")
+top_radius = 0.2
+bottom_radius = 0.24
+height = 0.86
+radial_segments = 16
+rings = 1
 
 [sub_resource type="CylinderMesh" id="Mesh_cannon_barrel"]
 material = SubResource("Mat_steel")
-top_radius = 0.075
-bottom_radius = 0.09
+top_radius = 0.07
+bottom_radius = 0.095
 height = 1.5
-radial_segments = 14
+radial_segments = 16
 rings = 1
 
 [sub_resource type="CylinderMesh" id="Mesh_brake"]
 material = SubResource("Mat_steel")
-top_radius = 0.14
+top_radius = 0.13
 bottom_radius = 0.15
-height = 0.28
+height = 0.26
+radial_segments = 16
+rings = 1
+
+[sub_resource type="TorusMesh" id="Mesh_brake_ring"]
+material = SubResource("Mat_dark")
+inner_radius = 0.1
+outer_radius = 0.16
+rings = 14
+ring_segments = 8
+
+[sub_resource type="CylinderMesh" id="Mesh_mg_body"]
+material = SubResource("Mat_steel")
+top_radius = 0.15
+bottom_radius = 0.17
+height = 0.66
 radial_segments = 14
 rings = 1
 
-[sub_resource type="BoxMesh" id="Mesh_mg_body"]
-material = SubResource("Mat_steel")
-size = Vector3(0.3, 0.3, 0.7)
-
 [sub_resource type="CylinderMesh" id="Mesh_mg_barrel"]
 material = SubResource("Mat_steel")
-top_radius = 0.042
+top_radius = 0.04
 bottom_radius = 0.05
 height = 1.05
-radial_segments = 10
+radial_segments = 12
 rings = 1
+
+; The cooling jacket, as rings down the barrel rather than a sleeve over it.
+[sub_resource type="TorusMesh" id="Mesh_jacket_ring"]
+material = SubResource("Mat_dark")
+inner_radius = 0.055
+outer_radius = 0.095
+rings = 12
+ring_segments = 8
 
 [sub_resource type="CylinderMesh" id="Mesh_drum"]
 material = SubResource("Mat_armour")
-top_radius = 0.24
-bottom_radius = 0.24
-height = 0.16
-radial_segments = 16
+top_radius = 0.23
+bottom_radius = 0.23
+height = 0.15
+radial_segments = 18
 rings = 1
 
 [sub_resource type="Gradient" id="Grad_smoke"]
@@ -289,92 +440,160 @@ shape = SubResource("Shape_body")
 [node name="LegL" type="Node3D" parent="."]
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -0.6, 2, 0)
 
-[node name="Hip" type="MeshInstance3D" parent="LegL"]
-transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0.04, 0)
-mesh = SubResource("Mesh_hip")
+[node name="HipBall" type="MeshInstance3D" parent="LegL"]
+mesh = SubResource("Mesh_hip_ball")
+
+[node name="HipCowl" type="MeshInstance3D" parent="LegL"]
+transform = Transform3D(0, 1, 0, -1, 0, 0, 0, 0, 1, -0.06, 0.02, 0)
+mesh = SubResource("Mesh_hip_cowl")
 
 [node name="Thigh" type="MeshInstance3D" parent="LegL"]
-transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, -0.5, 0)
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, -0.48, 0)
 mesh = SubResource("Mesh_thigh")
 
+[node name="ThighSleeve" type="MeshInstance3D" parent="LegL"]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, -0.42, 0)
+mesh = SubResource("Mesh_thigh_sleeve")
+
 [node name="Piston" type="MeshInstance3D" parent="LegL"]
-transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, -0.48, -0.28)
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, -0.46, -0.29)
 mesh = SubResource("Mesh_piston")
+
+[node name="PistonCollar" type="MeshInstance3D" parent="LegL"]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, -0.72, -0.29)
+mesh = SubResource("Mesh_piston_collar")
 
 [node name="Knee" type="Node3D" parent="LegL"]
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, -0.95, 0)
 
 [node name="KneeJoint" type="MeshInstance3D" parent="LegL/Knee"]
 transform = Transform3D(0, 1, 0, -1, 0, 0, 0, 0, 1, 0, 0, 0)
-mesh = SubResource("Mesh_knee")
+mesh = SubResource("Mesh_knee_joint")
+
+[node name="KneeCollar" type="MeshInstance3D" parent="LegL/Knee"]
+transform = Transform3D(0, 1, 0, -1, 0, 0, 0, 0, 1, 0, 0, 0)
+mesh = SubResource("Mesh_knee_collar")
 
 [node name="Shin" type="MeshInstance3D" parent="LegL/Knee"]
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, -0.45, 0)
 mesh = SubResource("Mesh_shin")
 
+[node name="ShinSleeve" type="MeshInstance3D" parent="LegL/Knee"]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, -0.4, 0)
+mesh = SubResource("Mesh_shin_sleeve")
+
 [node name="Greave" type="MeshInstance3D" parent="LegL/Knee"]
-transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, -0.42, -0.23)
+transform = Transform3D(1, 0, 0, 0, 0, -1, 0, 1, 0, 0, -0.4, -0.19)
 mesh = SubResource("Mesh_greave")
 
 [node name="Ankle" type="Node3D" parent="LegL/Knee"]
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, -0.85, 0)
 
-[node name="Foot" type="MeshInstance3D" parent="LegL/Knee/Ankle"]
-transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, -0.09, 0.1)
-mesh = SubResource("Mesh_foot")
+[node name="AnkleBall" type="MeshInstance3D" parent="LegL/Knee/Ankle"]
+mesh = SubResource("Mesh_ankle_ball")
 
-[node name="ToeCleat" type="MeshInstance3D" parent="LegL/Knee/Ankle"]
-transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, -0.15, -0.42)
+[node name="Sole" type="MeshInstance3D" parent="LegL/Knee/Ankle"]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, -0.145, 0.05)
+mesh = SubResource("Mesh_sole")
+
+[node name="Toe" type="MeshInstance3D" parent="LegL/Knee/Ankle"]
+transform = Transform3D(1, 0, 0, 0, 0, -1, 0, 1, 0, 0, -0.135, -0.42)
+mesh = SubResource("Mesh_toe")
+
+[node name="Heel" type="MeshInstance3D" parent="LegL/Knee/Ankle"]
+transform = Transform3D(-1, 0, 0, 0, 0, 1, 0, 1, 0, 0, -0.135, 0.525)
+mesh = SubResource("Mesh_heel")
+
+[node name="CleatFL" type="MeshInstance3D" parent="LegL/Knee/Ankle"]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -0.2, -0.21, -0.2)
 mesh = SubResource("Mesh_cleat")
 
-[node name="HeelCleat" type="MeshInstance3D" parent="LegL/Knee/Ankle"]
-transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, -0.15, 0.58)
+[node name="CleatFR" type="MeshInstance3D" parent="LegL/Knee/Ankle"]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0.2, -0.21, -0.2)
+mesh = SubResource("Mesh_cleat")
+
+[node name="CleatB" type="MeshInstance3D" parent="LegL/Knee/Ankle"]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, -0.21, 0.34)
 mesh = SubResource("Mesh_cleat")
 
 ; --- right leg ---------------------------------------------------------------
 [node name="LegR" type="Node3D" parent="."]
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0.6, 2, 0)
 
-[node name="Hip" type="MeshInstance3D" parent="LegR"]
-transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0.04, 0)
-mesh = SubResource("Mesh_hip")
+[node name="HipBall" type="MeshInstance3D" parent="LegR"]
+mesh = SubResource("Mesh_hip_ball")
+
+[node name="HipCowl" type="MeshInstance3D" parent="LegR"]
+transform = Transform3D(0, 1, 0, -1, 0, 0, 0, 0, 1, 0.06, 0.02, 0)
+mesh = SubResource("Mesh_hip_cowl")
 
 [node name="Thigh" type="MeshInstance3D" parent="LegR"]
-transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, -0.5, 0)
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, -0.48, 0)
 mesh = SubResource("Mesh_thigh")
 
+[node name="ThighSleeve" type="MeshInstance3D" parent="LegR"]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, -0.42, 0)
+mesh = SubResource("Mesh_thigh_sleeve")
+
 [node name="Piston" type="MeshInstance3D" parent="LegR"]
-transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, -0.48, -0.28)
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, -0.46, -0.29)
 mesh = SubResource("Mesh_piston")
+
+[node name="PistonCollar" type="MeshInstance3D" parent="LegR"]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, -0.72, -0.29)
+mesh = SubResource("Mesh_piston_collar")
 
 [node name="Knee" type="Node3D" parent="LegR"]
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, -0.95, 0)
 
 [node name="KneeJoint" type="MeshInstance3D" parent="LegR/Knee"]
 transform = Transform3D(0, 1, 0, -1, 0, 0, 0, 0, 1, 0, 0, 0)
-mesh = SubResource("Mesh_knee")
+mesh = SubResource("Mesh_knee_joint")
+
+[node name="KneeCollar" type="MeshInstance3D" parent="LegR/Knee"]
+transform = Transform3D(0, 1, 0, -1, 0, 0, 0, 0, 1, 0, 0, 0)
+mesh = SubResource("Mesh_knee_collar")
 
 [node name="Shin" type="MeshInstance3D" parent="LegR/Knee"]
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, -0.45, 0)
 mesh = SubResource("Mesh_shin")
 
+[node name="ShinSleeve" type="MeshInstance3D" parent="LegR/Knee"]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, -0.4, 0)
+mesh = SubResource("Mesh_shin_sleeve")
+
 [node name="Greave" type="MeshInstance3D" parent="LegR/Knee"]
-transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, -0.42, -0.23)
+transform = Transform3D(1, 0, 0, 0, 0, -1, 0, 1, 0, 0, -0.4, -0.19)
 mesh = SubResource("Mesh_greave")
 
 [node name="Ankle" type="Node3D" parent="LegR/Knee"]
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, -0.85, 0)
 
-[node name="Foot" type="MeshInstance3D" parent="LegR/Knee/Ankle"]
-transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, -0.09, 0.1)
-mesh = SubResource("Mesh_foot")
+[node name="AnkleBall" type="MeshInstance3D" parent="LegR/Knee/Ankle"]
+mesh = SubResource("Mesh_ankle_ball")
 
-[node name="ToeCleat" type="MeshInstance3D" parent="LegR/Knee/Ankle"]
-transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, -0.15, -0.42)
+[node name="Sole" type="MeshInstance3D" parent="LegR/Knee/Ankle"]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, -0.145, 0.05)
+mesh = SubResource("Mesh_sole")
+
+[node name="Toe" type="MeshInstance3D" parent="LegR/Knee/Ankle"]
+transform = Transform3D(1, 0, 0, 0, 0, -1, 0, 1, 0, 0, -0.135, -0.42)
+mesh = SubResource("Mesh_toe")
+
+[node name="Heel" type="MeshInstance3D" parent="LegR/Knee/Ankle"]
+transform = Transform3D(-1, 0, 0, 0, 0, 1, 0, 1, 0, 0, -0.135, 0.525)
+mesh = SubResource("Mesh_heel")
+
+[node name="CleatFL" type="MeshInstance3D" parent="LegR/Knee/Ankle"]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -0.2, -0.21, -0.2)
 mesh = SubResource("Mesh_cleat")
 
-[node name="HeelCleat" type="MeshInstance3D" parent="LegR/Knee/Ankle"]
-transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, -0.15, 0.58)
+[node name="CleatFR" type="MeshInstance3D" parent="LegR/Knee/Ankle"]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0.2, -0.21, -0.2)
+mesh = SubResource("Mesh_cleat")
+
+[node name="CleatB" type="MeshInstance3D" parent="LegR/Knee/Ankle"]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, -0.21, 0.34)
 mesh = SubResource("Mesh_cleat")
 
 ; --- upper body --------------------------------------------------------------
@@ -387,79 +606,79 @@ transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 2.3, 0)
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, -0.04, 0)
 mesh = SubResource("Mesh_waist")
 
-[node name="Hull" type="MeshInstance3D" parent="Turret"]
-transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0.55, 0)
-mesh = SubResource("Mesh_torso")
+[node name="CoreLower" type="MeshInstance3D" parent="Turret"]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0.3, 0)
+mesh = SubResource("Mesh_core_lower")
 
-; Sloped front plate, with the vision slit cut into it. The driver sees out of
-; this and nothing else.
+[node name="CoreUpper" type="MeshInstance3D" parent="Turret"]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0.83, 0)
+mesh = SubResource("Mesh_core_upper")
+
+[node name="Seam" type="MeshInstance3D" parent="Turret"]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0.56, 0)
+mesh = SubResource("Mesh_seam")
+
+; The nose: a wedge point-forward with the vision slit cut across its face. The
+; driver sees out of this and nothing else.
 [node name="Glacis" type="MeshInstance3D" parent="Turret"]
-transform = Transform3D(1, 0, 0, 0, 0.966, 0.259, 0, -0.259, 0.966, 0, 0.72, -0.66)
+transform = Transform3D(1, 0, 0, 0, 0, -1, 0, 1, 0, 0, 0.72, -0.62)
 mesh = SubResource("Mesh_glacis")
 
 [node name="Visor" type="MeshInstance3D" parent="Turret"]
-transform = Transform3D(1, 0, 0, 0, 0.966, 0.259, 0, -0.259, 0.966, 0, 0.82, -0.73)
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0.86, -0.76)
 mesh = SubResource("Mesh_visor")
 
 [node name="Lamp" type="MeshInstance3D" parent="Turret"]
-transform = Transform3D(1, 0, 0, 0, 0, -1, 0, 1, 0, -0.55, 0.36, -0.7)
+transform = Transform3D(1, 0, 0, 0, 0, -1, 0, 1, 0, -0.46, 0.42, -0.66)
 mesh = SubResource("Mesh_lamp")
 
-[node name="RivetTop" type="MeshInstance3D" parent="Turret"]
-transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 1.07, -0.6)
-mesh = SubResource("Mesh_rivet_long")
-
-[node name="RivetBelt" type="MeshInstance3D" parent="Turret"]
-transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0.16, -0.68)
-mesh = SubResource("Mesh_rivet_long")
-
-[node name="RivetSideL" type="MeshInstance3D" parent="Turret"]
-transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -0.78, 0.98, 0)
-mesh = SubResource("Mesh_rivet_side")
-
-[node name="RivetSideR" type="MeshInstance3D" parent="Turret"]
-transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0.78, 0.98, 0)
-mesh = SubResource("Mesh_rivet_side")
-
 [node name="HatchRing" type="MeshInstance3D" parent="Turret"]
-transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 1.08, 0.12)
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 1.09, 0.1)
 mesh = SubResource("Mesh_hatch_ring")
 
 [node name="Hatch" type="MeshInstance3D" parent="Turret"]
-transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 1.14, 0.12)
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 1.13, 0.1)
 mesh = SubResource("Mesh_hatch")
 
 [node name="Aerial" type="MeshInstance3D" parent="Turret"]
-transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -0.66, 1.62, 0.5)
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -0.5, 1.62, 0.42)
 mesh = SubResource("Mesh_aerial")
 
 [node name="Stowage" type="MeshInstance3D" parent="Turret"]
-transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0.4, 0.82)
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0.42, 0.74)
 mesh = SubResource("Mesh_stowage")
 
 [node name="ExhaustL" type="MeshInstance3D" parent="Turret"]
-transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -0.5, 1.2, 0.6)
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -0.42, 1.18, 0.52)
 mesh = SubResource("Mesh_exhaust")
 
-[node name="ExhaustCapL" type="MeshInstance3D" parent="Turret"]
-transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -0.5, 1.56, 0.6)
-mesh = SubResource("Mesh_exhaust_cap")
+[node name="ExhaustRingL" type="MeshInstance3D" parent="Turret"]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -0.42, 1.48, 0.52)
+mesh = SubResource("Mesh_exhaust_ring")
 
 [node name="ExhaustR" type="MeshInstance3D" parent="Turret"]
-transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0.5, 1.2, 0.6)
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0.42, 1.18, 0.52)
 mesh = SubResource("Mesh_exhaust")
 
-[node name="ExhaustCapR" type="MeshInstance3D" parent="Turret"]
-transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0.5, 1.56, 0.6)
-mesh = SubResource("Mesh_exhaust_cap")
+[node name="ExhaustRingR" type="MeshInstance3D" parent="Turret"]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0.42, 1.48, 0.52)
+mesh = SubResource("Mesh_exhaust_ring")
 
-[node name="ShoulderL" type="MeshInstance3D" parent="Turret"]
-transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -0.96, 0.76, -0.05)
-mesh = SubResource("Mesh_shoulder")
+[node name="ShoulderBallL" type="MeshInstance3D" parent="Turret"]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -0.82, 0.72, -0.02)
+mesh = SubResource("Mesh_shoulder_ball")
 
-[node name="ShoulderR" type="MeshInstance3D" parent="Turret"]
-transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0.96, 0.76, -0.05)
-mesh = SubResource("Mesh_shoulder")
+[node name="PauldronL" type="MeshInstance3D" parent="Turret"]
+transform = Transform3D(0, 1, 0, -1, 0, 0, 0, 0, 1, -0.94, 0.76, -0.02)
+mesh = SubResource("Mesh_pauldron")
+
+[node name="ShoulderBallR" type="MeshInstance3D" parent="Turret"]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0.82, 0.72, -0.02)
+mesh = SubResource("Mesh_shoulder_ball")
+
+[node name="PauldronR" type="MeshInstance3D" parent="Turret"]
+transform = Transform3D(0, 1, 0, -1, 0, 0, 0, 0, 1, 0.94, 0.76, -0.02)
+mesh = SubResource("Mesh_pauldron")
 
 ; Both arms hang off this and pitch together, which is what tank.gd elevates.
 [node name="Gun" type="Node3D" parent="Turret"]
@@ -468,56 +687,80 @@ transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0.62, 0)
 ; Right arm: the gun. A short autocannon with a muzzle brake, carried rather
 ; than mounted -- the arm is the mounting.
 [node name="ArmR" type="MeshInstance3D" parent="Turret/Gun"]
-transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0.96, 0.06, -0.34)
+transform = Transform3D(1, 0, 0, 0, 0, -1, 0, 1, 0, 0.94, 0.12, -0.3)
 mesh = SubResource("Mesh_arm")
 
-[node name="ShieldR" type="MeshInstance3D" parent="Turret/Gun"]
-transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0.96, 0.04, -0.76)
-mesh = SubResource("Mesh_shield")
+[node name="ArmSleeveR" type="MeshInstance3D" parent="Turret/Gun"]
+transform = Transform3D(1, 0, 0, 0, 0, -1, 0, 1, 0, 0.94, 0.12, -0.36)
+mesh = SubResource("Mesh_arm_sleeve")
 
 [node name="CannonBody" type="MeshInstance3D" parent="Turret/Gun"]
-transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0.96, 0.02, -1.1)
+transform = Transform3D(1, 0, 0, 0, 0, -1, 0, 1, 0, 0.94, 0.05, -1.06)
 mesh = SubResource("Mesh_cannon_body")
 
 [node name="CannonBarrel" type="MeshInstance3D" parent="Turret/Gun"]
-transform = Transform3D(1, 0, 0, 0, 0, -1, 0, 1, 0, 0.96, 0.02, -2.05)
+transform = Transform3D(1, 0, 0, 0, 0, -1, 0, 1, 0, 0.94, 0.05, -2.15)
 mesh = SubResource("Mesh_cannon_barrel")
 
 [node name="MuzzleBrake" type="MeshInstance3D" parent="Turret/Gun"]
-transform = Transform3D(1, 0, 0, 0, 0, -1, 0, 1, 0, 0.96, 0.02, -2.88)
+transform = Transform3D(1, 0, 0, 0, 0, -1, 0, 1, 0, 0.94, 0.05, -2.98)
 mesh = SubResource("Mesh_brake")
 
-[node name="MainMuzzle" type="Marker3D" parent="Turret/Gun"]
-transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0.96, 0.02, -3.05)
+[node name="BrakeRing" type="MeshInstance3D" parent="Turret/Gun"]
+transform = Transform3D(1, 0, 0, 0, 0, -1, 0, 1, 0, 0.94, 0.05, -2.86)
+mesh = SubResource("Mesh_brake_ring")
 
-; Left arm: the machine gun, with a pan magazine lying flat on top of the
-; receiver the way a Lewis or a DP-27 carries one.
+[node name="MainMuzzle" type="Marker3D" parent="Turret/Gun"]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0.94, 0.05, -3.14)
+
+; Left arm: the machine gun, with a pan magazine lying flat on the receiver the
+; way a Lewis or a DP-27 carries one, and a ringed cooling jacket on the barrel.
 [node name="ArmL" type="MeshInstance3D" parent="Turret/Gun"]
-transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -0.96, 0.06, -0.34)
+transform = Transform3D(1, 0, 0, 0, 0, -1, 0, 1, 0, -0.94, 0.12, -0.3)
 mesh = SubResource("Mesh_arm")
 
+[node name="ArmSleeveL" type="MeshInstance3D" parent="Turret/Gun"]
+transform = Transform3D(1, 0, 0, 0, 0, -1, 0, 1, 0, -0.94, 0.12, -0.36)
+mesh = SubResource("Mesh_arm_sleeve")
+
 [node name="MgBody" type="MeshInstance3D" parent="Turret/Gun"]
-transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -0.96, 0.02, -0.95)
+transform = Transform3D(1, 0, 0, 0, 0, -1, 0, 1, 0, -0.94, 0.05, -0.94)
 mesh = SubResource("Mesh_mg_body")
 
 [node name="Drum" type="MeshInstance3D" parent="Turret/Gun"]
-transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -0.96, 0.23, -0.95)
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -0.94, 0.24, -0.94)
 mesh = SubResource("Mesh_drum")
 
 [node name="MgBarrel" type="MeshInstance3D" parent="Turret/Gun"]
-transform = Transform3D(1, 0, 0, 0, 0, -1, 0, 1, 0, -0.96, 0.02, -1.82)
+transform = Transform3D(1, 0, 0, 0, 0, -1, 0, 1, 0, -0.94, 0.05, -1.8)
 mesh = SubResource("Mesh_mg_barrel")
 
+[node name="JacketRing1" type="MeshInstance3D" parent="Turret/Gun"]
+transform = Transform3D(1, 0, 0, 0, 0, -1, 0, 1, 0, -0.94, 0.05, -1.48)
+mesh = SubResource("Mesh_jacket_ring")
+
+[node name="JacketRing2" type="MeshInstance3D" parent="Turret/Gun"]
+transform = Transform3D(1, 0, 0, 0, 0, -1, 0, 1, 0, -0.94, 0.05, -1.78)
+mesh = SubResource("Mesh_jacket_ring")
+
+[node name="JacketRing3" type="MeshInstance3D" parent="Turret/Gun"]
+transform = Transform3D(1, 0, 0, 0, 0, -1, 0, 1, 0, -0.94, 0.05, -2.08)
+mesh = SubResource("Mesh_jacket_ring")
+
 [node name="CoaxMuzzle" type="Marker3D" parent="Turret/Gun"]
-transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -0.96, 0.02, -2.36)
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -0.94, 0.05, -2.36)
 
-; Rides with the upper body, so the view turns with the guns. Further back and
-; higher than the tank's: the thing it is looking over is twice the height.
-[node name="CameraMount" type="Node3D" parent="Turret"]
-transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 1.4, 4.6)
+; Out of the vision slit. On Gun rather than on Turret for the same reason the
+; tank's is: there is no crosshair aboard, so the arms are the aim, and a view
+; that did not pitch with them would be pointing somewhere else entirely -- and
+; these arms elevate to thirty degrees, twice what the tank's gun manages.
+;
+; Just outside the glacis rather than behind the slit itself. The plate is
+; solid, and a camera behind it would spend the whole match looking at it.
+[node name="CameraMount" type="Node3D" parent="Turret/Gun"]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0.33, -0.85)
 
-[node name="Camera3D" type="Camera3D" parent="Turret/CameraMount"]
-transform = Transform3D(1, 0, 0, 0, 0.984808, 0.173648, 0, -0.173648, 0.984808, 0, 0, 0)
+[node name="Camera3D" type="Camera3D" parent="Turret/Gun/CameraMount"]
 current = false
 
 ; Inside the hull, up in the cockpit where the visor is.
