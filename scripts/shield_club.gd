@@ -30,9 +30,20 @@ extends Equipment
 ## and still see over.
 @export_range(0.2, 1.2, 0.05) var cover_to_eye := 1.0
 
-## What the plate stops. Bullets, as asked -- blast goes round it and a club is
-## not troubled by it either.
-const STOPS := [Lethality.BULLET]
+## What the plate stops.
+##
+## Fragments as well as bullets, which is the same list the tank's armour keeps.
+## A grenade here is not a radius of damage -- it casts nine hundred individual
+## rays and cover genuinely stops them -- so a plate held up in front of one is
+## doing exactly the job a plate is for, and each fragment gets tested on its
+## own. A grenade at your feet is largely eaten; the same grenade behind you is
+## not touched by any of this.
+##
+## Blast still goes round it, and a club is not troubled by it either.
+const STOPS := [Lethality.BULLET, Lethality.FRAGMENT]
+## The shortest gap between two clangs. Without it a single grenade rings the
+## plate once per fragment stopped -- hundreds of times inside one frame.
+const RING_INTERVAL := 0.09
 
 const SWING_SOUND: AudioStream = preload("res://assets/audio/shovel_dig.wav")
 const CLANG: AudioStream = preload("res://assets/audio/hit_head.wav")
@@ -46,6 +57,7 @@ const CLANG: AudioStream = preload("res://assets/audio/hit_head.wav")
 var raised := false
 
 var _cooldown := 0.0
+var _ring_cooldown := 0.0
 var _swing_tween: Tween
 
 
@@ -55,6 +67,7 @@ func _ready() -> void:
 
 func _process(delta: float) -> void:
 	_cooldown = maxf(_cooldown - delta, 0.0)
+	_ring_cooldown = maxf(_ring_cooldown - delta, 0.0)
 
 
 ## The aim key is the shield. Nothing is sighted here -- there is nothing on
@@ -95,6 +108,9 @@ func stops(kind: StringName, from: Vector3, facing: Vector3, above_eye: bool) ->
 ## A clang rather than a wound, so being saved by the shield is something you
 ## hear happen rather than something you infer from not dying.
 func ring() -> void:
+	if _ring_cooldown > 0.0:
+		return
+	_ring_cooldown = RING_INTERVAL
 	swing_sound.stream = CLANG
 	swing_sound.pitch_scale = randf_range(0.7, 0.85)
 	swing_sound.play()

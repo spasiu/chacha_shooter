@@ -32,7 +32,7 @@ cloth_grain.tres::NoiseTexture2D::-1::1785849732::0::1::::<><><>0<>0<><>::
 smoke_puff.png::CompressedTexture2D::18799737287251226::1785767472::1785796459::1::::<><><>0<>0<>517a756664e22e66ec6aaec03498fb42<>res://.godot/imported/smoke_puff.png-f26fffc7abfaa0afa6d479a34c3edd74.ctex::
 wood_grain.tres::NoiseTexture2D::-1::1785852119::0::1::::<><><>0<>0<><>::
 ::res://build/::1785936004
-::res://build/linux/::1785965586
+::res://build/linux/::1785966119
 ::res://build/web/::1785966116
 index.apple-touch-icon.png::CompressedTexture2D::344285027444641909::1785966116::1785796459::1::::<><><>0<>0<>56016b8850fd4fab1d2a598e0f3aff7f<>res://.godot/imported/index.apple-touch-icon.png-21031f526f7942c8019a62913b80e091.ctex::
 index.icon.png::CompressedTexture2D::2829230572938213910::1785966116::1785796459::1::::<><><>0<>0<>4c7be99e0333e1c5f8d1f08dae89d204<>res://.godot/imported/index.icon.png-a9d2f4f7433eeddc29dad75f5e7f8710.ctex::
@@ -123,7 +123,7 @@ player.gd::GDScript::5332626523687789650::1785965998::0::1::::<>CharacterBody3D<
 radio.gd::GDScript::3566137500269261477::1785791024::0::1::::Radio<>Equipment<><>0<>0<><>::
 remote_player.gd::GDScript::4342549140684150153::1785949617::0::1::::RemotePlayer<>AnimatableBody3D<><>0<>0<><>::
 server_root.gd::GDScript::3731694121574431138::1785774226::0::1::::<>Node<><>0<>0<><>::
-shield_club.gd::GDScript::1177744160770507705::1785965561::0::1::::ShieldClub<>Equipment<><>0<>0<><>::
+shield_club.gd::GDScript::1177744160770507705::1785966898::0::1::::ShieldClub<>Equipment<><>0<>0<><>::
 shotgun.gd::GDScript::2898431180542851568::1785756553::0::1::::Shotgun<>Weapon<><>0<>0<><>::
 shovel.gd::GDScript::6657380234905397641::1785949655::0::1::::Shovel<>Equipment<><>0<>0<><>::
 smoke_grenade.gd::GDScript::7893545567600358824::1785774132::0::1::::SmokeGrenade<>Grenade<><>0<>0<><>::
@@ -137,6 +137,6 @@ tnt_charge.gd::GDScript::4297264644350443969::1785966092::0::1::::TNTCharge<>Nod
 voxel_chunk.gd::GDScript::2005511766938258363::1785937288::0::1::::VoxelChunk<>StaticBody3D<><>0<>0<><>::
 voxel_world.gd::GDScript::8218766206010941416::1785965252::0::1::::VoxelWorld<>Node3D<><>0<>0<><>::
 weapon.gd::GDScript::1877676255276685892::1785962906::0::1::::Weapon<>Equipment<><>0<>0<><>::
-::res://tools/::1785966113
+::res://tools/::1785966916
 shoot_guns.gd::GDScript::2049007996461809167::1785956444::0::1::::<>Node3D<><>0<>0<><>::
 shoot_guns.tscn::PackedScene::-1::1785955737::0::1::::<><><>0<>0<><>::res://tools/shoot_guns.gd
