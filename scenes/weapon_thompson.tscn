@@ -5,7 +5,7 @@
 ; Cutts compensator, a straight box magazine rather than a drum, a horizontal
 ; wooden forend in place of the vertical foregrip, and the bolt handle on the
 ; receiver's right flank.
-[gd_scene load_steps=35 format=3]
+[gd_scene load_steps=36 format=3]
 
 [ext_resource type="Script" path="res://scripts/weapon.gd" id="1_weapon"]
 [ext_resource type="Texture2D" path="res://assets/textures/wood_grain.tres" id="90_wood"]
@@ -42,7 +42,7 @@ emission_energy_multiplier = 6.0
 
 [sub_resource type="BoxMesh" id="Mesh_receiver"]
 material = SubResource("Mat_metal")
-size = Vector3(0.055, 0.075, 0.2)
+size = Vector3(0.055, 0.03, 0.2)
 
 [sub_resource type="CylinderMesh" id="Mesh_barrel"]
 material = SubResource("Mat_metal")
@@ -244,6 +244,14 @@ height = 0.0350
 radial_segments = 14
 rings = 1
 
+[sub_resource type="CylinderMesh" id="Mesh_receiver_top"]
+material = SubResource("Mat_metal")
+top_radius = 0.0275
+bottom_radius = 0.0275
+height = 0.2
+radial_segments = 16
+rings = 1
+
 [node name="WeaponThompson" type="Node3D"]
 script = ExtResource("1_weapon")
 move_penalty = 0.05
@@ -254,7 +262,7 @@ damage_beyond = 10.0
 magazine_size = 30
 
 [node name="Receiver" type="MeshInstance3D" parent="."]
-transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0, 0)
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, -0.0225, 0)
 mesh = SubResource("Mesh_receiver")
 
 [node name="Barrel" type="MeshInstance3D" parent="."]
@@ -402,3 +410,6 @@ mesh = SubResource("Grasp_m2")
 transform = Transform3D(1, 0, 0, 0, 0, -1, 0, 1, 0, 0, -0.0040, -0.1125)
 mesh = SubResource("Grasp_m3")
 
+[node name="ReceiverTop" type="MeshInstance3D" parent="."]
+transform = Transform3D(1, 0, 0, 0, 0, 0.818182, 0, -1, 0, 0, 0.015, 0)
+mesh = SubResource("Mesh_receiver_top")

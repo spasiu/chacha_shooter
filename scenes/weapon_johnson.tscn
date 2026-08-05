@@ -6,7 +6,7 @@
 ; of the LEFT side of the receiver rather than hanging underneath, and the
 ; straight stock running in line with the bore, which is why the sights stand
 ; so tall -- the eye sits well above the barrel.
-[gd_scene load_steps=30 format=3]
+[gd_scene load_steps=31 format=3]
 
 [ext_resource type="Script" path="res://scripts/weapon.gd" id="1_weapon"]
 [ext_resource type="Texture2D" path="res://assets/textures/wood_grain.tres" id="90_wood"]
@@ -41,7 +41,7 @@ emission_energy_multiplier = 6.0
 
 [sub_resource type="BoxMesh" id="Mesh_receiver"]
 material = SubResource("Mat_metal")
-size = Vector3(0.05, 0.075, 0.28)
+size = Vector3(0.05, 0.042, 0.28)
 
 [sub_resource type="CylinderMesh" id="Mesh_shroud"]
 material = SubResource("Mat_metal")
@@ -206,6 +206,14 @@ height = 0.0700
 radial_segments = 14
 rings = 1
 
+[sub_resource type="CylinderMesh" id="Mesh_receiver_top"]
+material = SubResource("Mat_metal")
+top_radius = 0.025
+bottom_radius = 0.025
+height = 0.28
+radial_segments = 16
+rings = 1
+
 [node name="WeaponJohnson" type="Node3D"]
 script = ExtResource("1_weapon")
 move_penalty = 0.25
@@ -234,7 +242,7 @@ magazine_size = 20
 reload_time = 3.2
 
 [node name="Receiver" type="MeshInstance3D" parent="."]
-transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0, -0.04)
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, -0.0165, -0.04)
 mesh = SubResource("Mesh_receiver")
 
 [node name="Shroud" type="MeshInstance3D" parent="."]
@@ -361,3 +369,6 @@ mesh = SubResource("Butt_m3")
 transform = Transform3D(0.547154, 0, 0, 0, 0, -1, 0, 1, 0, 0, -0.0180, 0.3650)
 mesh = SubResource("Butt_m4")
 
+[node name="ReceiverTop" type="MeshInstance3D" parent="."]
+transform = Transform3D(1, 0, 0, 0, 0, 0.66, 0, -1, 0, 0, 0.021, -0.04)
+mesh = SubResource("Mesh_receiver_top")

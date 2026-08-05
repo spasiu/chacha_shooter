@@ -449,6 +449,8 @@ func _crush_what_we_hit(driving: float) -> void:
 	for i in get_slide_collision_count():
 		var hit := get_slide_collision(i)
 		var body: Object = hit.get_collider()
+		if body != null and Lethality.friendly(Net.my_team(), body):
+			continue
 		if body == null or body == driver or not body.has_method("take_damage"):
 			continue
 		# Terrain answers take_damage too; only crush things that can die.
@@ -675,6 +677,8 @@ func _fire_coax() -> void:
 		return
 	var target: Object = hit.collider
 	var dealt := Lethality.at_range(from.distance_to(hit.position), coax_bands)
+	if target != null and Lethality.friendly(Net.my_team(), target):
+		return
 	if target != null and target.has_method("take_damage"):
 		var broke: Variant = target.take_damage(
 			dealt, hit.position, -direction, Lethality.BULLET

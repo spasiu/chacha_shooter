@@ -167,6 +167,8 @@ func _dig() -> void:
 			return
 
 	var target: Object = hit["collider"]
+	if target != null and Lethality.friendly(Net.my_team(), target):
+		return
 	if target != null and target.has_method("take_damage"):
 		target.take_damage(swing_damage, hit["position"], -into, Lethality.MELEE)
 	_play(DIG, randf_range(0.9, 1.0))

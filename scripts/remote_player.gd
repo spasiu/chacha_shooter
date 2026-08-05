@@ -98,8 +98,7 @@ var _weapon: Equipment
 var _down := false
 var _riding := false
 var _name := "SOLDIER"
-## The side this body is currently dressed as, so the uniform is only repainted
-## when it actually changes rather than on every roster message.
+## The side last written into the tag, so it is only rebuilt when it changes.
 var _team := ""
 ## Last range written into the tag, so it is only rewritten when it changes.
 var _tag_metres := -1
@@ -113,19 +112,28 @@ func _ready() -> void:
 	set_item(0)
 	# A body usually exists before its side does -- the first packet about a peer
 	# is what creates it, and that can arrive ahead of the roster naming the side
-	# they were put on -- so the uniform is hung on the roster rather than read
-	# once here.
+	# they were put on -- so the tag is hung on the roster rather than read once
+	# here.
 	Net.roster_changed.connect(_refresh_team)
 	_refresh_team()
 
 
-## Dresses this soldier as whatever side the roster says he is on.
+## Puts this soldier's side on his tag. Everybody wears the same green, so the
+## tag is the only thing that says which of them you are looking at -- which is
+## why it is a side rather than a name.
 func _refresh_team() -> void:
 	var side := Net.team_of(peer_id)
 	if side == _team:
 		return
 	_team = side
-	model.set_team_colour(Net.team_colour(side))
+	_tag_metres = -1
+	label.modulate = Net.team_colour(side).lightened(0.5)
+	_refresh_tag()
+
+
+## Which side this soldier is on. See `Lethality.friendly`.
+func team_name() -> String:
+	return Net.team_of(peer_id)
 
 
 func set_player_name(text: String) -> void:
@@ -134,9 +142,14 @@ func set_player_name(text: String) -> void:
 	_refresh_tag()
 
 
-## Name and how far off they are. The range is what turns the marker from "there
-## is somebody" into something you can act on -- whether that is walking over or
-## deciding they are too far to bother shooting at.
+## Which side they are on and how far off they are. Not their name: with every
+## soldier in the same green, the one thing worth reading off a body at speed is
+## whether you should be shooting at it, and a name cannot tell you that. The
+## range is what turns the marker from "there is somebody" into something you
+## can act on -- walking over, or deciding they are too far to bother with.
+##
+## Names are not lost, they have moved: the kill feed and the scoreboard both
+## still use them, which is where a name is actually worth reading.
 ##
 ## Rebuilt only when the rounded distance actually changes, because setting the
 ## text on a Label3D remakes its mesh, and doing that every frame for every
@@ -145,15 +158,16 @@ func set_player_name(text: String) -> void:
 func _refresh_tag() -> void:
 	if label == null:
 		return
+	var side := _team if not _team.is_empty() else Net.team_of(peer_id)
 	var camera := get_viewport().get_camera_3d()
 	if camera == null:
-		label.text = _name
+		label.text = "%s SOLDIER" % side.to_upper()
 		return
 	var metres := roundi(camera.global_position.distance_to(global_position))
 	if metres == _tag_metres:
 		return
 	_tag_metres = metres
-	label.text = "%s  %dm" % [_name, metres]
+	label.text = "%s SOLDIER  %dm" % [side.to_upper(), metres]
 
 
 ## Puts a different weapon in its hands. Held as the real weapon scene rather

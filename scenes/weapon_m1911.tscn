@@ -6,7 +6,7 @@
 ; The slide is the node named BoltHandle: the base magazine reload racks it
 ; back and forward at the end, which is exactly what loading a pistol looks
 ; like. The magazine lives inside the grip and drops out the bottom of it.
-[gd_scene load_steps=25 format=3]
+[gd_scene load_steps=26 format=3]
 
 [ext_resource type="Script" path="res://scripts/weapon.gd" id="1_weapon"]
 [ext_resource type="Texture2D" path="res://assets/textures/wood_grain.tres" id="90_wood"]
@@ -41,7 +41,7 @@ emission_energy_multiplier = 6.0
 
 [sub_resource type="BoxMesh" id="Mesh_slide"]
 material = SubResource("Mat_metal")
-size = Vector3(0.028, 0.032, 0.2)
+size = Vector3(0.028, 0.0176, 0.2)
 
 [sub_resource type="BoxMesh" id="Mesh_frame"]
 material = SubResource("Mat_metal")
@@ -149,6 +149,14 @@ height = 0.03
 radial_segments = 10
 rings = 1
 
+[sub_resource type="CylinderMesh" id="Mesh_bolthandle_top"]
+material = SubResource("Mat_metal")
+top_radius = 0.014
+bottom_radius = 0.014
+height = 0.2
+radial_segments = 16
+rings = 1
+
 [node name="WeaponM1911" type="Node3D"]
 script = ExtResource("1_weapon")
 eye_relief = 0.55
@@ -177,7 +185,7 @@ magazine_size = 7
 reload_time = 2.0
 
 [node name="BoltHandle" type="MeshInstance3D" parent="."]
-transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0.022, -0.055)
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0.0148, -0.055)
 mesh = SubResource("Mesh_slide")
 
 [node name="Frame" type="MeshInstance3D" parent="."]
@@ -286,3 +294,7 @@ mesh = SubResource("Mesh_tang")
 [node name="Bore" type="MeshInstance3D" parent="."]
 transform = Transform3D(1, 0, 0, 0, 0, -1, 0, 1, 0, 0, 0.022, -0.155)
 mesh = SubResource("Mesh_bore")
+
+[node name="BoltHandleTop" type="MeshInstance3D" parent="."]
+transform = Transform3D(1, 0, 0, 0, 0, 0.514286, 0, -1, 0, 0, 0.0308, -0.055)
+mesh = SubResource("Mesh_bolthandle_top")

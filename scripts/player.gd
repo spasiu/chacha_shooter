@@ -168,9 +168,6 @@ var _rest_fov := 75.0
 var health := 0.0
 var _dead := false
 var _spawn_transform := Transform3D.IDENTITY
-## The side our own body is dressed as, so it is repainted only when the side
-## changes rather than on every roster message.
-var _team := ""
 var _death_tween: Tween
 ## Holds the respawn loadout screen while it is up; null the rest of the time.
 var _select_layer: CanvasLayer
@@ -232,11 +229,6 @@ func _ready() -> void:
 	_set_shadows(viewmodel, GeometryInstance3D.SHADOW_CASTING_SETTING_OFF)
 	_equip(0)
 	_apply_view()
-	# Our own uniform matters over the shoulder and in our shadow, and the side
-	# it shows is only settled once the server has put us on one.
-	Net.roster_changed.connect(_refresh_team)
-	_refresh_team()
-
 	# Hand ourselves to the network last, once everything above is settled: the
 	# first thing it does is ask where we are and what we are holding.
 	Net.attach_local(self)
@@ -248,13 +240,11 @@ func _ready() -> void:
 		Net.report_spawn(global_position)
 
 
-## Dresses our own soldier as the side the roster has us on.
-func _refresh_team() -> void:
-	var side := Net.my_team()
-	if side == _team:
-		return
-	_team = side
-	body_model.set_team_colour(Net.team_colour(side))
+## Which side this soldier is on, for anything deciding whether a shot that
+## landed on him should have counted. Everything that can be hurt and belongs to
+## a side answers this; see `Lethality.friendly`.
+func team_name() -> String:
+	return Net.my_team()
 
 
 func _unhandled_input(event: InputEvent) -> void:

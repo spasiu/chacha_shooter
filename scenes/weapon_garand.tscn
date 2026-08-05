@@ -14,7 +14,7 @@
 ; Its tube is drawn with the caps off and culling disabled, so at full zoom you
 ; are genuinely looking down the inside of it. Note these bases put local +Y
 ; toward the shooter, so on any tapered part `top_radius` is the rear rim.
-[gd_scene load_steps=52 format=3]
+[gd_scene load_steps=53 format=3]
 
 [ext_resource type="Script" path="res://scripts/garand.gd" id="1_garand"]
 [ext_resource type="Texture2D" path="res://assets/textures/wood_grain.tres" id="90_wood"]
@@ -76,7 +76,7 @@ emission_energy_multiplier = 6.0
 
 [sub_resource type="BoxMesh" id="Mesh_receiver"]
 material = SubResource("Mat_metal")
-size = Vector3(0.048, 0.062, 0.25)
+size = Vector3(0.048, 0.0341, 0.25)
 
 [sub_resource type="CylinderMesh" id="Mesh_barrel"]
 material = SubResource("Mat_metal")
@@ -380,6 +380,14 @@ height = 0.0800
 radial_segments = 14
 rings = 1
 
+[sub_resource type="CylinderMesh" id="Mesh_receiver_top"]
+material = SubResource("Mat_metal")
+top_radius = 0.024
+bottom_radius = 0.024
+height = 0.25
+radial_segments = 16
+rings = 1
+
 [node name="WeaponGarand" type="Node3D"]
 script = ExtResource("1_garand")
 eye_relief = 0.08
@@ -411,7 +419,7 @@ magazine_size = 8
 reload_time = 2.4
 
 [node name="Receiver" type="MeshInstance3D" parent="."]
-transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0.006, -0.05)
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, -0.00795, -0.05)
 mesh = SubResource("Mesh_receiver")
 
 [node name="Barrel" type="MeshInstance3D" parent="."]
@@ -623,3 +631,6 @@ mesh = SubResource("Upper_m2")
 transform = Transform3D(1.61282, 0, 0, 0, 0, -1, 0, 1, 0, 0, 0.0300, -0.2200)
 mesh = SubResource("Upper_m3")
 
+[node name="ReceiverTop" type="MeshInstance3D" parent="."]
+transform = Transform3D(1, 0, 0, 0, 0, 0.58125, 0, -1, 0, 0, 0.02305, -0.05)
+mesh = SubResource("Mesh_receiver_top")

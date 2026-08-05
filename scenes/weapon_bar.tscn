@@ -5,7 +5,7 @@
 ; Heavy squad automatic: long barrel, twenty-round box under the receiver and a
 ; bipod at the muzzle. Uses the base magazine reload, so the box hangs off a
 ; node named Magazine and the charging handle off one named BoltHandle.
-[gd_scene load_steps=33 format=3]
+[gd_scene load_steps=34 format=3]
 
 [ext_resource type="Script" path="res://scripts/weapon.gd" id="1_weapon"]
 [ext_resource type="Texture2D" path="res://assets/textures/wood_grain.tres" id="90_wood"]
@@ -40,7 +40,7 @@ emission_energy_multiplier = 6.0
 
 [sub_resource type="BoxMesh" id="Mesh_receiver"]
 material = SubResource("Mat_metal")
-size = Vector3(0.055, 0.09, 0.3)
+size = Vector3(0.055, 0.0504, 0.3)
 
 [sub_resource type="CylinderMesh" id="Mesh_barrel"]
 material = SubResource("Mat_metal")
@@ -225,6 +225,14 @@ height = 0.0600
 radial_segments = 14
 rings = 1
 
+[sub_resource type="CylinderMesh" id="Mesh_receiver_top"]
+material = SubResource("Mat_metal")
+top_radius = 0.0275
+bottom_radius = 0.0275
+height = 0.3
+radial_segments = 16
+rings = 1
+
 [node name="WeaponBAR" type="Node3D"]
 script = ExtResource("1_weapon")
 move_penalty = 0.2
@@ -253,7 +261,7 @@ magazine_size = 20
 reload_time = 3.0
 
 [node name="Receiver" type="MeshInstance3D" parent="."]
-transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0, -0.05)
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, -0.0198, -0.05)
 mesh = SubResource("Mesh_receiver")
 
 [node name="Barrel" type="MeshInstance3D" parent="."]
@@ -390,3 +398,6 @@ mesh = SubResource("Grasp_m2")
 transform = Transform3D(0.847701, 0, 0, 0, 0, -1, 0, 1, 0, 0, -0.0120, -0.2100)
 mesh = SubResource("Grasp_m3")
 
+[node name="ReceiverTop" type="MeshInstance3D" parent="."]
+transform = Transform3D(1, 0, 0, 0, 0, 0.72, 0, -1, 0, 0, 0.0252, -0.05)
+mesh = SubResource("Mesh_receiver_top")

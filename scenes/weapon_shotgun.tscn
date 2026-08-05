@@ -7,7 +7,7 @@
 ; ribbed "corncob" forend that slides on the magazine tube. The only sight is a
 ; bead at the muzzle -- RearSight is a bare marker on the receiver's top line,
 ; so the aim solve still has two points to put on the camera's centre line.
-[gd_scene load_steps=30 format=3]
+[gd_scene load_steps=31 format=3]
 
 [ext_resource type="Script" path="res://scripts/shotgun.gd" id="1_shotgun"]
 [ext_resource type="Texture2D" path="res://assets/textures/wood_grain.tres" id="90_wood"]
@@ -58,7 +58,7 @@ emission_energy_multiplier = 6.0
 
 [sub_resource type="BoxMesh" id="Mesh_receiver"]
 material = SubResource("Mat_receiver")
-size = Vector3(0.05, 0.082, 0.24)
+size = Vector3(0.05, 0.04592, 0.24)
 
 [sub_resource type="BoxMesh" id="Mesh_ejection_port"]
 material = SubResource("Mat_metal")
@@ -217,6 +217,14 @@ height = 0.1042
 radial_segments = 14
 rings = 1
 
+[sub_resource type="CylinderMesh" id="Mesh_receiver_top"]
+material = SubResource("Mat_receiver")
+top_radius = 0.025
+bottom_radius = 0.025
+height = 0.24
+radial_segments = 16
+rings = 1
+
 [node name="WeaponShotgun" type="Node3D"]
 script = ExtResource("1_shotgun")
 rounds_per_minute = 75.0
@@ -246,7 +254,7 @@ magazine_size = 6
 reload_time = 3.0
 
 [node name="Receiver" type="MeshInstance3D" parent="."]
-transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0, -0.05)
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, -0.01804, -0.05)
 mesh = SubResource("Mesh_receiver")
 
 [node name="EjectionPort" type="MeshInstance3D" parent="."]
@@ -386,3 +394,6 @@ mesh = SubResource("Stock_m3")
 transform = Transform3D(0.422767, 0, 0, 0, -0.0575965, -0.99834, 0, 0.99834, -0.0575965, 0, -0.0450, 0.3820)
 mesh = SubResource("Stock_m4")
 
+[node name="ReceiverTop" type="MeshInstance3D" parent="."]
+transform = Transform3D(1, 0, 0, 0, 0, 0.7216, 0, -1, 0, 0, 0.02296, -0.05)
+mesh = SubResource("Mesh_receiver_top")

@@ -34,6 +34,11 @@ const EXPLOSION: AudioStream = preload("res://assets/audio/explosion.wav")
 static func hurt(tree: SceneTree, at: Vector3, yards: Array, damage: Array) -> void:
 	var reach := float(yards[yards.size() - 1]) * Lethality.YARD
 	for casualty: Array in Lethality.casualties_near(tree, at, reach, TARGET_HEIGHT):
+		# Anything that goes off here belongs to this client's soldier: a remote
+		# player's grenade is an inert copy over here and does its damage on the
+		# machine that threw it. So the side to spare is our own.
+		if Lethality.friendly(Net.my_team(), casualty[0]):
+			continue
 		var dealt := Lethality.banded(casualty[2], yards, damage)
 		if dealt > 0.0:
 			casualty[0].take_damage(

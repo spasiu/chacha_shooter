@@ -442,6 +442,13 @@ func _fire_pellet(camera: Camera3D, origin: Vector3, spread: float) -> void:
 		_spawn_hole(hit.position, hit.normal)
 		return
 
+	# A round that found one of our own stops there and does nothing. The shot
+	# is still spent and the man is still in the way -- what it does not do is
+	# hurt him. Decided on the firing client, which is the only one that knows
+	# where the round actually went.
+	if Lethality.friendly(Net.my_team(), target):
+		return
+
 	# Lethality is a function of how far the round actually travelled, and is
 	# quoted per shot rather than per projectile: buckshot splits its band
 	# across the pattern, so how much of the shot lands is the spread's job

@@ -102,6 +102,8 @@ func _spray_fragments() -> void:
 		if not is_instance_valid(collider):
 			continue
 		var entry: Array = casualties[collider]
+		if Lethality.friendly(Net.my_team(), collider):
+			continue
 		collider.take_damage(entry[0], entry[1], -entry[2], Lethality.FRAGMENT)
 
 

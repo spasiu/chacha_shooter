@@ -14,10 +14,6 @@ signal died
 @export var head_height := 1.32
 ## Seconds before it stands back up. Zero leaves the body down for good.
 @export var respawn_delay := 6.0
-## Which side's uniform it stands in. "auto" takes the side of whichever base it
-## is nearer, which is what a figure standing on one half of the map is: someone
-## who started there. The map decides, so moving the mannequin re-dresses it.
-@export_enum("auto", "blue", "red") var team := "auto"
 
 const HIT_FLESH: AudioStream = preload("res://assets/audio/hit_flesh.wav")
 const HIT_HEAD: AudioStream = preload("res://assets/audio/hit_head.wav")
@@ -37,24 +33,6 @@ func _ready() -> void:
 	add_to_group(Lethality.DAMAGEABLE)
 	health = max_health
 	health_changed.emit(health, max_health)
-	model.set_team_colour(Net.team_colour(_side()))
-
-
-## The side it belongs to. Worked out from where it is standing unless the scene
-## says outright, and blue when there is no map to ask -- the same side everyone
-## is on when nobody is keeping teams.
-func _side() -> String:
-	if team != "auto":
-		return team
-	var world: Node = get_tree().get_first_node_in_group("voxel_world")
-	if world == null:
-		return Net.BLUE
-	var red: Vector2 = world.team_spawn(Net.RED)
-	var blue: Vector2 = world.team_spawn(Net.BLUE)
-	if red == Vector2.ZERO or blue == Vector2.ZERO:
-		return Net.BLUE
-	var here := Vector2(global_position.x, global_position.z)
-	return Net.RED if here.distance_to(red) < here.distance_to(blue) else Net.BLUE
 
 
 func _process(delta: float) -> void:

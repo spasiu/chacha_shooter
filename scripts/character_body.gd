@@ -9,44 +9,6 @@ extends Node3D
 ## supplies the weapon (the player hands over its own shared instance).
 @export var weapon_scene: PackedScene
 
-## The plates the side's colour goes on: the armour, and only the armour.
-##
-## The bodysuit under it, the webbing over it, the boots and the visor are left
-## alone. That is what keeps a coloured trooper looking like a trooper: the dark
-## suit showing at every joint is the thing that reads as armour, and dyeing it
-## as well would turn the whole figure into one flat swatch.
-const TEAM_PARTS: Array[NodePath] = [
-	^"Spine/Torso",
-	^"Spine/Sternum",
-	^"Spine/BandLower",
-	^"Spine/BandMiddle",
-	^"Spine/BandUpper",
-	^"Spine/Hips",
-	^"Spine/Collar",
-	^"Spine/ShoulderLeft",
-	^"Spine/ShoulderRight",
-	^"Spine/Head",
-	^"Spine/Crest",
-	^"Spine/Pack",
-	^"LeftLeg/ThighPlate",
-	^"LeftLeg/Knee/KneePad",
-	^"LeftLeg/Knee/Greave",
-	^"LeftLeg/Knee/BootShaft",
-	^"RightLeg/ThighPlate",
-	^"RightLeg/Knee/KneePad",
-	^"RightLeg/Knee/Greave",
-	^"RightLeg/Knee/BootShaft",
-	^"Spine/Arms/RightUpper",
-	^"Spine/Arms/RightFore",
-	^"Spine/Arms/LeftUpper",
-	^"Spine/Arms/LeftFore",
-]
-
-## How far each plate travels toward its side's colour. Short of all the way on
-## purpose: what is left of the base colour underneath is what keeps a pauldron
-## reading darker than the chest instead of the whole suit going flat.
-const TEAM_TINT := 0.72
-
 @export_group("Crouch")
 ## How far the pelvis drops at full crouch. The legs fold to match so the feet
 ## stay planted; anything past twice the leg-segment length is unreachable.
@@ -223,33 +185,6 @@ func _collapse_angle(key: String) -> float:
 	if key.ends_with("_knee"):
 		return deg_to_rad(-62.0) if key.begins_with("left") else deg_to_rad(-48.0)
 	return deg_to_rad(28.0) if key.begins_with("left") else deg_to_rad(18.0)
-
-
-## Puts the soldier in his side's uniform, so which half of the map somebody
-## belongs to is a thing you can see across a valley rather than something you
-## find out by shooting them.
-##
-## Painted as per-instance overrides rather than by setting the albedo on the
-## scene's own materials: those are one set of resources shared by every soldier
-## in the game, so reddening one there reddens everybody. The base colour is
-## read off the mesh rather than off the current override, which leaves this
-## safe to call again when somebody changes sides.
-func set_team_colour(colour: Color) -> void:
-	# One tinted copy per material, not per mesh: the whole uniform comes off
-	# the same two, so thirteen parts cost two materials.
-	var painted := {}
-	for path: NodePath in TEAM_PARTS:
-		var part := get_node_or_null(path) as MeshInstance3D
-		if part == null or part.mesh == null:
-			continue
-		var base := part.mesh.surface_get_material(0) as StandardMaterial3D
-		if base == null:
-			continue
-		if not painted.has(base):
-			var tinted := base.duplicate() as StandardMaterial3D
-			tinted.albedo_color = base.albedo_color.lerp(colour, TEAM_TINT)
-			painted[base] = tinted
-		part.material_override = painted[base]
 
 
 ## First person hides the body but keeps its shadow, so the player sees their

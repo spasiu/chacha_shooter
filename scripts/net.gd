@@ -937,6 +937,12 @@ func _begin_round(field: String) -> void:
 func _hit(amount: float, at: Vector3, from: Vector3, kind: StringName) -> void:
 	if _local == null or not is_instance_valid(_local):
 		return
+	# The shooter's client already refuses to fire on its own side. This is the
+	# backstop: a client that is out of date about who is on which side -- or one
+	# that has been tampered with -- does not get to hurt a man on ours.
+	var shooter := multiplayer.get_remote_sender_id()
+	if on_my_field(shooter) and team_of(shooter) == my_team():
+		return
 	_attacker = multiplayer.get_remote_sender_id()
 	_attacked_at = Time.get_ticks_msec() / 1000.0
 	_local.take_damage(amount, at, from, kind)

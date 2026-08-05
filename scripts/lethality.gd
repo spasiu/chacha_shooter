@@ -63,6 +63,22 @@ static func band_name(metres: float) -> String:
 	return "beyond"
 
 
+## Whether a hit should be thrown away because it landed on your own side.
+##
+## `side` is the attacker's, and everything that can be shot answers `team_name`
+## if it belongs to one. Anything that does not -- terrain, a parked tank, the
+## mannequin on the range -- has no side and is therefore never friendly, which
+## is the right answer: those are things, and things are fair game.
+##
+## Asked at the moment damage would be dealt rather than when a shot is fired,
+## because a grenade does not know whose leg it is going to roll under.
+static func friendly(side: String, victim: Object) -> bool:
+	if side.is_empty() or victim == null or not victim.has_method("team_name"):
+		return false
+	var theirs: String = victim.team_name()
+	return not theirs.is_empty() and theirs == side
+
+
 ## Bodies within `radius` of a burst, each paired with the nearest point on it
 ## and how far away that point was. Measuring to a standing body rather than to
 ## its origin, which sits down at the feet, is what makes a burst at chest

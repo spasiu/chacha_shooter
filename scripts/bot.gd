@@ -126,9 +126,10 @@ func _ready() -> void:
 	# Staggered, so a section mustered on one frame does not all sweep the field
 	# for a target on the same one for the rest of the match.
 	_retarget_due = randf() * RETARGET_INTERVAL
-	model.set_team_colour(Net.team_colour(team))
-	label.text = "SOLDIER"
-	label.modulate = Net.team_colour(team).lightened(0.45)
+	# Every soldier wears the same green, so the tag is the only thing saying
+	# which of them this is.
+	label.text = "%s SOLDIER" % team.to_upper()
+	label.modulate = Net.team_colour(team).lightened(0.5)
 
 
 func _physics_process(delta: float) -> void:
@@ -409,6 +410,11 @@ func _shoot(delta: float) -> void:
 						0.0, 1.0)
 	chance *= 1.0 - accuracy_vs_moving * moving
 	if randf() > chance:
+		return
+	# It picks its targets off the other side already, but the check belongs at
+	# the moment damage is dealt rather than at the moment one is chosen: a bot
+	# holding a target across a side switch would otherwise shoot a friend.
+	if Lethality.friendly(team, target):
 		return
 	var hurt := Lethality.at_range(away, damage_bands)
 	target.take_damage(
