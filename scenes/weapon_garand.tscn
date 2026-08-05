@@ -108,18 +108,29 @@ rings = 1
 material = SubResource("Mat_metal")
 size = Vector3(0.024, 0.014, 0.03)
 
-[sub_resource type="BoxMesh" id="Mesh_front_blade"]
+[sub_resource type="CylinderMesh" id="Mesh_front_blade"]
 material = SubResource("Mat_metal")
-size = Vector3(0.006, 0.014, 0.007)
+top_radius = 0.0030
+bottom_radius = 0.0030
+height = 0.0140
+radial_segments = 14
+rings = 1
 
-[sub_resource type="BoxMesh" id="Mesh_front_wing"]
+[sub_resource type="CylinderMesh" id="Mesh_front_wing"]
 material = SubResource("Mat_metal")
-size = Vector3(0.005, 0.018, 0.009)
+top_radius = 0.0025
+bottom_radius = 0.0025
+height = 0.0180
+radial_segments = 14
+rings = 1
 
-; Band clamping the front of the stock to the barrel, where the wood stops.
-[sub_resource type="BoxMesh" id="Mesh_band"]
+[sub_resource type="CylinderMesh" id="Mesh_band"]
 material = SubResource("Mat_metal")
-size = Vector3(0.054, 0.052, 0.022)
+top_radius = 0.0260
+bottom_radius = 0.0260
+height = 0.0220
+radial_segments = 14
+rings = 1
 
 [sub_resource type="TorusMesh" id="Mesh_guard"]
 material = SubResource("Mat_metal")
@@ -128,37 +139,64 @@ outer_radius = 0.013
 rings = 16
 ring_segments = 6
 
-[sub_resource type="BoxMesh" id="Mesh_bolt"]
+[sub_resource type="CapsuleMesh" id="Mesh_bolt"]
 material = SubResource("Mat_metal")
-size = Vector3(0.014, 0.014, 0.05)
+radius = 0.0070
+height = 0.0500
+radial_segments = 14
+rings = 4
 
 [sub_resource type="BoxMesh" id="Mesh_clip"]
 material = SubResource("Mat_metal")
 size = Vector3(0.03, 0.045, 0.05)
 
-[sub_resource type="BoxMesh" id="Mesh_buttplate"]
+[sub_resource type="CylinderMesh" id="Mesh_buttplate"]
 material = SubResource("Mat_metal")
-size = Vector3(0.05, 0.11, 0.012)
+top_radius = 0.0250
+bottom_radius = 0.0250
+height = 0.0120
+radial_segments = 14
+rings = 1
 
-[sub_resource type="BoxMesh" id="Mesh_butt"]
+[sub_resource type="CylinderMesh" id="Mesh_butt"]
 material = SubResource("Mat_wood")
-size = Vector3(0.048, 0.108, 0.17)
+top_radius = 0.0226
+bottom_radius = 0.0240
+height = 0.1700
+radial_segments = 14
+rings = 1
 
-[sub_resource type="BoxMesh" id="Mesh_comb"]
+[sub_resource type="CylinderMesh" id="Mesh_comb"]
 material = SubResource("Mat_wood")
-size = Vector3(0.044, 0.076, 0.2)
+top_radius = 0.0213
+bottom_radius = 0.0220
+height = 0.2000
+radial_segments = 14
+rings = 1
 
-[sub_resource type="BoxMesh" id="Mesh_grip"]
+[sub_resource type="CylinderMesh" id="Mesh_grip"]
 material = SubResource("Mat_wood")
-size = Vector3(0.04, 0.075, 0.055)
+top_radius = 0.0200
+bottom_radius = 0.0200
+height = 0.0750
+radial_segments = 14
+rings = 1
 
-[sub_resource type="BoxMesh" id="Mesh_forearm"]
+[sub_resource type="CylinderMesh" id="Mesh_forearm"]
 material = SubResource("Mat_wood")
-size = Vector3(0.05, 0.062, 0.34)
+top_radius = 0.0230
+bottom_radius = 0.0250
+height = 0.3400
+radial_segments = 14
+rings = 1
 
-[sub_resource type="BoxMesh" id="Mesh_handguard"]
+[sub_resource type="CylinderMesh" id="Mesh_handguard"]
 material = SubResource("Mat_wood")
-size = Vector3(0.046, 0.03, 0.3)
+top_radius = 0.0141
+bottom_radius = 0.0150
+height = 0.3000
+radial_segments = 14
+rings = 1
 
 [sub_resource type="BoxMesh" id="Mesh_sling_front"]
 material = SubResource("Mat_leather")
@@ -249,9 +287,12 @@ cap_top = false
 albedo_color = Color(0.022, 0.022, 0.024, 1)
 roughness = 1.0
 
-[sub_resource type="BoxMesh" id="Mesh_trigger"]
+[sub_resource type="CapsuleMesh" id="Mesh_trigger"]
 material = SubResource("Mat_metal")
-size = Vector3(0.007, 0.026, 0.009)
+radius = 0.0035
+height = 0.0260
+radial_segments = 14
+rings = 4
 
 [sub_resource type="BoxMesh" id="Mesh_port"]
 material = SubResource("Mat_shadow")
@@ -328,19 +369,19 @@ transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0.03, -0.665)
 mesh = SubResource("Mesh_front_base")
 
 [node name="FrontSightBlade" type="MeshInstance3D" parent="."]
-transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0.039, -0.665)
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1.16667, 0, 0.039, -0.665)
 mesh = SubResource("Mesh_front_blade")
 
 [node name="FrontSightWingL" type="MeshInstance3D" parent="."]
-transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -0.013, 0.037, -0.665)
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1.8, -0.013, 0.037, -0.665)
 mesh = SubResource("Mesh_front_wing")
 
 [node name="FrontSightWingR" type="MeshInstance3D" parent="."]
-transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0.013, 0.037, -0.665)
+transform = Transform3D(1,  0,  0,  0,  1,  0,  0,  0,  1.8, 0.013,  0.037,  -0.665)
 mesh = SubResource("Mesh_front_wing")
 
 [node name="StockBand" type="MeshInstance3D" parent="."]
-transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0.004, -0.5)
+transform = Transform3D(1.03846, 0, 0, 0, 0, 1, 0, -1, 0, 0, 0.004, -0.5)
 mesh = SubResource("Mesh_band")
 
 [node name="TriggerGuard" type="MeshInstance3D" parent="."]
@@ -349,7 +390,7 @@ mesh = SubResource("Mesh_guard")
 
 ; Op rod handle on the right flank. The base class animates this as the bolt.
 [node name="BoltHandle" type="MeshInstance3D" parent="."]
-transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0.032, 0.012, -0.02)
+transform = Transform3D(1, 0, 0, 0, 0, 1, 0, -1, 0, 0.032, 0.012, -0.02)
 mesh = SubResource("Mesh_bolt")
 
 ; En-bloc clip, seated down inside the receiver with only its top edge showing.
@@ -361,27 +402,27 @@ mesh = SubResource("Mesh_clip")
 ; One stock from butt to band, then an upper handguard over the barrel. The
 ; wood is most of this rifle's read at a glance.
 [node name="Butt" type="MeshInstance3D" parent="."]
-transform = Transform3D(1, 0, 0, 0, 0.994522, -0.104528, 0, 0.104528, 0.994522, 0, -0.042, 0.265)
+transform = Transform3D(1, 0, 0, 0, 0.104528, 2.23767, 0, -0.994522, 0.235188, 0, -0.042, 0.265)
 mesh = SubResource("Mesh_butt")
 
 [node name="Comb" type="MeshInstance3D" parent="."]
-transform = Transform3D(1, 0, 0, 0, 0.994522, -0.104528, 0, 0.104528, 0.994522, 0, -0.03, 0.11)
+transform = Transform3D(1, 0, 0, 0, 0.104528, 1.71781, 0, -0.994522, 0.180548, 0, -0.03, 0.11)
 mesh = SubResource("Mesh_comb")
 
 [node name="PistolGrip" type="MeshInstance3D" parent="."]
-transform = Transform3D(1, 0, 0, 0, 0.965926, 0.258819, 0, -0.20791, 0.97815, 0, -0.078, 0.055)
+transform = Transform3D(1, 0, 0, 0, 0.965926, 0.355876, 0, -0.20791, 1.34496, 0, -0.078, 0.055)
 mesh = SubResource("Mesh_grip")
 
 [node name="Forearm" type="MeshInstance3D" parent="."]
-transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, -0.012, -0.33)
+transform = Transform3D(1, 0, 0, 0, 0, 1.24, 0, -1, 0, 0, -0.012, -0.33)
 mesh = SubResource("Mesh_forearm")
 
 [node name="Handguard" type="MeshInstance3D" parent="."]
-transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0.03, -0.33)
+transform = Transform3D(1.53333, 0, 0, 0, 0, 1, 0, -1, 0, 0, 0.03, -0.33)
 mesh = SubResource("Mesh_handguard")
 
 [node name="Buttplate" type="MeshInstance3D" parent="."]
-transform = Transform3D(1, 0, 0, 0, 0.994522, -0.104528, 0, 0.104528, 0.994522, 0, -0.042, 0.352)
+transform = Transform3D(1, 0, 0, 0, 0.104528, 2.18795, 0, -0.994522, 0.229962, 0, -0.042, 0.352)
 mesh = SubResource("Mesh_buttplate")
 
 ; Leather sling, band to butt, sagging in the middle.
@@ -471,7 +512,7 @@ omni_range = 9.0
 [node name="ReloadSound" type="AudioStreamPlayer" parent="."]
 
 [node name="Trigger" type="MeshInstance3D" parent="."]
-transform = Transform3D(1, 0, 0, 0, 0.98481, 0.17365, 0, -0.17365, 0.98481, 0, -0.032, 0.009)
+transform = Transform3D(1, 0, 0, 0, 0.98481, 0.223264, 0, -0.17365, 1.26618, 0, -0.032, 0.009)
 mesh = SubResource("Mesh_trigger")
 
 [node name="EjectionPort" type="MeshInstance3D" parent="."]

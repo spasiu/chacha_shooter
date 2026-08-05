@@ -55,9 +55,13 @@ height = 0.016
 radial_segments = 12
 rings = 1
 
-[sub_resource type="BoxMesh" id="Mesh_grip"]
+[sub_resource type="CylinderMesh" id="Mesh_grip"]
 material = SubResource("Mat_grip")
-size = Vector3(0.032, 0.088, 0.042)
+top_radius = 0.0160
+bottom_radius = 0.0160
+height = 0.0880
+radial_segments = 14
+rings = 1
 
 [sub_resource type="BoxMesh" id="Mesh_mag"]
 material = SubResource("Mat_metal")
@@ -70,28 +74,37 @@ outer_radius = 0.011
 rings = 16
 ring_segments = 6
 
-[sub_resource type="BoxMesh" id="Mesh_hammer"]
+[sub_resource type="CapsuleMesh" id="Mesh_hammer"]
 material = SubResource("Mat_metal")
-size = Vector3(0.008, 0.022, 0.012)
+radius = 0.0040
+height = 0.0220
+radial_segments = 14
+rings = 4
 
 [sub_resource type="BoxMesh" id="Mesh_rear_base"]
 material = SubResource("Mat_metal")
 size = Vector3(0.024, 0.008, 0.008)
 
-[sub_resource type="BoxMesh" id="Mesh_rear_post"]
+[sub_resource type="CylinderMesh" id="Mesh_rear_post"]
 material = SubResource("Mat_metal")
-size = Vector3(0.006, 0.012, 0.006)
+top_radius = 0.0030
+bottom_radius = 0.0030
+height = 0.0120
+radial_segments = 14
+rings = 1
 
-; Front post is deliberately oversized and pale so it reads against a dark
-; target; a scale-accurate blade is only a few pixels wide.
 [sub_resource type="StandardMaterial3D" id="Mat_front_post"]
 albedo_color = Color(0.52, 0.53, 0.56, 1)
 metallic = 0.35
 roughness = 0.55
 
-[sub_resource type="BoxMesh" id="Mesh_front_blade"]
+[sub_resource type="CylinderMesh" id="Mesh_front_blade"]
 material = SubResource("Mat_front_post")
-size = Vector3(0.006, 0.014, 0.006)
+top_radius = 0.0030
+bottom_radius = 0.0030
+height = 0.0140
+radial_segments = 14
+rings = 1
 
 [sub_resource type="CylinderMesh" id="Mesh_flash"]
 material = SubResource("Mat_flash")
@@ -117,11 +130,13 @@ size = Vector3(0.0295, 0.026, 0.0035)
 material = SubResource("Mat_shadow")
 size = Vector3(0.006, 0.013, 0.05)
 
-[sub_resource type="BoxMesh" id="Mesh_trigger"]
+[sub_resource type="CapsuleMesh" id="Mesh_trigger"]
 material = SubResource("Mat_metal")
-size = Vector3(0.006, 0.018, 0.007)
+radius = 0.0030
+height = 0.0180
+radial_segments = 14
+rings = 4
 
-; Beavertail behind the hammer, which is where the web of the hand sits.
 [sub_resource type="BoxMesh" id="Mesh_tang"]
 material = SubResource("Mat_metal")
 size = Vector3(0.024, 0.012, 0.028)
@@ -174,11 +189,11 @@ transform = Transform3D(1, 0, 0, 0, 0, -1, 0, 1, 0, 0, 0.022, -0.15)
 mesh = SubResource("Mesh_bushing")
 
 [node name="Hammer" type="MeshInstance3D" parent="."]
-transform = Transform3D(1, 0, 0, 0, 0.965926, 0.258819, 0, -0.258819, 0.965926, 0, 0.03, 0.05)
+transform = Transform3D(1, 0, 0, 0, 0.965926, 0.388229, 0, -0.258819, 1.44889, 0, 0.03, 0.05)
 mesh = SubResource("Mesh_hammer")
 
 [node name="Grip" type="MeshInstance3D" parent="."]
-transform = Transform3D(1, 0, 0, 0, 0.951057, 0.309017, 0, -0.309017, 0.951057, 0, -0.05, 0.026)
+transform = Transform3D(1, 0, 0, 0, 0.951057, 0.405585, 0, -0.309017, 1.24826, 0, -0.05, 0.026)
 mesh = SubResource("Mesh_grip")
 
 [node name="Magazine" type="MeshInstance3D" parent="."]
@@ -202,7 +217,7 @@ transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -0.008, 0.046, 0.03)
 mesh = SubResource("Mesh_rear_post")
 
 [node name="RearSightPostR" type="MeshInstance3D" parent="."]
-transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0.008, 0.046, 0.03)
+transform = Transform3D(1,  0,  0,  0,  1,  0,  0,  0,  1, 0.008,  0.046,  0.03)
 mesh = SubResource("Mesh_rear_post")
 
 [node name="FrontSight" type="Marker3D" parent="."]
@@ -259,7 +274,7 @@ transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0.0125, 0.006, 0.035)
 mesh = SubResource("Mesh_port")
 
 [node name="Trigger" type="MeshInstance3D" parent="."]
-transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, -0.022, -0.006)
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1.16667, 0, -0.022, -0.006)
 mesh = SubResource("Mesh_trigger")
 
 [node name="Tang" type="MeshInstance3D" parent="."]

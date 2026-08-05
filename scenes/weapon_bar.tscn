@@ -58,9 +58,13 @@ height = 0.34
 radial_segments = 10
 rings = 1
 
-[sub_resource type="BoxMesh" id="Mesh_forend"]
+[sub_resource type="CylinderMesh" id="Mesh_forend"]
 material = SubResource("Mat_wood")
-size = Vector3(0.05, 0.055, 0.24)
+top_radius = 0.0235
+bottom_radius = 0.0250
+height = 0.2400
+radial_segments = 14
+rings = 1
 
 [sub_resource type="BoxMesh" id="Mesh_mag"]
 material = SubResource("Mat_metal")
@@ -73,48 +77,77 @@ outer_radius = 0.014
 rings = 16
 ring_segments = 6
 
-[sub_resource type="BoxMesh" id="Mesh_grip"]
+[sub_resource type="CylinderMesh" id="Mesh_grip"]
 material = SubResource("Mat_wood")
-size = Vector3(0.034, 0.1, 0.05)
+top_radius = 0.0170
+bottom_radius = 0.0170
+height = 0.1000
+radial_segments = 14
+rings = 1
 
-[sub_resource type="BoxMesh" id="Mesh_wrist"]
+[sub_resource type="CylinderMesh" id="Mesh_wrist"]
 material = SubResource("Mat_wood")
-size = Vector3(0.042, 0.07, 0.12)
+top_radius = 0.0204
+bottom_radius = 0.0210
+height = 0.1200
+radial_segments = 14
+rings = 1
 
-[sub_resource type="BoxMesh" id="Mesh_butt"]
+[sub_resource type="CylinderMesh" id="Mesh_butt"]
 material = SubResource("Mat_wood")
-size = Vector3(0.046, 0.1, 0.2)
+top_radius = 0.0218
+bottom_radius = 0.0230
+height = 0.2000
+radial_segments = 14
+rings = 1
 
-[sub_resource type="BoxMesh" id="Mesh_buttplate"]
+[sub_resource type="CylinderMesh" id="Mesh_buttplate"]
 material = SubResource("Mat_metal")
-size = Vector3(0.048, 0.104, 0.012)
+top_radius = 0.0240
+bottom_radius = 0.0240
+height = 0.0120
+radial_segments = 14
+rings = 1
 
-[sub_resource type="BoxMesh" id="Mesh_bolt"]
+[sub_resource type="CapsuleMesh" id="Mesh_bolt"]
 material = SubResource("Mat_metal")
-size = Vector3(0.014, 0.014, 0.045)
+radius = 0.0070
+height = 0.0450
+radial_segments = 14
+rings = 4
 
-[sub_resource type="BoxMesh" id="Mesh_bipod_leg"]
+[sub_resource type="CylinderMesh" id="Mesh_bipod_leg"]
 material = SubResource("Mat_metal")
-size = Vector3(0.01, 0.22, 0.01)
+top_radius = 0.0050
+bottom_radius = 0.0050
+height = 0.2200
+radial_segments = 14
+rings = 1
 
 [sub_resource type="BoxMesh" id="Mesh_rear_base"]
 material = SubResource("Mat_metal")
 size = Vector3(0.03, 0.01, 0.01)
 
-[sub_resource type="BoxMesh" id="Mesh_rear_post"]
+[sub_resource type="CylinderMesh" id="Mesh_rear_post"]
 material = SubResource("Mat_metal")
-size = Vector3(0.006, 0.026, 0.008)
+top_radius = 0.0030
+bottom_radius = 0.0030
+height = 0.0260
+radial_segments = 14
+rings = 1
 
-; Front post is deliberately oversized and pale so it reads against a dark
-; target; a scale-accurate blade is only a few pixels wide.
 [sub_resource type="StandardMaterial3D" id="Mat_front_post"]
 albedo_color = Color(0.52, 0.53, 0.56, 1)
 metallic = 0.35
 roughness = 0.55
 
-[sub_resource type="BoxMesh" id="Mesh_front_blade"]
+[sub_resource type="CylinderMesh" id="Mesh_front_blade"]
 material = SubResource("Mat_front_post")
-size = Vector3(0.007, 0.024, 0.007)
+top_radius = 0.0035
+bottom_radius = 0.0035
+height = 0.0240
+radial_segments = 14
+rings = 1
 
 [sub_resource type="CylinderMesh" id="Mesh_flash"]
 material = SubResource("Mat_flash")
@@ -132,9 +165,12 @@ cap_top = false
 albedo_color = Color(0.022, 0.022, 0.024, 1)
 roughness = 1.0
 
-[sub_resource type="BoxMesh" id="Mesh_trigger"]
+[sub_resource type="CapsuleMesh" id="Mesh_trigger"]
 material = SubResource("Mat_metal")
-size = Vector3(0.007, 0.026, 0.009)
+radius = 0.0035
+height = 0.0260
+radial_segments = 14
+rings = 4
 
 [sub_resource type="BoxMesh" id="Mesh_port"]
 material = SubResource("Mat_shadow")
@@ -197,7 +233,7 @@ transform = Transform3D(1, 0, 0, 0, 0, -1, 0, 1, 0, 0, -0.012, -0.55)
 mesh = SubResource("Mesh_gas")
 
 [node name="Forend" type="MeshInstance3D" parent="."]
-transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, -0.012, -0.3)
+transform = Transform3D(1, 0, 0, 0, 0, 1.1, 0, -1, 0, 0, -0.012, -0.3)
 mesh = SubResource("Mesh_forend")
 
 [node name="Magazine" type="MeshInstance3D" parent="."]
@@ -209,23 +245,23 @@ transform = Transform3D(0, -1, 0, 1, 0, 0, 0, 0, 1.7, 0, -0.058, 0)
 mesh = SubResource("Mesh_guard")
 
 [node name="PistolGrip" type="MeshInstance3D" parent="."]
-transform = Transform3D(1, 0, 0, 0, 0.978148, 0.207912, 0, -0.207912, 0.978148, 0, -0.09, 0.07)
+transform = Transform3D(1, 0, 0, 0, 0.978148, 0.305753, 0, -0.207912, 1.43845, 0, -0.09, 0.07)
 mesh = SubResource("Mesh_grip")
 
 [node name="Wrist" type="MeshInstance3D" parent="."]
-transform = Transform3D(1, 0, 0, 0, 0.996195, -0.087156, 0, 0.087156, 0.996195, 0, -0.02, 0.16)
+transform = Transform3D(1, 0, 0, 0, 0.087156, 1.66033, 0, -0.996195, 0.14526, 0, -0.02, 0.16)
 mesh = SubResource("Mesh_wrist")
 
 [node name="Butt" type="MeshInstance3D" parent="."]
-transform = Transform3D(1, 0, 0, 0, 0.996195, -0.087156, 0, 0.087156, 0.996195, 0, -0.025, 0.31)
+transform = Transform3D(1, 0, 0, 0, 0.087156, 2.16564, 0, -0.996195, 0.18947, 0, -0.025, 0.31)
 mesh = SubResource("Mesh_butt")
 
 [node name="Buttplate" type="MeshInstance3D" parent="."]
-transform = Transform3D(1, 0, 0, 0, 0.996195, -0.087156, 0, 0.087156, 0.996195, 0, -0.025, 0.415)
+transform = Transform3D(1, 0, 0, 0, 0.087156, 2.15842, 0, -0.996195, 0.188838, 0, -0.025, 0.415)
 mesh = SubResource("Mesh_buttplate")
 
 [node name="BoltHandle" type="MeshInstance3D" parent="."]
-transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0.036, 0.024, -0.03)
+transform = Transform3D(1, 0, 0, 0, 0, 1, 0, -1, 0, 0.036, 0.024, -0.03)
 mesh = SubResource("Mesh_bolt")
 
 ; Splayed out and forward from under the muzzle.
@@ -234,7 +270,7 @@ transform = Transform3D(0.951057, 0.309017, 0, -0.309017, 0.951057, 0, 0, 0, 1, 
 mesh = SubResource("Mesh_bipod_leg")
 
 [node name="BipodLegR" type="MeshInstance3D" parent="."]
-transform = Transform3D(0.951057, -0.309017, 0, 0.309017, 0.951057, 0, 0, 0, 1, 0.05, -0.12, -0.66)
+transform = Transform3D(0.951057,  0.309017,  0,  -0.309017,  0.951057,  0,  0,  0,  1, 0.05,  -0.12,  -0.66)
 mesh = SubResource("Mesh_bipod_leg")
 
 ; Sight line runs at y=0.058 through the rear notch and across the blade tip.
@@ -246,11 +282,11 @@ transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0.05, 0.02)
 mesh = SubResource("Mesh_rear_base")
 
 [node name="RearSightPostL" type="MeshInstance3D" parent="."]
-transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -0.012, 0.066, 0.02)
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1.33333, -0.012, 0.066, 0.02)
 mesh = SubResource("Mesh_rear_post")
 
 [node name="RearSightPostR" type="MeshInstance3D" parent="."]
-transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0.012, 0.066, 0.02)
+transform = Transform3D(1,  0,  0,  0,  1,  0,  0,  0,  1.33333, 0.012,  0.066,  0.02)
 mesh = SubResource("Mesh_rear_post")
 
 [node name="FrontSight" type="Marker3D" parent="."]
@@ -285,7 +321,7 @@ omni_range = 9.0
 [node name="ReloadSound" type="AudioStreamPlayer" parent="."]
 
 [node name="Trigger" type="MeshInstance3D" parent="."]
-transform = Transform3D(1, 0, 0, 0, 0.98481, 0.17365, 0, -0.17365, 0.98481, 0, -0.051, 0.011)
+transform = Transform3D(1, 0, 0, 0, 0.98481, 0.223264, 0, -0.17365, 1.26618, 0, -0.051, 0.011)
 mesh = SubResource("Mesh_trigger")
 
 [node name="EjectionPort" type="MeshInstance3D" parent="."]

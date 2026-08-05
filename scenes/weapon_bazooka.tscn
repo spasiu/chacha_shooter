@@ -72,21 +72,37 @@ outer_radius = 0.042
 rings = 20
 ring_segments = 8
 
-[sub_resource type="BoxMesh" id="Mesh_grip"]
+[sub_resource type="CylinderMesh" id="Mesh_grip"]
 material = SubResource("Mat_wood")
-size = Vector3(0.032, 0.1, 0.05)
+top_radius = 0.0160
+bottom_radius = 0.0160
+height = 0.1000
+radial_segments = 14
+rings = 1
 
-[sub_resource type="BoxMesh" id="Mesh_foregrip"]
+[sub_resource type="CylinderMesh" id="Mesh_foregrip"]
 material = SubResource("Mat_wood")
-size = Vector3(0.034, 0.095, 0.055)
+top_radius = 0.0170
+bottom_radius = 0.0170
+height = 0.0950
+radial_segments = 14
+rings = 1
 
-[sub_resource type="BoxMesh" id="Mesh_shoulder"]
+[sub_resource type="CylinderMesh" id="Mesh_shoulder"]
 material = SubResource("Mat_wood")
-size = Vector3(0.05, 0.085, 0.16)
+top_radius = 0.0250
+bottom_radius = 0.0250
+height = 0.1600
+radial_segments = 14
+rings = 1
 
-[sub_resource type="BoxMesh" id="Mesh_sight_post"]
+[sub_resource type="CylinderMesh" id="Mesh_sight_post"]
 material = SubResource("Mat_metal")
-size = Vector3(0.006, 0.03, 0.008)
+top_radius = 0.0030
+bottom_radius = 0.0030
+height = 0.0300
+radial_segments = 14
+rings = 1
 
 [sub_resource type="BoxMesh" id="Mesh_sight_frame"]
 material = SubResource("Mat_metal")
@@ -112,13 +128,13 @@ rings = 1
 cap_top = false
 
 
-[sub_resource type="BoxMesh" id="Mesh_trigger"]
+[sub_resource type="CapsuleMesh" id="Mesh_trigger"]
 material = SubResource("Mat_metal")
-size = Vector3(0.007, 0.026, 0.009)
+radius = 0.0035
+height = 0.0260
+radial_segments = 14
+rings = 4
 
-; Firing wire from the grip back to the breech contacts, clipped along the
-; tube. On the real thing it is the most obvious thing about the launcher
-; after the tube itself.
 [sub_resource type="CylinderMesh" id="Mesh_wire"]
 material = SubResource("Mat_metal")
 top_radius = 0.004
@@ -179,15 +195,15 @@ transform = Transform3D(1, 0, 0, 0, 0, -1, 0, 1, 0, 0, 0, 0.36)
 mesh = SubResource("Mesh_rocket")
 
 [node name="PistolGrip" type="MeshInstance3D" parent="."]
-transform = Transform3D(1, 0, 0, 0, 0.965926, 0.258819, 0, -0.258819, 0.965926, 0, -0.078, 0.05)
+transform = Transform3D(1, 0, 0, 0, 0.965926, 0.404405, 0, -0.258819, 1.50926, 0, -0.078, 0.05)
 mesh = SubResource("Mesh_grip")
 
 [node name="Foregrip" type="MeshInstance3D" parent="."]
-transform = Transform3D(1, 0, 0, 0, 0.965926, 0.258819, 0, -0.258819, 0.965926, 0, -0.076, -0.3)
+transform = Transform3D(1, 0, 0, 0, 0.965926, 0.418678, 0, -0.258819, 1.56253, 0, -0.076, -0.3)
 mesh = SubResource("Mesh_foregrip")
 
 [node name="ShoulderRest" type="MeshInstance3D" parent="."]
-transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, -0.052, 0.24)
+transform = Transform3D(1, 0, 0, 0, 0, 1.7, 0, -1, 0, 0, -0.052, 0.24)
 mesh = SubResource("Mesh_shoulder")
 
 ; Sight line runs at y=0.058 along the top of the tube, rear post to front post.
@@ -195,7 +211,7 @@ mesh = SubResource("Mesh_shoulder")
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0.058, 0.1)
 
 [node name="RearSightPost" type="MeshInstance3D" parent="."]
-transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0.045, 0.1)
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1.33333, 0, 0.045, 0.1)
 mesh = SubResource("Mesh_sight_post")
 
 [node name="RearSightFrame" type="MeshInstance3D" parent="."]
@@ -206,7 +222,7 @@ mesh = SubResource("Mesh_sight_frame")
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0.058, -0.55)
 
 [node name="FrontSightPost" type="MeshInstance3D" parent="."]
-transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0.045, -0.55)
+transform = Transform3D(1,  0,  0,  0,  1,  0,  0,  0,  1.33333, 0,  0.045,  -0.55)
 mesh = SubResource("Mesh_sight_post")
 
 [node name="GripRight" type="Marker3D" parent="."]
@@ -234,7 +250,7 @@ omni_range = 12.0
 [node name="ReloadSound" type="AudioStreamPlayer" parent="."]
 
 [node name="Trigger" type="MeshInstance3D" parent="."]
-transform = Transform3D(1, 0, 0, 0, 0.98481, 0.17365, 0, -0.17365, 0.98481, 0, -0.05, 0.048)
+transform = Transform3D(1, 0, 0, 0, 0.98481, 0.223264, 0, -0.17365, 1.26618, 0, -0.05, 0.048)
 mesh = SubResource("Mesh_trigger")
 
 [node name="FiringWire" type="MeshInstance3D" parent="."]

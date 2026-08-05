@@ -1,6 +1,6 @@
 ; Trench shovel. Haft runs along -Z with the blade at the front, angled so it
 ; reads as a spade rather than a paddle.
-[gd_scene load_steps=8 format=3]
+[gd_scene load_steps=9 format=3]
 
 [ext_resource type="Script" path="res://scripts/shovel.gd" id="1_shovel"]
 
@@ -21,9 +21,12 @@ height = 0.46
 radial_segments = 10
 rings = 1
 
-[sub_resource type="BoxMesh" id="Mesh_grip"]
+[sub_resource type="CapsuleMesh" id="Mesh_grip"]
 material = SubResource("Mat_wood")
-size = Vector3(0.09, 0.026, 0.03)
+radius = 0.0130
+height = 0.0900
+radial_segments = 14
+rings = 4
 
 [sub_resource type="CylinderMesh" id="Mesh_socket"]
 material = SubResource("Mat_steel")
@@ -49,7 +52,7 @@ transform = Transform3D(1, 0, 0, 0, 0, -1, 0, 1, 0, 0, 0, -0.01)
 mesh = SubResource("Mesh_haft")
 
 [node name="TGrip" type="MeshInstance3D" parent="."]
-transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0, 0.225)
+transform = Transform3D(0, 1, 0, -1, 0, 0, 0, 0, 1.15385, 0, 0, 0.225)
 mesh = SubResource("Mesh_grip")
 
 [node name="Socket" type="MeshInstance3D" parent="."]
