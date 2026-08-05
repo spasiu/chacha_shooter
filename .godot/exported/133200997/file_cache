@@ -1,7 +1,7 @@
 res://scenes/artillery_strike.tscn::474aa7f56e259682f5222361ab0d2ac8::1785766017::res://.godot/exported/133200997/export-4a63249ac4f0ee62752f54b1d82189cf-artillery_strike.scn
 res://scenes/block_debris.tscn::233bad7e32498f88e25c65d2e967d7d8::1785757574::res://.godot/exported/133200997/export-8b2554524fa6f498cdad95beab8cedfc-block_debris.scn
 res://scenes/bullet_hole.tscn::99ad1101a36ffa103eb16937d90235cd::1785715275::res://.godot/exported/133200997/export-b01499424b6bb904617e807cb579f213-bullet_hole.scn
-res://scenes/character_body.tscn::d22afcc2eef910aa06a333705a9a846f::1785967218::res://.godot/exported/133200997/export-314e64af2b72111055f327b034d81485-character_body.scn
+res://scenes/character_body.tscn::02ba64d7bb5c862e2201eb348e7d7e7d::1785967482::res://.godot/exported/133200997/export-314e64af2b72111055f327b034d81485-character_body.scn
 res://scenes/grenade_projectile.tscn::5a851d1ec241c55710fc8ccd0bbeaa72::1785760133::res://.godot/exported/133200997/export-963dd493464b626e8a8d37ef4d4fe325-grenade_projectile.scn
 res://scenes/hand_left.tscn::e1e8904a94f2787b562b90bc5f6f0fcb::1785967245::res://.godot/exported/133200997/export-728bdfa248a20eec221aa22bb805fef8-hand_left.scn
 res://scenes/hand_right.tscn::b4fe2879f397d0d9d51029e6f42a1bda::1785967245::res://.godot/exported/133200997/export-dfbab18ba49e5e494e37d70b1eb3a8f2-hand_right.scn
@@ -42,4 +42,3 @@ res://scenes/weapon_jump_jet.tscn::05a8026dcd4c3e647d37603f5fde68f1::1785963532:
 res://scenes/weapon_shield_club.tscn::5ba6a15d1ffd3c4cf4fa64c191dce088::1785965155::res://.godot/exported/133200997/export-be8b4bac64381289805dbdea665216da-weapon_shield_club.scn
 res://scenes/weapon_body_armour.tscn::15269626e8142dfc1e6ec5ca33e4875c::1785967266::res://.godot/exported/133200997/export-baabecfeca9359113ce1c7a7d2cf460c-weapon_body_armour.scn
 res://tools/shoot_kit.tscn::1e85091867b2a32a3f5fd0d7d7c60b7d::1785967042::res://.godot/exported/133200997/export-2e1bb554f305e5af21d2ad668ac204c8-shoot_kit.scn
-res://_shot_cute.tscn::b3b1d6d1e8ae1f676f4575aae14158be::1785967297::res://.godot/exported/133200997/export-605dacd72dde2a6a3bb9ffc9a9cecfac-_shot_cute.scn
