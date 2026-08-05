@@ -93,6 +93,14 @@ const ITEMS: Array[Dictionary] = [
 		"accent": Color(0.45, 0.36, 0.22, 1.0),
 	},
 	{
+		"key": &"armour",
+		"name": "BODY ARMOUR",
+		"kind": "PROTECTION",
+		"blurb": "Front and back plate in a canvas carrier. Twice the man to kill, and half of anything arriving at the front plate. You will feel the weight of it every step, in every stance, whether or not anyone is shooting.",
+		"stats": "x2 HEALTH  ·  HALF DMG FRONT  ·  HALF SPEED",
+		"accent": Color(0.42, 0.46, 0.34, 1.0),
+	},
+	{
 		"key": &"shieldclub",
 		"name": "SHIELD & CLUB",
 		"kind": "CLOSE QUARTERS",

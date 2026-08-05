@@ -89,6 +89,8 @@ const SPAWN_TRIES := 12
 const STEP_VOLUME_DB := -10.0
 ## Where a jump jet rides: high on the back, clear of the legs it exhausts past.
 const JET_MOUNT := Vector3(0.0, 1.12, 0.2)
+## Where a plate carrier sits: on the chest, over the tunic.
+const ARMOUR_MOUNT := Vector3(0.0, 0.34, 0.0)
 
 const FOOTSTEPS: Array[AudioStream] = [
 	preload("res://assets/audio/footstep_01.wav"),
@@ -114,6 +116,7 @@ const LOADOUT_SCREEN: PackedScene = preload("res://scenes/loadout_select.tscn")
 @onready var johnson: Equipment = $Head/Camera3D/WeaponSocket/WeaponJohnson
 @onready var jump_jet: Equipment = $Head/Camera3D/WeaponSocket/WeaponJumpJet
 @onready var shield_club: Equipment = $Head/Camera3D/WeaponSocket/WeaponShieldClub
+@onready var body_armour: Equipment = $Head/Camera3D/WeaponSocket/WeaponBodyArmour
 @onready var tnt: Equipment = $Head/Camera3D/WeaponSocket/WeaponTNT
 @onready var shovel: Equipment = $Head/Camera3D/WeaponSocket/WeaponShovel
 @onready var smoke: Equipment = $Head/Camera3D/WeaponSocket/WeaponSmoke
@@ -140,6 +143,7 @@ const LOADOUT_SCREEN: PackedScene = preload("res://scenes/loadout_select.tscn")
 	&"johnson": johnson,
 	&"jumpjet": jump_jet,
 	&"shieldclub": shield_club,
+	&"armour": body_armour,
 	&"tnt": tnt,
 	&"shovel": shovel,
 	&"smoke": smoke,
@@ -188,6 +192,14 @@ var _resupply_told := false
 ## worn rather than held, so it never enters the slot rotation and never goes
 ## in the hands. Null when nobody chose one.
 var _jet: JumpJet
+## The plate carrier, if one was picked. Worn like the jet, and kept out of the
+## hand rotation for the same reason.
+var _armour: BodyArmour
+## What a full tank of health is for this life. The armour doubles it, so it is
+## worked out once when the loadout is built rather than read off the export
+## everywhere -- a max that meant two different things in two places is how a
+## health bar ends up reading 200/100.
+var _health_cap := 0.0
 var _vehicle: Node3D
 var _voxel_world: Node
 # Alternates each footfall so the gait phase runs 0..2PI over two steps, which
@@ -226,8 +238,8 @@ func _ready() -> void:
 	_head_rest_y = head.position.y
 	_stand_height = (collision_shape.shape as CapsuleShape3D).height
 	_rest_fov = camera_fp.fov
-	health = max_health
-	health_changed.emit(health, max_health)
+	health = _full_health()
+	health_changed.emit(health, _full_health())
 	_spawn_transform = global_transform
 	_voxel_world = get_tree().get_first_node_in_group("voxel_world")
 	_aim_yaw = rotation.y
@@ -520,6 +532,13 @@ func _aim_sensitivity() -> float:
 
 ## Running is the default; every other state can only slow it down, so the
 ## slowest applicable restriction always wins.
+## A full tank for this life: the export, doubled if a plate carrier was picked.
+## Falls back to the export before the loadout has been built, which is the case
+## for the frame or two before the first spawn.
+func _full_health() -> float:
+	return _health_cap if _health_cap > 0.0 else max_health
+
+
 func _current_speed() -> float:
 	# Prone is stationary by design: turn and shoot, but do not travel.
 	if _prone:
@@ -533,6 +552,11 @@ func _current_speed() -> float:
 	# off whatever pace the restrictions above have left you with, rather than
 	# competing with them for the slowest.
 	speed *= 1.0 - weapon.move_penalty
+	# Armour is worn in every stance, so it takes its cut after the stance
+	# restrictions rather than competing with them: crouching in plate is half
+	# of a crouch, not the slower of the two.
+	if _armour != null:
+		speed *= _armour.speed_factor
 	# Blended rather than switched, so raising the sights eases you down to a
 	# shuffle instead of snapping.
 	return lerpf(speed, minf(speed, shuffle_speed), weapon.aim_ratio())
@@ -629,8 +653,12 @@ func take_damage(
 	# covers both without the bot having to know shields exist.
 	if _stopped_by_shield(_hit_position, _from, _kind):
 		return
+	# What is left after the front plate, if there is one and the hit arrived
+	# where it covers.
+	if _armour != null:
+		amount = _armour.absorb(amount, _from, -global_basis.z)
 	health = maxf(health - amount, 0.0)
-	health_changed.emit(health, max_health)
+	health_changed.emit(health, _full_health())
 	if health <= 0.0:
 		_die()
 
@@ -652,7 +680,7 @@ func _check_out_of_bounds() -> void:
 	var limit: Vector2 = _voxel_world.boundary_half_extent()
 	if absf(global_position.x) > limit.x or absf(global_position.z) > limit.y:
 		health = 0.0
-		health_changed.emit(health, max_health)
+		health_changed.emit(health, _full_health())
 		_die()
 
 
@@ -764,8 +792,8 @@ func respawn() -> void:
 	_dead = false
 	_respawn_in = 0.0
 	_close_loadout_select()
-	health = max_health
-	health_changed.emit(health, max_health)
+	health = _full_health()
+	health_changed.emit(health, _full_health())
 
 	# Always back at your own side's base, whether or not anyone else is on the
 	# field: where you fell is somebody else's ground now, and the map is the
@@ -861,8 +889,8 @@ func _update_resupply() -> void:
 		return
 	_resupply_told = true
 	var wanted := health < max_health
-	health = max_health
-	health_changed.emit(health, max_health)
+	health = _full_health()
+	health_changed.emit(health, _full_health())
 	for item: Equipment in _catalogue.values():
 		item.restock()
 	if wanted:
@@ -971,8 +999,8 @@ func _somewhere_in(zone: Rect2, origin: Vector3) -> Vector3:
 func heal_full() -> void:
 	if _dead:
 		return
-	health = max_health
-	health_changed.emit(health, max_health)
+	health = _full_health()
+	health_changed.emit(health, _full_health())
 
 
 ## Carried off and put back in the line. Returns whether it actually took --
@@ -993,7 +1021,7 @@ func revive_from_aid() -> bool:
 
 func heal(amount: float) -> void:
 	health = minf(health + amount, max_health)
-	health_changed.emit(health, max_health)
+	health_changed.emit(health, _full_health())
 
 
 ## Assembles what is carried from the select screen's picks, in pick order, so
@@ -1003,6 +1031,7 @@ func heal(amount: float) -> void:
 func _build_loadout() -> void:
 	loadout.clear()
 	_jet = null
+	_armour = null
 	for key: StringName in LoadoutConfig.chosen:
 		# Capped here as well as on the select screen: a slot past the last one
 		# has no key bound to it, so anything beyond the cap would be carried
@@ -1010,6 +1039,10 @@ func _build_loadout() -> void:
 		if loadout.size() >= LoadoutConfig.SLOTS:
 			break
 		var item: Equipment = _catalogue.get(key)
+		if item is BodyArmour:
+			# Worn, like the jet: it takes a pick and then it is simply on.
+			_armour = item
+			continue
 		if item is JumpJet:
 			# Worn, not held. It takes a pick on the select screen and then stays
 			# out of the hand rotation entirely, which is what "always equipped"
@@ -1024,6 +1057,12 @@ func _build_loadout() -> void:
 		loadout.append(thompson)
 	for item: Equipment in _catalogue.values():
 		item.visible = false
+	_health_cap = max_health * (_armour.health_multiplier if _armour != null else 1.0)
+	if _armour != null:
+		if _armour.get_parent() != body_spine:
+			_armour.reparent(body_spine, false)
+		_armour.transform = Transform3D(Basis.IDENTITY, ARMOUR_MOUNT)
+		_armour.visible = true
 	if _jet != null:
 		# Hung off the player rather than off the body model, which is switched
 		# to shadows-only in first person -- the exhaust is worth seeing from

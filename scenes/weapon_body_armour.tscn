@@ -1,0 +1,50 @@
+; Plate carrier. See body_armour.gd: worn rather than held, so like the jump jet
+; it has no sights, no trigger and nothing that ever reaches a pair of hands.
+;
+; A front and back plate in a canvas carrier, with shoulder straps over. Only
+; ever seen from outside -- in first person the body it is strapped to is
+; shadows-only -- so it is built for a silhouette rather than for close reading.
+[gd_scene load_steps=6 format=3]
+
+[ext_resource type="Script" path="res://scripts/body_armour.gd" id="1_ba"]
+
+[sub_resource type="StandardMaterial3D" id="Mat_canvas"]
+albedo_color = Color(0.26, 0.29, 0.2, 1)
+metallic = 0.1
+roughness = 0.9
+
+[sub_resource type="StandardMaterial3D" id="Mat_strap"]
+albedo_color = Color(0.19, 0.21, 0.15, 1)
+metallic = 0.1
+roughness = 0.95
+
+[sub_resource type="BoxMesh" id="Mesh_plate"]
+material = SubResource("Mat_canvas")
+size = Vector3(0.34, 0.42, 0.07)
+
+[sub_resource type="BoxMesh" id="Mesh_strap"]
+material = SubResource("Mat_strap")
+size = Vector3(0.07, 0.3, 0.05)
+
+[node name="WeaponBodyArmour" type="Node3D"]
+script = ExtResource("1_ba")
+
+[node name="Front" type="MeshInstance3D" parent="."]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0, -0.11)
+mesh = SubResource("Mesh_plate")
+
+[node name="Back" type="MeshInstance3D" parent="."]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0, 0.11)
+mesh = SubResource("Mesh_plate")
+
+[node name="StrapLeft" type="MeshInstance3D" parent="."]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -0.12, 0.2, 0)
+mesh = SubResource("Mesh_strap")
+
+[node name="StrapRight" type="MeshInstance3D" parent="."]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0.12, 0.2, 0)
+mesh = SubResource("Mesh_strap")
+
+[node name="GripRight" type="Marker3D" parent="."]
+
+[node name="GripLeft" type="Marker3D" parent="."]

@@ -70,7 +70,10 @@ func try_fire() -> bool:
 	var charge: Node3D = charge_scene.instantiate()
 	charge.fuse_time = fuse_time
 	scene_root.add_child(charge)
+	_plant_host = null
 	charge.global_position = _plant_point()
+	if _plant_host != null and charge.has_method("attach_to"):
+		charge.attach_to(_plant_host)
 	_live = charge
 	# Planted where everyone can see it, and ticking on their screens too. Only
 	# this copy works out what it destroys when the fuse runs out.
@@ -118,6 +121,11 @@ func sight_transform(_relief: float) -> Transform3D:
 
 ## Where the charge ends up: stuck to whatever is in front of you, or dropped
 ## at your feet when that is open air.
+## What the charge was planted on, when that was something that moves. Null for
+## ground, walls and anything else that stays put.
+var _plant_host: Node3D
+
+
 func _plant_point() -> Vector3:
 	var camera := get_viewport().get_camera_3d()
 	var planter := _find_ancestor_body()
@@ -132,6 +140,11 @@ func _plant_point() -> Vector3:
 		query.exclude = [planter.get_rid()]
 	var hit := get_world_3d().direct_space_state.intersect_ray(query)
 	if not hit.is_empty():
+		# A vehicle is worth remembering: a charge stuck to a tank should go
+		# where the tank goes rather than staying in the air it drove out of.
+		var struck: Object = hit.get("collider")
+		_plant_host = struck if struck is Node3D and (struck as Node).is_in_group(
+			Tank.VEHICLES) else null
 		# Just off the surface, so it is not half sunk into it.
 		return hit.position + hit.normal * 0.04
 	if planter != null:
