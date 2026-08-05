@@ -20,7 +20,7 @@
 ; Every anchor the rest of the game reaches for is where it always was: hips at
 ; y=0.73, knees a 0.315 segment below, Spine at 0.84, the arm rig's shoulders at
 ; +-0.21 from it, and the bottom of the head on the 1.32 headshot line.
-[gd_scene load_steps=33 format=3]
+[gd_scene load_steps=40 format=3]
 
 [ext_resource type="Script" path="res://scripts/arm_rig.gd" id="1_rig"]
 [ext_resource type="Script" path="res://scripts/character_body.gd" id="4_model"]
@@ -70,6 +70,10 @@ roughness = 0.92
 
 ; Eyes and brows. Not black -- a very dark blue, which at this size reads softer
 ; than black does and is most of the difference between cute and menacing.
+[sub_resource type="StandardMaterial3D" id="Mat_sclera"]
+albedo_color = Color(0.96, 0.95, 0.92, 1)
+roughness = 0.6
+
 [sub_resource type="StandardMaterial3D" id="Mat_eye"]
 albedo_color = Color(0.13, 0.15, 0.22, 1)
 roughness = 0.55
@@ -166,9 +170,9 @@ size = Vector3(0.22, 0.2, 0.1)
 
 [sub_resource type="CylinderMesh" id="Mesh_neck"]
 material = SubResource("Mat_skin")
-top_radius = 0.055
-bottom_radius = 0.062
-height = 0.09
+top_radius = 0.058
+bottom_radius = 0.066
+height = 0.06
 radial_segments = 8
 rings = 1
 
@@ -182,26 +186,37 @@ rings = 7
 ; Scarf over the lower half of the face, standing just proud of it.
 [sub_resource type="SphereMesh" id="Mesh_mask"]
 material = SubResource("Mat_mask")
-radius = 0.104
-height = 0.15
+radius = 0.09
+height = 0.105
 radial_segments = 12
 rings = 6
 
-[sub_resource type="BoxMesh" id="Mesh_eye"]
+; The white, curved to the head so it sits in the face rather than on it.
+[sub_resource type="SphereMesh" id="Mesh_sclera"]
+material = SubResource("Mat_sclera")
+radius = 0.03
+height = 0.05
+radial_segments = 10
+rings = 5
+
+[sub_resource type="SphereMesh" id="Mesh_eye"]
 material = SubResource("Mat_eye")
-size = Vector3(0.032, 0.042, 0.02)
+radius = 0.017
+height = 0.03
+radial_segments = 8
+rings = 4
 
 [sub_resource type="BoxMesh" id="Mesh_brow"]
 material = SubResource("Mat_eye")
-size = Vector3(0.04, 0.014, 0.018)
+size = Vector3(0.046, 0.013, 0.016)
 
 ; Helmet: a dome wider than the head it sits on, with a brim all round. The
 ; single most important shape on the model -- at any distance past ten metres
 ; this is the whole silhouette.
 [sub_resource type="SphereMesh" id="Mesh_helmet"]
 material = SubResource("Mat_helmet")
-radius = 0.132
-height = 0.19
+radius = 0.138
+height = 0.15
 is_hemisphere = true
 radial_segments = 14
 rings = 6
@@ -329,19 +344,19 @@ transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, -0.005, 0)
 mesh = SubResource("Mesh_belt")
 
 [node name="PouchLeft" type="MeshInstance3D" parent="Spine"]
-transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -0.09, 0.055, -0.106)
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -0.088, 0.055, -0.132)
 mesh = SubResource("Mesh_pouch")
 
 [node name="PouchRight" type="MeshInstance3D" parent="Spine"]
-transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0.09, 0.055, -0.106)
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0.088, 0.055, -0.132)
 mesh = SubResource("Mesh_pouch")
 
 [node name="StrapLeft" type="MeshInstance3D" parent="Spine"]
-transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -0.075, 0.22, -0.112)
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -0.072, 0.235, -0.126)
 mesh = SubResource("Mesh_strap")
 
 [node name="StrapRight" type="MeshInstance3D" parent="Spine"]
-transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0.075, 0.22, -0.112)
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0.072, 0.235, -0.126)
 mesh = SubResource("Mesh_strap")
 
 [node name="Pack" type="MeshInstance3D" parent="Spine"]
@@ -349,7 +364,7 @@ transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0.2, 0.145)
 mesh = SubResource("Mesh_pack")
 
 [node name="Neck" type="MeshInstance3D" parent="Spine"]
-transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0.44, 0)
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0.462, 0)
 mesh = SubResource("Mesh_neck")
 
 ; Head bottom lands on y=1.32 in world, which is the line the headshot test
@@ -359,27 +374,41 @@ transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0.59, 0)
 mesh = SubResource("Mesh_head")
 
 [node name="Mask" type="MeshInstance3D" parent="Spine"]
-transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1.04, 0, 0.552, -0.008)
+transform = Transform3D(1.22, 0, 0, 0, 1.08, 0, 0, 0, 1.06, 0, 0.524, -0.016)
 mesh = SubResource("Mesh_mask")
 
-[node name="EyeLeft" type="MeshInstance3D" parent="Spine"]
-transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -0.042, 0.618, -0.096)
+[node name="EyeLeft" type="Node3D" parent="Spine"]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -0.044, 0.597, -0.0845)
+
+[node name="White" type="MeshInstance3D" parent="Spine/EyeLeft"]
+transform = Transform3D(1, 0, 0, 0, 1.1, 0, 0, 0, 0.5, 0, 0, 0)
+mesh = SubResource("Mesh_sclera")
+
+[node name="Pupil" type="MeshInstance3D" parent="Spine/EyeLeft"]
+transform = Transform3D(1, 0, 0, 0, 1.05, 0, 0, 0, 0.5, 0, 0, -0.011)
 mesh = SubResource("Mesh_eye")
 
-[node name="EyeRight" type="MeshInstance3D" parent="Spine"]
-transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0.042, 0.618, -0.096)
+[node name="EyeRight" type="Node3D" parent="Spine"]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0.044, 0.597, -0.0845)
+
+[node name="White" type="MeshInstance3D" parent="Spine/EyeRight"]
+transform = Transform3D(1, 0, 0, 0, 1.1, 0, 0, 0, 0.5, 0, 0, 0)
+mesh = SubResource("Mesh_sclera")
+
+[node name="Pupil" type="MeshInstance3D" parent="Spine/EyeRight"]
+transform = Transform3D(1, 0, 0, 0, 1.05, 0, 0, 0, 0.5, 0, 0, -0.011)
 mesh = SubResource("Mesh_eye")
 
 [node name="BrowLeft" type="MeshInstance3D" parent="Spine"]
-transform = Transform3D(1, 0, 0, 0, 0.99619, 0.08716, 0, -0.08716, 0.99619, -0.042, 0.648, -0.094)
+transform = Transform3D(1, 0, 0, 0, 0.99619, 0.08716, 0, -0.08716, 0.99619, -0.044, 0.625, -0.083)
 mesh = SubResource("Mesh_brow")
 
 [node name="BrowRight" type="MeshInstance3D" parent="Spine"]
-transform = Transform3D(1, 0, 0, 0, 0.99619, -0.08716, 0, 0.08716, 0.99619, 0.042, 0.648, -0.094)
+transform = Transform3D(1, 0, 0, 0, 0.99619, -0.08716, 0, 0.08716, 0.99619, 0.044, 0.625, -0.083)
 mesh = SubResource("Mesh_brow")
 
 [node name="Helmet" type="Node3D" parent="Spine"]
-transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0.612, 0.006)
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0.638, 0.006)
 
 [node name="Shell" type="MeshInstance3D" parent="Spine/Helmet"]
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1.04, 0, 0, 0)
