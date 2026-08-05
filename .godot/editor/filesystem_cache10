@@ -1,7 +1,8 @@
 78098b89c88a74ebe8c20117b8754620
-::res://::1785935976
+::res://::1785937455
 export_presets.cfg::TextFile::-1::1785935982::0::1::::<><><>0<>0<><>::
 netprobe.gd::GDScript::3388120863264306176::1785792064::0::1::::<>Node<><>0<>0<><>::
+::res://__pycache__/::1785937418
 ::res://assets/::1785767472
 ::res://assets/audio/::1785796459
 body_fall.wav::AudioStreamWAV::1941009716122484847::1785719072::1785796459::1::::<><><>0<>0<>1f39c94a296690858cabdc7c0b473c2c<>res://.godot/imported/body_fall.wav-79a073a790d1a1c075156df84651c41a.sample::
@@ -32,10 +33,10 @@ smoke_puff.png::CompressedTexture2D::18799737287251226::1785767472::1785796459::
 wood_grain.tres::NoiseTexture2D::-1::1785852119::0::1::::<><><>0<>0<><>::
 ::res://build/::1785936004
 ::res://build/linux/::1785936007
-::res://build/web/::1785936467
-index.apple-touch-icon.png::CompressedTexture2D::344285027444641909::1785936467::1785796459::1::::<><><>0<>0<>56016b8850fd4fab1d2a598e0f3aff7f<>res://.godot/imported/index.apple-touch-icon.png-21031f526f7942c8019a62913b80e091.ctex::
-index.icon.png::CompressedTexture2D::2829230572938213910::1785936467::1785796459::1::::<><><>0<>0<>4c7be99e0333e1c5f8d1f08dae89d204<>res://.godot/imported/index.icon.png-a9d2f4f7433eeddc29dad75f5e7f8710.ctex::
-index.png::CompressedTexture2D::3637643214681756157::1785936467::1785796459::1::::<><><>0<>0<>abbee48fe18209cf8a43cf337791f4dd<>res://.godot/imported/index.png-7e97af7272d6fa0065ffc53e96463470.ctex::
+::res://build/web/::1785937404
+index.apple-touch-icon.png::CompressedTexture2D::344285027444641909::1785936831::1785796459::1::::<><><>0<>0<>56016b8850fd4fab1d2a598e0f3aff7f<>res://.godot/imported/index.apple-touch-icon.png-21031f526f7942c8019a62913b80e091.ctex::
+index.icon.png::CompressedTexture2D::2829230572938213910::1785936831::1785796459::1::::<><><>0<>0<>4c7be99e0333e1c5f8d1f08dae89d204<>res://.godot/imported/index.icon.png-a9d2f4f7433eeddc29dad75f5e7f8710.ctex::
+index.png::CompressedTexture2D::3637643214681756157::1785936831::1785796459::1::::<><><>0<>0<>abbee48fe18209cf8a43cf337791f4dd<>res://.godot/imported/index.png-7e97af7272d6fa0065ffc53e96463470.ctex::
 ::res://maps/::1785855687
 arena_preview.png::CompressedTexture2D::509373294099274685::1785788881::1785796459::1::::<><><>0<>0<>fa65f8a3dee9aacf67a1d6f98fa2dc64<>res://.godot/imported/arena_preview.png-0236e5c8c8dbc29db470051a8f861bf7.ctex::
 arena_structures.json::JSON::-1::1785853603::0::1::::<><><>0<>0<><>::
@@ -50,7 +51,7 @@ nuketown_structures.json::JSON::-1::1785855299::0::1::::<><><>0<>0<><>::
 nuketown_terrain.png::::9105378707515764071::1785855299::1785862444::0::::<><><>0<>0<>cd5ca6bd3d8d3cb6927a763128ad45fc<>::
 shipment_structures.json::JSON::-1::1785855300::0::1::::<><><>0<>0<><>::
 shipment_terrain.png::::6028645975372234087::1785855300::1785862444::0::::<><><>0<>0<>cd5ca6bd3d8d3cb6927a763128ad45fc<>::
-::res://scenes/::1785936450
+::res://scenes/::1785937178
 ammo_box.tscn::PackedScene::-1::1785853764::0::1::::<><><>0<>0<><>::res://scripts/ammo_box.gd<>res://assets/textures/cloth_grain.tres<>res://assets/textures/wood_grain.tres
 artillery_strike.tscn::PackedScene::-1::1785766017::0::1::::<><><>0<>0<><>::res://scripts/artillery_strike.gd
 block_debris.tscn::PackedScene::-1::1785757574::0::1::::<><><>0<>0<><>::res://scripts/block_debris.gd
@@ -87,7 +88,7 @@ weapon_smoke.tscn::PackedScene::-1::1785790276::0::1::::<><><>0<>0<><>::res://sc
 weapon_thompson.tscn::PackedScene::-1::1785852836::0::1::::<><><>0<>0<><>::res://scripts/weapon.gd<>res://assets/textures/wood_grain.tres<>res://assets/textures/cloth_grain.tres
 weapon_tnt.tscn::PackedScene::-1::1785769338::0::1::::<><><>0<>0<><>::res://scripts/tnt.gd<>res://scenes/tnt_charge.tscn
 world.tscn::PackedScene::-1::1785936410::0::1::::<><><>0<>0<><>::res://scenes/player.tscn<>res://scenes/target_character.tscn<>res://scripts/voxel_world.gd<>res://scenes/block_debris.tscn<>res://scenes/tank.tscn<>res://scripts/ammo_dump.gd<>res://scenes/ammo_box.tscn<>res://scripts/tank_park.gd<>res://scripts/bot_command.gd
-::res://scripts/::1785936450
+::res://scripts/::1785937288
 ammo_box.gd::GDScript::246689671203969854::1785853907::0::1::::AmmoBox<>StaticBody3D<><>0<>0<><>::
 ammo_dump.gd::GDScript::2414763805431841702::1785853792::0::1::::<>Node3D<><>0<>0<><>::
 arm_rig.gd::GDScript::7851186891513231705::1785720479::0::1::::ArmRig<>Node3D<><>0<>0<><>::
@@ -124,7 +125,7 @@ tank_park.gd::GDScript::7538282738642356950::1785855633::0::1::::<>Node3D<><>0<>
 target_character.gd::GDScript::2166466132116996497::1785848967::0::1::::TargetCharacter<>StaticBody3D<><>0<>0<><>::
 tnt.gd::GDScript::6727446262081658712::1785790284::0::1::::TNT<>Equipment<><>0<>0<><>::
 tnt_charge.gd::GDScript::4297264644350443969::1785774105::0::1::::TNTCharge<>Node3D<><>0<>0<><>::
-voxel_chunk.gd::GDScript::2005511766938258363::1785769760::0::1::::VoxelChunk<>StaticBody3D<><>0<>0<><>::
+voxel_chunk.gd::GDScript::2005511766938258363::1785937288::0::1::::VoxelChunk<>StaticBody3D<><>0<>0<><>::
 voxel_world.gd::GDScript::8218766206010941416::1785855633::0::1::::VoxelWorld<>Node3D<><>0<>0<><>::
 weapon.gd::GDScript::1877676255276685892::1785790263::0::1::::Weapon<>Equipment<><>0<>0<><>::
 ::res://tools/::1785855231

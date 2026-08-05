@@ -4,7 +4,9 @@
     python3 dev.py run       play it
     python3 dev.py server    run the dedicated multiplayer server
     python3 dev.py web       export the browser build into build/web
+    python3 dev.py linux     export the dedicated server for the host
     python3 dev.py serve     host build/web and the game server together
+    python3 dev.py deploy    put a new version on the public host
     python3 dev.py import    reimport assets after adding new ones
 
 `serve` is the one to use for letting other people in: it puts the page on one
@@ -128,6 +130,31 @@ WS_PATH = "/ws"
 # Where the engine usually lives on macOS. Overridable, because it is the one
 # thing here that genuinely is machine-specific.
 MAC_GODOT = Path("/Applications/Godot.app/Contents/MacOS/Godot")
+
+# --- the host the game is played on -------------------------------------------
+#
+# A Lightsail box running nginx for the page and one systemd service for the
+# game. Defaults rather than constants: every one of these is a command line
+# flag, so a second host is a flag and not an edit.
+DEPLOY_HOST = "15.223.69.70"
+DEPLOY_USER = "admin"
+DEPLOY_KEY = "~/.ssh/id_ed25519"
+# nginx serves the page straight out of a checkout of this repository, which is
+# why the browser build has to travel by commit and not by scp.
+REMOTE_REPO = "/home/admin/chacha_shooter"
+REMOTE_BINARY = "/opt/kilroy/kilroy_server"
+REMOTE_SERVICE = "kilroy"
+PUBLIC_URL = "https://15.223.69.70.sslip.io"
+
+LINUX_PRESET = "Linux Server"
+LINUX_OUT = PROJECT / "build" / "linux" / "kilroy_server"
+
+# The three files worth compressing, and the reason this command exists at all.
+# nginx runs with `gzip_static on`, which means it serves `index.wasm.gz` in
+# preference to `index.wasm` and never checks which is newer. Pull a new build
+# without remaking these and every player keeps getting the old one, silently,
+# while the files on disk look exactly right.
+COMPRESSED = ("index.wasm", "index.pck", "index.js")
 
 
 def godot() -> str:
@@ -399,6 +426,250 @@ def _make_handler(directory: str, game_port: int):
     return Handler
 
 
+def cmd_linux(opts) -> int:
+    """Export the dedicated server for the host. One file, with the pack
+    embedded, so the machine it runs on needs neither Godot nor the project."""
+    LINUX_OUT.parent.mkdir(parents=True, exist_ok=True)
+    out = os.path.relpath(LINUX_OUT, Path.cwd())
+    code = run([
+        "--headless", "--path", project_arg(), "--export-release", LINUX_PRESET, out
+    ])
+    if code == 0 and LINUX_OUT.exists():
+        print("\nbuilt %s (%.0f MB)" % (LINUX_OUT, LINUX_OUT.stat().st_size / 1_000_000))
+    return code
+
+
+def _git(*args: str) -> str:
+    """A git command's output, or an empty string if git had nothing to say."""
+    result = subprocess.run(
+        ["git", *args], cwd=PROJECT, capture_output=True, text=True
+    )
+    return result.stdout.strip()
+
+
+def _ssh_base(opts) -> list[str]:
+    return [
+        "ssh", "-i", os.path.expanduser(opts.key),
+        "-o", "BatchMode=yes", "-o", "ConnectTimeout=15",
+        "%s@%s" % (opts.user, opts.host),
+    ]
+
+
+def _remote(opts, script: str) -> int:
+    """Run a line of shell on the host, showing what was asked for. Failures are
+    the caller's to interpret: half of them here mean something different from
+    the other half."""
+    print("$ ssh %s@%s %s" % (opts.user, opts.host, script), flush=True)
+    return subprocess.call([*_ssh_base(opts), script])
+
+
+def _remote_output(opts, script: str) -> str:
+    result = subprocess.run(
+        [*_ssh_base(opts), script], capture_output=True, text=True
+    )
+    return result.stdout.strip()
+
+
+def _deploy_web(opts) -> int:
+    """Get the browser build onto the host, by way of the repository.
+
+    The page is served out of a checkout, so the only way a new build reaches
+    the host is as a commit that has been pushed. That is worth checking before
+    anything is pulled rather than after: a pull that quietly does nothing is
+    indistinguishable, from the outside, from a deploy that worked.
+    """
+    if not opts.no_export:
+        code = cmd_web(opts)
+        if code != 0:
+            return code
+
+    dirty = _git("status", "--porcelain", "--", "build/web")
+    if dirty:
+        if not opts.push:
+            print(
+                "\n! build/web has changes that are not committed, so the host has"
+                "\n  nothing to pull. Commit and push them, or re-run with --push:"
+                "\n\n    git add build/web && git commit -m 'rebuild web' && git push\n",
+                file=sys.stderr,
+            )
+            return 1
+        print("\n--- committing the browser build")
+        if subprocess.call(["git", "add", "build/web"], cwd=PROJECT) != 0:
+            return 1
+        if subprocess.call(
+            ["git", "commit", "-m", "Rebuild the browser build."], cwd=PROJECT
+        ) != 0:
+            return 1
+
+    if opts.push and _git("rev-list", "--count", "@{u}..HEAD") not in ("", "0"):
+        print("\n--- pushing")
+        if subprocess.call(["git", "push"], cwd=PROJECT) != 0:
+            return 1
+
+    print("\n--- updating the page on %s" % opts.host)
+    # Only recompress what the pull actually changed.
+    #
+    # This is the difference between a returning player downloading nothing and
+    # downloading ten megabytes. nginx builds its ETag out of the file's mtime
+    # and size, and a browser with the old copy revalidates against that ETag.
+    # `gzip -f` on every deploy rewrote the .gz whether or not its source had
+    # moved, which gave it a fresh mtime, a fresh ETag, and a full re-download
+    # for everybody -- even on a deploy that only touched a script.
+    #
+    # The engine is in `index.wasm` and changes about never; the game is in the
+    # far smaller `index.pck`. Left alone, the ten-megabyte half stays in the
+    # cache across all the deploys that do not touch it.
+    compress = "".join(
+        'if [ -f {f} ] && {{ [ ! -f {f}.gz ] || [ {f} -nt {f}.gz ]; }}; then'
+        ' gzip -9 -k -f {f}; echo "  recompressed {f}";'
+        ' else echo "  {f} unchanged, kept its cache"; fi; '.format(f=name)
+        for name in COMPRESSED
+    )
+    code = _remote(opts, (
+        "set -e; cd %s && git pull --ff-only && cd build/web && %s"
+        " echo pulled $(git -C %s rev-parse --short HEAD)"
+    ) % (REMOTE_REPO, compress, REMOTE_REPO))
+    if code != 0:
+        return code
+
+    # Whether the host ended up on the commit that was just built. It will not
+    # have if the push went to a branch nobody there is following, which is the
+    # one way to do everything right and still deploy nothing.
+    local = _git("rev-parse", "HEAD")
+    remote = _remote_output(opts, "git -C %s rev-parse HEAD" % REMOTE_REPO)
+    if local and remote and local != remote:
+        print(
+            "\n! the host is on %s but this checkout is on %s."
+            "\n  The page on the host is not the one just built."
+            % (remote[:9], local[:9]),
+            file=sys.stderr,
+        )
+        return 1
+    return 0
+
+
+def _deploy_server(opts) -> int:
+    """Replace the dedicated server and restart it.
+
+    Restarting is not free: it drops everyone who is playing, and the terrain
+    goes back to how the map ships, because the master copy of what has been
+    shot away lives in that process and nowhere else.
+    """
+    if not opts.no_export:
+        code = cmd_linux(opts)
+        if code != 0:
+            return code
+    if not LINUX_OUT.exists():
+        print(
+            "No %s to deploy. Build it with:  python3 dev.py linux" % LINUX_OUT,
+            file=sys.stderr,
+        )
+        return 1
+
+    print("\n--- uploading %.0f MB" % (LINUX_OUT.stat().st_size / 1_000_000))
+    code = subprocess.call([
+        "scp", "-i", os.path.expanduser(opts.key), "-o", "BatchMode=yes",
+        str(LINUX_OUT), "%s@%s:/tmp/kilroy_server" % (opts.user, opts.host),
+    ])
+    if code != 0:
+        return code
+
+    # Stopped before it is moved over, because Linux refuses to overwrite the
+    # file a running process was loaded from and the error for it says only
+    # "Text file busy", which is not a sentence anyone connects to this.
+    print("\n--- restarting %s" % REMOTE_SERVICE)
+    code = _remote(opts, (
+        "set -e;"
+        " sudo systemctl stop %s;"
+        " sudo mv /tmp/kilroy_server %s;"
+        " sudo chmod +x %s;"
+        " sudo chown %s:%s %s;"
+        " sudo systemctl start %s;"
+        " sleep 8;"
+        " systemctl is-active %s"
+    ) % (
+        REMOTE_SERVICE, REMOTE_BINARY, REMOTE_BINARY,
+        opts.user, opts.user, REMOTE_BINARY, REMOTE_SERVICE, REMOTE_SERVICE,
+    ))
+    if code != 0:
+        print(
+            "\n! the service did not come back. What it said:", file=sys.stderr
+        )
+        _remote(opts, "sudo journalctl -u %s -n 30 --no-pager" % REMOTE_SERVICE)
+        return code
+
+    # The line only the server scene prints. Asked for because the service being
+    # up says the process started, which is a different question from whether it
+    # started as a server rather than as a game with nobody at the keyboard.
+    log = _remote_output(
+        opts, "sudo journalctl -u %s -n 20 --no-pager" % REMOTE_SERVICE
+    )
+    if "listening on port" not in log:
+        print("\n! the server is up but never said it was listening:\n%s" % log,
+              file=sys.stderr)
+        return 1
+    for line in log.splitlines()[-3:]:
+        print("  %s" % line.split("]: ")[-1])
+    return 0
+
+
+def _check_live(opts) -> int:
+    """Ask the public URL whether any of this worked. Cheap, and it catches the
+    failure that no step above can see: the page being served as something other
+    than a page, which a browser answers by offering to download the game."""
+    import urllib.request
+
+    url = opts.url.rstrip("/") + "/"
+    try:
+        with urllib.request.urlopen(url, timeout=20) as response:
+            kind = response.headers.get("Content-Type", "")
+            print("\n%s  %s  %s" % (url, response.status, kind))
+            if not kind.startswith("text/html"):
+                print(
+                    "! served as %s rather than text/html, which a browser will"
+                    " download instead of run." % kind,
+                    file=sys.stderr,
+                )
+                return 1
+    except Exception as err:  # noqa: BLE001 -- any failure here is the same news
+        print("\n! %s is not answering: %s" % (url, err), file=sys.stderr)
+        return 1
+    return 0
+
+
+def cmd_deploy(opts) -> int:
+    """Put a new version on the host.
+
+    Two halves, deployed together by default because they have to agree. The
+    browser build and the dedicated server exchange a protocol number on every
+    join, and a client whose number differs is refused outright -- so shipping
+    one without the other does not degrade the game, it empties it. The number
+    covers the weapon catalogue too, which means editing LoadoutConfig.ITEMS is
+    a server change however much it reads like a client one.
+
+    --web-only is for when nothing the server runs has moved: no restart, and
+    nobody playing is thrown out.
+    """
+    if opts.web_only and opts.server_only:
+        print("--web-only and --server-only ask for opposite things.",
+              file=sys.stderr)
+        return 1
+
+    if not opts.server_only:
+        code = _deploy_web(opts)
+        if code != 0:
+            return code
+    if not opts.web_only:
+        code = _deploy_server(opts)
+        if code != 0:
+            return code
+
+    code = _check_live(opts)
+    if code == 0:
+        print("\ndeployed.  %s" % opts.url)
+    return code
+
+
 def main() -> int:
     parser = argparse.ArgumentParser(
         description=__doc__, formatter_class=argparse.RawDescriptionHelpFormatter
@@ -428,6 +699,32 @@ def main() -> int:
 
     imp = subs.add_parser("import", help="reimport assets")
     imp.set_defaults(func=cmd_import)
+
+    linux = subs.add_parser("linux", help="export the dedicated server binary")
+    linux.set_defaults(func=cmd_linux)
+
+    dep = subs.add_parser("deploy", help="put a new version on the host")
+    dep.add_argument(
+        "--web-only", action="store_true",
+        help="page only; leaves the game server and everyone on it alone"
+    )
+    dep.add_argument(
+        "--server-only", action="store_true", help="game server only"
+    )
+    dep.add_argument(
+        "--push", action="store_true",
+        help="commit and push the browser build rather than refusing without it"
+    )
+    dep.add_argument(
+        "--no-export", action="store_true",
+        help="deploy what is already in build/, without rebuilding it"
+    )
+    dep.add_argument("--reimport", action="store_true")
+    dep.add_argument("--host", default=DEPLOY_HOST)
+    dep.add_argument("--user", default=DEPLOY_USER)
+    dep.add_argument("--key", default=DEPLOY_KEY)
+    dep.add_argument("--url", default=PUBLIC_URL)
+    dep.set_defaults(func=cmd_deploy)
 
     opts = parser.parse_args()
     if opts.command is None:

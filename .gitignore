@@ -1,0 +1,11 @@
+# The exported Linux server: 74 MB of engine with the game embedded in it, and
+# rebuilt from the project every time it is deployed. It travels to the host by
+# scp rather than through here.
+build/linux/
+
+# The page's pre-compressed twins, made on the host at deploy time. nginx serves
+# these in preference to the originals, so they belong wherever the originals
+# actually are rather than in a commit that could carry a stale one.
+*.gz
+
+__pycache__/
