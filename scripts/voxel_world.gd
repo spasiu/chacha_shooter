@@ -296,6 +296,10 @@ var tank_points: Array = []
 ## one above, because the two are parked by two different nodes and a vehicle is
 ## named across the network by its path under the node that parked it.
 var mech_points: Array = []
+## The ground inside each side's own walls, in metres. A spawn belongs in here
+## and nowhere else: a base is a room, and arriving behind it or in the street
+## in front of it is not spawning at your base.
+var spawn_zones := {}
 ## Where the map wants ammunition standing, as world (x, z) in metres. The map
 ## picks the spots because the map is the thing that knows which side of a wall
 ## is the useful one; everything here does is hand them over.
@@ -929,6 +933,14 @@ func _read_places(meta: Dictionary) -> void:
 	capture_points.clear()
 	ammo_points.clear()
 	tank_points.clear()
+	spawn_zones.clear()
+	for side: String in meta.get("spawn_zones", {}):
+		var box: Dictionary = meta["spawn_zones"][side]
+		spawn_zones[side] = Rect2(
+			float(box["x0"]), float(box["z0"]),
+			float(box["x1"]) - float(box["x0"]),
+			float(box["z1"]) - float(box["z0"])
+		)
 	mech_points.clear()
 	for at: Array in meta.get("ammo_boxes", []):
 		ammo_points.append(Vector2(float(at[0]), float(at[1])))
@@ -957,6 +969,12 @@ func _read_places(meta: Dictionary) -> void:
 ## map, which is where a map that names no sides puts everybody anyway.
 func team_spawn(side: String) -> Vector2:
 	return team_spawns.get(side, Vector2.ZERO)
+
+
+## The ground a side may spawn on: the inside of its own base. Empty on a map
+## that does not say, which is what the fallback in Player is for.
+func team_zone(side: String) -> Rect2:
+	return spawn_zones.get(side, Rect2())
 
 
 func _build_structures(meta: Dictionary) -> void:

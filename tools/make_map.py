@@ -147,6 +147,11 @@ class Layout:
         self.canyon = None    # (a, b, floor_half, corner, half_x, half_z, feather, rise)
         self.bare = []        # (centre, half_x, half_z, feather) -- no trees here
         self.spawns = {}
+        # The ground inside each side's own walls, as (x0, z0, x1, z1) in
+        # blocks. What a spawn is allowed to use: a base is a room, and coming
+        # into the world behind it or in the street in front of it is not
+        # spawning at your base, it is spawning near it.
+        self.spawn_zones = {}
         self.captures = []
         self.tanks = []
         self.ammo_anchors = []
@@ -363,11 +368,19 @@ class Layout:
 
         self._roof(name, x0, z0, x1, z1, gy + total, roof, roof_style, second)
         if chimney:
-            cx0 = x0 + 4 if hashed(x0, z0, 83) < 0.5 else x1 - 10
-            self.box(name + " stack", cx0, z0 + 4, cx0 + 6, z0 + 10, 16, trim,
-                     flat=gy + total)
-            self.box(name + " pot", cx0 + 1, z0 + 5, cx0 + 5, z0 + 9, 3, "tile",
-                     flat=gy + total + 16)
+            along_x = (x1 - x0) >= (z1 - z0)
+            if along_x:
+                cx0 = x0 + 6 if hashed(x0, z0, 83) < 0.5 else x1 - 12
+                cz0 = (z0 + z1) // 2 - 3
+            else:
+                cx0 = (x0 + x1) // 2 - 3
+                cz0 = z0 + 6 if hashed(x0, z0, 83) < 0.5 else z1 - 12
+            # Started below the eaves so it is built into the roof rather than
+            # resting on top of whatever the pitch happened to leave there.
+            self.box(name + " stack", cx0, cz0, cx0 + 6, cz0 + 6, 20, trim,
+                     flat=gy + total - 6)
+            self.box(name + " pot", cx0 + 1, cz0 + 1, cx0 + 5, cz0 + 5, 3, "tile",
+                     flat=gy + total + 14)
 
     def _roof(self, name, x0, z0, x1, z1, gy, roof, style, second=None):
         """The lid, and the most patterned thing on the map.
@@ -390,20 +403,20 @@ class Layout:
 
         if style == "gable":
             span = (z1 - z0) if along_x else (x1 - x0)
-            steps = max(min(span // 8, 7), 2)
+            steps = max(min(span // 10, 5), 2)
             for i in range(steps):
-                inset = i * (span // (2 * steps))
+                inset = i * max(span // (3 * steps), 2)
                 # Courses alternate up the pitch, so the slope is banded the way
                 # a tiled roof is.
                 kind = roof if i % 2 == 0 else second
                 if along_x:
-                    self.box(name + " roof %d" % i, x0 - 2 + i, z0 - 2 + inset,
-                             x1 + 2 - i, z1 + 2 - inset, 2, kind, flat=gy + i * 2)
+                    self.box(name + " roof %d" % i, x0 - 1 + i, z0 - 1 + inset,
+                             x1 + 1 - i, z1 + 1 - inset, 2, kind, flat=gy + i)
                 else:
-                    self.box(name + " roof %d" % i, x0 - 2 + inset, z0 - 2 + i,
-                             x1 + 2 - inset, z1 + 2 - i, 2, kind, flat=gy + i * 2)
+                    self.box(name + " roof %d" % i, x0 - 1 + inset, z0 - 1 + i,
+                             x1 + 1 - inset, z1 + 1 - i, 2, kind, flat=gy + i)
             # Ridge cap along the apex, in the other material.
-            top = gy + steps * 2
+            top = gy + steps
             if along_x:
                 mid = (z0 + z1) // 2
                 self.box(name + " ridge", x0 - 1, mid - 2, x1 + 1, mid + 2, 2,
@@ -419,14 +432,14 @@ class Layout:
         # alternating courses.
         step = 4
         if along_x:
-            for i, z in enumerate(range(z0 - 2, z1 + 2, step)):
-                self.box(name + " course %d" % i, x0 - 2, z, x1 + 2,
-                         min(z + step, z1 + 2), 2, roof if i % 2 == 0 else second,
+            for i, z in enumerate(range(z0 - 1, z1 + 1, step)):
+                self.box(name + " course %d" % i, x0 - 1, z, x1 + 1,
+                         min(z + step, z1 + 1), 2, roof if i % 2 == 0 else second,
                          flat=gy)
         else:
-            for i, x in enumerate(range(x0 - 2, x1 + 2, step)):
-                self.box(name + " course %d" % i, x, z0 - 2,
-                         min(x + step, x1 + 2), z1 + 2, 2,
+            for i, x in enumerate(range(x0 - 1, x1 + 1, step)):
+                self.box(name + " course %d" % i, x, z0 - 1,
+                         min(x + step, x1 + 1), z1 + 1, 2,
                          roof if i % 2 == 0 else second, flat=gy)
 
         if style == "corrugated":
@@ -472,7 +485,25 @@ class Layout:
         walk out of is worse than no respawn at all.
         """
         x0, z0, x1, z1 = cx - half_x, cz - half_z, cx + half_x, cz + half_z
-        self.box("%s floor" % name, x0, z0, x1, z1, 1, side, flat=gy + 1)
+        # The floor is laid rather than poured: a checker of the side's colour
+        # and bare concrete, eight blocks to a square. A base seen from a roof
+        # is one of the biggest flat surfaces on the map, and one flat colour
+        # over the whole of it is the thing that most says "untextured".
+        self.box("%s floor" % name, x0, z0, x1, z1, 1, "concrete", flat=gy + 1)
+        tile = 8
+        for i, tx in enumerate(range(x0, x1, tile)):
+            for j, tz in enumerate(range(z0, z1, tile)):
+                if (i + j) % 2:
+                    continue
+                self.box("%s tile %d %d" % (name, i, j), tx, tz,
+                         min(tx + tile, x1), min(tz + tile, z1), 1, side,
+                         flat=gy + 1)
+        # A band of the side's colour round the edge, so the checker reads as a
+        # floor with a border rather than as a chessboard somebody left out.
+        self.box("%s apron" % name, x0, z0, x1, z0 + 4, 1, side, flat=gy + 1)
+        self.box("%s apron s" % name, x0, z1 - 4, x1, z1, 1, side, flat=gy + 1)
+        self.box("%s apron w" % name, x0, z0, x0 + 4, z1, 1, side, flat=gy + 1)
+        self.box("%s apron e" % name, x1 - 4, z0, x1, z1, 1, side, flat=gy + 1)
         faces = {
             "north": (x0, z0, x1, z0 + 6),
             "south": (x0, z1 - 6, x1, z1),
@@ -510,6 +541,12 @@ class Layout:
             self.box("%s colours" % name, band, z0 + 6, band + 4, z1 - 6,
                      height + 2, side)
         self.box("%s mast" % name, cx - 2, cz - 2, cx + 2, cz + 2, height + 14, side)
+        # Inside the walls, kept a couple of blocks off them so nobody arrives
+        # with a shoulder in the concrete. The stores, the crates and the mast
+        # are still in there; the spawn tries several spots and takes one with
+        # room to stand, so they thin the room out rather than block it.
+        if side.startswith("team_"):
+            self.spawn_zone(side[5:], x0 + 9, z0 + 9, x1 - 9, z1 - 9)
         # Buttresses up the outside of the walls, every eight blocks. Cheap
         # relief on the biggest flat faces on any map.
         for i, x in enumerate(range(x0 + 8, x1 - 6, 16)):
@@ -540,6 +577,10 @@ class Layout:
 
     def spawn(self, side, x, z):
         self.spawns[side] = (x, z)
+
+
+    def spawn_zone(self, side, x0, z0, x1, z1):
+        self.spawn_zones[side] = (int(x0), int(z0), int(x1), int(z1))
 
     def capture(self, name, x, z, radius=10.0):
         self.captures.append((name, x, z, radius))
@@ -629,6 +670,13 @@ class Layout:
             "build_height": BUILD_HEIGHT,
             "team_spawns": {
                 side: self.world(x, z) for side, (x, z) in self.spawns.items()
+            },
+            "spawn_zones": {
+                side: {
+                    "x0": self.world(z[0], z[1])[0], "z0": self.world(z[0], z[1])[1],
+                    "x1": self.world(z[2], z[3])[0], "z1": self.world(z[2], z[3])[1],
+                }
+                for side, z in self.spawn_zones.items()
             },
             "capture_points": [
                 {"name": n, "x": self.world(x, z)[0], "z": self.world(x, z)[1],
@@ -803,11 +851,11 @@ def build_shipment(m, cx, cz, level=GROUND):
             if bw >= bd:
                 for i, rx in enumerate(range(bx + 2, bx + bw - 2, 4)):
                     m.box("%s rib %d" % (tag, i), rx, bz - 1, rx + 2, bz + bd + 1,
-                          8, "steel", flat=base + 1)
+                          8, kind, flat=base + 1)
             else:
                 for i, rz in enumerate(range(bz + 2, bz + bd - 2, 4)):
                     m.box("%s rib %d" % (tag, i), bx - 1, rz, bx + bw + 1, rz + 2,
-                          8, "steel", flat=base + 1)
+                          8, kind, flat=base + 1)
             # Capping rail, and the doors at one end in a darker sheet.
             m.box(tag + " cap", bx - 1, bz - 1, bx + bw + 1, bz + bd + 1, 1, "steel",
                   flat=base + 10)

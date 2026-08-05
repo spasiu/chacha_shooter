@@ -139,6 +139,13 @@ func _other_side() -> String:
 func _muster_point(side: String) -> Vector3:
 	var at := Vector2.ZERO
 	if _world != null and is_instance_valid(_world):
+		# Out of their own base, inside its walls, the same as a player.
+		var zone: Rect2 = _world.team_zone(side)
+		if zone.size.x > 1.0 and zone.size.y > 1.0:
+			return _dropped(Vector2(
+				randf_range(zone.position.x, zone.end.x),
+				randf_range(zone.position.y, zone.end.y)
+			))
 		at = _world.team_spawn(side)
 	if at == Vector2.ZERO and _player != null:
 		var away := randf_range(30.0, 45.0)
@@ -146,6 +153,11 @@ func _muster_point(side: String) -> Vector3:
 		at = Vector2(_player.global_position.x + cos(turn) * away,
 					 _player.global_position.z + sin(turn) * away)
 	at += Vector2(randf_range(-scatter, scatter), randf_range(-scatter, scatter))
+	return _dropped(at)
+
+
+## Stands a point on the ground under it.
+func _dropped(at: Vector2) -> Vector3:
 	var ground := 1.0
 	if _world != null and is_instance_valid(_world):
 		ground = _world.ground_height(at.x, at.y)

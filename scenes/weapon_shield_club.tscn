@@ -1,0 +1,123 @@
+; Shield and club. See shield_club.gd.
+;
+; Left arm carries a plate of riveted steel; right carries a length of ash with
+; a banded head. Nothing here is period ordnance and nothing pretends to be --
+; it is what you end up holding when the ammunition runs out, which is why it is
+; the one thing in the catalogue that never needs resupplying.
+[gd_scene load_steps=11 format=3]
+
+[ext_resource type="Script" path="res://scripts/shield_club.gd" id="1_sc"]
+[ext_resource type="Texture2D" path="res://assets/textures/wood_grain.tres" id="2_wood"]
+
+[sub_resource type="StandardMaterial3D" id="Mat_plate"]
+albedo_color = Color(0.3, 0.315, 0.35, 1)
+metallic = 0.6
+roughness = 0.42
+
+[sub_resource type="StandardMaterial3D" id="Mat_rivet"]
+albedo_color = Color(0.42, 0.43, 0.46, 1)
+metallic = 0.7
+roughness = 0.35
+
+[sub_resource type="StandardMaterial3D" id="Mat_ash"]
+albedo_color = Color(0.42, 0.3, 0.17, 1)
+albedo_texture = ExtResource("2_wood")
+roughness = 0.55
+uv1_scale = Vector3(18, 18, 3)
+uv1_triplanar = true
+
+; Slightly dished, which a flat slab is not: a shield is curved so a round that
+; does not arrive square is turned rather than caught.
+[sub_resource type="CylinderMesh" id="Mesh_plate"]
+material = SubResource("Mat_plate")
+top_radius = 0.3
+bottom_radius = 0.26
+height = 0.04
+radial_segments = 20
+rings = 1
+
+[sub_resource type="TorusMesh" id="Mesh_rim"]
+material = SubResource("Mat_rivet")
+inner_radius = 0.28
+outer_radius = 0.31
+rings = 22
+ring_segments = 8
+
+[sub_resource type="SphereMesh" id="Mesh_boss"]
+material = SubResource("Mat_rivet")
+radius = 0.07
+height = 0.09
+radial_segments = 16
+rings = 6
+
+[sub_resource type="CylinderMesh" id="Mesh_haft"]
+material = SubResource("Mat_ash")
+top_radius = 0.019
+bottom_radius = 0.024
+height = 0.52
+radial_segments = 12
+rings = 1
+
+[sub_resource type="CylinderMesh" id="Mesh_head"]
+material = SubResource("Mat_ash")
+top_radius = 0.045
+bottom_radius = 0.036
+height = 0.16
+radial_segments = 14
+rings = 1
+
+[sub_resource type="TorusMesh" id="Mesh_band"]
+material = SubResource("Mat_rivet")
+inner_radius = 0.04
+outer_radius = 0.05
+rings = 14
+ring_segments = 6
+
+[node name="WeaponShieldClub" type="Node3D"]
+script = ExtResource("1_sc")
+
+; --- left arm: the plate -----------------------------------------------------
+; Position is driven from the script: up in front of the face while the aim key
+; is held, down at the side otherwise.
+[node name="Shield" type="Node3D" parent="."]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0.16, -0.14, 0.12)
+
+[node name="Plate" type="MeshInstance3D" parent="Shield"]
+transform = Transform3D(1, 0, 0, 0, 0, 1, 0, -1, 0, -0.16, 0.02, -0.34)
+mesh = SubResource("Mesh_plate")
+
+[node name="Rim" type="MeshInstance3D" parent="Shield"]
+transform = Transform3D(1, 0, 0, 0, 0, 1, 0, -1, 0, -0.16, 0.02, -0.34)
+mesh = SubResource("Mesh_rim")
+
+[node name="Boss" type="MeshInstance3D" parent="Shield"]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -0.16, 0.02, -0.37)
+mesh = SubResource("Mesh_boss")
+
+; --- right arm: the club ------------------------------------------------------
+[node name="Club" type="Node3D" parent="."]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0.13, -0.16, -0.1)
+
+[node name="Haft" type="MeshInstance3D" parent="Club"]
+transform = Transform3D(1, 0, 0, 0, 0.94, -0.342, 0, 0.342, 0.94, 0, 0.1, -0.16)
+mesh = SubResource("Mesh_haft")
+
+[node name="Head" type="MeshInstance3D" parent="Club"]
+transform = Transform3D(1, 0, 0, 0, 0.94, -0.342, 0, 0.342, 0.94, 0, 0.31, -0.38)
+mesh = SubResource("Mesh_head")
+
+[node name="BandUpper" type="MeshInstance3D" parent="Club"]
+transform = Transform3D(1, 0, 0, 0, 0.94, -0.342, 0, 0.342, 0.94, 0, 0.36, -0.4)
+mesh = SubResource("Mesh_band")
+
+[node name="BandLower" type="MeshInstance3D" parent="Club"]
+transform = Transform3D(1, 0, 0, 0, 0.94, -0.342, 0, 0.342, 0.94, 0, 0.26, -0.36)
+mesh = SubResource("Mesh_band")
+
+[node name="GripRight" type="Marker3D" parent="."]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0.13, -0.14, -0.14)
+
+[node name="GripLeft" type="Marker3D" parent="."]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -0.14, -0.1, -0.26)
+
+[node name="SwingSound" type="AudioStreamPlayer" parent="."]

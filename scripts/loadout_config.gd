@@ -93,6 +93,14 @@ const ITEMS: Array[Dictionary] = [
 		"accent": Color(0.45, 0.36, 0.22, 1.0),
 	},
 	{
+		"key": &"shieldclub",
+		"name": "SHIELD & CLUB",
+		"kind": "CLOSE QUARTERS",
+		"blurb": "A plate of riveted steel and a length of banded ash. Hold the aim key and the shield covers you to the eye against anything coming from in front; swing with fire. Nothing to reload, and nothing that will stop a shell.",
+		"stats": "50 DMG/HIT  ·  BULLETPROOF  ·  FRONT ARC ONLY",
+		"accent": Color(0.55, 0.57, 0.62, 1.0),
+	},
+	{
 		"key": &"jumpjet",
 		"name": "JUMP JET",
 		"kind": "MOBILITY",

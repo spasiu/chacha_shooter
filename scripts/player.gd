@@ -113,6 +113,7 @@ const LOADOUT_SCREEN: PackedScene = preload("res://scenes/loadout_select.tscn")
 @onready var m1911: Equipment = $Head/Camera3D/WeaponSocket/WeaponM1911
 @onready var johnson: Equipment = $Head/Camera3D/WeaponSocket/WeaponJohnson
 @onready var jump_jet: Equipment = $Head/Camera3D/WeaponSocket/WeaponJumpJet
+@onready var shield_club: Equipment = $Head/Camera3D/WeaponSocket/WeaponShieldClub
 @onready var tnt: Equipment = $Head/Camera3D/WeaponSocket/WeaponTNT
 @onready var shovel: Equipment = $Head/Camera3D/WeaponSocket/WeaponShovel
 @onready var smoke: Equipment = $Head/Camera3D/WeaponSocket/WeaponSmoke
@@ -138,6 +139,7 @@ const LOADOUT_SCREEN: PackedScene = preload("res://scenes/loadout_select.tscn")
 	&"m1911": m1911,
 	&"johnson": johnson,
 	&"jumpjet": jump_jet,
+	&"shieldclub": shield_club,
 	&"tnt": tnt,
 	&"shovel": shovel,
 	&"smoke": smoke,
@@ -620,6 +622,13 @@ func take_damage(
 ) -> void:
 	if _dead:
 		return
+	# Behind a raised shield, a bullet from in front and below the top edge is
+	# stopped outright. Done here rather than with a collider in front of the
+	# man, because every shot in the game ends at whoever it hit -- and because
+	# a bot's shot is a roll rather than a ray, so this is the one place that
+	# covers both without the bot having to know shields exist.
+	if _stopped_by_shield(_hit_position, _from, _kind):
+		return
 	health = maxf(health - amount, 0.0)
 	health_changed.emit(health, max_health)
 	if health <= 0.0:
@@ -669,6 +678,21 @@ func _update_respawn_clock(delta: float) -> void:
 ## Drops the camera to the ground and collapses the body, which then lies where
 ## it fell until the wait is served. Input is ignored throughout, bar asking for
 ## the loadout screen.
+## Whether the shield ate it. `from` points back toward whoever fired.
+func _stopped_by_shield(at: Vector3, from: Vector3, kind: StringName) -> bool:
+	var held: Equipment = weapon
+	if held == null or not held.has_method("stops"):
+		return false
+	# Above the eye is over the top of the plate: a man behind a shield still
+	# has to see past it, and what he can see out of can be shot into.
+	var eye: float = head.global_position.y
+	var above_eye: bool = at != Vector3.ZERO and at.y > eye
+	if not held.stops(kind, from, -global_basis.z, above_eye):
+		return false
+	held.ring()
+	return true
+
+
 func _die() -> void:
 	if _dead:
 		return
@@ -902,20 +926,15 @@ func _team_origin() -> Vector3:
 ## crowded and watched, and appearing inside somebody else is worse than either.
 func _scattered_spawn() -> Vector3:
 	var origin := _team_origin()
-	var limit := SPAWN_SCATTER
-	if _voxel_world != null:
-		limit = minf(limit, _voxel_world.view_distance() * SPAWN_SCATTER_OF_VIEW)
 	if _voxel_world == null:
 		return origin
 
-	# Try a few spots and take the first with room to stand in. Asking the world
-	# how high the ground is and dropping somebody there is not enough: bases are
-	# walled, yards are full of containers, and a soldier put down inside any of
-	# it gets squeezed out through the floor and falls until the void kills them.
+	# Inside our own walls, if the map says where they are. Somewhere in that
+	# room rather than on one spot in it: the start point is both crowded and
+	# watched, and appearing inside somebody else is worse than either.
+	var zone: Rect2 = _voxel_world.team_zone(Net.my_team())
 	for _attempt in SPAWN_TRIES:
-		var angle := randf() * TAU
-		var reach := randf_range(limit * 0.35, limit)
-		var at := origin + Vector3(cos(angle) * reach, 0.0, sin(angle) * reach)
+		var at := _somewhere_in(zone, origin)
 		var stand: float = _voxel_world.standing_height(at.x, at.z)
 		if not is_nan(stand):
 			# Clear of the ground rather than level with it, so the first thing
@@ -923,10 +942,27 @@ func _scattered_spawn() -> Vector3:
 			at.y = stand + 0.3
 			return at
 
-	# Everywhere we looked was built on. The map's own spawn point is the one
-	# spot its author definitely meant to be standable, so fall back to that.
+	# Everywhere we looked was built on -- the stores, the crates, the mast. The
+	# map's own spawn point is the one spot its author definitely meant to be
+	# standable, so fall back to that.
 	var home: float = _voxel_world.standing_height(origin.x, origin.z)
 	return Vector3(origin.x, (home if not is_nan(home) else origin.y) + 0.3, origin.z)
+
+
+## A spot to try. Inside the base when the map declared one, and otherwise a
+## ring around the spawn point, which is all a map without walls can offer.
+func _somewhere_in(zone: Rect2, origin: Vector3) -> Vector3:
+	if zone.size.x > 1.0 and zone.size.y > 1.0:
+		return Vector3(
+			randf_range(zone.position.x, zone.end.x), origin.y,
+			randf_range(zone.position.y, zone.end.y)
+		)
+	var limit := SPAWN_SCATTER
+	if _voxel_world != null:
+		limit = minf(limit, _voxel_world.view_distance() * SPAWN_SCATTER_OF_VIEW)
+	var angle := randf() * TAU
+	var reach := randf_range(limit * 0.35, limit)
+	return origin + Vector3(cos(angle) * reach, 0.0, sin(angle) * reach)
 
 
 ## Treated by somebody else's medic while still on your feet. Full health, not

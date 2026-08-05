@@ -12,6 +12,7 @@
 [ext_resource type="PackedScene" path="res://scenes/weapon_m1911.tscn" id="12_m1911"]
 [ext_resource type="PackedScene" path="res://scenes/weapon_johnson.tscn" id="13_johnson"]
 [ext_resource type="PackedScene" path="res://scenes/weapon_jump_jet.tscn" id="14_jet"]
+[ext_resource type="PackedScene" path="res://scenes/weapon_shield_club.tscn" id="15_shield"]
 [ext_resource type="PackedScene" path="res://scenes/weapon_tnt.tscn" id="16_tnt"]
 [ext_resource type="PackedScene" path="res://scenes/weapon_shovel.tscn" id="20_shovel"]
 [ext_resource type="PackedScene" path="res://scenes/weapon_smoke.tscn" id="21_smoke"]
@@ -70,6 +71,10 @@ visible = false
 visible = false
 
 [node name="WeaponJumpJet" parent="Head/Camera3D/WeaponSocket" instance=ExtResource("14_jet")]
+visible = false
+
+[node name="WeaponShieldClub" parent="Head/Camera3D/WeaponSocket" instance=ExtResource("15_shield")]
+visible = false
 visible = false
 
 [node name="WeaponTNT" parent="Head/Camera3D/WeaponSocket" instance=ExtResource("16_tnt")]
