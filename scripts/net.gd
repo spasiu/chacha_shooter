@@ -78,7 +78,14 @@ const PROXY_PATH := "/ws"
 ## the smoke, TNT and grenade indices. Two builds either side of that agreed on
 ## every other weapon and disagreed on those, which reads as a soldier
 ## respawning with kit he did not pick.
-const PROTOCOL_BASE := 3
+##
+## 4: the walkers arrived. Not a format change -- a vehicle travels as its path
+## in the scene, and a path is data -- but a build with no MechPark resolves
+## "MechPark/Mech0" to nothing and quietly drops every message about it. The two
+## would agree on the shape of every packet and disagree about whether there is
+## a four-metre machine standing in the open, which is the failure this number
+## exists to prevent whatever its cause.
+const PROTOCOL_BASE := 4
 
 ## The catalogue's half, worked out rather than remembered.
 ##

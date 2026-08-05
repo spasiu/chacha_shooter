@@ -1,10 +1,11 @@
-[gd_scene load_steps=16 format=3]
+[gd_scene load_steps=17 format=3]
 
 [ext_resource type="PackedScene" path="res://scenes/player.tscn" id="1_player"]
 [ext_resource type="PackedScene" path="res://scenes/target_character.tscn" id="2_target"]
 [ext_resource type="Script" path="res://scripts/voxel_world.gd" id="4_voxel"]
 [ext_resource type="PackedScene" path="res://scenes/block_debris.tscn" id="5_debris"]
 [ext_resource type="PackedScene" path="res://scenes/tank.tscn" id="9_tank"]
+[ext_resource type="PackedScene" path="res://scenes/mech.tscn" id="14_mech"]
 [ext_resource type="Script" path="res://scripts/ammo_dump.gd" id="10_ammo_dump"]
 [ext_resource type="PackedScene" path="res://scenes/ammo_box.tscn" id="11_ammo_box"]
 [ext_resource type="Script" path="res://scripts/tank_park.gd" id="12_tank_park"]
@@ -54,6 +55,16 @@ prebuild_ms_per_frame = 200.0
 [node name="TankPark" type="Node3D" parent="."]
 script = ExtResource("12_tank_park")
 tank_scene = ExtResource("9_tank")
+
+; Walkers, from the map's own list and parked by the same script. A separate
+; node rather than a second list on the one above, because a vehicle is named
+; across the network by its path -- "MechPark/Mech0" -- and that has to mean
+; the same machine on every client.
+[node name="MechPark" type="Node3D" parent="."]
+script = ExtResource("12_tank_park")
+tank_scene = ExtResource("14_mech")
+points_property = "mech_points"
+name_prefix = "Mech"
 
 ; Opposition, for a field with nobody else on it. Clears itself the moment
 ; somebody real joins your map.

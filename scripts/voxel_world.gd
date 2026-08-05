@@ -269,6 +269,10 @@ var team_spawns := {}
 var capture_points: Array = []
 ## Where the map parks its armour: {"x", "z", "yaw"} in metres and degrees.
 var tank_points: Array = []
+## The same, for walkers. Kept as its own list rather than a kind field on the
+## one above, because the two are parked by two different nodes and a vehicle is
+## named across the network by its path under the node that parked it.
+var mech_points: Array = []
 ## Where the map wants ammunition standing, as world (x, z) in metres. The map
 ## picks the spots because the map is the thing that knows which side of a wall
 ## is the useful one; everything here does is hand them over.
@@ -902,10 +906,16 @@ func _read_places(meta: Dictionary) -> void:
 	capture_points.clear()
 	ammo_points.clear()
 	tank_points.clear()
+	mech_points.clear()
 	for at: Array in meta.get("ammo_boxes", []):
 		ammo_points.append(Vector2(float(at[0]), float(at[1])))
 	for spot: Dictionary in meta.get("tanks", []):
 		tank_points.append({
+			"position": Vector2(float(spot["x"]), float(spot["z"])),
+			"yaw": float(spot.get("yaw", 0.0)),
+		})
+	for spot: Dictionary in meta.get("mechs", []):
+		mech_points.append({
 			"position": Vector2(float(spot["x"]), float(spot["z"])),
 			"yaw": float(spot.get("yaw", 0.0)),
 		})
