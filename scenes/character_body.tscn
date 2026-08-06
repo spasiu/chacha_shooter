@@ -20,7 +20,7 @@
 ; Every anchor the rest of the game reaches for is where it always was: hips at
 ; y=0.73, knees a 0.315 segment below, Spine at 0.84, the arm rig's shoulders at
 ; +-0.21 from it, and the bottom of the head on the 1.32 headshot line.
-[gd_scene load_steps=40 format=3]
+[gd_scene load_steps=38 format=3]
 
 [ext_resource type="Script" path="res://scripts/arm_rig.gd" id="1_rig"]
 [ext_resource type="Script" path="res://scripts/character_body.gd" id="4_model"]
@@ -70,10 +70,6 @@ roughness = 0.92
 
 ; Eyes and brows. Not black -- a very dark blue, which at this size reads softer
 ; than black does and is most of the difference between cute and menacing.
-[sub_resource type="StandardMaterial3D" id="Mat_sclera"]
-albedo_color = Color(0.96, 0.95, 0.92, 1)
-roughness = 0.6
-
 [sub_resource type="StandardMaterial3D" id="Mat_eye"]
 albedo_color = Color(0.13, 0.15, 0.22, 1)
 roughness = 0.55
@@ -191,20 +187,9 @@ height = 0.105
 radial_segments = 12
 rings = 6
 
-; The white, curved to the head so it sits in the face rather than on it.
-[sub_resource type="SphereMesh" id="Mesh_sclera"]
-material = SubResource("Mat_sclera")
-radius = 0.03
-height = 0.05
-radial_segments = 10
-rings = 5
-
-[sub_resource type="SphereMesh" id="Mesh_eye"]
+[sub_resource type="BoxMesh" id="Mesh_eye"]
 material = SubResource("Mat_eye")
-radius = 0.017
-height = 0.03
-radial_segments = 8
-rings = 4
+size = Vector3(0.032, 0.042, 0.02)
 
 [sub_resource type="BoxMesh" id="Mesh_brow"]
 material = SubResource("Mat_eye")
@@ -377,34 +362,20 @@ mesh = SubResource("Mesh_head")
 transform = Transform3D(1.22, 0, 0, 0, 1.08, 0, 0, 0, 1.06, 0, 0.524, -0.016)
 mesh = SubResource("Mesh_mask")
 
-[node name="EyeLeft" type="Node3D" parent="Spine"]
-transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -0.044, 0.597, -0.0845)
-
-[node name="White" type="MeshInstance3D" parent="Spine/EyeLeft"]
-transform = Transform3D(1, 0, 0, 0, 1.1, 0, 0, 0, 0.5, 0, 0, 0)
-mesh = SubResource("Mesh_sclera")
-
-[node name="Pupil" type="MeshInstance3D" parent="Spine/EyeLeft"]
-transform = Transform3D(1, 0, 0, 0, 1.05, 0, 0, 0, 0.5, 0, 0, -0.011)
+[node name="EyeLeft" type="MeshInstance3D" parent="Spine"]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -0.042, 0.618, -0.096)
 mesh = SubResource("Mesh_eye")
 
-[node name="EyeRight" type="Node3D" parent="Spine"]
-transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0.044, 0.597, -0.0845)
-
-[node name="White" type="MeshInstance3D" parent="Spine/EyeRight"]
-transform = Transform3D(1, 0, 0, 0, 1.1, 0, 0, 0, 0.5, 0, 0, 0)
-mesh = SubResource("Mesh_sclera")
-
-[node name="Pupil" type="MeshInstance3D" parent="Spine/EyeRight"]
-transform = Transform3D(1, 0, 0, 0, 1.05, 0, 0, 0, 0.5, 0, 0, -0.011)
+[node name="EyeRight" type="MeshInstance3D" parent="Spine"]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0.042, 0.618, -0.096)
 mesh = SubResource("Mesh_eye")
 
 [node name="BrowLeft" type="MeshInstance3D" parent="Spine"]
-transform = Transform3D(1, 0, 0, 0, 0.99619, 0.08716, 0, -0.08716, 0.99619, -0.044, 0.625, -0.083)
+transform = Transform3D(1, 0, 0, 0, 0.99619, 0.08716, 0, -0.08716, 0.99619, -0.043, 0.646, -0.086)
 mesh = SubResource("Mesh_brow")
 
 [node name="BrowRight" type="MeshInstance3D" parent="Spine"]
-transform = Transform3D(1, 0, 0, 0, 0.99619, -0.08716, 0, 0.08716, 0.99619, 0.044, 0.625, -0.083)
+transform = Transform3D(1, 0, 0, 0, 0.99619, -0.08716, 0, 0.08716, 0.99619, 0.043, 0.646, -0.086)
 mesh = SubResource("Mesh_brow")
 
 [node name="Helmet" type="Node3D" parent="Spine"]

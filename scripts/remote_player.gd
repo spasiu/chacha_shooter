@@ -36,7 +36,6 @@ const ITEM_SCENES := {
 	&"medic": preload("res://scenes/weapon_medic.tscn"),
 	&"tnt": preload("res://scenes/weapon_tnt.tscn"),
 	&"grenade": preload("res://scenes/weapon_grenade.tscn"),
-	&"shieldclub": preload("res://scenes/weapon_shield_club.tscn"),
 }
 
 ## Catalogue entries that are worn rather than carried. Somebody who has the

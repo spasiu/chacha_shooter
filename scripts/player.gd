@@ -115,7 +115,6 @@ const LOADOUT_SCREEN: PackedScene = preload("res://scenes/loadout_select.tscn")
 @onready var m1911: Equipment = $Head/Camera3D/WeaponSocket/WeaponM1911
 @onready var johnson: Equipment = $Head/Camera3D/WeaponSocket/WeaponJohnson
 @onready var jump_jet: Equipment = $Head/Camera3D/WeaponSocket/WeaponJumpJet
-@onready var shield_club: Equipment = $Head/Camera3D/WeaponSocket/WeaponShieldClub
 @onready var body_armour: Equipment = $Head/Camera3D/WeaponSocket/WeaponBodyArmour
 @onready var tnt: Equipment = $Head/Camera3D/WeaponSocket/WeaponTNT
 @onready var shovel: Equipment = $Head/Camera3D/WeaponSocket/WeaponShovel
@@ -142,7 +141,6 @@ const LOADOUT_SCREEN: PackedScene = preload("res://scenes/loadout_select.tscn")
 	&"m1911": m1911,
 	&"johnson": johnson,
 	&"jumpjet": jump_jet,
-	&"shieldclub": shield_club,
 	&"armour": body_armour,
 	&"tnt": tnt,
 	&"shovel": shovel,
@@ -646,13 +644,6 @@ func take_damage(
 ) -> void:
 	if _dead:
 		return
-	# Behind a raised shield, a bullet from in front and below the top edge is
-	# stopped outright. Done here rather than with a collider in front of the
-	# man, because every shot in the game ends at whoever it hit -- and because
-	# a bot's shot is a roll rather than a ray, so this is the one place that
-	# covers both without the bot having to know shields exist.
-	if _stopped_by_shield(_hit_position, _from, _kind):
-		return
 	# What is left after the front plate, if there is one and the hit arrived
 	# where it covers.
 	if _armour != null:
@@ -706,20 +697,6 @@ func _update_respawn_clock(delta: float) -> void:
 ## Drops the camera to the ground and collapses the body, which then lies where
 ## it fell until the wait is served. Input is ignored throughout, bar asking for
 ## the loadout screen.
-## Whether the shield ate it. `from` points back toward whoever fired.
-func _stopped_by_shield(at: Vector3, from: Vector3, kind: StringName) -> bool:
-	var held: Equipment = weapon
-	if held == null or not held.has_method("stops"):
-		return false
-	# Above the eye is over the top of the plate: a man behind a shield still
-	# has to see past it, and what he can see out of can be shot into.
-	var eye: float = head.global_position.y
-	var above_eye: bool = at != Vector3.ZERO and at.y > eye
-	if not held.stops(kind, from, -global_basis.z, above_eye):
-		return false
-	held.ring()
-	return true
-
 
 func _die() -> void:
 	if _dead:

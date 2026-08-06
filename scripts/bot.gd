@@ -420,7 +420,7 @@ func _shoot(delta: float) -> void:
 	# Pointing back at the shooter, which is what weapon.gd and the vehicles all
 	# report and what anything reading the direction has to be able to assume.
 	# This used to hand over the direction of travel instead -- the opposite --
-	# and nothing noticed until a shield needed to know which side it arrived on.
+	# and nothing noticed until something needed to know which side it arrived on.
 	target.take_damage(
 		hurt, target.global_position + Vector3.UP * 1.1,
 		(global_position - target.global_position).normalized(), Lethality.BULLET

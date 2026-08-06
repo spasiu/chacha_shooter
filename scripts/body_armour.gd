@@ -10,8 +10,8 @@ extends Equipment
 ## is situational: you are wearing it in the open and you are wearing it running
 ## for cover, and the second one is where it hurts.
 ##
-## Like the shield, it decides nothing itself. Player asks it what a hit should
-## become and how fast a man in it moves; the armour only knows its own numbers.
+## It decides nothing itself. Player asks it what a hit should become and how
+## fast a man in it moves; the armour only knows its own numbers.
 ## That keeps the one place where damage is worked out as the one place where
 ## damage is worked out.
 
@@ -45,8 +45,8 @@ func covers(from: Vector3, facing: Vector3) -> bool:
 	if flat_from.length_squared() < 1e-6 or flat_face.length_squared() < 1e-6:
 		return false
 	var away := rad_to_deg(flat_face.normalized().angle_to(flat_from.normalized()))
-	# The same hair of tolerance the shield uses, and for the same reason: a hit
-	# arriving exactly side-on is on the rim of the arc, not outside it.
+	# A hair of tolerance, so a hit arriving exactly side-on is on the rim of the
+	# arc rather than outside it.
 	return absf(away) <= front_degrees + 0.01
 
 
