@@ -33,7 +33,7 @@ uv1_triplanar = true
 
 [sub_resource type="StandardMaterial3D" id="Mat_flash"]
 transparency = 1
-shading_mode = 0
+shading_mode = 1
 albedo_color = Color(1, 0.83, 0.45, 0.9)
 emission_enabled = true
 emission = Color(1, 0.72, 0.3, 1)

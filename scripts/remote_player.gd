@@ -36,7 +36,14 @@ const ITEM_SCENES := {
 	&"medic": preload("res://scenes/weapon_medic.tscn"),
 	&"tnt": preload("res://scenes/weapon_tnt.tscn"),
 	&"grenade": preload("res://scenes/weapon_grenade.tscn"),
+	&"shieldclub": preload("res://scenes/weapon_shield_club.tscn"),
 }
+
+## Catalogue entries that are worn rather than carried. Somebody who has the
+## armour or the jet selected is holding nothing, and that is what has to be
+## drawn: leaving the last weapon in their hands shows a man with a rifle who is
+## about to hit you with a club.
+const WORN := [&"armour", &"jumpjet"]
 
 ## Matches TargetCharacter, so a head is a head wherever you shoot it.
 const HEADSHOT_MULTIPLIER := 2.5
@@ -176,12 +183,21 @@ func _refresh_tag() -> void:
 func set_item(index: int) -> void:
 	if index == _item or index < 0 or index >= LoadoutConfig.ITEMS.size():
 		return
-	var scene: PackedScene = ITEM_SCENES.get(LoadoutConfig.ITEMS[index]["key"])
-	if scene == null:
-		return
+	var key: StringName = LoadoutConfig.ITEMS[index]["key"]
+	var scene: PackedScene = ITEM_SCENES.get(key)
+	# Nothing to draw is a state, not a failure. Something worn empties their
+	# hands; an item nobody has listed here does too, rather than leaving them
+	# holding whatever they had last -- which is how a man who switched to the
+	# club stayed visibly armed with a Thompson.
+	if scene == null and key not in WORN:
+		push_warning("RemotePlayer has no scene for '%s'; hands left empty." % key)
 	_item = index
 	if _weapon != null:
 		_weapon.queue_free()
+		_weapon = null
+	model.arms.set_weapon(null)
+	if scene == null:
+		return
 	_weapon = scene.instantiate()
 	model.weapon_socket.add_child(_weapon)
 	model.arms.set_weapon(_weapon)
